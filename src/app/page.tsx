@@ -1,69 +1,82 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import ProfileWizard from "@/components/ProfileWizard";
+import { addProfile, useHydrated, useProfiles } from "@/lib/store";
+
+export default function EntryPage() {
+  const router = useRouter();
+  const [started, setStarted] = useState(false);
+  const profiles = useProfiles();
+  const hydrated = useHydrated();
+
+  if (started) {
+    return (
+      <main className="mx-auto flex min-h-dvh w-full max-w-2xl flex-col px-6 py-10">
+        <div className="flex min-h-[34rem] flex-1 flex-col rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+          <ProfileWizard
+            onCancel={() => setStarted(false)}
+            onComplete={(draft) => {
+              addProfile(draft);
+              router.push("/dashboard");
+            }}
+          />
         </div>
       </main>
-    </div>
+    );
+  }
+
+  return (
+    <main className="mx-auto flex min-h-dvh w-full max-w-2xl flex-col justify-center px-6 py-16">
+      <span className="inline-flex w-fit items-center gap-2 rounded-full bg-brand-100 px-3 py-1 text-xs font-medium text-brand-700">
+        福利資源導引平台
+      </span>
+      <h1 className="mt-6 text-4xl leading-tight font-semibold tracking-tight">
+        找補助，不用先知道
+        <br />
+        它叫什麼名字
+      </h1>
+      <p className="mt-5 text-base leading-relaxed text-ink-600">
+        回答幾個問題，建立一份屬於你的狀況檔案。系統會依照地區、身分與年齡幫你篩選可申請的福利；
+        不知道怎麼找的時候，也可以直接和 AI 助理聊聊，由它幫你把需求整理出來。
+      </p>
+
+      <ul className="mt-8 space-y-3 text-sm text-ink-600">
+        {[
+          "一份檔案 = 一個服務對象，家人可以分別建檔",
+          "找不到資源時，需求會送給承辦人員評估",
+          "有新補助上架，符合條件就主動通知你",
+        ].map((t) => (
+          <li key={t} className="flex gap-3">
+            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-500" />
+            {t}
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-10 flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          onClick={() => setStarted(true)}
+          className="rounded-lg bg-brand-500 px-7 py-3.5 font-medium text-white transition hover:bg-brand-600"
+        >
+          開始建立我的檔案
+        </button>
+        {hydrated && profiles.length > 0 && (
+          <button
+            type="button"
+            onClick={() => router.push("/dashboard")}
+            className="rounded-lg border border-slate-200 bg-white px-6 py-3.5 text-sm text-ink-600 transition hover:border-brand-300"
+          >
+            我已經建過檔案，直接進入
+          </button>
+        )}
+      </div>
+
+      <p className="mt-10 text-xs text-ink-400">
+        全程不需要註冊，資料只留在你的裝置上。
+      </p>
+    </main>
   );
 }
