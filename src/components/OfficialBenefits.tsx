@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import type { Profile } from "@/lib/types";
 import type { MatchResponse } from "@/benefits/types";
 import { toBenefitProfile } from "@/lib/benefit-profile";
+import { officialRecommendations } from "@/lib/official-recommendations";
 
 const labels: Record<string, string> = { high_match: "初步符合", possible_match: "可能符合", insufficient_data: "需補充資料" };
 export default function OfficialBenefits({ profile }: { profile: Profile }) {
@@ -22,17 +23,17 @@ export default function OfficialBenefits({ profile }: { profile: Profile }) {
   }).catch(err => { if (!controller.signal.aborted) setError(err.message); });
   return () => controller.abort();
  }, [profile, attempt]);
- const matches = result?.matches.filter(item => item.status !== "not_match") ?? [];
- matches.sort((a, b) => b.eligibility_score - a.eligibility_score);
+ const { matches, pending } = officialRecommendations(result, profile);
  return <section className="mb-8" aria-label="官方補助媒合">
   <div className="mb-3 flex items-center justify-between gap-3">
    <h2 className="text-sm font-medium">官方補助・初步資格比對</h2>
    <a href="/my-benefits" className="text-xs text-brand-600 underline">補充條件與完整媒合</a>
   </div>
-  <p className="mb-4 text-xs leading-relaxed text-ink-400">依已填寫的明確條件比對。年齡區間與不確定的答案仍保留為待確認，實際資格以主辦機關審核為準。</p>
+  <p className="mb-4 text-xs leading-relaxed text-ink-400">依你選擇的需求「{profile.needs.join('、') || '尚未選擇'}」篩選，僅列出已有符合條件的方案，初步符合優先。實際資格仍以主辦機關審核為準。</p>
+  {result && pending > 0 && <p className="mb-3 text-sm text-amber-700">另有 {pending} 筆相關補助缺少判斷資料，請點「補充條件與完整媒合」，不將它們列為推薦。</p>}
   {error ? <div role="alert" className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm">{error}<button className="ml-3 underline" onClick={() => { setError(""); setResult(null); setAttempt(value => value + 1); }}>重試</button></div>
    : !result ? <p role="status" className="text-sm text-ink-400">正在比對官方補助資料…</p>
-   : matches.length === 0 ? <p className="text-sm text-ink-400">目前資料中沒有可推薦項目，可至資料中心查閱所有方案。</p>
+   : matches.length === 0 ? <p className="text-sm text-ink-400">目前沒有足夠依據推薦符合這些需求的方案。請補充資格條件，或編輯身分調整需求；這不代表沒有補助可申請。</p>
    : <ul className="grid gap-3 md:grid-cols-2">{matches.slice(0, 6).map(item => <li key={item.benefit_id} className="rounded-xl border border-slate-200 bg-white p-5">
     <div className="flex justify-between gap-3 text-xs text-ink-400"><span>{item.provider}</span><span>{labels[item.status] || "待確認"}</span></div>
     <h3 className="mt-2 font-medium">{item.title}</h3>

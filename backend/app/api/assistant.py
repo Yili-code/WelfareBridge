@@ -1,10 +1,13 @@
 """Contextual resource guidance via the configured local LLM."""
 import json
+import re
 from typing import Literal
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field, ValidationError
 from ..llm.factory import get_provider
 from ..llm.provider import LLMError
+from ..matching.guidance import guidance
+from pymongo.errors import PyMongoError
 
 router = APIRouter(prefix="/api", tags=["assistant"])
 
@@ -15,12 +18,18 @@ class Message(BaseModel):
 class Request(BaseModel):
     profile: dict | None = None
     messages: list[Message] = Field(default_factory=list, max_length=40)
+    guidance_profile: dict | None = None
+    question_attribute: str = Field(default="", max_length=150)
 
 class Answer(BaseModel):
     reply: str = Field(min_length=1, max_length=2000)
     quickReplies: list[str] = Field(default_factory=list, max_length=4)
     summary: str = Field(default="", max_length=2000)
     mainRequest: str = Field(default="", max_length=500)
+
+class Summary(BaseModel):
+    summary: str = Field(min_length=1, max_length=2000)
+    mainRequest: str = Field(min_length=1, max_length=500)
 
 SYSTEM = """你是臺灣福利資源引導助理。使用繁體中文，簡短自然。
 根據最後一個使用者回答決定下一個問題，每輪只問一個重點。
@@ -41,14 +50,61 @@ def converse(body: Request):
         raise HTTPException(422, "身分資料過長")
     if body.messages and body.messages[-1].role != "user":
         raise HTTPException(422, "最後一則訊息需為使用者回答")
+    turn_count = sum(m.role == 'user' for m in body.messages)
+    if turn_count > 9:
+        raise HTTPException(422, '對話最多 9 輪，請重新開始。')
     provider = get_provider()
     if provider is None:
         raise HTTPException(503, "本地 AI 未啟用或指定模型尚未就緒，請確認 Ollama 與 LLM_MODEL 設定後重試。")
+    latest = body.messages[-1].content if body.messages else ""
+    explicit_summary = "整理需求登記" in latest
+    summary_requested = explicit_summary or turn_count >= 9
     try:
-        result = provider.complete_json(SYSTEM, body.model_dump_json(), json_schema=Answer.model_json_schema(), max_tokens=600)
+        context = guidance(body.guidance_profile or {}, "" if explicit_summary else latest, body.question_attribute)
+    except PyMongoError:
+        raise HTTPException(503, "補助資料庫暫時無法連線，無法根據候選條件縮小範圍，請重試。") from None
+    payload = json.dumps({**body.model_dump(), "guidance": context}, ensure_ascii=False)
+    system = SYSTEM + "\n本輪有資料庫 guidance 結果。reply 只用一句話承接上一個回答，不要問問題、不推薦選單、不捏造條件。系統會另外附上唯一的追問。summary 只有明確要求整理需求登記才填。"
+    schema = Answer.model_json_schema()
+    budget = 600
+    if summary_requested:
+        system = "你是需求登記整理員。依提供的對話與身分資料，以繁體中文整理已明確說出的需求。未回答的成績、收入或資格請標示未提供，不得推測。不要繼續問問題，也不要聲稱已送出或審核通過。只輸出兩個字串欄位的 JSON：mainRequest（50字內需求標題）、summary（300字內摘要）。不要輸出 reply 或 quickReplies；不要把助理提問當成使用者事實。"
+        schema = Summary.model_json_schema()
+        budget = 1400
+    try:
+        try:
+            result = provider.complete_json(system, payload, json_schema=schema, max_tokens=budget)
+        except LLMError as exc:
+            # Older Ollama runners may reject JSON-schema grammar generation.
+            # JSON mode still goes through the same strict response validation.
+            if "failed to parse grammar" not in str(exc):
+                raise
+            result = provider.complete_json(system, payload, max_tokens=budget)
+        if summary_requested:
+            summary = Summary.model_validate(result)
+            result = {**summary.model_dump(), "reply": "請確認以下需求摘要，尚未送出：\n" + summary.summary, "quickReplies": []}
+        if not summary_requested:
+            # Only the acknowledgement is model-authored in guidance mode.
+            # Options and summaries below are controlled by the application.
+            result = {"reply": result.get("reply"), "quickReplies": [], "summary": "", "mainRequest": ""}
         answer = Answer.model_validate(result)
         if not answer.reply.strip() or any(len(q) > 100 for q in answer.quickReplies):
             raise ValueError("invalid response")
     except (LLMError, ValidationError, ValueError, KeyError):
         raise HTTPException(502, "AI 暫時無法產生有效回應，請重試。") from None
-    return {**answer.model_dump(), "model": provider.model, "llm_used": True}
+    question = context['question']
+    if not summary_requested:
+        answer.summary = answer.mainRequest = ""
+        # Keep one rule-backed question even when the model adds its own question.
+        acknowledgement = re.split(r'[。！？!?\n]', answer.reply)[0].strip()
+        previous = [m.content for m in body.messages if m.role == 'assistant']
+        if (len(acknowledgement) > 80 or any(acknowledgement in text for text in previous)
+                or any(word in acknowledgement for word in ['確認', '判斷', '補助需要', '？', '?'])):
+            acknowledgement = ''
+        if question:
+            answer.reply = (acknowledgement + "。\n" if acknowledgement else '') + question['reason'] + "。\n" + question['question']
+            answer.quickReplies = [o['label'] for o in question['options']] + ['不確定']
+        else:
+            answer.reply = ("目前沒有仍可能符合的候選，請確認已填條件或到資料中心檢查資料。" if not context['candidate_count'] else "目前可追問的明確條件已確認；其餘條件需核對官方原文。請前往完整資格媒合查看結果。")
+            answer.quickReplies = []
+    return {**answer.model_dump(), "model": provider.model, "llm_used": True, "guidance_profile": context['profile'], "question_attribute": question['attribute_id'] if question and not summary_requested else "", "candidate_count": context['candidate_count'], "turn_count": turn_count, "max_turns": 9, "completed": summary_requested, "request_schema": Request.model_json_schema()}

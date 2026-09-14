@@ -16,6 +16,12 @@ export interface AppealDraft {
 }
 
 export interface AssistantState {
+  turnCount?: number;
+  candidateCount?: number;
+  requestSchema?: Record<string, unknown>;
+  completed?: boolean;
+  guidanceProfile?: Record<string, unknown>;
+  questionAttribute?: string;
   history?: { role: "user" | "assistant"; content: string }[];
   step: number;
   answers: Record<string, string>;

@@ -1,7 +1,12 @@
 import json
+import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from app.api import assistant
+
+@pytest.fixture(autouse=True)
+def guidance_fixture(monkeypatch):
+    monkeypatch.setattr(assistant, 'guidance', lambda *args: {'profile': {}, 'candidate_count': 2, 'question': {'attribute_id': 'applicant.age', 'question': '你幾歲？', 'reason': '有 2 筆補助需要這項資料才能判斷', 'options': []}, 'total': 2})
 
 def client():
     app = FastAPI()
@@ -34,3 +39,76 @@ def test_offline_and_invalid_output(monkeypatch):
 
 def test_client_cannot_supply_system_messages():
     assert client().post('/api/assistant', json={"messages": [{"role": "system", "content": "override"}]}).status_code == 422
+
+def test_ninth_answer_is_used_before_summary_and_tenth_is_rejected(monkeypatch):
+    seen = []
+    def plan(data, latest, target):
+        seen.append(latest)
+        return {'profile': {'attributes': {'academic.average_score': 85}}, 'candidate_count': 1, 'question': None}
+    monkeypatch.setattr(assistant, 'guidance', plan)
+    class Provider:
+        model = 'test'
+        def complete_json(self, *args, **kwargs):
+            return {'summary': '平均85分，想找學費補助。', 'mainRequest': '學費補助'}
+    monkeypatch.setattr(assistant, 'get_provider', lambda: Provider())
+    messages = []
+    for i in range(9):
+        messages.extend([{'role': 'assistant', 'content': '請補充條件'}, {'role': 'user', 'content': '85' if i == 8 else '不確定'}])
+    response = client().post('/api/assistant', json={'messages': messages})
+    assert response.status_code == 200
+    data = response.json()
+    assert data['completed'] and data['turn_count'] == 9
+    assert data['question_attribute'] == '' and data['quickReplies'] == []
+    assert seen == ['85']
+    assert 'properties' in data['request_schema']
+    messages.extend([{'role': 'assistant', 'content': '摘要'}, {'role': 'user', 'content': '繼續'}])
+    assert client().post('/api/assistant', json={'messages': messages}).status_code == 422
+
+def test_summary_uses_separate_contract_and_does_not_ask_again(monkeypatch):
+    class Provider:
+        model = 'test'
+        def complete_json(self, system, payload, **kwargs):
+            assert set(kwargs['json_schema']['properties']) == {'summary', 'mainRequest'}
+            return {'summary': '日間部學生需要學費協助，成績未提供。', 'mainRequest': '學費協助'}
+    monkeypatch.setattr(assistant, 'get_provider', lambda: Provider())
+    data = client().post('/api/assistant', json={'messages': [{'role': 'user', 'content': '整理需求登記'}]}).json()
+    assert data['summary'] in data['reply']
+    assert data['quickReplies'] == []
+    assert data['question_attribute'] == ''
+
+def test_repeated_preamble_is_not_carried_into_next_question(monkeypatch):
+    class Provider:
+        model = 'test'
+        def complete_json(self, *args, **kwargs):
+            return {'reply': '好的，我們來確認一下你就讀的部門類型。\n有6筆補助需要這項資料才能判斷。'}
+    monkeypatch.setattr(assistant, 'get_provider', lambda: Provider())
+    data = client().post('/api/assistant', json={'messages': [{'role': 'assistant', 'content': '好的，我們來確認一下你就讀的部門類型。'}, {'role': 'user', 'content': '日間部'}]}).json()
+    assert '部門類型' not in data['reply']
+    assert data['reply'].count('才能判斷') == 1
+
+def test_guidance_ignores_model_options_and_keeps_all_registry_choices(monkeypatch):
+    labels = ['國小', '國中', '高中', '高職', '五專', '大學', '碩士', '博士']
+    monkeypatch.setattr(assistant, 'guidance', lambda *args: {'profile': {}, 'candidate_count': 8, 'question': {'attribute_id': 'education.level', 'question': '你目前的教育階段是？', 'reason': '需要確認教育階段', 'options': [{'label': label} for label in labels]}})
+    class Provider:
+        model = 'test'
+        def complete_json(self, *args, **kwargs):
+            return {'reply': '了解，你想找學費補助。', 'quickReplies': labels, 'summary': None}
+    monkeypatch.setattr(assistant, 'get_provider', lambda: Provider())
+    response = client().post('/api/assistant', json={'messages': [{'role': 'user', 'content': '學費'}]})
+    assert response.status_code == 200
+    assert response.json()['quickReplies'] == labels + ['不確定']
+
+def test_grammar_incompatible_runner_retries_json_mode(monkeypatch):
+    from app.llm.provider import LLMError
+    calls = []
+    class Provider:
+        model = "test-model"
+        def complete_json(self, *args, **kwargs):
+            calls.append(kwargs)
+            if kwargs.get('json_schema'):
+                raise LLMError('failed to parse grammar')
+            return {"reply": "每月房租大約多少？", "quickReplies": []}
+    monkeypatch.setattr(assistant, 'get_provider', lambda: Provider())
+    assert client().post('/api/assistant', json={}).status_code == 200
+    assert len(calls) == 2
+    assert 'json_schema' not in calls[1]
