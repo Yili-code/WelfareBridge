@@ -1,0 +1,35 @@
+id: mohw_social_assistance
+name: 衛生福利部社會救助及社工司 — 低收入戶、中低收入戶、急難救助
+organization: 衛生福利部社會救助及社工司
+provider_type: central_government
+source_type: government_site
+base_url: https://dep.mohw.gov.tw/DOSAASW/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [社會救助及社工司, 衛生福利部]
+data_confidence: 100
+enabled: true
+domains: [social_welfare]
+content_selectors: ["section.cp", "article.cpArticle", "main"]
+# 說明：本司網站（dep.mohw.gov.tw/DOSAASW）的方案條文幾乎都放在附件 PDF（檔案在 www.mohw.gov.tw/dl-…），
+# HTML 頁面只有附件清單、公告、常見問答與法令解釋函釋；因此 pages 以 PDF 為主，並用 source_page 記錄來源頁。
+# 衛生福利e寶箱（www.mohw.gov.tw/cp-88-…）的「急難救助」「低收入戶及中低收入戶」兩頁註明資料來源為社會救助及社工司，一併收入。
+pages:
+  # ── 急難救助 ──
+  - {url: "https://www.mohw.gov.tw/dl-86267-27a4eeb1-89b9-4dca-9908-20df855a2d29.html", title: 強化社會安全網－急難紓困實施方案（關懷救助金）, format: pdf, seed_category: emergency_relief, source_page: "https://dep.mohw.gov.tw/DOSAASW/np-601-103.html"}
+  - {url: "https://www.mohw.gov.tw/dl-100852-113a5dd0-7557-43c4-87f9-1e3ee6658e69.html", title: 衛生福利部急難救助金申請審核及撥款作業規定, format: pdf, seed_category: emergency_relief, source_page: "https://www.mohw.gov.tw/cp-88-226-1.html"}
+  - {url: "https://dep.mohw.gov.tw/DOSAASW/cp-594-5082-103.html", title: 急難救助作業流程（社會救助法第21條急難救助對象）, seed_category: emergency_relief}
+  - {url: "https://www.mohw.gov.tw/cp-88-226-1.html", title: 急難救助（衛生福利e寶箱）, seed_category: emergency_relief}
+  # ── 低收入戶、中低收入戶 ──
+  - {url: "https://www.mohw.gov.tw/dl-97289-8c213179-3e49-4ea3-ab21-1759306d51d5.html", title: 115年度低收入戶及中低收入戶資格審核標準, format: pdf, seed_category: low_income_allowance, source_page: "https://dep.mohw.gov.tw/DOSAASW/cp-566-84223-103.html"}
+  - {url: "https://www.mohw.gov.tw/dl-80481-7fe1304b-9591-4cb1-b8b3-28fa92c5a8ce.html", title: 112年度低收入戶生活扶助現金給付項目及標準, format: pdf, seed_category: low_income_allowance, source_page: "https://dep.mohw.gov.tw/DOSAASW/cp-566-72131-103.html"}
+  - {url: "https://www.mohw.gov.tw/dl-86739-9b8fd27c-ec65-4c94-b225-8d59e98889b5.html", title: 臺灣省及福建省低收入戶生活扶助金額表（113年1月1日起適用）, format: pdf, seed_category: low_income_allowance, source_page: "https://dep.mohw.gov.tw/DOSAASW/cp-566-77174-103.html"}
+  - {url: "https://dep.mohw.gov.tw/DOSAASW/cp-574-5050-103.html", title: 政府鼓勵脫貧自立3+1, seed_category: low_income_allowance}
+  - {url: "https://www.mohw.gov.tw/cp-88-79005-1.html", title: 低收入戶及中低收入戶（衛生福利e寶箱）, seed_category: low_income_allowance}
+  # ── 遊民、獨居老人、低收入戶：極端氣候關懷 ──
+  - {url: "https://www.mohw.gov.tw/dl-100580-c4905173-4b47-4faf-8a12-f8394f278847.html", title: 極端氣候及年節時期加強關懷弱勢民眾計畫, format: pdf, source_page: "https://dep.mohw.gov.tw/DOSAASW/cp-569-73026-103.html"}
+  # ── 抓過但不收的頁面（記錄原因） ──
+  - {url: "https://dep.mohw.gov.tw/DOSAASW/cp-572-5035-103.html", title: 低收入戶、中低收入戶常見問答, skip: true, skip_reason: 問答集（FAQ）依收錄政策排除；申請條件內容已由資格審核標準 PDF 涵蓋}
+  - {url: "https://dep.mohw.gov.tw/DOSAASW/cp-576-44095-103.html", title: 衛生福利部辦理災害救濟捐款專戶慰問金發放要點, skip: true, skip_reason: 頁面只有 docx／odt 附件與申請表單，爬蟲不解析 docx；要點本文沒有 HTML 或 PDF 版本}
+  - {url: "https://www.mohw.gov.tw/dl-97290-0b65921d-b09a-426b-996e-3346f5b61e9d.html", title: 115年度低收入戶類別條件一覽表, format: pdf, skip: true, skip_reason: 標題為一覽表（依收錄政策視為名單／窗口類排除）；各款類別條件屬資格審核標準的補充}
+  - {url: "https://www.mohw.gov.tw/dl-58806-bdcafdda-cb96-4daa-852f-50b4a26be59b.html", title: 兒童及少年未來教育與發展帳戶宣導摺頁, format: pdf, skip: true, skip_reason: PDF 使用自訂字型編碼，pypdf 抽出來是亂碼；方案條文只存在於條例本文（法律本文依政策排除）}
+  - {url: "https://dep.mohw.gov.tw/DOSAASW/cp-571-5013-103.html", title: 生活扶助法令解釋, skip: true, skip_reason: 歷年函釋彙編（14 萬字），不是方案內容頁}

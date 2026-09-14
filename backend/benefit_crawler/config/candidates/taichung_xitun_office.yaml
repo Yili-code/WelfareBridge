@@ -1,0 +1,29 @@
+id: taichung_xitun_office
+name: 臺中市西屯區公所 — 社會課受理的補助與救助
+organization: 臺中市西屯區公所
+provider_type: township
+source_type: government_site
+base_url: https://www.xitun.taichung.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [臺中市西屯區公所, 西屯區公所]
+data_confidence: 95
+enabled: false   # 乾跑判定：網站沒有任何「資格＋給付＋申請方式」的方案內容頁，不要啟用（見 notes）
+domains: [social_welfare, disability]
+content_selectors: ['#cpArticle', 'article.cpArticle']
+notes: >-
+  臺中市各區公所共用臺中市政府網站樣板（與 society.taichung.gov.tw 相同）：內容頁網址型態 /<數字id>/post、
+  清單頁 /<數字id>/Lpsimplelist、節點頁 /<數字id>/Normalnodelist；主內容區 <article id="cpArticle" class="cpArticle">，
+  selector '#cpArticle' 在乾跑可正常抽出內文。但西屯區公所網站（依網站導覽 /831932/832532/siteMap 逐節點確認）沒有
+  「社會福利／社會救助」單元：業務資訊只有施政亮點、施政計畫、常見問答；便民服務只有調解、法律扶助、役政、學區、活動中心；
+  社會課相關內容只有(1)業務職掌 /4011116/post（承辦人職掌與分機表，不是方案頁）、(2)常見問答（社會課 16 題，皆為應備文件或名詞解釋，
+  沒有金額，且標題含「常見問答」會被收錄政策判為 faq 排除）。生育津貼在臺中市由戶政事務所受理，區公所網站沒有方案頁。
+  站內搜尋是 Google 自訂搜尋（JavaScript），無法用來找頁面。同樣板的南屯區公所首頁也只有「重陽敬老禮金」一則公告與法律扶助，
+  推測其他區公所亦相同。有「補助對象及標準／補助金額／申辦流程」的區公所受理項目其實集中在臺中市政府服務e櫃檯
+  https://eservices.taichung.gov.tw/AdvSearch/index/160/Metasearch/0?ApplyType=0&CodeLv0=0&Lv1Dept=387560000A
+  （西屯區公所篩選；內容頁網址型態 /AdvSearch/CaseInfo/160/Notices/<14碼id>，主內容 '#base-content'，項目為全市一致，
+  例如 201909160026 市急難救助申請：最高2萬元、特殊3萬元；201909160016 低收入戶生活補助：第1款每人每月11,918元），
+  建議另建一個全市共用的來源（例如 taichung_eservices），不要依區公所重複登錄。
+pages:
+  - {url: 'https://www.xitun.taichung.gov.tw/924931/post', title: 何謂特殊境遇家庭（常見問答）, seed_category: special_circumstances_aid}
+  - {url: 'https://www.xitun.taichung.gov.tw/3757987/post', title: 如何申請育兒津貼（常見問答）, seed_category: child_allowance}
+  - {url: 'https://www.xitun.taichung.gov.tw/4011116/post', title: 社會課業務, skip: true, skip_reason: 業務職掌頁只有承辦人職掌與分機表（1330 字），沒有任何方案的資格與給付內容；若不 skip 會被誤判為 program}

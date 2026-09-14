@@ -1,0 +1,170 @@
+{
+  "labels": [
+    {
+      "id": "c37a84de-a73d-4853-b29b-fd312a93f1d2",
+      "title": "身心障礙者居家維生器材用電優惠",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "disability_other",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文詳列可申請對象（經醫師診斷使用呼吸器、氧氣製造機等維生器材，或使用電動輪椅、電動床等5項生活輔具者），標題為用電優惠，屬對身障者有經濟價值的費用減免；原文未寫優惠額度，但資格已明確。",
+      "confidence": "high"
+    },
+    {
+      "id": "3c95ee30-c8e7-4456-8010-050c51af4c9f",
+      "title": "新北市市民意外事故致死救助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "emergency_relief",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文寫明救助金額（低收入戶50萬、中低收入戶30萬、一般市民15萬）、須於死亡起六個月內向戶籍地區公所申請及具領人順序，對象與給付俱全。",
+      "confidence": "high"
+    },
+    {
+      "id": "aa9af9d4-ae7a-499e-8665-9bbf48e077e8",
+      "title": "2至未滿5歲育兒津貼及5歲至入國民小學前幼兒就學補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "child_allowance",
+      "secondary": ["education_subsidy"],
+      "closed": false,
+      "reason": "區公所以問答表格呈現，但完整寫出申請對象（設籍板橋區、2歲至入小學前、未就讀公共化幼兒園之我國籍幼兒）、每月金額（第一胎5000、第二胎6000、第三胎7000元）與申請地點，內容即方案本身而非附帶問答；5歲幼兒就學補助另涉就學補助。因版面為FAQ形式，信心中等。",
+      "confidence": "medium"
+    },
+    {
+      "id": "fcf4a16c-847e-4bbd-a824-20a9031e260c",
+      "title": "臺中市政府社會局弱勢家庭兒童臨時托育服務補助計畫",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "childcare_subsidy",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文寫出服務對象（設籍本市0至12歲兒童且為低收、中低收、特殊境遇、脆弱家庭等）與補助標準（一般兒童每小時120元、身障兒童180元，每月最高40小時、每年240小時）。",
+      "confidence": "high"
+    },
+    {
+      "id": "f6ba25da-69fd-4e29-be8b-2a2f5456d53e",
+      "title": "中低收入老人裝置假牙補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文寫明申請資格（設籍本市65歲以上或55歲以上原住民，且為低收／中低收入戶、領中低收老人生活津貼等）與受理單位；金額上限引用實施計畫；「年度內經費用罄後不再受理」為條件敘述，未明說已停辦。",
+      "confidence": "high"
+    },
+    {
+      "id": "fe776e14-532d-4231-b430-f0d697f6be1e",
+      "title": "農民健康保險生育給付加給補助要點",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "birth_incentive",
+      "secondary": [],
+      "closed": false,
+      "reason": "要點條文本身寫出補助對象（115年1月1日後分娩或早產且領取農保生育給付之女性被保險人）與給付（與農保生育給付合計每胎10萬元，雙生以上比例增給），屬寫有資格與給付的要點。",
+      "confidence": "high"
+    },
+    {
+      "id": "de11b2a2-49d2-4917-ba45-becd9ecb997f",
+      "title": "新北市身心障礙者租賃房屋租金補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "rental_subsidy",
+      "secondary": ["disability_other"],
+      "closed": false,
+      "reason": "原文寫出申請對象（設籍實住新北市之身心障礙者、家庭總收入未達最低生活費2.5倍、全戶無自有住宅等）與補助標準（每坪最高330元、單身每月最高2,400元、3人以上家庭4,400元）。",
+      "confidence": "high"
+    },
+    {
+      "id": "1f27b6d9-e932-40c1-b182-c23795c04824",
+      "title": "臺中市低收入戶生育、產婦及嬰兒營養補助計畫",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "birth_incentive",
+      "secondary": ["low_income_allowance"],
+      "closed": false,
+      "reason": "同一計畫下三項補助均以本市列冊低收入戶為對象且可合併申請：生育補助每胎10,200元、產婦營養補助每月4,000元共4個月、嬰兒營養補助每月1,800元最多12個月，對象與金額俱全。",
+      "confidence": "high"
+    },
+    {
+      "id": "5c5bf998-e034-4fbb-a39b-2f9544f95975",
+      "title": "新北市中低收入老人特別照顧津貼",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文寫明受照顧者須領有中低收入老人生活津貼且失能重度以上、照顧者資格（16至65歲未從事全時工作之家人）與補助金額每月5,000元撥入照顧者帳戶。",
+      "confidence": "high"
+    },
+    {
+      "id": "922c0b3a-8817-4fd0-bfc3-853743464f21",
+      "title": "身心障礙者生活補助申請須知",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "disability_living_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文寫出服務對象（設籍實住本市、持本市身障手冊、全戶收入與動產不動產門檻）與補助標準（中度以上每月5,065元、輕度每月3,772元）。",
+      "confidence": "high"
+    },
+    {
+      "id": "4b3807e1-9764-4c4f-9b10-0209925fcfec",
+      "title": "115年低收入戶及中低收入戶申請規定及應備文件",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "區公所PDF除應備文件外，寫出低收／中低收入戶審核標準（每人每月收入低收17,186元、中低收25,779元，動產與不動產上限）以及中低收入戶享健保費補助二分之一、高中職以上學雜費減免60%等給付項目，屬資格說明頁。",
+      "confidence": "high"
+    },
+    {
+      "id": "2cedbff9-6dbd-46c2-9b5a-f27bfdeb543d",
+      "title": "低/中低收入戶微型火災不便費用保險",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": ["emergency_relief"],
+      "closed": false,
+      "reason": "新竹縣政府為列冊低收／中低收入戶免費投保微型火災不便費用保險（保費由基金會捐款支應，縣民不需繳費），火災事故每次定額給付8,000元，對象與給付明確，非民眾自行購買的金融商品；taxonomy無保險類別，以低收入戶福利歸類。",
+      "confidence": "medium"
+    },
+    {
+      "id": "010634b2-1f66-46ec-bd24-96ad88b7d931",
+      "title": "臺中市到宅坐月子服務(含弱勢對象)",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "birth_incentive",
+      "secondary": ["health_service"],
+      "closed": false,
+      "reason": "原文寫明弱勢孕產婦（低收／中低收、身障、特殊境遇、新住民、社宅第三胎等）可免費獲得120小時到宅坐月子服務（價值3萬6,000元）及多胞胎新生兒照顧費每日1,500元，屬有經濟價值的生育相關服務；taxonomy無坐月子專屬類別，以生育福利歸類。頁面同時含自費收費資訊。",
+      "confidence": "medium"
+    },
+    {
+      "id": "34a2920e-8563-41ab-a825-dc7dcb6c43e0",
+      "title": "育有未滿2歲兒童育兒津貼總覽",
+      "is_benefit": "no",
+      "kind": "other",
+      "category": "",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文只有「單元查詢」表單與兩則文章標題連結（取消排富、0-6歲國家一起養），沒有任何資格或給付內容，屬文章列表頁而非方案說明。",
+      "confidence": "high"
+    },
+    {
+      "id": "91df7c08-b2b6-4541-a147-d6864d685c0b",
+      "title": "低收入戶產婦生育及營養補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "birth_incentive",
+      "secondary": ["low_income_allowance"],
+      "closed": false,
+      "reason": "區公所問答表格寫出服務對象（設籍本市列冊低收入戶之本國籍婦女，提供生育補助與產後營養補助）、應備文件與申請方式（新生兒3個月內向戶籍地區公所申請），但未寫補助金額；版面為FAQ形式，信心中等。",
+      "confidence": "medium"
+    }
+  ],
+  "count": 15
+}

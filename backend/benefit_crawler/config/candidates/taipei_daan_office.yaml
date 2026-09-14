@@ -1,0 +1,30 @@
+id: taipei_daan_office
+name: 臺北市大安區公所 — 社會課受理的補助與救助
+organization: 臺北市大安區公所
+provider_type: township
+source_type: government_site
+base_url: https://dado.gov.taipei/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [臺北市大安區公所]
+data_confidence: 100
+enabled: true
+domains: [social_welfare, disability]
+content_selectors: ["#CCMS_Content"]
+notes: "臺北市各區公所共用樣板（Taipei CCMS）。社會課的方案簡介頁網址型態：News_Content.aspx?n=<單元>&sms=<子單元>&s=<文章>；大安區社會課單元 n=0783D7E57EDE1FB4&sms=4A389A5CC11718C2。舊網址 ct.asp?xItem=… 會 302 轉到新網址。社會課首頁(s=2BDD2B898BDE4ED2)大多是連到社會局 dosw.gov.taipei 的連結（已由 taipei_dosw 收錄）。生育獎勵金在臺北市由戶政事務所受理，區公所網站沒有方案頁。"
+follow_links:
+  depth: 1
+  allow: ['News_Content\.aspx\?n=0783D7E57EDE1FB4&sms=4A389A5CC11718C2&s=']
+  deny: ['s=1438411665558F92', 's=87E8EA4C139C77F1', 's=2BDD2B898BDE4ED2', 's=300D532A976678E7', 'Download\.ashx']
+  max_links: 15
+pages:
+  - {url: "https://dado.gov.taipei/News.aspx?n=0783D7E57EDE1FB4&sms=4A389A5CC11718C2", title: 大安區公所社會課業務簡介一覽, seed_category: ""}
+  - {url: "https://dado.gov.taipei/News_Content.aspx?n=0783D7E57EDE1FB4&sms=4A389A5CC11718C2&s=B843CB3C8B48CD52", title: 災害救助申請簡介, seed_category: emergency_relief}
+  - {url: "https://dado.gov.taipei/News_Content.aspx?n=0783D7E57EDE1FB4&sms=4A389A5CC11718C2&s=97D40A837EC0FF9A", title: 身心障礙者生活補助申請須知, seed_category: disability_living_allowance}
+  - {url: "https://dado.gov.taipei/News_Content.aspx?n=0783D7E57EDE1FB4&sms=4A389A5CC11718C2&s=26E655AE41BEBEF7", title: 身心障礙者社會保險自付保險費現金補助, seed_category: disability_other}
+  - {url: "https://dado.gov.taipei/News_Content.aspx?n=0783D7E57EDE1FB4&sms=4A389A5CC11718C2&s=A6784B18C80BFED9", title: 國民年金被保險人所得未達一定標準資格申請簡介, seed_category: ""}
+  - {url: "https://dado.gov.taipei/News_Content.aspx?n=0783D7E57EDE1FB4&sms=4A389A5CC11718C2&s=4EBE59C4DB321FC8", title: 以工代賑臨時工申請須知, seed_category: ""}
+  - {url: "https://www-ws.gov.taipei/Download.ashx?u=LzAwMS9VcGxvYWQvMzExL2NrZmlsZS8zZmY3ZjEzNi1lNDQxLTQzNTktOWQwZC1lMmFkNTZiMTliMjcucGRm&n=6IKy5YWS5rSl6LK857Ch5LuLLnBkZg%3d%3d&icon=.pdf", title: 育兒津貼申請簡介, format: pdf, seed_category: child_allowance, source_page: "https://dado.gov.taipei/News_Content.aspx?n=0783D7E57EDE1FB4&sms=4A389A5CC11718C2&s=2BDD2B898BDE4ED2"}
+  - {url: "https://dado.gov.taipei/News_Content.aspx?n=0783D7E57EDE1FB4&sms=4A389A5CC11718C2&s=2BDD2B898BDE4ED2", title: 社會課服務項目, skip: true, skip_reason: 只是業務目錄頁，連結多半指向社會局 dosw.gov.taipei（已由 taipei_dosw 收錄）}
+  - {url: "https://dado.gov.taipei/News_Content.aspx?n=0783D7E57EDE1FB4&sms=4A389A5CC11718C2&s=300D532A976678E7", title: 身心障礙證明申請, skip: true, skip_reason: 只有鑑定流程與應備文件，沒有給付內容}
+  - {url: "https://dado.gov.taipei/cp.aspx?n=B97F40B7B1A09872", title: 好便利櫃檯受理項目一覽表, skip: true, skip_reason: 只是受理項目名稱清單，沒有資格與給付}
+  - {url: "https://dado.gov.taipei/News.aspx?n=3B6B49D14C7D84A7&sms=D36FF802DE9B88C4", title: 重陽專區, skip: true, skip_reason: 只有匯款同意書下載與社會局線上申請外部連結，沒有方案內文}

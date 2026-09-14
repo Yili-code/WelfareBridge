@@ -1,0 +1,31 @@
+# 候選來源：教育部國民及學前教育署 全國教保資訊網（www.ece.moe.edu.tw，已加白名單）
+# 網站結構：靜態路徑 /ch/<區>/<頁>/；「就學補助與育兒津貼」專區 /ch/subsidy/<頁>/ 共 4 個方案頁，
+# 學前特教專區另有身心障礙幼兒就學費用補助頁。主內容區 div#centercontainer.userBlk（內含 .containerBlk），
+# 資格／申請方式／金額表（<table>）都在其中；左側選單在 .leftNavBlk、麵包屑在 .breadCrumbBlk（不在 #centercontainer 內）。
+# /ch/subsidy/ 本身會 302 到 public-non-profit/，沒有獨立目錄頁；申請表頁與各縣市諮詢窗口頁只放表單／電話，不收。
+# 網站上沒有獨立的「弱勢加額補助」頁：低收、中低收入家庭子女免費的規定寫在各收費表的最後一列。
+id: ece_moe
+name: 教育部國教署全國教保資訊網 — 幼兒園就學補助
+organization: 教育部國民及學前教育署
+provider_type: central_government
+source_type: government_site
+base_url: https://www.ece.moe.edu.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [全國教保資訊網]
+data_confidence: 100
+enabled: true
+domains: [education, social_welfare]
+content_selectors: ["#centercontainer", ".containerBlk", ".centerCol"]
+pages:
+  # ---- 就學補助與育兒津貼專區 ----
+  - {url: "https://www.ece.moe.edu.tw/ch/subsidy/allowance-1/", title: 2歲以上未滿5歲幼兒育兒津貼, seed_category: child_allowance}
+  - {url: "https://www.ece.moe.edu.tw/ch/subsidy/ece-for-5y-1/", title: 5歲至入國民小學前幼兒就學補助（未就讀平價教保服務機構）, seed_category: education_subsidy}
+  - {url: "https://www.ece.moe.edu.tw/ch/subsidy/public-non-profit/", title: 公立及非營利幼兒園幼兒就學補助（家長每月繳費上限、政府協助支付差額、低收與中低收入家庭子女免費）, seed_category: education_subsidy}
+  - {url: "https://www.ece.moe.edu.tw/ch/subsidy/zgg-1/", title: 準公共幼兒園幼兒就學補助（家長每月繳費上限、政府協助支付差額、低收與中低收入家庭子女免費）, seed_category: education_subsidy}
+  # ---- 學前特教專區 ----
+  - {url: "https://www.ece.moe.edu.tw/ch/special_education/resources/allowance_Info/", title: 身心障礙幼兒就學費用補助, seed_category: education_subsidy}
+  # ---- 不收的頁面 ----
+  - {url: "https://www.ece.moe.edu.tw/ch/ggh/public/about-ggh/", title: 關於公共化教保服務, skip: true, skip_reason: 收費表與「公立、非營利幼兒園」頁完全相同，避免重複}
+  - {url: "https://www.ece.moe.edu.tw/ch/subsidy/allowance-1/apply_0001/", title: 育兒津貼及就學補助申請表下載, skip: true, skip_reason: 只有 22 縣市申請表 PDF 連結（表單），收錄政策排除}
+  - {url: "https://www.ece.moe.edu.tw/ch/subsidy/allowance-1/county-contact/", title: 各縣市育兒津貼／就學補助諮詢窗口, skip: true, skip_reason: 只有各縣市聯絡電話表，沒有資格與給付內容}
+  - {url: "https://www.ece.moe.edu.tw/ch/law/category07/", title: 幼兒就學補助相關法規, skip: true, skip_reason: 法規目錄，各法規頁只有連到 law.moj.gov.tw 的連結；法律本文被收錄政策排除}

@@ -1,0 +1,82 @@
+id: nantou_sw
+name: 南投縣政府社會及勞動局 — 生育、育兒、社會救助、老人福利
+organization: 南投縣政府社會及勞動局
+provider_type: local_government
+source_type: government_site
+# www.nantou.gov.tw 只是 JavaScript 轉址殼（縣府首頁），社會福利方案都在社會及勞動局的「社會福利資訊網」子站
+base_url: https://welfare.nantou.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [南投縣政府社會及勞動局]
+data_confidence: 100
+enabled: true
+domains: [social_welfare, long_term_care, disability]
+# 網站結構（重要）：
+#   方案內容頁網址型態 https://welfare.nantou.gov.tw/1486/<slug>，但靜態 HTML 只有標題與選單（<div class="table-block b2-1 noJSarea"> 內只有 h2）。
+#   內文由頁面載入後的 _fetchPage() 以 POST 送到 <input id="PartialUrl">（/1486/P_Word/Info/<MNU_ID>/<guid>）取得，
+#   需帶 .search-menu 內的 __RequestVerificationToken 與同一連線的 cookie；直接 GET 該 partial 回 404，無 token 的 POST 被 WAF 擋（Request Rejected）。
+#   GenericPageCrawler 只做 GET，抓不到這些 HTML 方案頁的內文 → 下面只列「附件 PDF」（GET 可直接下載，內容為實施計畫／要點／作業規定，含資格、給付、申請方式），
+#   HTML 方案頁以 skip 記錄，留給日後支援 POST 的 crawler。
+#   附件網址型態：/ViewService/FileDownload.ashx?id=<guid>&name=<hex>&module=File|Word_File（無副檔名，要用 format: pdf）。
+pages:
+  # ---------------------------------------------------------------- 生育獎勵金（縣府主管法規共用系統 glrs.nantou.gov.tw，靜態 HTML）
+  # 南投縣生育獎勵金由民政處主辦、各戶政事務所受理（要點第二點亦列社會及勞動處為權責單位）；社會福利資訊網與縣府官網都沒有內容頁
+  # （官網新聞頁已失效、戶政所網站同為 JS 載入的 CMS），縣府主管法規系統的要點全文是唯一可 GET 的官方內容頁：資格、第一～五胎金額、60 日內臨櫃／線上申請
+  - {url: "https://glrs.nantou.gov.tw/glrsout/LawContent.aspx?id=GL000080", title: 南投縣生育獎勵金發放作業要點, seed_category: birth_incentive}
+  # ---------------------------------------------------------------- 老人福利（附件 PDF）
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=4912a3bf-8ee6-411b-a128-c6bc53a921e4&name=0E0E76D3C3A944E6B126BE5267836A34&module=Word_File", title: 南投縣中低收入老人生活津貼審核作業辦法, seed_category: elderly_allowance, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/1002"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=e48516b3-4e09-4787-9727-e39f70c0fb4e&name=278FF462C5BA4C948FA9B1F516CC1020&module=Word_File", title: 南投縣發給中低收入老人特別照顧津貼實施辦法, seed_category: elderly_allowance, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/1001"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=2cd92b74-593e-4d65-a7a2-a79c91f1356a&name=1A9C89FDBA7F425F9525AE9EFCC76B40&module=File", title: 南投縣政府老人裝置假牙補助實施計畫, seed_category: elderly_allowance, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/1003"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=3f28803c-cac6-4d4b-b211-de82128eaa28&name=068C1772FB6648FBB68F7C1D540620A9&module=Word_File", title: 南投縣中低收入老人醫療補助規定, seed_category: elderly_allowance, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/1005"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=20607046-0056-499c-901f-ad98d47df393&name=14EDCB10E95F48D08A6D8A107B34E3B3&module=File", title: 南投縣中低收入老人傷病住院看護補助實施要點, seed_category: elderly_allowance, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/1006"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=a7d4857e-bf7b-4a12-93ae-73ad184560c1&name=35463B1B85B24D29A41C4B64B803D708&module=File", title: 南投縣中低收入老人自付全民健康保險費補助實施計畫, seed_category: elderly_allowance, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/18411841"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=9c8e188b-29d2-4b08-bfc3-e18f6c56b928&name=67276468A6EF4A61842BEE4FCBAB7D95&module=File", title: 南投縣重陽節敬老禮金發放作業規定, seed_category: elderly_allowance, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/1011"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=e4921285-61f7-49b4-b5c5-bcdc91d894f7&name=E9D782C8FE1B4EF88C80D97ABBD80C46&module=File", title: 南投縣辦理重陽節敬老禮金禮券發放實施要點, seed_category: elderly_allowance, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/1011"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=09bcfa4b-d346-466d-a066-5f6b5eb7fef2&name=F94EE3D3B48B458FB2866C448C47C922&module=File", title: 南投縣弱勢家庭老人住宅修繕補助辦法, seed_category: elderly_allowance, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/1013"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=616c5b77-4f85-4b89-b17e-2931e6327542&name=AF1FDCF2744E45449B4524CC233359D7&module=Word_File", title: 南投縣低收入戶老人公費安養補助作業要點, seed_category: institutional_care_subsidy, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/1020"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=fb7d9235-86f3-4097-be62-f585becd4d90&name=B7A2AB52A18246CF8189D8BB63515817&module=Word_File", title: 南投縣低收入戶老人公費養護作業規定, seed_category: institutional_care_subsidy, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/1021"}
+  # ---------------------------------------------------------------- 長期照顧（附件 PDF）
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=cce31273-1523-43ac-baaf-1b05bf610c07&name=9B59E65260F442C88C512A80705CACBD&module=File", title: 南投縣政府辦理長照輔具服務及居家無障礙環境改善服務暨代償墊付實施計畫, seed_category: assistive_device, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/1041"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=be9dfb7b-c278-46ee-8c04-de20be30c9c8&name=832CD9C7718A4737B2DEFEC4E8C90290&module=File", title: 南投縣營養餐飲服務補助計畫, seed_category: meal_service, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/1040"}
+  # ---------------------------------------------------------------- 兒童及少年（附件 PDF）
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=01bda388-74df-4857-8cc0-02ebcea97bdc&name=13CE4ADDC38449178719818357531333&module=File", title: 0至未滿2歲育兒津貼要點, seed_category: child_allowance, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/ch002_1"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=f97b4a33-7f19-45f1-915a-8c5895037d50&name=E9F9AE768084446CB71CF3277916E876&module=File", title: 南投縣兒童及少年生活扶助審核作業規定, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/ch002_3"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=d6d51b1b-d461-4ce9-83fe-ac6acfeb9efb&name=39B134026B3E439F9BB0F3435E5B5044&module=File", title: 南投縣政府弱勢家庭兒童少年緊急生活扶助補助及核發作業規定, seed_category: emergency_relief, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/ch002_4"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=ac76faa7-cd0b-41f8-aba6-d0455bb21cca&name=4D4081EEAB1C4CF78C3B82921579EE04&module=File", title: 南投縣弱勢兒童及少年醫療補助作業規定, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/ch002_5"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=72f4b8dd-eeaa-42fb-ac38-6269de55e65c&name=14E9696C65214DAD8827F1F9E68B69F1&module=File", title: 南投縣政府社會及勞動局辦理發展遲緩兒童早期療育費用補助計畫, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/ch006_11"}
+  # ---------------------------------------------------------------- 婦女福利／特殊境遇家庭（附件 PDF）
+  # 檔名「南投縣特殊境遇家庭扶助補助標準及所附資料一覽表(10810修)」：內容是各扶助項目的對象、申請期限、扶助標準、金額與應備文件表，
+  # 是方案內容本身；標題若照檔名寫「一覽表」會被收錄政策判為名單／窗口（directory），故依內容命名
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=9bfaff9c-e8fc-45f8-aca1-85ee592573aa&name=AADDF7A6474F4324957DD61CB86ADB16&module=File", title: 南投縣特殊境遇家庭扶助補助標準及應備文件, seed_category: special_circumstances_aid, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/2013"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=476b3f60-61c5-4b9e-8a0c-2274a5882d35&name=A04243EF2D544285A456D31606C57318&module=File", title: 南投縣特殊境遇家庭扶助申請及審核作業要點, seed_category: special_circumstances_aid, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/2013", skip: true, skip_reason: 掃描影像 PDF，pdf_to_text 抽不到文字（乾跑 0 字）；需要 OCR}
+  # ---------------------------------------------------------------- 身心障礙福利（附件 PDF）
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=63ad14ad-62f5-475f-9185-626c85dc7687&name=BCEA06031E7A40209AEBB53CA961D8E2&module=Word_File", title: 南投縣身心障礙者生活補助審核作業規定, seed_category: disability_living_allowance, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/3007"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=63575264-8dab-459a-aa2d-847887445c03&name=1B05FCB9E1344DDD884515EAF07F097E&module=File", title: 南投縣身心障礙者日間照顧及住宿式照顧補助審核作業規定, seed_category: disability_care_subsidy, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/3001"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=5926d9ad-f63e-486f-a8ed-f43185a41c43&name=603D747687EA42058AA923570DDCAE7E&module=File", title: 南投縣身心障礙者房屋租金補貼作業要點, seed_category: rental_subsidy, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/3003"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=9f746bb0-37eb-41d5-aff4-3c2f6891d755&name=071B0EF94C9743A6911EB98CF4267123&module=File", title: 南投縣政府辦理身心障礙者參加社會保險保險費補助作業規定, seed_category: disability_other, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/3006"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=2a1b9a99-df1b-4e3d-9f2a-3a59e55c94d9&name=BF8E40E50F0A404F8E52AF20C726D19A&module=File", title: 南投縣身心障礙者臨時及短期照顧服務補助計畫, seed_category: respite_care, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/3015"}
+  # ---------------------------------------------------------------- 社會救助（附件 PDF）
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=17d22b8b-20c6-4521-a69f-d752952e7e0d&name=C133FB55B45D4A1C9090BC9B62F37219&module=File", title: 南投縣辦理民眾急難救助實施要點, seed_category: emergency_relief, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/17-8"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=cde3d8c1-06d6-4eb9-9305-2b12ebc7646b&name=48908F0B38FA4BA586FF7564ACF9CF8F&module=File", title: 南投縣政府急難救助申請作業應備文件及程序, seed_category: emergency_relief, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/17-8"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=ffbf3c22-61ae-4313-be8b-e2f7abcab28f&name=E5141AFBD4534082B381CF44F0A57227&module=Word_File", title: 強化社會安全網－急難紓困實施方案, seed_category: emergency_relief, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/reliefsubsidy"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=9228ca0b-dd9d-42ee-9b3c-89802a4d51bf&name=B1949394325D4987875F4F427166CB3B&module=Word_File", title: 南投縣政府醫療補助審核作業規定（低收入戶及中低收入戶傷病醫療補助）, seed_category: low_income_allowance, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/4001"}
+  - {url: "https://welfare.nantou.gov.tw/ViewService/FileDownload.ashx?id=5a871a93-abf9-455c-bd6e-7a778f498e70&name=3E997B7875D4441A861610AA67BC0CBD&module=Word_File", title: 南投縣辦理傷病看護費用補助實施計劃（低收入戶及中低收入戶）, seed_category: low_income_allowance, format: pdf, source_page: "https://welfare.nantou.gov.tw/1486/4002"}
+  # ---------------------------------------------------------------- HTML 方案頁：內文要 POST 才拿得到，GenericPageCrawler 抓不到 → 只留紀錄
+  - {url: "https://welfare.nantou.gov.tw/1486/1002", title: 中低收入老人生活津貼, seed_category: elderly_allowance, skip: true, skip_reason: 靜態 HTML 只有標題（14 字）；內文（補助對象、申請資格、補助標準每月 8,329／4,164 元）由 POST /1486/P_Word/Info/5816/<guid> 載入且需 __RequestVerificationToken，GET 抓不到}
+  - {url: "https://welfare.nantou.gov.tw/1486/1001", title: 中低收入老人特別照顧津貼, seed_category: elderly_allowance, skip: true, skip_reason: 同上，內文為 POST 載入的 P_Word partial（約 890 字）}
+  - {url: "https://welfare.nantou.gov.tw/1486/1005", title: 中低收入老人醫療補助, seed_category: elderly_allowance, skip: true, skip_reason: 同上，內文為 POST 載入的 P_Word partial；規定內容已改列附件 PDF}
+  - {url: "https://welfare.nantou.gov.tw/1486/1020", title: 低收入戶老人公費安養, seed_category: institutional_care_subsidy, skip: true, skip_reason: 同上，內文為 POST 載入的 P_Word partial（約 535 字）；作業要點已改列附件 PDF}
+  - {url: "https://welfare.nantou.gov.tw/1486/1021", title: 低收入戶老人公費養護, seed_category: institutional_care_subsidy, skip: true, skip_reason: 同上，內文為 POST 載入的 P_Word partial（約 1,000 字）；作業規定已改列附件 PDF}
+  - {url: "https://welfare.nantou.gov.tw/1486/3007", title: 身心障礙生活補助, seed_category: disability_living_allowance, skip: true, skip_reason: 同上，內文為 POST 載入的 P_Word partial（約 1,030 字）；審核作業規定已改列附件 PDF}
+  - {url: "https://welfare.nantou.gov.tw/1486/3041", title: 低收入戶生活補助（低收入戶申請）, seed_category: low_income_allowance, skip: true, skip_reason: 同上，內文為 POST 載入的 P_Word partial（約 1,580 字，含補助對象、家庭總收入／財產門檻、補助金額）；附件只有申請調查表與流程表，沒有可改抓的方案 PDF}
+  - {url: "https://welfare.nantou.gov.tw/1486/3042", title: 中低收入戶申請, seed_category: low_income_allowance, skip: true, skip_reason: 同上，內文為 POST 載入的 P_Word partial（約 1,240 字）；沒有附件}
+  - {url: "https://welfare.nantou.gov.tw/1486/3043", title: 低收入戶喪葬補助, seed_category: low_income_allowance, skip: true, skip_reason: 同上，內文為 POST 載入的 P_Word partial（約 320 字）；沒有附件}
+  - {url: "https://welfare.nantou.gov.tw/1486/3044", title: 低收入戶婦嬰營養補助, seed_category: low_income_allowance, skip: true, skip_reason: 同上，內文為 POST 載入的 P_Word partial（約 340 字）；附件只有領款收據}
+  - {url: "https://welfare.nantou.gov.tw/1486/4001", title: 低收入戶及中低收入戶傷病醫療補助, seed_category: low_income_allowance, skip: true, skip_reason: 同上，內文為 POST 載入的 P_Word partial（約 1,060 字）；審核作業規定已改列附件 PDF}
+  - {url: "https://welfare.nantou.gov.tw/1486/4002", title: 低收入戶及中低收入戶傷病住院看護補助, seed_category: low_income_allowance, skip: true, skip_reason: 同上，內文為 POST 載入的 P_Word partial（約 810 字）；實施計劃已改列附件 PDF}
+  - {url: "https://welfare.nantou.gov.tw/1486/reliefsubsidy", title: 急難紓困實施方案, seed_category: emergency_relief, skip: true, skip_reason: 同上，內文為 POST 載入的 P_Word partial（約 3,070 字）；實施方案已改列附件 PDF}
+  - {url: "https://welfare.nantou.gov.tw/1486/326", title: 三節慰問金（春節、端午、中秋）, seed_category: low_income_allowance, skip: true, skip_reason: 同上，內文為 POST 載入的 P_Word partial（約 350 字）；附件只有清冊、名冊、領據}
+  - {url: "https://welfare.nantou.gov.tw/1486/microinsurance", title: 微型保險, skip: true, skip_reason: 同上，內文為 POST 載入的 P_Word partial（約 1,410 字）}
+  - {url: "https://welfare.nantou.gov.tw/1486/1731", title: 國民年金保費補助, skip: true, skip_reason: 同上，內文為 POST 載入的 P_Word partial（約 580 字）；沒有附件}
+  - {url: "https://welfare.nantou.gov.tw/1486/baby", title: 國民年金生育給付, seed_category: birth_incentive, skip: true, skip_reason: 同上，內文為 POST 載入的 P_Word partial（約 820 字，含申請資格與給付標準）；沒有附件。縣府「南投縣生育獎勵金」不在本站（由民政處／各戶政事務所受理，縣府官網只有失效的新聞頁與法規系統條文）}
+  - {url: "https://welfare.nantou.gov.tw/1486/18", title: 兒童及少年未來教育與發展帳戶申請, skip: true, skip_reason: 同上，內文為 POST 載入的 P_Word partial（約 1,290 字）；附件只有申請書與授權書}
+notes: 南投縣政府社會及勞動局社會福利資訊網（welfare.nantou.gov.tw）。方案頁 /1486/<slug> 的內文全部由 JavaScript 以 POST 載入（P_Word 為內文頁、P_File 為附件清單頁），GenericPageCrawler 只抓得到標題；本設定改抓各方案頁的附件 PDF（實施計畫／要點／作業規定），source_page 指回原方案頁。若日後 crawler 支援「GET 頁面 → 取 #PartialUrl 與 .search-menu 內 __RequestVerificationToken → POST（page=1）」，HTML 方案頁的內文在回應的 div.table-responsive table 內（標題／發布時間／發布單位／內容／相關檔案）。站台憑證缺 Subject Key Identifier，需 ssl_strict_x509=false（專案預設）。

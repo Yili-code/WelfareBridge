@@ -1,0 +1,39 @@
+# 候選來源：衛生福利部社會及家庭署（www.sfaa.gov.tw）
+# 網站結構：目錄頁 /sfaa/list/<node>、/sfaa/menus/<node>；內容頁 /sfaa/list/detail/<node>/<id> 與 /sfaa/page/<id>；
+# 主內容區 div.content-body-main（外層 #dataContentBody）。多數方案頁只放附件，內文在 PDF
+# （/www_download_attach.php/<檔名>.pdf?f=…&g=…&view_pdf=1），所以以 format: pdf 直接收附件。
+id: sfaa_childcare
+name: 衛生福利部社會及家庭署 — 育兒津貼、托育補助、兒少福利
+organization: 衛生福利部社會及家庭署
+provider_type: central_government
+source_type: government_site
+base_url: https://www.sfaa.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [社家署, 社會及家庭署]
+data_confidence: 100
+enabled: true
+domains: [social_welfare]
+content_selectors: [".content-body-main", "#dataContentBody", "#mainContent"]
+pages:
+  # ---- 育兒津貼 ----
+  - {url: "https://www.sfaa.gov.tw/sfaa/list/detail/5e0/5KZ", title: 育有未滿2歲兒童育兒津貼, seed_category: child_allowance}
+  - {url: "https://www.sfaa.gov.tw/www_download_attach.php/%E8%82%B2%E6%9C%89%E6%9C%AA%E6%BB%BF2%E6%AD%B2%E5%85%92%E7%AB%A5%E8%82%B2%E5%85%92%E6%B4%A5%E8%B2%BC%E7%94%B3%E9%A0%98%E4%BD%9C%E6%A5%AD%E8%A6%81%E9%BB%9E.pdf?f=_OSL256_o_8t6Ku_dviccCk1YSIPR4A7bm1jELEANFkHAoevJRIUpwbxOYtsRGdOmWOTy87HuOxAwwLEgqza51_hhL-CEe1A3zy6KnvRlMQDyn2diF5go08TpvLIENkzPq7uyoXI&g=_OSL256_99ft9RbTq5wUeETjAxvVL-QyJntE6GYIM-x5K2Cl3Ro&view_pdf=1", title: 育有未滿2歲兒童育兒津貼申領作業要點, format: pdf, seed_category: child_allowance, source_page: "https://www.sfaa.gov.tw/sfaa/list/detail/5dY/5y6"}
+  # ---- 托育補助（公共化／準公共） ----
+  - {url: "https://www.sfaa.gov.tw/www_download_attach.php/%E7%9B%B4%E8%BD%84%E5%B8%82%E3%80%81%E7%B8%A3%28%E5%B8%82%29%E6%94%BF%E5%BA%9C%E8%BE%A6%E7%90%86%E6%9C%AA%E6%BB%BF%E4%BA%8C%E6%AD%B2%E5%85%92%E7%AB%A5%E6%89%98%E8%82%B2%E5%85%AC%E5%85%B1%E5%8C%96%E5%8F%8A%E6%BA%96%E5%85%AC%E5%85%B1%E6%9C%8D%E5%8B%99%E4%BD%9C%E6%A5%AD%E8%A6%81%E9%BB%9E%28%E4%BF%AE%E6%AD%A3%E5%BE%8C%E5%85%A8%E6%96%87%29.pdf?f=_OSL256_o_8t6Ku_dviccCk1YSIPR2fvqTpG0-24ahUxMepZJiv9dpKD825YRMc2avSUdmwsqMillI25oixpN5YOyDaB2UaVIifIGBwQKBgT2hZCMh76Uq6rJvZWOPhsqi9G1SLS&g=_OSL256_99ft9RbTq5wUeETjAxvVL-QyJntE6GYIM-x5K2Cl3Ro&view_pdf=1", title: 直轄市、縣(市)政府辦理未滿二歲兒童托育公共化及準公共服務作業要點, format: pdf, seed_category: childcare_subsidy, source_page: "https://www.sfaa.gov.tw/sfaa/list/detail/5d3/5KH"}
+  - {url: "https://www.sfaa.gov.tw/www_download_attach.php/%E9%99%84%E8%A1%A8%E4%BA%8C-%E5%85%AC%E5%85%B1%E5%8C%96%E5%8F%8A%E6%BA%96%E5%85%AC%E5%85%B1%E6%89%98%E8%82%B2%E5%8D%94%E5%8A%A9%E6%94%AF%E4%BB%98%E9%87%91%E9%A1%8D.pdf?f=_OSL256_o_8t6Ku_dviccCk1YSIPR_3LsI2U8SRSBmq36735IX6_FtOoljNqckMpJEgq2hHn8MPakFuh-c6_aH32IGHW-1mseKANWsmo6V5G0oOip2gQL8ZKx3SBO463UPSmGVfY&g=_OSL256_99ft9RbTq5wUeETjAxvVL-QyJntE6GYIM-x5K2Cl3Ro&view_pdf=1", title: 未滿二歲兒童公共化及準公共托育補助（協助支付）金額表, format: pdf, seed_category: childcare_subsidy, source_page: "https://www.sfaa.gov.tw/sfaa/list/detail/5d3/5KH"}
+  # ---- 弱勢兒少生活／緊急／醫療扶助 ----
+  - {url: "https://www.sfaa.gov.tw/sfaa/list/detail/5i2/5tP", title: 弱勢兒童及少年生活扶助, seed_category: low_income_allowance}
+  - {url: "https://www.sfaa.gov.tw/www_download_attach.php/%E5%BC%B1%E5%8B%A2%E5%85%92%E7%AB%A5%E5%8F%8A%E5%B0%91%E5%B9%B4%E7%94%9F%E6%B4%BB%E6%89%B6%E5%8A%A9%E8%88%87%E6%89%98%E8%82%B2%E5%8F%8A%E9%86%AB%E7%99%82%E8%B2%BB%E7%94%A8%E8%A3%9C%E5%8A%A9%E8%BE%A6%E6%B3%95.pdf?f=_OSL256_o_8t6Ku_dviccCk1YSIPR4IzUXhe4GozePy81asLrTfR3l2fHVRNIkTBv2wd4fjodtNbf9gS5Y_vuUHYjso37iKQabnm-SBIUk1FGjYPDgox_V08no_4SmWRss9o_EYs&g=_OSL256_99ft9RbTq5wUeETjAxvVL-QyJntE6GYIM-x5K2Cl3Ro&view_pdf=1", title: 弱勢兒童及少年生活扶助與托育及醫療費用補助辦法, format: pdf, seed_category: low_income_allowance, source_page: "https://www.sfaa.gov.tw/sfaa/list/detail/5i2/5tP"}
+  - {url: "https://www.sfaa.gov.tw/sfaa/list/detail/5i2/5tQ", title: 弱勢家庭兒童及少年緊急生活扶助, seed_category: emergency_relief}
+  - {url: "https://www.sfaa.gov.tw/sfaa/list/detail/5i3/5BH", title: 弱勢兒童及少年醫療補助, skip: true, skip_reason: 內文只有一段 188 字摘要且無金額；資格與給付內容在「弱勢兒童及少年生活扶助與托育及醫療費用補助辦法」PDF（已另收）}
+  - {url: "https://www.sfaa.gov.tw/www_download_attach.php/115%E5%B9%B4%E6%8C%87%E6%A8%99%E6%80%A7%E8%A8%88%E7%95%AB%E8%A8%88%E7%95%AB%E6%9B%B8-%E8%A3%9C%E5%8A%A9%E8%A6%AA%E5%B1%AC%E6%8E%A5%E5%8F%97%E5%A7%94%E8%A8%97%E7%85%A7%E9%A1%A7%E5%85%92%E5%B0%91%E8%B2%BB%E7%94%A8%E8%A8%88%E7%95%AB.pdf?f=_OSL256_o_8t6Ku_dviccCk1YSIPR50Hkqn70y3sGpQpXF6DKrnPe10Ogbzk7imF5nXCGzzsF27bBzGnob1OXk_orShHX-7NxP24sApX_rn0H342pSvLYPUag1EWIAt_3q0PHxdL&g=_OSL256_99ft9RbTq5wUeETjAxvVL-QyJntE6GYIM-x5K2Cl3Ro&view_pdf=1", title: 補助親屬接受委託照顧兒少費用計畫, format: pdf, source_page: "https://www.sfaa.gov.tw/sfaa/list/5eL"}
+  # ---- 家庭支持 ----
+  - {url: "https://www.sfaa.gov.tw/sfaa/list/detail/5eA/6v6", title: 衛生福利部社會及家庭署115年第2階段單親培力計畫, seed_category: education_subsidy}
+  # ---- 老人福利 ----
+  - {url: "https://www.sfaa.gov.tw/sfaa/page/5fR", title: 中低收入老人補助裝置假牙實施計畫, seed_category: elderly_allowance}
+  - {url: "https://www.sfaa.gov.tw/sfaa/list/detail/5fF/5JY", title: 馬偕計畫（長期奉獻外籍人士比照老人優待及長照服務）, seed_category: elderly_service}
+  # ---- 目錄／宣導頁（不收） ----
+  - {url: "https://www.sfaa.gov.tw/sfaa/list/5d3", title: 育兒津貼及托育準公共專區, skip: true, skip_reason: 專區目錄頁，只有各公告的連結}
+  - {url: "https://www.sfaa.gov.tw/sfaa/list/detail/5d3/5Ur", title: 0~6歲國家跟你一起養2.0, skip: true, skip_reason: 只有宣導圖片，沒有可抽取的文字}
+  - {url: "https://www.sfaa.gov.tw/sfaa/list/detail/5d3/5KG", title: 未滿2歲兒童托育補助問答集, skip: true, skip_reason: 問答集（FAQ）附件頁，收錄政策排除}
+  - {url: "https://www.sfaa.gov.tw/sfaa/list/detail/5eK/5XX", title: 原住民兒童零至二歲托育服務補助要點, skip: true, skip_reason: 補助對象為試辦單位（地方政府／民間團體）的開辦與營運經費，不是民眾可申請的給付}

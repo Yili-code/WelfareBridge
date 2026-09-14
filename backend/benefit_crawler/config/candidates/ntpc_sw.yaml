@@ -1,0 +1,53 @@
+id: ntpc_sw
+name: 新北市政府社會局 — 生育獎勵、育兒、社會救助、老人福利
+organization: 新北市政府社會局
+provider_type: local_government
+source_type: government_site
+base_url: https://www.sw.ntpc.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [新北市政府社會局]
+data_confidence: 100
+enabled: true
+domains: [social_welfare, long_term_care, disability]
+# 社會局官網（www.sw.ntpc.gov.tw）內容頁主內容在 #home_content；
+# 方案的「資格／金額／申請方式」多半放在新北市申辦 E 服務（service.ntpc.gov.tw/eservice/CaseData.action?itemId=…），
+# 主內容在 .case-detail-box（標題在區塊外的 h2，故 pages 一律給 title）。
+content_selectors: ["#home_content", ".case-detail-box"]
+pages:
+  # ---- 生育、育兒、托育 ----
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=101054", title: 新北市生育獎勵金, seed_category: child_allowance}
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110018", title: 新北市低收入戶產婦生育及營養補助, seed_category: child_allowance}
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110013", title: 新北市弱勢兒童少年生活扶助, seed_category: ""}
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110058", title: 新北市弱勢兒童及少年醫療補助, seed_category: ""}
+  - {url: "https://www.sw.ntpc.gov.tw/home.jsp?id=5867b2cfdc1aad19&act=be4f48068b2b0031&dataserno=202efb1cf9659f11b13540de239b7fa8", title: 0~2歲擴大育兒津貼及準公共化托育專區, seed_category: child_allowance, skip: true, skip_reason: 只有法令依據、名冊與申請表的附件連結清單，資格與金額都在附件裡}
+  - {url: "https://www.sw.ntpc.gov.tw/home.jsp?id=b2dfefc09cf046f2&act=be4f48068b2b0031&dataserno=202efb1cf9659f11b2145d719ce3e007", title: 弱勢家庭兒童夜間暨臨時托育補助, seed_category: childcare_subsidy, skip: true, skip_reason: 頁面只有實施計畫與申請表附件清單，沒有方案內文}
+  - {url: "https://www.sw.ntpc.gov.tw/home.jsp?id=b2dfefc09cf046f2&act=be4f48068b2b0031&dataserno=c0aa2dd9e1d590ffd20fabc509a45600", title: 新北市政府臨時托育服務, seed_category: childcare_subsidy, skip: true, skip_reason: 頁面只有服務計畫附件，沒有方案內文}
+  - {url: "https://lovebaby.sw.ntpc.gov.tw/", title: 新北育兒資訊網, skip: true, skip_reason: Angular 單頁應用（#/ 路由），福利內容由 JavaScript 動態載入，伺服器端只有空殼}
+  # ---- 社會救助 ----
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110017", title: 新北市低收入戶資格申請, seed_category: low_income_allowance}
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110069", title: 新北市中低收入戶資格申請, seed_category: low_income_allowance}
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110019", title: 新北市急難救助, seed_category: emergency_relief}
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=300034", title: 新北市政府委任區公所辦理強化社會安全網急難紓困實施方案, seed_category: emergency_relief}
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=300033", title: 新北市市民意外事故致死救助, seed_category: emergency_relief}
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110098", title: 新北市低收入戶及中低收入戶傷病住院看護費用補助, seed_category: low_income_allowance}
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110015", title: 新北市市民醫療補助, seed_category: ""}
+  - {url: "https://www.sw.ntpc.gov.tw/home.jsp?id=dff618d9d6f956fa", title: 社會救助業務總覽, skip: true, skip_reason: 只是分類目錄頁（各方案連到 service.ntpc.gov.tw 申辦 E 服務，跨主機無法用 follow_links 追）}
+  # ---- 老人福利 ----
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110027", title: 新北市中低收入老人生活津貼, seed_category: elderly_allowance}
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110004", title: 新北市中低收入老人特別照顧津貼, seed_category: elderly_allowance}
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110063", title: 新北市中低收入老人裝置假牙補助, seed_category: elderly_allowance}
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110052", title: 新北市65歲以上未滿70歲中低收入老人全民健康保險自付保險費補助, seed_category: elderly_allowance}
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110051", title: 新北市中低收入老人重病住院看護補助, seed_category: elderly_allowance}
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110032", title: 新北市低收入戶及中低收入失能老人接受長期照顧機構安置補助, seed_category: institutional_care_subsidy}
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110006", title: 新北市中低收入戶老人住宅修繕補助, seed_category: elderly_service}
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110026", title: 新北市敬老、愛心及愛心陪伴悠遊卡, seed_category: elderly_service}
+  - {url: "https://www.sw.ntpc.gov.tw/home.jsp?id=bd3ac04bd17eafde&act=be4f48068b2b0031&dataserno=c88dc1550b5791675b53145f3441d318", title: 新北市重陽禮金, seed_category: elderly_allowance}
+  - {url: "https://www.sw.ntpc.gov.tw/home.jsp?id=bd3ac04bd17eafde&act=be4f48068b2b0031&dataserno=1386a3300fb1f9c4ce2557492e1cf60e", title: 新北市獨居老人照顧關懷服務計畫, seed_category: elderly_service, skip: true, skip_reason: 機關間的實施計畫（依據、目的、執行單位分工），沒有民眾申請資格與申請方式}
+  - {url: "https://www.sw.ntpc.gov.tw/home.jsp?id=bd3ac04bd17eafde", title: 老人福利業務總覽, skip: true, skip_reason: 只是分類目錄頁（分頁靠 POST 表單，方案多連到 service.ntpc.gov.tw）}
+  # ---- 身心障礙 ----
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110049", title: 新北市身心障礙者生活補助, seed_category: disability_living_allowance}
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110043", title: 新北市身心障礙者參加全民健康保險及社會保險自付保費補助, seed_category: disability_other}
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110030", title: 新北市身心障礙者租賃房屋租金補助, seed_category: rental_subsidy}
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110094", title: 新北市身心障礙者輔具費用補助, seed_category: assistive_device}
+  - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110105", title: 新北市長期照顧輔具服務及居家無障礙環境改善服務補助, seed_category: assistive_device}
+  - {url: "https://www.sw.ntpc.gov.tw/home.jsp?id=d4abdaae79035953&act=be4f48068b2b0031&dataserno=c88dc1550b5791674d27c1b26f65a24e", title: 身心障礙者日間照顧及住宿式照顧費用補助, seed_category: disability_care_subsidy, skip: true, skip_reason: 頁面只有申請規定與補助標準一覽表的附件連結，沒有方案內文}

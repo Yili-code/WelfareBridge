@@ -1,0 +1,11 @@
+node_modules
+.next
+.git
+.project-history
+backend/.venv
+backend/data
+**/__pycache__
+data
+.env*
+!.env.example
+test-results

@@ -1,0 +1,89 @@
+id: changhua_sw
+name: 彰化縣政府社會處 — 生育、育兒、社會救助、老人福利
+organization: 彰化縣政府社會處
+provider_type: local_government
+source_type: government_site
+# https://social.chcg.gov.tw/ 會 302 轉到 www.chcg.gov.tw/DTO/social/…，所有內容頁都在 www.chcg.gov.tw 底下，base_url 直接用轉址後的位址。
+base_url: https://www.chcg.gov.tw/DTO/social/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+# base_url 首頁 <title> 是「彰化縣政府全球資訊網-社會處」，各內容頁 <title> 結尾是「-彰化縣政府社會處」
+expected_title_keywords: [彰化縣政府社會處, 彰化縣政府全球資訊網-社會處]
+data_confidence: 100
+enabled: true
+domains: [social_welfare, long_term_care, disability]
+# 方案內容頁（06service/service01_con.aspx 與 07other/other01_con.aspx）主內容都在 <article class="pages_content_blcok-article">（站方拼字就是 blcok）：
+# 含方案標題、承辦單位／電話／處理期限、申辦說明（資格、金額、申請方式）。#div_print 是含附件清單的外層，給清單頁用。
+content_selectors: [".pages_content_blcok-article", "#div_print"]
+follow_links:
+  depth: 1
+  # 只追「便民服務 › 申辦服務 › 津貼及補助專區」（cate 2434）底下的方案頁；福利服務申辦（cate 7006）混有身障證明請領、停車識別證等行政程序頁，改為逐頁列出
+  allow: ["service01_con\\.aspx\\?topsn=2434&data_id="]
+  deny: ["getFile\\.aspx", "bulletin", "service01_list", "other01_list", "main\\.aspx", "sitemap", "links01", "sharer", "line\\.naver", "ctrl\\.chcg"]
+  max_links: 40
+pages:
+  # ── 便民服務 › 申辦服務 › 津貼及補助專區 ──
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=11371", title: 彰化縣政府生育補助, seed_category: birth_incentive}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=11495", title: 特殊境遇家庭扶助, seed_category: special_circumstances_aid}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25544", title: 設籍前新住民遭逢特殊境遇家庭扶助, seed_category: special_circumstances_aid}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=21902", title: 育有未滿二歲兒童育兒津貼, seed_category: child_allowance}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25527", title: 未滿二歲兒童托育準公共化服務費用, seed_category: childcare_subsidy}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25531", title: 零至六歲幼童臨時托育補助, seed_category: childcare_subsidy}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25534", title: 低收入戶暨寄養家庭兒童托育津貼, seed_category: childcare_subsidy}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25535", title: 弱勢兒童及少年生活扶助與醫療費用補助, seed_category: child_allowance}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25536", title: 罹患癌症之兒童及青少年醫療費用補助}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25537", title: 弱勢家庭兒童及少年緊急生活扶助, seed_category: child_allowance}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25538", title: 新生兒助聽器補助, seed_category: assistive_device}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25539", title: 發展遲緩兒童接受日間托育服務補助, seed_category: childcare_subsidy}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25540", title: 發展遲緩兒童早期療育費用補助}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=8372", title: 身心障礙者生活補助, seed_category: disability_living_allowance}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25541", title: 身心障礙者輔具費用補助, seed_category: assistive_device}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25547", title: 居家身心障礙者使用維生器材及必要生活輔具用電優惠, seed_category: disability_other}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25542", title: 身心障礙者房屋租金補貼, seed_category: rental_subsidy}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25560", title: 身心障礙者購屋貸款利息補貼, seed_category: disability_other}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25546", title: 身心障礙者(中)低收入戶裝置假牙費用補助, seed_category: disability_other}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25561", title: 身心障礙者購置停車位貸款利息補貼或承租停車位補助, seed_category: disability_other}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25558", title: 身心障礙者購買或承租公有公共場所商店攤販低利貸款或租金補貼, seed_category: disability_other}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25532", title: 彰化縣長青幸福卡申辦暨補助項目, seed_category: elderly_service}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25525", title: 中低收入老人生活津貼, seed_category: elderly_allowance}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25526", title: 中低收入老人特別照顧津貼, seed_category: elderly_allowance}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25528", title: 中低收入老人住宅設施設備補助, seed_category: elderly_service}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25530", title: 中低收入老人傷病醫療暨看護費用補助, seed_category: elderly_allowance}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25574", title: 低收入戶老人公費安養護補助, seed_category: institutional_care_subsidy}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25572", title: 低收入戶及中低收入老人裝置假牙補助, seed_category: elderly_allowance}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25573", title: 65歲以上老人裝置全口活動假牙補助, seed_category: elderly_allowance}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=24341", title: 低收入戶補助, seed_category: low_income_allowance}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=21903", title: 災害救助, seed_category: emergency_relief}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=21944", title: 急難救助, seed_category: emergency_relief}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=2434&data_id=25584", title: 國民年金所得未達一定標準保險費補助}
+  # ── 便民服務 › 申辦服務 › 福利服務申辦 ──
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=7006&data_id=25564", title: 彰化縣敬老眼鏡, seed_category: elderly_service}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=7006&data_id=25566", title: 防走失愛心手鍊, seed_category: elderly_service}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=7006&data_id=25576", title: 老人緊急救援連線系統, seed_category: elderly_service}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=7006&data_id=25575", title: 獨居老人關懷訪視及電話問安服務, seed_category: elderly_service}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=7006&data_id=25687", title: 臨時托育服務, seed_category: childcare_subsidy}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_con.aspx?topsn=7006&data_id=25543", title: 身心障礙者小型復康巴士, seed_category: transport_service}
+  # ── 業務專區裡「津貼及補助專區」沒有的方案（社會救助／長青福利／身心障礙專區）──
+  - {url: "https://www.chcg.gov.tw/DTO/social/07other/other01_con.aspx?topsn=714&cate_id=1833&data_id=12792", title: 中低收入戶資格認定, seed_category: low_income_allowance}
+  - {url: "https://www.chcg.gov.tw/DTO/social/07other/other01_con.aspx?topsn=714&cate_id=1833&data_id=8714", title: 改善低收入戶住宅設施設備補助, seed_category: low_income_allowance}
+  - {url: "https://www.chcg.gov.tw/DTO/social/07other/other01_con.aspx?topsn=714&cate_id=1833&data_id=8726", title: 中低收入戶傷病醫療及看護費補助, seed_category: low_income_allowance}
+  - {url: "https://www.chcg.gov.tw/DTO/social/07other/other01_con.aspx?topsn=714&cate_id=1833&data_id=11568", title: 強化社會安全網－急難紓困實施方案, seed_category: emergency_relief}
+  - {url: "https://www.chcg.gov.tw/DTO/social/07other/other01_con.aspx?topsn=714&cate_id=1833&data_id=27919", title: 油症患者喪葬補助}
+  - {url: "https://www.chcg.gov.tw/DTO/social/07other/other01_con.aspx?topsn=714&cate_id=1134&data_id=28359", title: 國保生育給付加給補助至10萬元, seed_category: birth_incentive}
+  - {url: "https://www.chcg.gov.tw/DTO/social/07other/other01_con.aspx?topsn=714&cate_id=4572&data_id=18788", title: 兒童及少年未來教育與發展帳戶}
+  - {url: "https://www.chcg.gov.tw/DTO/social/07other/other01_con.aspx?topsn=714&cate_id=8009&data_id=28104", title: 「資產累積、築夢心希望」家庭發展帳戶脫貧計畫}
+  - {url: "https://www.chcg.gov.tw/DTO/social/07other/other01_con.aspx?topsn=714&cate_id=8009&data_id=28105", title: 「儲蓄希望、培力築夢」脫貧試辦計畫}
+  - {url: "https://www.chcg.gov.tw/DTO/social/07other/other01_con.aspx?topsn=711&cate_id=2298&data_id=11143", title: 中低收入老人健保費補助, seed_category: elderly_allowance}
+  - {url: "https://www.chcg.gov.tw/DTO/social/07other/other01_con.aspx?topsn=711&cate_id=5692&data_id=26467", title: 彰化縣重陽敬老禮金, seed_category: elderly_allowance}
+  - {url: "https://www.chcg.gov.tw/DTO/social/07other/other01_con.aspx?topsn=711&cate_id=7892&data_id=27708", title: 低收入戶老人配戴助聽器補助, seed_category: assistive_device}
+  - {url: "https://www.chcg.gov.tw/DTO/social/07other/other01_con.aspx?topsn=715&cate_id=5067&data_id=20146", title: 身心障礙者日間照顧及住宿式照顧費用補助, seed_category: disability_care_subsidy}
+  - {url: "https://www.chcg.gov.tw/DTO/social/07other/other01_con.aspx?topsn=715&cate_id=5297&data_id=20697", title: 身心障礙者參加社會保險保險費補助, seed_category: disability_other}
+  - {url: "https://www.chcg.gov.tw/DTO/social/07other/other01_con.aspx?topsn=715&cate_id=5219&data_id=20480", title: 身心障礙者家庭托顧服務, seed_category: family_care_home}
+  - {url: "https://www.chcg.gov.tw/DTO/social/07other/other01_con.aspx?topsn=715&cate_id=5218&data_id=20479", title: 身心障礙者社區式日間照顧服務, seed_category: day_care}
+  - {url: "https://www.chcg.gov.tw/DTO/social/07other/other01_con.aspx?topsn=715&cate_id=5060&data_id=20103", title: 身心障礙者臨時及短期照顧服務, seed_category: respite_care}
+  - {url: "https://www.chcg.gov.tw/DTO/social/07other/other01_con.aspx?topsn=715&cate_id=5207&data_id=20458", title: 身心障礙者監護及輔助宣告補助, seed_category: disability_other}
+  # ── 清單頁：標題用「總覽」讓收錄政策判為彙整頁，但仍抓取並由 follow_links 追新方案 ──
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_list.aspx?txtQKeyword=&cate_id=2434&page=1", title: 津貼及補助專區總覽（1）}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_list.aspx?txtQKeyword=&cate_id=2434&page=2", title: 津貼及補助專區總覽（2）}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_list.aspx?txtQKeyword=&cate_id=2434&page=3", title: 津貼及補助專區總覽（3）}
+  - {url: "https://www.chcg.gov.tw/DTO/social/06service/service01_list.aspx?txtQKeyword=&cate_id=2434&page=4", title: 津貼及補助專區總覽（4）}
+  - {url: "https://www.chcg.gov.tw/DTO/social/07other/other01_list.aspx?topsn=714", title: 社會救助專區目錄, skip: true, skip_reason: 只是分類目錄頁（子項已逐一列在 pages）}

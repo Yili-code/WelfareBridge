@@ -1,0 +1,93 @@
+# 關鍵字過濾／分類的「種子」規則（v2）。
+#
+# 這份只是語料統計前的起始值：讓第一次爬取時能把「明顯不是補助」的頁面擋掉。
+# 正式使用的關鍵字由 `python -m benefit_crawler --mine-keywords` 依實際爬回的語料統計產生
+# （benefit_crawler/config/keyword_rules_v2.yaml + docs/generated/keyword-report.md），存在時自動優先使用。
+version: 2
+source: seed
+benefit_signal:
+  threshold: 4
+  title_bonus: 2
+  keywords:
+    - {term: 補助, weight: 3}
+    - {term: 津貼, weight: 3}
+    - {term: 給付, weight: 3}
+    - {term: 獎學金, weight: 3}
+    - {term: 獎助, weight: 3}
+    - {term: 助學金, weight: 3}
+    - {term: 減免, weight: 2}
+    - {term: 救助, weight: 2}
+    - {term: 扶助, weight: 2}
+    - {term: 申請資格, weight: 3}
+    - {term: 補助對象, weight: 3}
+    - {term: 服務對象, weight: 3}
+    - {term: 申請方式, weight: 2}
+    - {term: 應備文件, weight: 2}
+    - {term: 補助標準, weight: 2}
+    - {term: 補助金額, weight: 2}
+  negative:
+    - {term: 招標, weight: -5}
+    - {term: 決標, weight: -5}
+    - {term: 採購, weight: -4}
+    - {term: 徵才, weight: -4}
+    - {term: 甄選結果, weight: -4}
+    - {term: 隱私權政策, weight: -3}
+    - {term: 網站導覽, weight: -2}
+    - {term: 資訊安全政策, weight: -3}
+    - {term: 瀏覽人次, weight: -1}
+    - {term: 新聞稿, weight: -2}
+    - {term: 草案, weight: -4}
+    - {term: 修正草案, weight: -4}
+    - {term: 公聽會, weight: -3}
+    - {term: 徵求意見, weight: -3}
+    - {term: 招生簡章, weight: -2}
+    - {term: 研習, weight: -2}
+    - {term: 課程表, weight: -2}
+    - {term: 秩序冊, weight: -3}
+    - {term: 民意信箱, weight: -1}
+    - {term: 網站地圖, weight: -2}
+categories:
+  scholarship: {label: 獎學金, keywords: [{term: 獎學金, weight: 4}, {term: 優秀學生, weight: 2}, {term: 成績, weight: 1}]}
+  student_aid: {label: 助學金, keywords: [{term: 助學金, weight: 4}, {term: 弱勢助學, weight: 3}, {term: 安心就學, weight: 3}]}
+  tuition_waiver: {label: 學雜費減免, keywords: [{term: 學雜費減免, weight: 4}, {term: 免學費, weight: 3}, {term: 就學費用補助, weight: 3}]}
+  education_subsidy: {label: 就學補助, keywords: [{term: 就學補助, weight: 4}, {term: 就學補助金, weight: 3}, {term: 在學子女, weight: 2}]}
+  housing_support: {label: 住宿補助, keywords: [{term: 住宿補貼, weight: 4}, {term: 住宿補助, weight: 4}, {term: 校內住宿, weight: 3}]}
+  emergency_aid_student: {label: 學生急難救助, keywords: [{term: 急難救助, weight: 3}, {term: 學生, weight: 1}]}
+  student_loan: {label: 就學貸款, keywords: [{term: 就學貸款, weight: 4}]}
+  study_abroad: {label: 留學獎助, keywords: [{term: 留學, weight: 4}, {term: 出國, weight: 2}]}
+  youth_employment: {label: 青年就業獎勵, keywords: [{term: 青年就業, weight: 4}, {term: 尋職, weight: 2}, {term: 就業獎勵, weight: 3}]}
+  youth_entrepreneurship: {label: 青年創業, keywords: [{term: 青年創業, weight: 4}, {term: 創業貸款, weight: 3}]}
+  youth_development: {label: 青年發展, keywords: [{term: 壯遊, weight: 4}, {term: 青年發展, weight: 3}]}
+  low_income_allowance: {label: 低收入戶生活補助, keywords: [{term: 低收入戶生活補助, weight: 5}, {term: 生活補助, weight: 3}, {term: 生活扶助, weight: 3}, {term: 家庭生活補助, weight: 3}, {term: 低收入戶, weight: 2}, {term: 中低收入戶, weight: 2}]}
+  special_circumstances_aid: {label: 特殊境遇家庭扶助, keywords: [{term: 特殊境遇, weight: 4}, {term: 緊急生活扶助, weight: 3}]}
+  child_allowance: {label: 育兒津貼, keywords: [{term: 育兒津貼, weight: 4}, {term: 幼兒, weight: 2}, {term: 入國民小學前, weight: 3}]}
+  childcare_subsidy: {label: 托育補助, keywords: [{term: 托育補助, weight: 4}, {term: 托育, weight: 2}, {term: 準公共, weight: 3}]}
+  parental_leave_allowance: {label: 育嬰留停津貼, keywords: [{term: 育嬰留職停薪, weight: 4}, {term: 育嬰, weight: 3}]}
+  emergency_relief: {label: 急難救助, keywords: [{term: 急難救助, weight: 4}, {term: 急難, weight: 3}, {term: 變故, weight: 2}]}
+  elderly_allowance: {label: 老人生活津貼, keywords: [{term: 老人生活津貼, weight: 4}, {term: 特別照顧津貼, weight: 4}, {term: 中低收入老人, weight: 3}]}
+  elderly_service: {label: 老人福利服務, keywords: [{term: 老人福利, weight: 3}, {term: 收容安置, weight: 3}, {term: 老人, weight: 1}]}
+  home_care: {label: 居家服務, keywords: [{term: 居家服務, weight: 4}, {term: 居家照顧, weight: 3}, {term: 照顧服務員, weight: 2}]}
+  day_care: {label: 日間照顧, keywords: [{term: 日間照顧, weight: 4}, {term: 日照, weight: 2}]}
+  family_care_home: {label: 家庭托顧, keywords: [{term: 家庭托顧, weight: 4}]}
+  transport_service: {label: 交通接送, keywords: [{term: 交通接送, weight: 4}, {term: 接送服務, weight: 3}]}
+  assistive_device: {label: 輔具與無障礙, keywords: [{term: 輔具, weight: 4}, {term: 無障礙環境改善, weight: 3}, {term: 居家無障礙, weight: 3}]}
+  respite_care: {label: 喘息服務, keywords: [{term: 喘息服務, weight: 4}, {term: 喘息, weight: 3}]}
+  meal_service: {label: 營養餐飲, keywords: [{term: 營養餐飲, weight: 4}, {term: 送餐, weight: 3}]}
+  institutional_care_subsidy: {label: 機構住宿補助, keywords: [{term: 住宿式機構, weight: 4}, {term: 機構收容安置, weight: 4}, {term: 機構住宿, weight: 3}]}
+  ltc_general: {label: 長照服務總覽, keywords: [{term: 長期照顧, weight: 2}, {term: 長照服務, weight: 3}, {term: 給付及支付, weight: 3}, {term: 1966, weight: 2}]}
+  disability_living_allowance: {label: 身心障礙者生活補助, keywords: [{term: 身心障礙者生活補助, weight: 5}, {term: 生活補助費, weight: 3}, {term: 身心障礙, weight: 1}]}
+  disability_assistive_device: {label: 身心障礙輔具補助, keywords: [{term: 身心障礙者輔具, weight: 4}, {term: 輔具費用補助, weight: 4}]}
+  disability_care_subsidy: {label: 身心障礙照顧補助, keywords: [{term: 身心障礙者日間照顧, weight: 4}, {term: 住宿式照顧費用, weight: 4}, {term: 照顧費用補助, weight: 3}]}
+  disability_other: {label: 身心障礙其他福利, keywords: [{term: 身心障礙者, weight: 2}, {term: 福利, weight: 1}]}
+  unemployment_benefit: {label: 失業給付, keywords: [{term: 失業給付, weight: 5}, {term: 提早就業獎助津貼, weight: 3}, {term: 失業認定, weight: 2}]}
+  training_allowance: {label: 職業訓練生活津貼, keywords: [{term: 職業訓練生活津貼, weight: 5}, {term: 職業訓練, weight: 2}, {term: 職訓, weight: 2}]}
+  employment_incentive: {label: 就業促進津貼, keywords: [{term: 跨域就業, weight: 4}, {term: 求職交通補助, weight: 4}, {term: 臨工津貼, weight: 4}, {term: 就業獎勵, weight: 3}, {term: 僱用安定, weight: 3}]}
+  employer_subsidy: {label: 雇主補助, keywords: [{term: 僱用獎助, weight: 4}, {term: 減班休息, weight: 4}, {term: 雇主, weight: 2}]}
+  worker_welfare: {label: 勞工福利, keywords: [{term: 勞工子女, weight: 4}, {term: 職工福利, weight: 3}, {term: 失業勞工, weight: 3}]}
+  rental_subsidy: {label: 租金補貼, keywords: [{term: 租金補貼, weight: 5}, {term: 租金, weight: 2}, {term: 租屋, weight: 2}]}
+  housing_loan_subsidy: {label: 住宅貸款利息補貼, keywords: [{term: 利息補貼, weight: 4}, {term: 購置住宅, weight: 3}, {term: 修繕住宅, weight: 3}]}
+  social_housing: {label: 社會住宅, keywords: [{term: 社會住宅, weight: 5}, {term: 包租代管, weight: 4}]}
+  medical_subsidy: {label: 醫療費用補助, keywords: [{term: 醫療補助, weight: 4}, {term: 醫療費用, weight: 3}, {term: 住院看護, weight: 3}, {term: 傷病醫療, weight: 3}]}
+  insurance_premium_subsidy: {label: 保險費補助, keywords: [{term: 健保費補助, weight: 4}, {term: 保險費補助, weight: 4}, {term: 自付保險費, weight: 4}, {term: 健保保險費, weight: 3}, {term: 全民健康保險保險費, weight: 3}, {term: 國民年金保險費, weight: 3}, {term: 保險費自付額, weight: 3}, {term: 健保費, weight: 2}]}
+  birth_incentive: {label: 生育獎勵金, keywords: [{term: 生育獎勵, weight: 4}, {term: 生育津貼, weight: 4}, {term: 生育補助, weight: 4}, {term: 生育給付, weight: 3}, {term: 新生兒, weight: 2}, {term: 出生登記, weight: 2}, {term: 初設戶籍, weight: 2}, {term: 胞胎, weight: 2}]}
+  health_service: {label: 健康服務, keywords: [{term: 心理諮商, weight: 4}, {term: 健康檢查, weight: 3}]}

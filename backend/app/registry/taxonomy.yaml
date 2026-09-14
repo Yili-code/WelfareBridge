@@ -1,0 +1,82 @@
+# 領域／類別樹（資料，不是程式）。
+# 分類器的候選清單 = 所有葉節點；每個葉節點的 description 供本地 LLM 分類與說明使用。
+# need_types：此類別能滿足的需求類型（cash_now 急需現金 / reduce_burden 長期減負 / honor 榮譽 / service 需要服務）
+# default_benefit_form：抽取不到給付形式時的預設（會標記 inferred）
+version: 2
+domains:
+  - id: education
+    label: 教育
+    description: 學生就學相關的獎學金、助學金、學雜費減免、住宿與就學補助
+    children:
+      - {id: scholarship, label: 獎學金, description: 依成績、身分或特定條件核發的獎學金／獎助學金, need_types: [cash_now, honor], default_benefit_form: cash}
+      - {id: student_aid, label: 助學金, description: 弱勢學生助學金、生活助學金、安心就學等以經濟協助為主的補助, need_types: [cash_now, reduce_burden], default_benefit_form: cash}
+      - {id: tuition_waiver, label: 學雜費減免, description: 學雜費減免、免學費、就學費用補助, need_types: [reduce_burden], default_benefit_form: waiver}
+      - {id: education_subsidy, label: 就學補助, description: 就學補助金、教育代金、學習扶助、失業勞工子女就學補助等, need_types: [cash_now, reduce_burden], default_benefit_form: cash}
+      - {id: housing_support, label: 住宿補助, description: 學生校內住宿補貼、宿舍補助, need_types: [reduce_burden], default_benefit_form: cash}
+      - {id: emergency_aid_student, label: 學生急難救助, description: 學生或家庭遭遇變故的急難救助金, need_types: [cash_now], default_benefit_form: cash}
+      - {id: student_loan, label: 就學貸款, description: 高級中等以上學校學生就學貸款、利息補貼, need_types: [reduce_burden], default_benefit_form: loan}
+      - {id: study_abroad, label: 留學獎助, description: 留學獎學金、留學貸款、出國研習獎助, need_types: [cash_now, honor], default_benefit_form: cash}
+  - id: youth
+    label: 青年
+    description: 青年就業、創業、壯遊與發展相關補助
+    children:
+      - {id: youth_employment, label: 青年就業獎勵, description: 青年就業獎勵津貼、初次尋職、跨域就業補助, need_types: [cash_now], default_benefit_form: cash}
+      - {id: youth_entrepreneurship, label: 青年創業, description: 青年創業貸款、創業補助、育成, need_types: [reduce_burden], default_benefit_form: loan}
+      - {id: youth_development, label: 青年發展, description: 壯遊、志工、國際參與等青年發展獎助, need_types: [honor], default_benefit_form: cash}
+  - id: social_welfare
+    label: 社會福利
+    description: 低收入戶、中低收入戶、特殊境遇家庭、兒少、家庭與急難救助等社會救助與福利
+    children:
+      - {id: low_income_allowance, label: 低收入戶生活補助, description: 低收入戶／中低收入戶家庭生活扶助、就學生活補助, need_types: [cash_now, reduce_burden], default_benefit_form: cash}
+      - {id: special_circumstances_aid, label: 特殊境遇家庭扶助, description: 特殊境遇家庭緊急生活扶助、子女生活津貼、傷病醫療補助, need_types: [cash_now], default_benefit_form: cash}
+      - {id: birth_incentive, label: 生育獎勵金, description: 生育獎勵金、生育津貼、生育補助、生育給付（縣市政府或鄉鎮市區公所發給新生兒家庭的一次性給付）、產婦與新生兒營養補助、坐月子服務、好孕專車車資補貼, need_types: [cash_now], default_benefit_form: cash}
+      - {id: insurance_premium_subsidy, label: 保險費補助, description: 全民健康保險保費補助、國民年金保險費補助（低收入戶、中低收入戶、老人、身心障礙者、所得未達一定標準者）, need_types: [reduce_burden], default_benefit_form: cash}
+      - {id: child_allowance, label: 育兒津貼, description: 0 至未滿 5 歲育兒津貼、5 歲至入小學前就學補助, need_types: [reduce_burden], default_benefit_form: cash}
+      - {id: childcare_subsidy, label: 托育補助, description: 托育補助、公共托育、準公共托育, need_types: [reduce_burden], default_benefit_form: cash}
+      - {id: parental_leave_allowance, label: 育嬰留停津貼, description: 育嬰留職停薪津貼及薪資補助, need_types: [reduce_burden], default_benefit_form: cash}
+      - {id: emergency_relief, label: 急難救助, description: 家庭遭遇急難變故的救助金、緊急紓困, need_types: [cash_now], default_benefit_form: cash}
+      - {id: elderly_allowance, label: 老人生活津貼, description: 中低收入老人生活津貼、特別照顧津貼、老人收容安置補助, need_types: [cash_now, reduce_burden], default_benefit_form: cash}
+      - {id: elderly_service, label: 老人福利服務, description: 老人營養餐飲、日間照顧、家庭托顧、機構安置等服務類福利, need_types: [service], default_benefit_form: service}
+  - id: long_term_care
+    label: 長期照顧
+    description: 長照 2.0 給付與支付：居家服務、日間照顧、家庭托顧、交通接送、輔具、喘息、機構補助
+    children:
+      - {id: home_care, label: 居家服務, description: 居家照顧服務、身體照顧與日常生活協助（照顧及專業服務給付）, need_types: [service], default_benefit_form: service}
+      - {id: day_care, label: 日間照顧, description: 長照日間照顧中心服務, need_types: [service], default_benefit_form: service}
+      - {id: family_care_home, label: 家庭托顧, description: 家庭托顧服務, need_types: [service], default_benefit_form: service}
+      - {id: transport_service, label: 交通接送, description: 長期照顧交通接送服務給付, need_types: [service], default_benefit_form: service}
+      - {id: assistive_device, label: 輔具與無障礙, description: 長照輔具服務、居家無障礙環境改善補助, need_types: [service, reduce_burden], default_benefit_form: in_kind}
+      - {id: respite_care, label: 喘息服務, description: 喘息服務給付、照顧者支持, need_types: [service], default_benefit_form: service}
+      - {id: meal_service, label: 營養餐飲, description: 失能者營養餐飲服務（送餐）, need_types: [service], default_benefit_form: service}
+      - {id: institutional_care_subsidy, label: 機構住宿補助, description: 住宿式機構使用者補助、老人機構收容安置補助, need_types: [reduce_burden], default_benefit_form: cash}
+      - {id: ltc_general, label: 長照服務總覽, description: 長照服務申請方式、給付及支付基準、服務項目總覽, need_types: [service], default_benefit_form: service}
+  - id: disability
+    label: 身心障礙
+    description: 身心障礙者生活補助、輔具、照顧、就學與就業相關補助
+    children:
+      - {id: disability_living_allowance, label: 身心障礙者生活補助, description: 身心障礙者生活補助費, need_types: [cash_now, reduce_burden], default_benefit_form: cash}
+      - {id: disability_assistive_device, label: 身心障礙輔具補助, description: 身心障礙者輔具費用補助, need_types: [reduce_burden, service], default_benefit_form: cash}
+      - {id: disability_care_subsidy, label: 身心障礙照顧補助, description: 身心障礙者日間照顧、住宿式照顧費用補助、居家照顧、發展遲緩兒童早期療育費用補助、照顧者津貼, need_types: [service, reduce_burden], default_benefit_form: cash}
+      - {id: disability_other, label: 身心障礙其他福利, description: 交通、稅賦、保險費補助等其他身心障礙福利, need_types: [reduce_burden], default_benefit_form: cash}
+  - id: labor
+    label: 勞工就業
+    description: 失業給付、職業訓練生活津貼、就業促進津貼、僱用獎助等勞動部補助
+    children:
+      - {id: unemployment_benefit, label: 失業給付, description: 就業保險失業給付、提早就業獎助津貼, need_types: [cash_now], default_benefit_form: cash}
+      - {id: training_allowance, label: 職業訓練生活津貼, description: 職業訓練期間生活津貼、職訓補助, need_types: [cash_now, reduce_burden], default_benefit_form: cash}
+      - {id: employment_incentive, label: 就業促進津貼, description: 求職交通補助、跨域就業津貼、臨工津貼、缺工就業獎勵、僱用安定措施, need_types: [cash_now], default_benefit_form: cash}
+      - {id: employer_subsidy, label: 雇主補助, description: 僱用獎助、減班休息補貼、雇主聘僱補助（申請者為雇主）, need_types: [reduce_burden], default_benefit_form: cash}
+      - {id: worker_welfare, label: 勞工福利, description: 勞工子女就學補助、職工福利、勞工紓困, need_types: [cash_now, reduce_burden], default_benefit_form: cash}
+  - id: housing
+    label: 住宅
+    description: 租金補貼、購置與修繕住宅貸款利息補貼、社會住宅
+    children:
+      - {id: rental_subsidy, label: 租金補貼, description: 中央擴大租金補貼、地方租金補貼, need_types: [reduce_burden], default_benefit_form: cash}
+      - {id: housing_loan_subsidy, label: 住宅貸款利息補貼, description: 購置、修繕住宅貸款利息補貼, need_types: [reduce_burden], default_benefit_form: cash}
+      - {id: social_housing, label: 社會住宅, description: 社會住宅承租、包租代管, need_types: [service, reduce_burden], default_benefit_form: service}
+  - id: health
+    label: 醫療健康
+    description: 醫療費用補助、健保費補助、重大傷病、心理健康支持
+    children:
+      - {id: medical_subsidy, label: 醫療費用補助, description: 醫療費用補助、住院看護費補助、重大傷病與弱勢兒少醫療補助, need_types: [cash_now, reduce_burden], default_benefit_form: cash}
+      - {id: health_service, label: 健康服務, description: 心理諮商、健康檢查、預防保健等服務, need_types: [service], default_benefit_form: service}

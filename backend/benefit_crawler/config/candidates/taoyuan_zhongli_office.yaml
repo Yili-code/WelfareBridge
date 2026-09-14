@@ -1,0 +1,48 @@
+id: taoyuan_zhongli_office
+name: 桃園市中壢區公所 — 社會課受理的補助與救助
+organization: 桃園市中壢區公所
+provider_type: township
+source_type: government_site
+base_url: https://www.zhongli.tycg.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [桃園市中壢區公所, 中壢區公所]
+data_confidence: 95
+enabled: true
+domains: [social_welfare, disability]
+content_selectors: ['#CCMS_Content', '#base-content']
+follow_links:
+  depth: 1
+  allow: ['News_Content\.aspx\?n=6431&s=']
+  deny: [s=1212736, s=651667, Download\.ashx, News\.aspx, cl\.aspx, cp\.aspx, ENews, Questionnaire, SiteMap, Advanced_Search, Default]
+  max_links: 5
+notes: >-
+  桃園市各區公所共用樣板（Taoyuan CCMS，與 sab.tycg.gov.tw 同款）。內容頁主內容區 #CCMS_Content；首頁沒有 #CCMS_Content（只有 #base-content），
+  第二個 selector 只為了讓 base_url 驗證不被當成空殼回應。
+  網址型態：分類目錄 cl.aspx?n=<單元>、靜態頁 cp.aspx?n=<單元>、清單 News.aspx?n=<單元>&sms=<子單元>（可加 &_CSN=<類別> 篩選，827=社會福利、889=社會救助）、
+  文章 News_Content.aspx?n=<單元>&s=<文章>。附件一律在 https://ws.tycg.gov.tw/Download.ashx?u=<base64 路徑>&n=<base64 檔名>&icon=.pdf。
+  中壢區公所沒有「社會課業務簡介」單元：唯一寫出資格＋金額的 HTML 方案頁是「特殊境遇家庭扶助專區」(n=6431) 的年度文章；
+  其他社福業務（低收／中低收、弱勢兒少、急難救助、國民年金、生育津貼、育兒津貼）只在「下載專區＞民眾常用檔案下載」(News.aspx?n=6379&sms=11393) 以附件 PDF 提供申請規定或申請表。
+pages:
+  # ---- HTML 方案頁：特殊境遇家庭扶助專區（每年一篇，只收最新年度）
+  - {url: 'https://www.zhongli.tycg.gov.tw/News_Content.aspx?n=6431&s=1601717', title: 115年度特殊境遇家庭扶助, seed_category: special_circumstances_aid}
+  - {url: 'https://www.zhongli.tycg.gov.tw/News_Content.aspx?n=6431&s=1212736', title: 113年特殊境遇家庭扶助, skip: true, skip_reason: 舊年度版本（113 年），內容與 115 年度頁重複，只收最新年度}
+  - {url: 'https://www.zhongli.tycg.gov.tw/News_Content.aspx?n=6431&s=651667', title: 108年特殊境遇家庭扶助, skip: true, skip_reason: 舊年度版本（108 年），金額標準已過期}
+  # 專區清單頁本身會被判為 portal（不進媒合），留著是為了 follow_links 每年自動接到新年度的文章
+  - {url: 'https://www.zhongli.tycg.gov.tw/News.aspx?n=6431&sms=11423', title: 特殊境遇家庭扶助專區}
+  # ---- 民眾常用檔案下載（社會課）：頁面本身只有「請參照附件」，方案內容在 ws.tycg.gov.tw 的 PDF 附件
+  - {url: 'https://ws.tycg.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNzkvcmVsZmlsZS8xMTM5My8xNjAxMDk5LzI2M2Q4YjIyLTZmZDUtNGMzMC1hMDM4LTY5MWZjMGUzNzdiOS5wZGY%3d&n=MTE15bm05bqm54m55q6K5aKD6YGH5a625bqt5om25Yqp55Sz6KuL6KaP5a6a5Y%2bK5oeJ5YKZ5paH5Lu2LnBkZg%3d%3d&icon=.pdf', title: 115年度特殊境遇家庭扶助申請規定及應備文件, format: pdf, seed_category: special_circumstances_aid, source_page: 'https://www.zhongli.tycg.gov.tw/News_Content.aspx?n=6379&s=1601099'}
+  - {url: 'https://ws.tycg.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNzkvcmVsZmlsZS8xMTM5My8xNjAxMDk4LzM1NjAzMzFjLWMyNTgtNDBhNS05NjcxLWIyMjFkMTE2MTBiZC5wZGY%3d&n=MTE15bm05bqm5byx5Yui5YWS56ul5Y%2bK5bCR5bm055Sf5rS75om25Yqp5oeJ5YKZ5paH5Lu25Y%2bK6KaP5a6aLnBkZg%3d%3d&icon=.pdf', title: 115年度弱勢兒童及少年生活扶助應備文件及規定, format: pdf, seed_category: child_allowance, source_page: 'https://www.zhongli.tycg.gov.tw/News_Content.aspx?n=6379&s=1601098'}
+  - {url: 'https://ws.tycg.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNzkvcmVsZmlsZS8xMTM5My84NDc2NzkvY2UwN2M2N2QtYmQ0Ny00NzAyLWJhYjAtMGI4ZDg3N2NhN2VhLnBkZg%3d%3d&n=MTE15bm05L2O5pS25YWl5oi25Y%2bK5Lit5L2O5pS25YWl5oi255Sz6KuL6KaP5a6a5Y%2bK5oeJ5YKZ5paH5Lu2LnBkZg%3d%3d&icon=.pdf', title: 115年低收入戶及中低收入戶申請規定及應備文件, format: pdf, seed_category: low_income_allowance, source_page: 'https://www.zhongli.tycg.gov.tw/News_Content.aspx?n=6379&s=847679'}
+  - {url: 'https://ws.tycg.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNzkvcmVsZmlsZS8xMTM5My84NDc3ODkvYWRjZDZlMTUtYTk4My00MjIyLWI3MjAtM2FhMWQ4MWQ5YjE1LnBkZg%3d%3d&n=5qGD5ZyS5biC5Lit5aOi5Y2A5YWs5omA5oCl6Zuj5pWR5Yqp55Sz6KuL5oeJ5YKZ5paH5Lu26KGoMTE0LjEwLjI45L%2buLnBkZg%3d%3d&icon=.pdf', title: 桃園市中壢區公所急難救助申請應備文件表, format: pdf, seed_category: emergency_relief, source_page: 'https://www.zhongli.tycg.gov.tw/News_Content.aspx?n=6379&s=847789'}
+  # 生育津貼 PDF 第 2 頁是「桃園市生育津貼發放作業要點」申請說明（資格、第一名 3 萬／第二名 4 萬／第三名以上 5 萬、多胞胎加碼、6 個月申請期限、受理窗口），不是純表單
+  - {url: 'https://ws.tycg.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNzkvcmVsZmlsZS8xMTM5My8xNTYwODAzLzdhOGVkOTEzLWZhZGYtNGE4Yi04NTNhLTYzMjFmYWY3ZmI5Mi5wZGY%3d&n=55Sf6IKy5rSl6LK8LnBkZg%3d%3d&icon=.pdf', title: 桃園市生育津貼發放作業要點申請說明（含申請表）, format: pdf, seed_category: birth_incentive, source_page: 'https://www.zhongli.tycg.gov.tw/News.aspx?n=6379&sms=11393'}
+  - {url: 'https://ws.tycg.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNzkvcmVsZmlsZS8xMTM5My8xNTYyMTQ1LzYyNDUwMTczLWFiMTctNDE0ZS05ZTMzLTg2NzFmNGY5ZWU3Ny5wZGY%3d&n=6IKy5pyJ5pyq5ru%2fMuatsuWFkuerpeiCsuWFkua0peiyvOeUs%2biri%2bihqF8xMTXkv67mraMucGRm&icon=.pdf', title: 育有未滿2歲兒童育兒津貼申請表, format: pdf, seed_category: child_allowance, source_page: 'https://www.zhongli.tycg.gov.tw/News.aspx?n=6379&sms=11393', skip: true, skip_reason: 純申請表（2382 字都是欄位、應備文件與切結），沒有給付金額；育兒津貼為中央方案，由 sfaa_childcare 收錄}
+  - {url: 'https://ws.tycg.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNzkvcmVsZmlsZS8xMTM5My84NDc4NDcvNmM1Njg5MDYtNmIzYS00OTkwLTk1MmUtZGE2OTliNWY0MDBmLnBkZg%3d%3d&n=Mi026IKy5YWS5rSl6LK85Y%2bK5bCx5a246KOc5Yqp55Sz5b6p55Sz6KuL6KGoLnBkZg%3d%3d&icon=.pdf', title: 2歲以上未滿5歲幼兒育兒津貼及5歲至入國民小學前幼兒就學補助申復申請表, format: pdf, seed_category: child_allowance, source_page: 'https://www.zhongli.tycg.gov.tw/News.aspx?n=6379&sms=11393', skip: true, skip_reason: 純申復申請表（2209 字），沒有資格與金額}
+  # ---- 目錄頁與附件殼頁（不收）
+  - {url: 'https://www.zhongli.tycg.gov.tw/News.aspx?n=6379&sms=11393', title: 民眾常用檔案下載, skip: true, skip_reason: 目錄頁：社會課各項業務只以附件 PDF 提供，方案 PDF 已分別列在 pages}
+  - {url: 'https://www.zhongli.tycg.gov.tw/News_Content.aspx?n=6379&s=1601099', title: 特殊境遇家庭扶助業務, skip: true, skip_reason: 頁面只有「請參照附件」一句（67 字），內容在附件 PDF}
+  - {url: 'https://www.zhongli.tycg.gov.tw/News_Content.aspx?n=6379&s=1601098', title: 弱勢家庭兒童及少年生活扶助業務, skip: true, skip_reason: 頁面只有「請參照附件」一句（77 字），內容在附件 PDF}
+  - {url: 'https://www.zhongli.tycg.gov.tw/News_Content.aspx?n=6379&s=847679', title: 低收入戶及中低收入戶申請相關表單, skip: true, skip_reason: 頁面只有「請參考附件」一句（63 字），內容在附件 PDF}
+  - {url: 'https://www.zhongli.tycg.gov.tw/News_Content.aspx?n=6379&s=847789', title: 桃園市急難救助業務相關表單, skip: true, skip_reason: 頁面只有「規定如附件」一句（54 字），內容在附件 PDF}
+  - {url: 'https://www.zhongli.tycg.gov.tw/News_Content.aspx?n=6379&s=847832', title: 國民年金所得未達一定標準業務, skip: true, skip_reason: 頁面只有一句（67 字），附件只有申請書與流程圖，沒有給付內容}
+  - {url: 'https://www.zhongli.tycg.gov.tw/cp.aspx?n=6366', title: 業務職掌, skip: true, skip_reason: 只有各課室職掌一句話（社會課：社會福利、社會救助…），沒有方案}

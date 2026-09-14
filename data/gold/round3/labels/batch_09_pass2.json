@@ -1,0 +1,170 @@
+{
+  "labels": [
+    {
+      "id": "006f50d1-3788-41e9-96f0-1bb9a6c3e6c1",
+      "title": "育有未滿2歲兒童育兒津貼申領作業要點",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "child_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "作業要點條文本身寫明發放對象（未滿二歲、完成出生登記、未接受公共化或準公共托育）與發放基準（第一名5,000、第二名6,000、第三名以上7,000元／月），符合「要點寫了資格與給付即為 yes」。",
+      "confidence": "high"
+    },
+    {
+      "id": "2c6b1a79-ea74-42e1-b491-f8b8cd61baae",
+      "title": "低收入戶喪葬補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": ["emergency_relief"],
+      "closed": false,
+      "reason": "頁面寫明補助對象為本市列冊低收入戶，補助標準依款別每人1萬5,000／1萬2,000／1萬元，並有申請方法與應備文件；taxonomy 無喪葬補助專類，依對象歸低收入戶補助，殮葬性質次類為急難救助。",
+      "confidence": "medium"
+    },
+    {
+      "id": "810e2e21-601a-4470-a710-8e579fd0dc00",
+      "title": "農保生育給付加給補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "birth_incentive",
+      "secondary": [],
+      "closed": false,
+      "reason": "寫明補助對象（115年1月1日後分娩或早產、依農保條例請領生育給付之女性被保險人）與補助金額（每胎加給至10萬元，加給補助38,800元，多胞胎按比例增給），由勞保局核給時一併加發。",
+      "confidence": "high"
+    },
+    {
+      "id": "f5d39936-6fa7-407c-bb57-80fcbf2e6e83",
+      "title": "特殊境遇家庭的相關福利",
+      "is_benefit": "no",
+      "kind": "faq",
+      "category": "special_circumstances_aid",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文是區公所「題號／問題／解答內容／承辦人／分機」格式的常見問答表，三題分別列福利項目名稱與特殊境遇家庭身分條件，未寫任何給付金額，並導向社會局網站查詢，依規則 FAQ 不收。",
+      "confidence": "medium"
+    },
+    {
+      "id": "3e904aa0-52e8-4687-94f9-f6fdbbb43589",
+      "title": "國民年金生育給付暨加給補助 — 請領資格及給付金額",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "birth_incentive",
+      "secondary": [],
+      "closed": false,
+      "reason": "頁面寫明請領資格（國保被保險人於保險有效期間分娩或早產，退保後1年內亦可）與給付金額（按月投保金額一次發給2個月；115年起補足至10萬元，雙生以上按比例增給）。",
+      "confidence": "high"
+    },
+    {
+      "id": "3f0c2fd3-a3be-4f05-8ac0-1981b02cd9d4",
+      "title": "育兒津貼申請簡介",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "child_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "區公所簡介表列出0–2歲與2–未滿5歲育兒津貼的申領資格（年齡、所得稅率未達20%、未送托公共化／準公共或未就讀公幼等）與補助金額（每月5,000／6,000／7,000元）及應備文件，兩者同屬育兒津貼且擇一擇優發給，視為一筆方案。",
+      "confidence": "high"
+    },
+    {
+      "id": "1c56b22b-b99e-4adc-b9dd-4e36365a5fe3",
+      "title": "身心障礙者社會保險自付保險費現金補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "disability_other",
+      "secondary": ["medical_subsidy"],
+      "closed": false,
+      "reason": "雖以問答形式呈現，但整頁描述單一方案：資格為設籍本市領有身心障礙手冊且參加社會保險及健保者，補助標準依障礙程度全額／二分之一／四分之一保費，由社會局直接撥付扣抵、免申請；身障者保費補助歸身心障礙其他福利。",
+      "confidence": "medium"
+    },
+    {
+      "id": "403657ec-2dc5-4fd0-b37e-7247d61d837e",
+      "title": "苗栗縣114年生育津貼（民政處）",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "birth_incentive",
+      "secondary": [],
+      "closed": false,
+      "reason": "寫明申請資格（父母一方設籍本縣持續六個月以上、新生兒於本縣完成出生登記）、每名新生兒2萬元、死胎或自然流產1萬元，並有申請方式、期限與應備文件。",
+      "confidence": "high"
+    },
+    {
+      "id": "ef913cd7-b6d1-4578-9c5d-8a9270e85961",
+      "title": "114年中低收入老人補助裝置假牙實施計畫",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_allowance",
+      "secondary": ["medical_subsidy"],
+      "closed": false,
+      "reason": "實施計畫本文寫明補助對象（設籍本縣65歲以上或55歲以上原住民，且為低收／中低收、領中低收老人津貼等）與補助基準（5年內最高5萬元，附表列各類假牙上限），文末雖附申請表與切結書但主體是方案；依規則老人假牙歸 elderly_allowance。",
+      "confidence": "high"
+    },
+    {
+      "id": "e9a02c32-f0ac-4ce0-9afa-348d9a4bc9c7",
+      "title": "南投縣辦理重陽節敬老禮金禮券發放實施要點",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "要點第三點寫明實施對象與標準：設籍本縣55–64歲原住民500元、65–99歲老人1,000元、百歲以上1萬元，並列現金／匯款發放方式；重陽敬老金依規則歸 elderly_allowance。",
+      "confidence": "high"
+    },
+    {
+      "id": "46b0be77-27e2-4534-a2b1-448a43256ad3",
+      "title": "衛生福利部急難救助金申請審核及撥款作業規定",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "emergency_relief",
+      "secondary": [],
+      "closed": false,
+      "reason": "作業規定第二點寫明急難救助對象六款（戶內人口死亡無力殮葬、遭意外傷害或重病、主要生計者失業入獄等致生活陷困），並寫申請途徑與撥款方式；雖未載明金額，但已寫出「誰可以申請」。",
+      "confidence": "medium"
+    },
+    {
+      "id": "68e1f8a2-d6f0-4804-80b7-1fbaf16c44ff",
+      "title": "就保育嬰留職停薪津貼 — 請領資格",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "parental_leave_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "頁面是勞保局津貼專頁的「請領資格」分頁，實質寫出資格條件（保險年資滿1年、子女滿3歲前、依性別平等工作法辦理育嬰留停）與不得請領情形；雖未載給付金額，仍符合「誰可以申請」。",
+      "confidence": "medium"
+    },
+    {
+      "id": "a5b05676-bf75-4b63-ae99-7a93756ddd35",
+      "title": "脫貧自立計畫",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": ["education_subsidy", "employment_incentive"],
+      "closed": false,
+      "reason": "單一計畫描述五大策略，對本市列冊低收入戶／中低收入戶提供具體給付：儲蓄期滿相對提撥款、子女學習設備與升學補習費補助、3,000或5,000元一次性就業獎勵津貼；有對象與給付，但金額多未細列。",
+      "confidence": "medium"
+    },
+    {
+      "id": "60d0c785-5d31-4e92-9c8f-207d87d01d46",
+      "title": "災害救助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "emergency_relief",
+      "secondary": [],
+      "closed": false,
+      "reason": "寫明申請資格（於新竹市遭受水火風雹旱地震等災害之國民）與福利內容（死亡／失蹤20萬、重傷10萬、安遷每人2萬、淹水1–2萬、土石流2萬）及應備文件，附件僅為配套。",
+      "confidence": "high"
+    },
+    {
+      "id": "eed46a4c-9491-4249-a997-7e874223a698",
+      "title": "川資（車資返鄉）救助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "emergency_relief",
+      "secondary": [],
+      "closed": false,
+      "reason": "寫明服務對象（非設籍本縣縣民流落本縣、缺乏車資返鄉者）與給付（經評估核發鐵路局單程區間車換票證1張，每年1次），屬有經濟價值的急難救助。",
+      "confidence": "high"
+    }
+  ],
+  "count": 15
+}

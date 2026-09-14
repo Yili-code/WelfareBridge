@@ -1,0 +1,102 @@
+id: hsinchu_city_sw
+name: 新竹市政府社會處 — 生育、育兒、社會救助、老人福利
+organization: 新竹市政府社會處
+provider_type: local_government
+source_type: government_site
+base_url: https://society.hccg.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [新竹市政府社會處]
+data_confidence: 100
+enabled: true
+domains: [social_welfare, long_term_care, disability]
+# 站台為 home.jsp?id=<分類>&parentpath=…&mcustomize=onemessages_view.jsp&dataserno=<文件序號> 的 JSP CMS；
+# 分類頁（onemessages_list）與內容頁（onemessages_view）的主內容都在 #fontcontent。
+content_selectors: ["#fontcontent"]
+follow_links:
+  depth: 1
+  # 只追各方案分類頁底下的內容頁（onemessages_view.jsp）
+  allow: ['home\.jsp\?id=(10361|10327|108|119|123|127|128|139|140|10329)&parentpath=0,[34]&mcustomize=onemessages_view\.jsp']
+  # 排除附件下載、友善列印、名冊／表單／問答集及法規本文（201704270001 補助辦法條文、202002100001 廠商名冊、
+  # 202401250006 服務據點名單、201603290066 啟能生活照顧服務（房舍修繕中暫停，頁面只有一句話））
+  deny: ['uploaddowndoc', 'hotkey_print', 'sitemap\.jsp', 'rss\.jsp', 'imgprview', 'dataserno=(201704270001|202002100001|202401250006|201603290066)']
+  max_links: 40
+pages:
+  # ── 托育專區經濟補助總覽（分類頁 id=10361）──
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=10361&parentpath=0,4&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=202602260001&t=SocietyOnes&mserno=201603090001", title: 新竹市育兒津貼加碼, seed_category: child_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=10361&parentpath=0,4&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603280003&t=SocietyOnes&mserno=201603090001", title: 育有未滿二歲兒童育兒津貼, seed_category: child_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=10361&parentpath=0,4&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=202311300001&t=SocietyOnes&mserno=201603090001", title: 新竹市加碼托育補助, seed_category: childcare_subsidy}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=10361&parentpath=0,4&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201808240001&t=SocietyOnes&mserno=201603090001", title: 未滿二歲兒童托育公共化及準公共服務費用(托育費用補助), seed_category: childcare_subsidy}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=10361&parentpath=0,4&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201907010006&t=SocietyOnes&mserno=201603090001", title: 兒童臨時托育費用補助, seed_category: childcare_subsidy}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=10361&parentpath=0,4&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603280001&t=SocietyOnes&mserno=201603090001", title: 低收入戶-兒童托育津貼, seed_category: childcare_subsidy}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=10361&parentpath=0,4", title: 托育專區經濟補助總覽, seed_category: child_allowance}
+  # ── 兒少經濟補助總覽（分類頁 id=10327）──
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=10327&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=202601140001&t=SocietyOnes&mserno=201803140001", title: 兒童及少年醫療費用補助}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=10327&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201803140001&t=SocietyOnes&mserno=201803140001", title: 弱勢家庭兒童及少年緊急生活扶助, seed_category: child_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=10327&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201704270003&t=SocietyOnes&mserno=201803140001", title: 兒童及少年生活扶助, seed_category: child_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=10327&parentpath=0,3", title: 兒少經濟補助總覽, seed_category: child_allowance}
+  # ── 婦女經濟補助總覽（分類頁 id=108）──
+  - {url: "https://society.hccg.gov.tw/uploaddowndoc?file=Womenswelfare/202601291456150.pdf&filedisplay=%E6%96%B0%E7%AB%B9%E5%B8%82115%E5%B9%B4%E8%A8%AD%E7%B1%8D%E5%89%8D%E7%89%B9%E6%AE%8A%E5%A2%83%E9%81%87%E6%89%B6%E5%8A%A9%E8%A8%88%E7%95%AB0709%E6%A0%B8%E5%AE%9A-%E7%B6%B2%E7%AB%99%E5%85%AC%E5%91%8A.pdf&flag=doc", title: 新竹市115年度設籍前新住民遭逢特殊境遇扶助計畫, seed_category: special_circumstances_aid, format: pdf}
+  - {url: "https://society.hccg.gov.tw/uploaddowndoc?file=Womenswelfare/202601291456570.pdf&filedisplay=115%E5%B9%B4%E8%A8%AD%E7%B1%8D%E5%89%8D%E7%A4%BE%E6%9C%83%E6%95%91%E5%8A%A9%E8%A8%88%E7%95%AB0709%E6%A0%B8%E5%AE%9A-%E7%B6%B2%E7%AB%99%E5%85%AC%E5%91%8A.pdf&flag=doc", title: 新竹市115年度設籍前新住民社會救助計畫, seed_category: low_income_allowance, format: pdf}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=108&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603280098&t=SocietyOnes&mserno=201603090018", title: 特殊境遇家庭扶助, seed_category: special_circumstances_aid}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=108&parentpath=0,3", title: 婦女經濟補助總覽, seed_category: special_circumstances_aid}
+  # ── 老人經濟補助總覽（分類頁 id=119）──
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=119&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603290034&t=SocietyOnes&mserno=201603090025", title: 中低收入老人特別照顧津貼, seed_category: elderly_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=119&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603290031&t=SocietyOnes&mserno=201603090025", title: 中低收入老人生活津貼, seed_category: elderly_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=119&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=202603270001&t=SocietyOnes&mserno=201603090025", title: 愛老津貼, seed_category: elderly_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=119&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603290032&t=SocietyOnes&mserno=201603090025", title: 安老津貼, seed_category: elderly_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=119&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=202301300001&t=SocietyOnes&mserno=201603090025", title: 中低收入老人假牙補助, seed_category: elderly_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=119&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=202507300001&t=SocietyOnes&mserno=201603090025", title: 低收入老人配戴助聽器補助, seed_category: assistive_device}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=119&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=202307270001&t=SocietyOnes&mserno=201603090025", title: 低收入戶及中低收入戶老人營養費補助, seed_category: elderly_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=119&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603290033&t=SocietyOnes&mserno=201603090025", title: 中低收入老人重病住院看護補助, seed_category: elderly_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=119&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603290035&t=SocietyOnes&mserno=201603090025", title: 中低收入老人修繕住屋補助, seed_category: elderly_service}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=119&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603290036&t=SocietyOnes&mserno=201603090025", title: 中低收入老人參加全民健康保險無力負擔醫療費用補助, seed_category: elderly_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=119&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603290037&t=SocietyOnes&mserno=201603090025", title: 中低收入老人租賃房屋租金補助, seed_category: rental_subsidy}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=119&parentpath=0,3", title: 老人經濟補助總覽, seed_category: elderly_allowance}
+  # ── 敬老優待總覽（分類頁 id=123）──
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=123&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603290054&t=SocietyOnes&mserno=201603090029", title: 年滿65歲以上(原住民55歲以上)長輩使用敬老卡搭乘公車、計程車、台鐵等服務, seed_category: elderly_service}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=123&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603290055&t=SocietyOnes&mserno=201603090029", title: 重陽節敬老禮金, seed_category: elderly_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=123&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603290058&t=SocietyOnes&mserno=201603090029", title: 老人輔具補助, seed_category: assistive_device}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=123&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603290057&t=SocietyOnes&mserno=201603090029", title: 百歲人瑞祝賀, seed_category: elderly_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=123&parentpath=0,3", title: 敬老優待總覽, seed_category: elderly_allowance}
+  # ── 身心障礙者經濟補助總覽（分類頁 id=127）──
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=127&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603290063&t=SocietyOnes&mserno=201603090030", title: 身心障礙者日間照顧及住宿式照顧費用補助, seed_category: disability_care_subsidy}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=127&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603290060&t=SocietyOnes&mserno=201603090030", title: 身心障礙者生活補助, seed_category: disability_living_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=127&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603290061&t=SocietyOnes&mserno=201603090030", title: 身心障礙者輔具費用補助, seed_category: assistive_device}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=127&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603290062&t=SocietyOnes&mserno=201603090030", title: 身心障礙者租賃房屋租金及購屋貸款利息補貼, seed_category: rental_subsidy}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=127&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603290065&t=SocietyOnes&mserno=201603090030", title: 居家身心障礙者使用維生器材及必要生活輔具用電優惠, seed_category: disability_other}
+  - {url: "https://society.hccg.gov.tw/uploaddowndoc?file=Disability/202102231408250.pdf&filedisplay=%E6%96%B0%E7%AB%B9%E5%B8%82%E7%99%BC%E5%B1%95%E9%81%B2%E7%B7%A9%E5%85%92%E7%AB%A5%E6%97%A9%E6%9C%9F%E7%99%82%E8%82%B2%E8%B2%BB%E7%94%A8.pdf&flag=doc", title: 新竹市發展遲緩兒童早期療育費用補助實施計畫, seed_category: disability_other, format: pdf}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=127&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603290064&t=SocietyOnes&mserno=201603090030", title: 身心障礙者健康保險及社會保險自付額保費補助, seed_category: disability_other}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=127&parentpath=0,3", title: 身心障礙者經濟補助總覽, seed_category: disability_other}
+  # ── 身心障礙者個人照顧支持服務總覽（分類頁 id=128）──
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=128&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201911120001&t=SocietyOnes&mserno=201603090031", title: 視覺功能障礙者生活重建服務, seed_category: disability_other}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=128&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201911120002&t=SocietyOnes&mserno=201603090031", title: 身心障礙者自立生活支持服務, seed_category: disability_other}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=128&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603290070&t=SocietyOnes&mserno=201603090031", title: 身心障礙者社區居住服務, seed_category: disability_other}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=128&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=202605280003&t=SocietyOnes&mserno=201603090031", title: 預防身心障礙者走失手鍊服務, seed_category: disability_other}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=128&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=202605280002&t=SocietyOnes&mserno=201603090031", title: 身心障礙者緊急救援服務, seed_category: disability_other}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=128&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=202605280001&t=SocietyOnes&mserno=201603090031", title: 身心障礙者嚴重情緒行為正向支持整合模式服務, seed_category: disability_other}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=128&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=202502200001&t=SocietyOnes&mserno=201603090031", title: 身心障礙者婚姻、生育輔導及心理重建服務, seed_category: disability_other}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=128&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=202208100002&t=SocietyOnes&mserno=201603090031", title: 社區日間作業設施服務, seed_category: disability_other}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=128&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=202308230001&t=SocietyOnes&mserno=201603090031", title: 身心障礙者家庭托顧服務, seed_category: family_care_home}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=128&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=202205120007&t=SocietyOnes&mserno=201603090031", title: 社區式日間照顧服務, seed_category: day_care}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=128&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=202208100004&t=SocietyOnes&mserno=201603090031", title: 身心障礙兒童日間照顧服務及時段療育, seed_category: day_care}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=128&parentpath=0,3", title: 身心障礙者個人照顧支持服務總覽, seed_category: disability_other}
+  # ── 低收入戶及中低收入戶福利總覽（分類頁 id=139）──
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=139&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603300046&t=SocietyOnes&mserno=201603090042", title: 中低收入戶資格, seed_category: low_income_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=139&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201902210001&t=SocietyOnes&mserno=201603090042", title: 低收入戶資格及生活補助, seed_category: low_income_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=139&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603300044&t=SocietyOnes&mserno=201603090042", title: 低收入戶喪葬費補助, seed_category: low_income_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=139&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603300040&t=SocietyOnes&mserno=201603090042", title: 低收入戶高中職以上學生就學補助, seed_category: education_subsidy}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=139&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603300039&t=SocietyOnes&mserno=201603090042", title: 低收入戶兒童生活補助, seed_category: low_income_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=139&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603300045&t=SocietyOnes&mserno=201603090042", title: 低收入戶重病住院看護費補助, seed_category: low_income_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=139&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603300043&t=SocietyOnes&mserno=201603090042", title: 低收入戶產婦及嬰兒營養費補助, seed_category: low_income_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=139&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603300041&t=SocietyOnes&mserno=201603090042", title: 中低收入傷病醫療補助, seed_category: low_income_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=139&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603300042&t=SocietyOnes&mserno=201603090042", title: 低收入戶全民健康保險補助, seed_category: low_income_allowance}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=139&parentpath=0,3", title: 低收入戶及中低收入戶福利總覽, seed_category: low_income_allowance}
+  # ── 急難及災害救助總覽（分類頁 id=140）──
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=140&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603300048&t=SocietyOnes&mserno=201603090043", title: 強化社會安全網－急難紓困實施方案, seed_category: emergency_relief}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=140&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603300049&t=SocietyOnes&mserno=201603090043", title: 災害救助, seed_category: emergency_relief}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=140&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201603300047&t=SocietyOnes&mserno=201603090043", title: 急難救助, seed_category: emergency_relief}
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=140&parentpath=0,3", title: 急難及災害救助總覽, seed_category: emergency_relief}
+  # ── 兒童及少年未來教育與發展帳戶（分類頁 id=10329）──
+  - {url: "https://society.hccg.gov.tw/ch/home.jsp?id=10329&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201807060001&t=SocietyOnes&mserno=201807060001", title: 兒童及少年未來教育與發展帳戶}
+  # 生育津貼由民政處／戶政事務所辦理（不在社會處網站）：逐頁覆寫主辦機關
+  - {url: "https://dep-civil.hccg.gov.tw/ch/home.jsp?id=272&parentpath=0,4,51", title: 新竹市生育津貼, seed_category: birth_incentive, organization: 新竹市政府民政處}

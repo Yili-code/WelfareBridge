@@ -1,0 +1,64 @@
+id: tainan_east_office
+name: 臺南市東區區公所 — 社會課受理的補助與救助
+organization: 臺南市東區區公所
+provider_type: township
+source_type: government_site
+# 任務給的 east.tainan.gov.tw 無法解析（DNS 不存在）；東區區公所正式網址為 www.tneast.gov.tw（首頁「市府首頁」連到 www.tainan.gov.tw）
+base_url: https://www.tneast.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+# 頁面 <title> 格式為「東區區公所-<方案名>」，不含「臺南市」
+expected_title_keywords: [東區區公所]
+data_confidence: 100
+enabled: true
+domains: [social_welfare, disability]
+# 臺南市各區公所共用樣板（與社會局 sab.tainan.gov.tw 同一套 CCMS）：
+#   業務總表：News.aspx?n=21123&sms=19317（3 頁，page=1..3&PageSize=20）
+#   業務內容頁：News_Content_Table.aspx?n=21123&s=<業務 id>（表格：類別／單位／辦理時限／聯絡電話／注意事項(資格)／應附文件）
+#   主內容區：#CCMS_Content
+content_selectors: ["#CCMS_Content"]
+notes: "區公所業務頁只有「注意事項（資格）＋應附文件」，多半沒有給付金額；金額條文在社會局 sab.tainan.gov.tw（tainan_sw 來源）。生育獎勵金在臺南市由戶政事務所受理，區公所網站沒有方案頁；老人津貼（中低收入老人生活津貼、重陽敬老金）也不在區公所業務總表。"
+follow_links:
+  depth: 1
+  allow: ['News_Content_Table\.aspx\?n=21123&s=\d+$']
+  # 已看過但不是社福方案頁：農業（4360977 農機使用證、4360950 休耕轉作、4360949 無自用農舍）、4360951 代收所得、
+  # 身障證明事務（4360961 遺失補發手冊、4360962 鑑定、4360960 換發永久手冊）、4360973 調解、4360976 祭祀公業、7660267 三七五租佃、
+  # 兵役（4360930 4360935 4360936 4360928 4360939 4360937 4360941 4360938 4360944 4360943 4360947 4360929 4360948 4360945 4360940 4360933 4360934 4360932）、
+  # 7702987 市民卡業務、4360978 住宅補貼（只有應附文件清單）、內文太短的社福頁（4360957 4360966 4360967 4360965）
+  deny: ['s=(4360977|4360950|4360949|4360951|4360961|4360962|4360960|4360973|4360976|7660267|4360930|4360935|4360936|4360928|4360939|4360937|4360941|4360938|4360944|4360943|4360947|4360929|4360948|4360945|4360940|4360933|4360934|4360932|7702987|4360978|4360957|4360966|4360967|4360965)$', 'Download\.ashx', 'News\.aspx', 'SiteMap', 'Default']
+  max_links: 30
+pages:
+  # ---------------------------------------------------------------- 社會課：社政綜合業務（急難、災害）
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=4360955", title: 急難救助, seed_category: emergency_relief}
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=4360954", title: 災害救助, seed_category: emergency_relief}
+  # ---------------------------------------------------------------- 社會課：婦女兒童少年業務
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=4360952", title: 特殊境遇家庭扶助, seed_category: special_circumstances_aid}
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=4360975", title: 臺南市育有未滿二歲兒童育兒津貼, seed_category: child_allowance}
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=7641873", title: 臺南市二歲以上未滿五歲幼兒育兒津貼, seed_category: child_allowance}
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=7911329", title: 臺南市5歲至入國民小學前幼兒就學補助, seed_category: education_subsidy}
+  # ---------------------------------------------------------------- 社會課：低收入戶業務
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=4360968", title: 低收入戶家庭生活補助, seed_category: low_income_allowance}
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=4360963", title: 傷病醫療補助, seed_category: low_income_allowance}
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=4360964", title: 低收入戶收容, seed_category: institutional_care_subsidy}
+  # ---------------------------------------------------------------- 社會課：身心障礙者業務
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=4360959", title: 身心障礙者生活補助, seed_category: disability_living_allowance}
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=4360958", title: 身心障礙者托育養護補助, seed_category: disability_care_subsidy}
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=4360956", title: 身心障礙者輔具補助申請, seed_category: assistive_device}
+  # ================================================================ 以下乾跑 --max-items 12 不會抓到
+  # 社會課：市民卡業務
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=4360953", title: 申請社福卡(敬老卡、愛心卡、愛心陪伴卡), seed_category: elderly_service}
+  # 民政課：救助與原住民福利
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=7702988", title: 平民安葬救助金申請, seed_category: emergency_relief}
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=4360970", title: 原住民急難救助, seed_category: emergency_relief}
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=4360969", title: 原住民學生獎助學金, seed_category: scholarship}
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=4360971", title: 原住民建構及修繕住宅補助}
+  # 內文太短或沒有資格條文的頁面
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=4360957", title: 身心障礙者健康保險費補助, seed_category: disability_other, skip: true, skip_reason: 只有一句「不須至本所申請，由市府轉檔健保局」，沒有資格與補助內容}
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=4360966", title: 子女就學教育補助, seed_category: low_income_allowance, skip: true, skip_reason: 只有「核列低收入戶高中職以上學生，區公所主動造冊」一句，沒有給付內容}
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=4360967", title: 兒童家庭生活補助, seed_category: low_income_allowance, skip: true, skip_reason: 只有「核列低收入戶國中小兒童，區公所主動造冊」一句，沒有給付內容}
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=4360965", title: 國中、小營養午餐補助, seed_category: low_income_allowance, skip: true, skip_reason: 只有兩句（低收入戶學生、由公所核發證明後向學校申請），沒有給付內容}
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=4360978", title: 住宅補貼申請, seed_category: rental_subsidy, skip: true, skip_reason: 經建課頁面，只有應附文件清單，沒有資格與補貼金額（方案本文在內政部／都發局）}
+  - {url: "https://www.tneast.gov.tw/News_Content_Table.aspx?n=21123&s=4360932", title: 役男家屬生活扶助, skip: true, skip_reason: 兵役業務，只有「由區公所調查填寫家狀表經市府核定」與文件清單，沒有資格與給付}
+  # 業務總表（彙整頁，配合 follow_links 追新增的業務內容頁；3 頁）
+  - {url: "https://www.tneast.gov.tw/News.aspx?n=21123&sms=19317", title: 各項業務查詢（第 1 頁）}
+  - {url: "https://www.tneast.gov.tw/News.aspx?n=21123&sms=19317&page=2&PageSize=20", title: 各項業務查詢（第 2 頁）}
+  - {url: "https://www.tneast.gov.tw/News.aspx?n=21123&sms=19317&page=3&PageSize=20", title: 各項業務查詢（第 3 頁）}

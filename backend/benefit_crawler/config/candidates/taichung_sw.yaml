@@ -1,0 +1,108 @@
+id: taichung_sw
+name: 臺中市政府社會局 — 生育、育兒、社會救助、老人福利
+organization: 臺中市政府社會局
+provider_type: local_government
+source_type: government_site
+base_url: https://www.society.taichung.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [臺中市政府社會局]
+data_confidence: 100
+enabled: true
+domains: [social_welfare, long_term_care, disability]
+# 方案內容頁網址型態：https://www.society.taichung.gov.tw/<數字id>/post
+# 內文在 <article id="cpArticle">；標題 h2、附件清單、發布單位都在 article 之外（#media 是空元素，#center 會夾帶麵包屑與分享列）
+content_selectors: ["#cpArticle", "article.cpArticle"]
+pages:
+  # ---------------------------------------------------------------- 生育、育兒、托育
+  - {url: "https://www.society.taichung.gov.tw/461494/post", title: 臺中市生育津貼, seed_category: child_allowance}
+  - {url: "https://www.society.taichung.gov.tw/135819/post", title: 臺中市低收入戶生育、產婦及嬰兒營養補助計畫, seed_category: child_allowance}
+  - {url: "https://www.society.taichung.gov.tw/2348434/post", title: 未滿二歲兒童育兒津貼, seed_category: child_allowance}
+  - {url: "https://www.society.taichung.gov.tw/media/1361272/%E8%87%BA%E4%B8%AD%E5%B8%82%E5%B9%B3%E5%83%B9%E6%89%98%E8%82%B2%E5%8F%8A%E6%BA%96%E5%85%AC%E5%85%B1%E6%9C%8D%E5%8B%99%E5%AF%A6%E6%96%BD%E8%A8%88%E7%95%AB-11519%E7%B0%BD%E5%87%86.pdf", title: 臺中市平價托育及準公共服務實施計畫, seed_category: childcare_subsidy, format: pdf, source_page: "https://www.society.taichung.gov.tw/134479/post"}
+  - {url: "https://www.society.taichung.gov.tw/134479/post", title: 臺中市平價托育及準公共服務實施計畫（網頁）, seed_category: childcare_subsidy, skip: true, skip_reason: 網頁內文只有依據、目的與各區承辦人分機，實施對象與托育費用／補助規定在附件計畫 PDF（已另列為 pdf 頁面）}
+  - {url: "https://www.society.taichung.gov.tw/134477/post", title: 臺中市政府社會局弱勢家庭兒童臨時托育服務補助計畫, seed_category: childcare_subsidy}
+  - {url: "https://www.society.taichung.gov.tw/461496/post", title: 臺中市到宅坐月子服務(含弱勢對象)}
+  - {url: "https://www.society.taichung.gov.tw/461274/post", title: 臺中市政府社會局辦理發展遲緩兒童早期療育補助執行計畫}
+  # ---------------------------------------------------------------- 低收入戶／中低收入戶
+  - {url: "https://www.society.taichung.gov.tw/135829/post", title: 臺中市低收入戶三項生活補助費調整公告, seed_category: low_income_allowance}
+  - {url: "https://www.society.taichung.gov.tw/3101150/post", title: 臺中市115年最低生活費、低收入戶及中低收入戶審核標準公告, seed_category: low_income_allowance}
+  - {url: "https://www.society.taichung.gov.tw/135831/post", title: 臺中市低收入戶三節慰問金補助計畫, seed_category: low_income_allowance}
+  - {url: "https://www.society.taichung.gov.tw/135841/post", title: 臺中市政府社會局低收入戶房屋租金補助及房屋稅減免, seed_category: rental_subsidy}
+  - {url: "https://www.society.taichung.gov.tw/135837/post", title: 臺中市低收入戶、中低收入戶住院看護費用補助, seed_category: low_income_allowance}
+  - {url: "https://www.society.taichung.gov.tw/135825/post", title: 臺中市市民醫療補助, seed_category: low_income_allowance}
+  - {url: "https://www.society.taichung.gov.tw/135809/post", title: 臺中市政府辦理低收入戶及中低收入戶喪葬補助計畫, seed_category: low_income_allowance}
+  - {url: "https://www.society.taichung.gov.tw/135827/post", title: 低收入戶未滿65歲生活無法自理者安置費用補助, seed_category: institutional_care_subsidy}
+  - {url: "https://www.society.taichung.gov.tw/1624530/post", title: 臺中市辦理低收入戶及中低收入戶微型保險, seed_category: low_income_allowance}
+  - {url: "https://www.society.taichung.gov.tw/135803/post", title: 兒童及少年未來教育與發展帳戶}
+  - {url: "https://www.society.taichung.gov.tw/461240/post", title: 臺中市經濟弱勢兒童及少年生活扶助}
+  - {url: "https://www.society.taichung.gov.tw/461246/post", title: 臺中市辦理中低收入家庭內未滿18歲兒童及少年健保費補助, seed_category: low_income_allowance}
+  - {url: "https://www.society.taichung.gov.tw/461238/post", title: 臺中市政府辦理低收入戶及弱勢兒童少年醫療補助計畫, seed_category: low_income_allowance}
+  # ---------------------------------------------------------------- 急難救助、災害救助
+  - {url: "https://www.society.taichung.gov.tw/135886/post", title: 臺中市急難救助, seed_category: emergency_relief}
+  - {url: "https://www.society.taichung.gov.tw/135927/post", title: 急難紓困方案, seed_category: emergency_relief}
+  - {url: "https://www.society.taichung.gov.tw/461242/post", title: 弱勢家庭兒童及少年緊急生活扶助, seed_category: emergency_relief}
+  - {url: "https://www.society.taichung.gov.tw/135891/post", title: 行旅人返鄉車資補助(川資), seed_category: emergency_relief}
+  - {url: "https://www.society.taichung.gov.tw/135903/post", title: 災害救助－安遷救助, seed_category: emergency_relief}
+  - {url: "https://www.society.taichung.gov.tw/135901/post", title: 災害救助－重傷救助, seed_category: emergency_relief}
+  - {url: "https://www.society.taichung.gov.tw/135899/post", title: 災害救助－死亡救助, seed_category: emergency_relief}
+  - {url: "https://www.society.taichung.gov.tw/135896/post", title: 災害救助－失蹤救助, seed_category: emergency_relief}
+  - {url: "https://www.society.taichung.gov.tw/135893/post", title: 災害救助－住屋淹水救助, seed_category: emergency_relief}
+  - {url: "https://www.society.taichung.gov.tw/135906/post", title: 災害救助－住屋土石流救助, seed_category: emergency_relief}
+  # ---------------------------------------------------------------- 特殊境遇家庭
+  - {url: "https://www.society.taichung.gov.tw/1803601/post", title: 特殊境遇家庭扶助實施計畫, seed_category: special_circumstances_aid}
+  - {url: "https://www.society.taichung.gov.tw/1803289/post", title: 特殊境遇家庭扶助－緊急生活扶助, seed_category: special_circumstances_aid}
+  - {url: "https://www.society.taichung.gov.tw/1803293/post", title: 特殊境遇家庭扶助－子女生活津貼, seed_category: special_circumstances_aid}
+  - {url: "https://www.society.taichung.gov.tw/1803425/post", title: 特殊境遇家庭扶助－傷病醫療補助, seed_category: special_circumstances_aid}
+  - {url: "https://www.society.taichung.gov.tw/1803532/post", title: 特殊境遇家庭扶助－兒童托育津貼, seed_category: childcare_subsidy}
+  - {url: "https://www.society.taichung.gov.tw/1803573/post", title: 特殊境遇家庭扶助－法律訴訟補助, seed_category: special_circumstances_aid}
+  - {url: "https://www.society.taichung.gov.tw/1803594/post", title: 特殊境遇家庭扶助－設籍前新住民返鄉機票費, seed_category: special_circumstances_aid}
+  - {url: "https://www.society.taichung.gov.tw/2328816/post", title: 臺中市單親及弱勢家庭短期租屋津貼計畫, seed_category: rental_subsidy}
+  # ---------------------------------------------------------------- 老人福利
+  - {url: "https://www.society.taichung.gov.tw/461548/post", title: 中低收入老人生活津貼, seed_category: elderly_allowance}
+  - {url: "https://www.society.taichung.gov.tw/461550/post", title: 中低收入老人特別照顧津貼, seed_category: elderly_allowance}
+  - {url: "https://www.society.taichung.gov.tw/461556/post", title: 中低收入老人補助裝置假牙實施計畫, seed_category: elderly_allowance}
+  - {url: "https://www.society.taichung.gov.tw/2905980/post", title: 臺中市重陽節敬老禮金, seed_category: elderly_allowance}
+  - {url: "https://www.society.taichung.gov.tw/461552/post", title: 百歲人瑞敬老禮金, seed_category: elderly_allowance}
+  - {url: "https://www.society.taichung.gov.tw/461560/post", title: 65歲以上老人健保補助, seed_category: elderly_allowance}
+  - {url: "https://www.society.taichung.gov.tw/461558/post", title: 臺中市中低收入老人健保保費自付額補助, seed_category: elderly_allowance}
+  - {url: "https://www.society.taichung.gov.tw/461562/post", title: 臺中市老人傷病住院醫療及看護費用補助, seed_category: elderly_allowance}
+  - {url: "https://www.society.taichung.gov.tw/461578/post", title: 中低收入老人修繕住屋補助, seed_category: elderly_allowance}
+  - {url: "https://www.society.taichung.gov.tw/1030625/post", title: 空間行善者－獨居銀髮族暨弱勢民眾住屋愛心修繕補助, seed_category: elderly_allowance}
+  - {url: "https://www.society.taichung.gov.tw/461554/post", title: 老人聲請監護輔助宣告費用補助, seed_category: elderly_allowance}
+  - {url: "https://www.society.taichung.gov.tw/461566/post", title: 低收入戶孤苦無依老人收容照顧補助, seed_category: institutional_care_subsidy}
+  - {url: "https://www.society.taichung.gov.tw/1261480/post", title: 115年度住宿式服務機構使用者補助方案, seed_category: institutional_care_subsidy}
+  - {url: "https://www.society.taichung.gov.tw/461576/post", title: 臺中市政府辦理老人敬老愛心卡乘車及各項補助, seed_category: elderly_service}
+  - {url: "https://www.society.taichung.gov.tw/3061124/post", title: 臺中市政府社會局低收入戶老人補助配戴助聽器實施計畫, seed_category: assistive_device}
+  - {url: "https://www.society.taichung.gov.tw/2854210/post", title: 臺中市敬老眼鏡補助暨視力檢查服務實施計畫, seed_category: assistive_device}
+  - {url: "https://www.society.taichung.gov.tw/889808/post", title: 臺中市中低收入獨居老人營養餐飲服務, seed_category: meal_service}
+  - {url: "https://www.society.taichung.gov.tw/461592/post", title: 臺中市獨居老人服務計畫, seed_category: elderly_service, skip: true, skip_reason: 內文是計畫目標、執行單位與四區委託單位電話，沒有個人申請資格與給付內容}
+  - {url: "https://www.society.taichung.gov.tw/461586/post", title: 老人緊急庇護安置, seed_category: elderly_service}
+  - {url: "https://www.society.taichung.gov.tw/826729/post", title: 日間托老服務, seed_category: day_care}
+  # ---------------------------------------------------------------- 身心障礙
+  - {url: "https://www.society.taichung.gov.tw/461728/post", title: 身心障礙者生活補助費, seed_category: disability_living_allowance}
+  - {url: "https://www.society.taichung.gov.tw/1875151/post", title: 臺中市政府社會局身心障礙照顧者津貼, seed_category: disability_care_subsidy}
+  - {url: "https://www.society.taichung.gov.tw/461756/post", title: 身心障礙者日間照顧及住宿式照顧費用補助, seed_category: disability_care_subsidy}
+  - {url: "https://www.society.taichung.gov.tw/461734/post", title: 身心障礙者輔具費用補助, seed_category: assistive_device}
+  - {url: "https://www.society.taichung.gov.tw/461730/post", title: 身心障礙者參加健保費及社會保險補助, seed_category: disability_other}
+  - {url: "https://www.society.taichung.gov.tw/461750/post", title: 身心障礙者國民年金保險費補助, seed_category: disability_other}
+  - {url: "https://www.society.taichung.gov.tw/461738/post", title: 臺中市身心障礙者房屋租金補貼, seed_category: rental_subsidy}
+  - {url: "https://www.society.taichung.gov.tw/461732/post", title: 身心障礙者裝置假牙補助計畫, seed_category: disability_other}
+  - {url: "https://www.society.taichung.gov.tw/461736/post", title: 身心障礙者傷病住院看護費用補助, seed_category: disability_other}
+  - {url: "https://www.society.taichung.gov.tw/461744/post", title: 視覺障礙者搭乘計程車費用補助, seed_category: transport_service}
+  - {url: "https://www.society.taichung.gov.tw/461758/post", title: 大小型復康巴士服務, seed_category: transport_service}
+  - {url: "https://www.society.taichung.gov.tw/461746/post", title: 補助身心障礙者住屋愛心修繕計畫, seed_category: disability_other}
+  - {url: "https://www.society.taichung.gov.tw/811651/post", title: 身心障礙者聲請監護(輔助)宣告費用補助, seed_category: disability_other}
+  - {url: "https://www.society.taichung.gov.tw/461780/post", title: 身心障礙者臨時及短期照顧服務, seed_category: respite_care}
+  - {url: "https://www.society.taichung.gov.tw/795431/post", title: 身心障礙者家庭托顧服務, seed_category: family_care_home}
+  # ---------------------------------------------------------------- 遊民服務
+  - {url: "https://www.society.taichung.gov.tw/2270978/post", title: 臺中市政府社會局遊民租屋補助實施計畫, seed_category: rental_subsidy}
+  - {url: "https://www.society.taichung.gov.tw/2657320/post", title: 臺中市遊民醫療及看護補助計畫}
+  # ---------------------------------------------------------------- 只留紀錄、不抓
+  - {url: "https://www.society.taichung.gov.tw/135817/post", title: 中低收入戶健保費減免, seed_category: low_income_allowance, skip: true, skip_reason: 內文只有一句（補助全民健保費二分之一＋洽詢電話，47 字），資格與申請方式在附件裡}
+  - {url: "https://www.society.taichung.gov.tw/135811/post", title: 低收入戶及中低收入戶核列與福利一覽表, skip: true, skip_reason: 各行政區承辦人聯絡表＋福利項目一覽，屬名單／一覽表，不是單一方案頁}
+  - {url: "https://www.society.taichung.gov.tw/2286918/normalURL", title: 準公共化托育服務, skip: true, skip_reason: 育兒資訊專區的外部轉址項目，頁面沒有內文（0 字）}
+  - {url: "https://www.society.taichung.gov.tw/13862/Lpsimplelist", title: 社會救助－低收及中低收入戶（目錄）, skip: true, skip_reason: 分類目錄頁，方案內容頁已逐一列入}
+  - {url: "https://www.society.taichung.gov.tw/13865/Lpsimplelist", title: 社會救助－災害、急難救助（目錄）, skip: true, skip_reason: 分類目錄頁，方案內容頁已逐一列入}
+  - {url: "https://www.society.taichung.gov.tw/13783/Lpsimplelist", title: 老人福利（目錄）, skip: true, skip_reason: 分類目錄頁（兩頁、共 36 筆），方案內容頁已逐一列入}
+  - {url: "https://www.society.taichung.gov.tw/13798/Lpsimplelist", title: 身心障礙者福利（目錄）, skip: true, skip_reason: 分類目錄頁（兩頁、共 58 筆），方案內容頁已逐一列入}
+  - {url: "https://www.society.taichung.gov.tw/2285652/Lpsimplelist", title: 兒少－育兒資訊專區（目錄）, skip: true, skip_reason: 分類目錄頁，方案內容頁已逐一列入}
+notes: 臺中市政府社會局全球資訊網；內容頁網址為 /<id>/post，內文在 #cpArticle。列表頁每頁 30 筆（?Page=2&PageSize=30 可翻頁）。附件（申請表、計畫 PDF）在 article 之外的 section.attachment，本設定不抓附件。

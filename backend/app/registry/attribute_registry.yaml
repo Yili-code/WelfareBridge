@@ -1,0 +1,703 @@
+# 屬性登錄表（資料，不是程式）。唯一會隨領域成長的定義檔。
+#
+# 每個屬性：
+#   id            namespace.name（applicant / education / academic / residence / household / financial / identity /
+#                 disability / care / health / employment / housing / family）
+#   type          number | boolean | enum | multi_enum | city | date | text
+#   values        enum / multi_enum 的允許值（value/label）；ordered: true 才允許 >= <=
+#   unit          number 的單位：years / months / score / gpa / percent / TWD / TWD_year / TWD_month / level / multiple
+#   domains       會用到的領域（taxonomy 節點 id 或 all）
+#   label / question / help   中文標籤、追問句、補充說明
+#   aliases       原文與使用者文字中的同義詞（人工種子；語料統計補充的別名在 attribute_aliases_mined.yaml）
+#   sensitivity   low | medium | high（high：追問前先說明用途、可跳過、不得推定）
+#   hard_filter   可做候選檢索索引
+#   ask_priority  同資訊增益時的平手順序；0 = 不直接問（推導欄位）
+#   derived       由其他屬性推導（只允許四則運算與 poverty_line(city) 查表）
+#   value_patterns 抽取時「數值＋單位」的 regex（可省略，依 unit 取預設）
+version: 2
+attributes:
+  # ---------------------------------------------------------------- applicant
+  - id: applicant.age
+    type: number
+    unit: years
+    domains: [all]
+    label: 年齡
+    question: 你今年幾歲？
+    aliases: [年滿, 歲以上, 歲以下, 未滿, 足歲, 年齡]
+    sensitivity: low
+    hard_filter: true
+    ask_priority: 90
+  - id: applicant.is_elderly
+    type: boolean
+    domains: [social_welfare, long_term_care, health]
+    label: 年滿 65 歲
+    question: 你（或受照顧者）是否年滿 65 歲？
+    aliases: [老人, 長者, 年滿65歲, 65歲以上, 高齡]
+    derived: applicant.age >= 65
+    sensitivity: low
+    ask_priority: 0
+  - id: applicant.gender
+    type: enum
+    values: [{value: male, label: 男}, {value: female, label: 女}, {value: other, label: 其他}]
+    domains: [all]
+    label: 性別
+    question: 你的性別？
+    aliases: [性別, 男性, 女性, 婦女]
+    sensitivity: medium
+    ask_priority: 20
+  - id: applicant.nationality
+    type: enum
+    values: [{value: roc, label: 中華民國國籍}, {value: foreign, label: 外國籍}, {value: stateless, label: 無國籍}]
+    domains: [all]
+    label: 國籍
+    question: 你的國籍？
+    aliases: [國籍, 本國籍, 中華民國國民, 外國人, 外籍]
+    sensitivity: medium
+    hard_filter: true
+    ask_priority: 40
+  - id: applicant.marital_status
+    type: enum
+    values: [{value: single, label: 未婚}, {value: married, label: 已婚}, {value: divorced, label: 離婚}, {value: widowed, label: 喪偶}]
+    domains: [social_welfare, housing]
+    label: 婚姻狀況
+    question: 你的婚姻狀況？
+    aliases: [婚姻, 已婚, 未婚, 離婚, 喪偶, 配偶]
+    sensitivity: medium
+    ask_priority: 20
+  - id: applicant.is_student
+    type: boolean
+    domains: [all]
+    label: 在學學生
+    question: 你目前是否為在學學生？
+    aliases: [在學學生, 在學之學生, 目前在學, 在校生, 具學生身分, 在學中]
+    sensitivity: low
+    hard_filter: true
+    ask_priority: 85
+
+  # ---------------------------------------------------------------- education
+  - id: education.level
+    type: enum
+    ordered: true
+    values:
+      - {value: elementary, label: 國小}
+      - {value: junior_high, label: 國中}
+      - {value: senior_high, label: 高中}
+      - {value: vocational_high, label: 高職}
+      - {value: junior_college, label: 五專}
+      - {value: university, label: 大學／大專（含科大、技術學院）}
+      - {value: master, label: 碩士}
+      - {value: doctoral, label: 博士}
+    domains: [education, youth, social_welfare, labor]
+    label: 教育階段
+    question: 你目前的教育階段是？
+    aliases: [學制, 就讀, 大專校院, 大專院校, 大學, 研究所, 碩士班, 博士班, 高級中等學校, 高中職, 國中, 國小, 五專, 專科]
+    sensitivity: low
+    hard_filter: true
+    ask_priority: 95
+  - id: education.grade
+    type: number
+    domains: [education]
+    label: 年級
+    question: 你目前是幾年級？
+    aliases: [年級, 大一, 大二, 大三, 大四, 一年級, 二年級, 三年級, 新生]
+    sensitivity: low
+    ask_priority: 60
+  - id: education.school
+    type: text
+    domains: [education]
+    label: 就讀學校
+    question: 你就讀的學校是？
+    aliases: [學校, 就讀學校, 校名]
+    sensitivity: low
+    ask_priority: 30
+  - id: education.school_type
+    type: enum
+    values: [{value: public, label: 公立}, {value: private, label: 私立}]
+    domains: [education]
+    label: 公私立
+    question: 你的學校是公立還是私立？
+    aliases: [限公立, 限私立, 僅限公立, 僅限私立, 公立學校為限, 私立學校為限]
+    sensitivity: low
+    ask_priority: 30
+  - id: education.school_city
+    type: city
+    domains: [education]
+    label: 學校所在縣市
+    question: 你的學校在哪個縣市？
+    aliases: [就讀本市, 本市學校, 市立, 縣立, 設於本市]
+    sensitivity: low
+    hard_filter: true
+    ask_priority: 50
+  - id: education.department
+    type: text
+    domains: [education]
+    label: 科系
+    question: 你就讀的科系是？
+    aliases: [科系, 學系, 系所, 學門, 主修]
+    sensitivity: low
+    ask_priority: 30
+  - id: education.program_type
+    type: enum
+    values:
+      - {value: day, label: 日間部}
+      - {value: night, label: 夜間部}
+      - {value: continuing, label: 進修部／進修學院}
+      - {value: in_service, label: 在職專班}
+      - {value: open_university, label: 空中大學}
+      - {value: credit_program, label: 學分班／推廣教育}
+      - {value: military_police, label: 軍警學校}
+    domains: [education]
+    label: 就讀部別
+    question: 你就讀的是日間部、夜間部、進修部還是在職專班？
+    aliases: [夜間部, 進修部, 進修學院, 在職專班, 空中大學, 學分班, 推廣教育, 軍警學校, 日間部, 進修學校, 補習學校, 建教班]
+    sensitivity: low
+    hard_filter: true
+    ask_priority: 70
+  - id: education.extended_study
+    type: boolean
+    domains: [education]
+    label: 延長修業／重修
+    question: 你目前是否延長修業年限、重修或補修？
+    aliases: [延長修業, 延畢, 重修, 補修, 延長修業年限]
+    sensitivity: low
+    ask_priority: 40
+  - id: education.years_in_program
+    type: number
+    unit: years
+    domains: [education]
+    label: 本學制修業年數
+    question: 你在目前學制已修業第幾年？
+    aliases: [修業年限, 修業第, 修業年數]
+    sensitivity: low
+    ask_priority: 30
+  - id: education.is_freshman
+    type: boolean
+    domains: [education]
+    label: 新生
+    question: 你是否為本學年新生？
+    aliases: [新生, 一年級新生, 入學]
+    sensitivity: low
+    ask_priority: 20
+
+  # ---------------------------------------------------------------- academic
+  - id: academic.average_score
+    type: number
+    unit: score
+    domains: [education]
+    label: 學業平均成績
+    question: 你上一學期（或學年）的學業平均成績約幾分？
+    aliases: [學業成績, 學業平均, 平均成績, 成績平均, 總平均, 智育成績, 學期成績]
+    sensitivity: low
+    ask_priority: 80
+  - id: academic.gpa
+    type: number
+    unit: gpa
+    domains: [education]
+    label: GPA
+    question: 你的 GPA 是多少？
+    aliases: [GPA, 平均績點]
+    sensitivity: low
+    ask_priority: 40
+  - id: academic.ranking_percent
+    type: number
+    unit: percent
+    domains: [education]
+    label: 班級排名百分比
+    question: 你上一學期的班級排名大約在前百分之幾？
+    aliases: [排名, 名次, 前百分之, 班排, 系排]
+    sensitivity: low
+    ask_priority: 40
+  - id: academic.conduct_score
+    type: number
+    unit: score
+    domains: [education]
+    label: 操行成績
+    question: 你上一學期的操行（德育）成績約幾分？
+    aliases: [操行, 德育, 操行成績, 德育成績, 品行]
+    sensitivity: low
+    ask_priority: 70
+  - id: academic.subject_min_score
+    type: number
+    unit: score
+    domains: [education]
+    label: 最低單科成績
+    question: 你上一學期最低的一科成績約幾分？
+    aliases: [各科成績, 每科, 單科, 各科目]
+    sensitivity: low
+    ask_priority: 30
+  - id: academic.no_disciplinary_record
+    type: boolean
+    domains: [education]
+    label: 無懲處紀錄
+    question: 你是否沒有警告以上的懲處紀錄？
+    aliases: [懲處, 警告, 記過, 獎懲紀錄, 未受懲處, 操行不及格]
+    sensitivity: medium
+    ask_priority: 40
+  - id: academic.no_failed_subject
+    type: boolean
+    domains: [education]
+    label: 無不及格科目
+    question: 你上一學期是否沒有不及格的科目？
+    aliases: [不及格, 及格, 未達60分, 未達六十分]
+    sensitivity: low
+    ask_priority: 30
+
+  # ---------------------------------------------------------------- residence
+  - id: residence.household_city
+    type: city
+    domains: [all]
+    label: 戶籍縣市
+    question: 你的戶籍在哪個縣市？
+    aliases: [設籍, 戶籍, 戶籍地, 籍設, 本市, 本縣, 設籍本市, 戶籍所在地]
+    sensitivity: low
+    hard_filter: true
+    ask_priority: 95
+  - id: residence.household_district
+    type: text
+    domains: [all]
+    label: 戶籍鄉鎮市區
+    question: 你的戶籍在哪個鄉鎮市區？
+    aliases: [本區, 本鄉, 本鎮, 設籍本區, 區公所]
+    sensitivity: low
+    ask_priority: 40
+  - id: residence.duration_months
+    type: number
+    unit: months
+    domains: [all]
+    label: 設籍時間（月）
+    question: 你在戶籍地連續設籍多久了？（月）
+    aliases: [設籍滿, 連續設籍, 設籍達, 設籍六個月, 設籍一年, 居住滿, 連續居住]
+    sensitivity: low
+    ask_priority: 70
+  - id: residence.current_city
+    type: city
+    domains: [all]
+    label: 目前居住縣市
+    question: 你目前實際居住在哪個縣市？
+    aliases: [實際居住, 居住地, 現居, 居住於本市]
+    sensitivity: low
+    hard_filter: true
+    ask_priority: 60
+  - id: residence.same_household_as_parent
+    type: boolean
+    domains: [education, social_welfare]
+    label: 與父母同戶籍
+    question: 你是否與父母同一戶籍？
+    aliases: [同一戶籍, 同戶, 共同生活]
+    sensitivity: medium
+    ask_priority: 20
+
+  # ---------------------------------------------------------------- household / financial
+  - id: household.size
+    type: number
+    domains: [all]
+    label: 家庭人口數
+    question: 你的家庭（同一戶）共有幾人？
+    aliases: [家庭人口, 全家人口, 家戶人口, 人口數]
+    sensitivity: medium
+    ask_priority: 50
+  - id: household.income_year
+    type: number
+    unit: TWD_year
+    domains: [all]
+    label: 家庭年所得
+    question: 你的家庭年所得大約是多少（新臺幣）？
+    aliases: [家庭年所得, 家庭所得, 年所得, 年收入, 家庭總收入, 所得總額, 綜合所得, 家戶所得]
+    sensitivity: high
+    ask_priority: 65
+  - id: household.income_month
+    type: number
+    unit: TWD_month
+    domains: [all]
+    label: 家庭月所得
+    question: 你的家庭每月所得大約是多少？
+    aliases: [每月所得, 月收入, 月所得]
+    derived: household.income_year / 12
+    sensitivity: high
+    ask_priority: 0
+  - id: household.income_per_capita
+    type: number
+    unit: TWD_month
+    domains: [all]
+    label: 家庭每人每月平均所得
+    question: 你的家庭平均每人每月所得大約是多少？
+    aliases: [平均每人每月, 每人每月收入, 每人每月所得, 平均所得, 家庭總收入平均分配全家人口]
+    derived: household.income_month / household.size
+    sensitivity: high
+    ask_priority: 0
+  - id: household.income_vs_poverty_line
+    type: number
+    unit: multiple
+    domains: [all]
+    label: 每人所得為最低生活費的倍數
+    question: 你的家庭每人每月所得約為當地最低生活費的幾倍？
+    aliases: [最低生活費, 最低生活費標準, 最低生活費1.5倍, 最低生活費2倍, 最低生活費2.5倍, 倍]
+    derived: household.income_per_capita / poverty_line(residence.household_city)
+    sensitivity: high
+    ask_priority: 0
+  - id: household.assets
+    type: number
+    unit: TWD
+    domains: [education, social_welfare, housing, long_term_care]
+    label: 家庭財產總額
+    question: 你的家庭動產與不動產總額大約是多少？
+    aliases: [動產, 不動產, 財產, 存款, 財產總額, 土地及房屋價值]
+    sensitivity: high
+    ask_priority: 30
+  - id: household.dependents
+    type: number
+    domains: [social_welfare]
+    label: 扶養人數
+    question: 你需要扶養幾位家人？
+    aliases: [扶養, 扶養親屬, 受扶養]
+    sensitivity: medium
+    ask_priority: 20
+  - id: financial.receiving_public_funding
+    type: boolean
+    domains: [education]
+    label: 公費生
+    question: 你目前是否為公費生（享有公費待遇）？
+    aliases: [公費, 公費生, 公費待遇, 享有公費]
+    sensitivity: low
+    ask_priority: 50
+  - id: financial.receiving_other_benefit
+    type: multi_enum
+    values:
+      - {value: government_scholarship, label: 政府獎學金}
+      - {value: tuition_waiver, label: 學雜費減免}
+      - {value: student_aid, label: 助學金}
+      - {value: living_allowance, label: 生活補助／津貼}
+      - {value: long_term_care, label: 長照服務給付}
+      - {value: none, label: 都沒有}
+    domains: [all]
+    label: 目前領取中的政府補助
+    question: 你目前已領取哪些政府補助或獎助？
+    aliases: [已領, 已受領, 已領取, 領有其他, 重複領取, 不得重複, 擇一, 同性質補助, 已享有]
+    sensitivity: medium
+    ask_priority: 55
+  - id: financial.student_loan
+    type: boolean
+    domains: [education]
+    label: 就學貸款
+    question: 你是否有申請就學貸款？
+    aliases: [就學貸款, 助學貸款]
+    sensitivity: medium
+    ask_priority: 20
+  - id: financial.labor_insured
+    type: boolean
+    domains: [labor]
+    label: 有勞保／就業保險
+    question: 你是否有勞工保險或就業保險？
+    aliases: [就業保險, 勞工保險, 勞保, 被保險人, 投保]
+    sensitivity: medium
+    hard_filter: true
+    ask_priority: 70
+
+  # ---------------------------------------------------------------- identity（對應 identity_ontology）
+  - {id: identity.low_income, type: boolean, domains: [all], label: 低收入戶, question: 你是否具有低收入戶身分？, aliases: [低收入戶, 低收], sensitivity: high, hard_filter: true, ask_priority: 88}
+  - {id: identity.middle_low_income, type: boolean, domains: [all], label: 中低收入戶, question: 你是否具有中低收入戶身分？, aliases: [中低收入戶, 中低收], sensitivity: high, hard_filter: true, ask_priority: 87}
+  - {id: identity.economic_hardship, type: boolean, domains: [education], label: 清寒, question: 你是否有清寒證明（村里長證明或學校認定）？, aliases: [清寒, 家境清寒], sensitivity: high, ask_priority: 75}
+  - {id: identity.special_circumstances, type: boolean, domains: [all], label: 特殊境遇家庭, question: 你是否為特殊境遇家庭？, aliases: [特殊境遇家庭, 特殊境遇], sensitivity: high, ask_priority: 60}
+  - {id: identity.indigenous, type: boolean, domains: [all], label: 原住民, question: 你是否具有原住民身分？, aliases: [原住民, 原住民族], sensitivity: high, hard_filter: true, ask_priority: 80}
+  - id: identity.indigenous_tribe
+    type: enum
+    values: [{value: 阿美族, label: 阿美族}, {value: 泰雅族, label: 泰雅族}, {value: 排灣族, label: 排灣族}, {value: 布農族, label: 布農族}, {value: 卑南族, label: 卑南族}, {value: 魯凱族, label: 魯凱族}, {value: 鄒族, label: 鄒族}, {value: 賽夏族, label: 賽夏族}, {value: 雅美族, label: 雅美族（達悟族）}, {value: 邵族, label: 邵族}, {value: 噶瑪蘭族, label: 噶瑪蘭族}, {value: 太魯閣族, label: 太魯閣族}, {value: 撒奇萊雅族, label: 撒奇萊雅族}, {value: 賽德克族, label: 賽德克族}, {value: 拉阿魯哇族, label: 拉阿魯哇族}, {value: 卡那卡那富族, label: 卡那卡那富族}]
+    domains: [education, social_welfare]
+    label: 族別
+    question: 你的族別是？
+    aliases: [族別, 雅美族, 達悟族, 阿美族, 泰雅族, 排灣族, 布農族]
+    sensitivity: high
+    ask_priority: 30
+  - {id: identity.hakka, type: boolean, domains: [education], label: 客家, question: 你是否為客家子弟？, aliases: [客家, 客家子弟], sensitivity: medium, ask_priority: 30}
+  - {id: identity.new_immigrant, type: boolean, domains: [all], label: 新住民（含子女）, question: 你是否為新住民或新住民子女？, aliases: [新住民, 新移民, 外籍配偶], sensitivity: high, ask_priority: 60}
+  - {id: identity.single_parent, type: boolean, domains: [all], label: 單親家庭, question: 你是否來自單親家庭？, aliases: [單親], sensitivity: high, ask_priority: 55}
+  - {id: identity.grandparent_family, type: boolean, domains: [education, social_welfare], label: 隔代教養, question: 你是否為隔代教養家庭？, aliases: [隔代教養], sensitivity: high, ask_priority: 40}
+  - {id: identity.orphan, type: boolean, domains: [education, social_welfare], label: 失依兒少, question: 你是否為失依兒少（父母雙亡或無法扶養）？, aliases: [失依, 孤兒], sensitivity: high, ask_priority: 40}
+  - {id: identity.veteran_family, type: boolean, domains: [education], label: 榮民子女／榮眷, question: 你是否為榮民或榮眷子女？, aliases: [榮民, 榮眷], sensitivity: medium, ask_priority: 40}
+  - {id: identity.military_civil_bereaved, type: boolean, domains: [education], label: 軍公教遺族, question: 你是否為軍公教遺族？, aliases: [軍公教遺族, 遺族], sensitivity: medium, ask_priority: 30}
+  - {id: identity.unemployed_worker_child, type: boolean, domains: [education, labor], label: 失業勞工子女, question: 你的父母是否為非自願離職的失業勞工？, aliases: [失業勞工子女, 非自願離職], sensitivity: high, ask_priority: 40}
+  - {id: identity.overseas_chinese, type: boolean, domains: [education], label: 僑生, question: 你是否為僑生？, aliases: [僑生], sensitivity: medium, hard_filter: true, ask_priority: 40}
+  - {id: identity.foreign_student, type: boolean, domains: [education], label: 外籍生, question: 你是否為外籍學生？, aliases: [外籍生, 國際學生], sensitivity: medium, hard_filter: true, ask_priority: 40}
+
+  # 虛擬屬性：由上列身分布林值與 identity_ontology 的 implies 推出的標籤集合（規則用 contains / in / not_in）
+  - id: identity.tags
+    type: multi_enum
+    values:
+      - {value: low_income, label: 低收入戶}
+      - {value: middle_low_income, label: 中低收入戶}
+      - {value: economic_hardship, label: 清寒}
+      - {value: special_circumstances, label: 特殊境遇家庭}
+      - {value: disadvantaged, label: 弱勢學生}
+      - {value: indigenous, label: 原住民}
+      - {value: yami, label: 雅美族}
+      - {value: hakka, label: 客家}
+      - {value: disabled, label: 身心障礙}
+      - {value: disabled_family, label: 身心障礙人士子女}
+      - {value: new_immigrant, label: 新住民}
+      - {value: single_parent, label: 單親家庭}
+      - {value: grandparent_family, label: 隔代教養}
+      - {value: orphan, label: 失依兒少}
+      - {value: veteran_family, label: 榮民子女}
+      - {value: military_civil_bereaved, label: 軍公教遺族}
+      - {value: unemployed_worker_child, label: 失業勞工子女}
+      - {value: overseas_chinese, label: 僑生}
+      - {value: foreign_student, label: 外籍生}
+      - {value: elderly, label: 老人}
+      - {value: catastrophic_illness, label: 重大傷病}
+      - {value: dementia, label: 失智症}
+    domains: [all]
+    label: 身分標籤
+    question: 你是否具有下列任一身分？
+    aliases: []
+    sensitivity: high
+    ask_priority: 0
+    derived: "tags"
+
+  # ---------------------------------------------------------------- disability
+  - id: disability.has_certificate
+    type: boolean
+    domains: [disability, long_term_care, education, social_welfare, housing, labor]
+    label: 身心障礙證明
+    question: 你（或受照顧者）是否領有身心障礙證明？
+    aliases: [身心障礙證明, 身心障礙手冊, 身心障礙者, 身障]
+    sensitivity: high
+    hard_filter: true
+    ask_priority: 85
+  - id: disability.certificate_level
+    type: enum
+    ordered: true
+    values: [{value: 輕度, label: 輕度}, {value: 中度, label: 中度}, {value: 重度, label: 重度}, {value: 極重度, label: 極重度}]
+    domains: [disability, long_term_care, education, social_welfare]
+    label: 身心障礙等級
+    question: 身心障礙證明的等級是？
+    aliases: [障礙等級, 輕度, 中度, 重度, 極重度, 中度以上, 重度以上]
+    sensitivity: high
+    hard_filter: true
+    ask_priority: 80
+  - id: disability.category
+    type: multi_enum
+    values: [{value: 第一類, label: 第一類（神經系統）}, {value: 第二類, label: 第二類（眼耳）}, {value: 第三類, label: 第三類（發聲、語言）}, {value: 第四類, label: 第四類（循環、造血、免疫、呼吸）}, {value: 第五類, label: 第五類（消化、新陳代謝、內分泌）}, {value: 第六類, label: 第六類（泌尿、生殖）}, {value: 第七類, label: 第七類（肢體）}, {value: 第八類, label: 第八類（皮膚）}]
+    domains: [disability]
+    label: 障礙類別
+    question: 身心障礙證明的障礙類別是？
+    aliases: [障礙類別, 肢體障礙, 視覺障礙, 聽覺障礙, 智能障礙, 精神障礙, 自閉症]
+    sensitivity: high
+    ask_priority: 30
+  - id: disability.family_member_has_certificate
+    type: boolean
+    domains: [education, social_welfare]
+    label: 家中有身心障礙者
+    question: 你的父母或家人是否領有身心障礙證明？
+    aliases: [身心障礙人士子女, 身心障礙者子女, 家中有身心障礙者]
+    sensitivity: high
+    ask_priority: 40
+
+  # ---------------------------------------------------------------- care（長期照顧）
+  - id: care.cms_level
+    type: number
+    unit: level
+    domains: [long_term_care]
+    label: 長照需要等級（CMS）
+    question: 照顧管理專員評估的長照需要等級（CMS）是第幾級？
+    help: 撥打 1966 申請評估後，照管中心會告知等級（第 2～8 級可使用長照服務）
+    aliases: [CMS, 長照需要等級, 照顧管理評估, 失能等級, 第2級以上, 評估為第]
+    sensitivity: high
+    hard_filter: true
+    ask_priority: 90
+  - id: care.needs_care
+    type: boolean
+    domains: [long_term_care, social_welfare, disability]
+    label: 失能／需照顧
+    question: 你（或受照顧者）是否經評估為失能或需要他人照顧？
+    aliases: [失能, 失能者, 日常生活需他人協助, 需照顧, 生活無法自理, 巴氏量表]
+    sensitivity: high
+    hard_filter: true
+    ask_priority: 88
+  - id: care.adl_score
+    type: number
+    unit: score
+    domains: [long_term_care]
+    label: 巴氏量表分數
+    question: 巴氏量表（ADL）分數是多少？
+    aliases: [巴氏量表, ADL, 日常生活活動功能]
+    sensitivity: high
+    ask_priority: 40
+  - id: care.institutional_placement
+    type: boolean
+    domains: [long_term_care, social_welfare, disability]
+    label: 已入住機構
+    question: 你（或受照顧者）目前是否已入住安養或住宿式機構？
+    aliases: [機構安置, 入住機構, 住宿式機構, 安置於機構, 全日型機構, 護理之家]
+    sensitivity: high
+    hard_filter: true
+    ask_priority: 75
+  - id: care.has_foreign_caregiver
+    type: boolean
+    domains: [long_term_care]
+    label: 聘有外籍看護
+    question: 家中是否聘有外籍看護工？
+    aliases: [外籍看護, 外籍家庭看護工, 聘僱外籍, 外勞]
+    sensitivity: medium
+    ask_priority: 60
+  - id: care.is_primary_caregiver
+    type: boolean
+    domains: [long_term_care]
+    label: 主要照顧者
+    question: 你是否為家中失能者的主要照顧者？
+    aliases: [照顧者, 主要照顧者, 家庭照顧者]
+    sensitivity: medium
+    ask_priority: 40
+  - id: care.dementia_diagnosis
+    type: boolean
+    domains: [long_term_care, health]
+    label: 失智診斷
+    question: 你（或受照顧者）是否有失智症診斷？
+    aliases: [失智, 失智症, 認知功能]
+    sensitivity: high
+    ask_priority: 50
+
+  # ---------------------------------------------------------------- health
+  - id: health.catastrophic_illness
+    type: boolean
+    domains: [health, social_welfare, education]
+    label: 重大傷病
+    question: 你是否持有重大傷病證明（卡）？
+    aliases: [重大傷病, 重大傷病卡, 重大傷病證明]
+    sensitivity: high
+    ask_priority: 40
+  - id: health.specific_disease
+    type: text
+    domains: [health, education]
+    label: 特定疾病
+    question: 你是否患有特定疾病（請說明）？
+    aliases: [罕見疾病, 癌症, 洗腎, 燒燙傷, 病童, 重症]
+    sensitivity: high
+    ask_priority: 20
+
+  # ---------------------------------------------------------------- employment
+  - id: employment.status
+    type: enum
+    values: [{value: employed, label: 在職}, {value: unemployed, label: 失業／待業}, {value: student, label: 學生}, {value: retired, label: 退休}, {value: self_employed, label: 自營}]
+    domains: [labor, youth, housing, social_welfare]
+    label: 就業狀態
+    question: 你目前的就業狀態？
+    aliases: [失業, 非自願離職, 待業, 求職, 在職, 就業中, 離職]
+    sensitivity: medium
+    hard_filter: true
+    ask_priority: 80
+  - id: employment.unemployed_months
+    type: number
+    unit: months
+    domains: [labor]
+    label: 失業月數
+    question: 你已經失業多久了？（月）
+    aliases: [失業期間, 連續失業, 離職滿, 待業期間]
+    sensitivity: medium
+    ask_priority: 50
+  - id: employment.involuntary_separation
+    type: boolean
+    domains: [labor]
+    label: 非自願離職
+    question: 你是否為非自願離職（被資遣、關廠等）？
+    aliases: [非自願離職, 資遣, 關廠, 歇業, 非自願性失業]
+    sensitivity: medium
+    ask_priority: 70
+  - id: employment.insured_years
+    type: number
+    unit: years
+    domains: [labor]
+    label: 就業保險年資
+    question: 你的就業保險年資累計幾年？
+    aliases: [保險年資, 投保年資, 年資合計, 累計年資]
+    sensitivity: medium
+    ask_priority: 50
+  - id: employment.is_middle_aged
+    type: boolean
+    domains: [labor]
+    label: 中高齡（45 歲以上）
+    question: 你是否年滿 45 歲？
+    aliases: [中高齡, 高齡者, 45歲以上, 65歲以上勞工]
+    derived: applicant.age >= 45
+    sensitivity: low
+    ask_priority: 0
+  - id: employment.in_training
+    type: boolean
+    domains: [labor]
+    label: 參加職業訓練
+    question: 你是否正在或即將參加政府核定的職業訓練？
+    aliases: [職業訓練, 職訓, 受訓, 全日制訓練]
+    sensitivity: low
+    ask_priority: 60
+
+  # ---------------------------------------------------------------- housing
+  - id: housing.tenure
+    type: enum
+    values: [{value: own, label: 自有住宅}, {value: rent, label: 租屋}, {value: family, label: 住家人房子}, {value: dorm, label: 學校宿舍}, {value: none, label: 無固定住所}]
+    domains: [housing, education, social_welfare]
+    label: 居住型態
+    question: 你目前的居住型態？
+    aliases: [租屋, 租賃, 承租, 自有住宅, 無自有住宅, 住宿, 宿舍]
+    sensitivity: medium
+    hard_filter: true
+    ask_priority: 75
+  - id: housing.rent_month
+    type: number
+    unit: TWD_month
+    domains: [housing]
+    label: 每月租金
+    question: 你每月的租金是多少？
+    aliases: [租金, 每月租金, 房租]
+    sensitivity: medium
+    ask_priority: 50
+  - id: housing.owns_property
+    type: boolean
+    domains: [housing, social_welfare]
+    label: 持有自有住宅
+    question: 你或家庭成員是否持有自有住宅？
+    aliases: [自有住宅, 持有住宅, 無自有住宅, 房屋, 名下]
+    sensitivity: high
+    ask_priority: 60
+
+  # ---------------------------------------------------------------- family
+  - id: family.children_count
+    type: number
+    domains: [social_welfare, housing]
+    label: 子女數
+    question: 你有幾位子女？
+    aliases: [子女, 子女數, 未成年子女, 第三名子女, 第二名子女]
+    sensitivity: medium
+    ask_priority: 50
+  - id: family.youngest_child_age
+    type: number
+    unit: years
+    domains: [social_welfare]
+    label: 最小子女年齡
+    question: 你最小的子女幾歲？
+    aliases: [未滿2歲, 未滿5歲, 2歲以上, 幼兒, 學齡前, 入國民小學前]
+    sensitivity: medium
+    hard_filter: true
+    ask_priority: 80
+  - id: family.pregnant
+    type: boolean
+    domains: [social_welfare, health]
+    label: 懷孕
+    question: 你是否懷孕中？
+    aliases: [懷孕, 孕婦, 妊娠]
+    sensitivity: high
+    ask_priority: 30
+  - id: family.child_in_public_daycare
+    type: boolean
+    domains: [social_welfare]
+    label: 子女送托公共／準公共托育
+    question: 你的子女是否送托公共托育或準公共托育單位？
+    aliases: [公共托育, 準公共, 托嬰中心, 送托, 居家托育]
+    sensitivity: low
+    ask_priority: 50
+  - id: family.on_parental_leave
+    type: boolean
+    domains: [social_welfare, labor]
+    label: 育嬰留職停薪中
+    question: 你是否正在育嬰留職停薪？
+    aliases: [育嬰留職停薪, 育嬰留停, 育嬰假]
+    sensitivity: medium
+    ask_priority: 60

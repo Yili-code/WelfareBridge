@@ -1,0 +1,15 @@
+id: _test_taipei_dosw
+name: 測試 — 臺北市政府社會局（既有來源縮減版）
+organization: 臺北市政府社會局
+provider_type: local_government
+source_type: government_site
+base_url: https://dosw.gov.taipei/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [臺北市政府社會局]
+data_confidence: 100
+enabled: true
+domains: [social_welfare]
+content_selectors: ["#CCMS_Content", "#base-content"]
+pages:
+  - {url: "https://dosw.gov.taipei/cp.aspx?n=0BF751F1B9F07AA1", title: 臺北市急難救助, seed_category: emergency_relief}
+  - {url: "https://dosw.gov.taipei/cp.aspx?n=FCF3DAE98DDA289F", title: 臺北市中低收入老人生活津貼, seed_category: elderly_allowance}

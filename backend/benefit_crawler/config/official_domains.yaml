@@ -1,0 +1,157 @@
+# Official Source Validation 規則
+#
+# 一個來源要被標記 source_verified = true，必須同時滿足：
+#   1. HTTPS
+#   2. 網域符合 suffix_rules，或列在 whitelist 中
+#   3. 若網域是 edu.tw 但不是 whitelist 裡的政府機關，必須符合 public_school_domains（公立學校）
+#   4. 抓到的頁面 <title> 含 expected_title_keywords（在 sources.yaml 逐一設定）
+# 不符合的來源：source_verified = false, source_status = needs_review，資料不得進正式資料表。
+
+suffix_rules:
+  - suffix: gov.tw
+    domain_type: government
+    note: 中央與地方政府機關網域（含各縣市政府、區公所、教育局處、開放資料平臺）
+  - suffix: gov.taipei
+    domain_type: government
+    note: 臺北市政府機關使用 *.gov.taipei（社會局、衛生局、檔案伺服器 www-ws）
+  - suffix: edu.tw
+    domain_type: education
+    note: 教育部（www.edu.tw）、各縣市教育網、學校；需再依 whitelist / public_school_domains 判斷
+
+# 明確白名單：host → 機關資訊（優先於 suffix 推論）
+whitelist:
+  www.ece.moe.edu.tw:
+    organization: 教育部國民及學前教育署（全國教保資訊網）
+    provider_type: central_government
+    source_type: government_site
+  www.bli.gov.tw:
+    organization: 勞動部勞工保險局
+    provider_type: central_government
+    source_type: government_site
+  www.gov.tw:
+    organization: 國家發展委員會（我的E政府）
+    provider_type: central_government
+    source_type: government_site
+  www.edu.tw:
+    organization: 教育部
+    provider_type: central_government
+    source_type: government_site
+  edu.law.moe.gov.tw:
+    organization: 教育部（主管法規查詢系統）
+    provider_type: central_government
+    source_type: government_site
+  www.yda.gov.tw:
+    organization: 教育部青年發展署
+    provider_type: central_government
+    source_type: government_site
+  law.cip.gov.tw:
+    organization: 原住民族委員會
+    provider_type: central_government
+    source_type: government_site
+  www.cip.gov.tw:
+    organization: 原住民族委員會
+    provider_type: central_government
+    source_type: government_site
+  www.mol.gov.tw:
+    organization: 勞動部
+    provider_type: central_government
+    source_type: government_site
+  apiservice.mol.gov.tw:
+    organization: 勞動部（開放資料 API）
+    provider_type: central_government
+    source_type: open_data
+  emps.wda.gov.tw:
+    organization: 勞動部勞動力發展署（台灣就業通）
+    provider_type: central_government
+    source_type: government_site
+  www.mohw.gov.tw:
+    organization: 衛生福利部
+    provider_type: central_government
+    source_type: government_site
+  www.opendata.mohw.gov.tw:
+    organization: 衛生福利部（開放資料）
+    provider_type: central_government
+    source_type: open_data
+  1966.gov.tw:
+    organization: 衛生福利部長期照顧司（1966 長照服務專線）
+    provider_type: central_government
+    source_type: government_site
+  pip.moi.gov.tw:
+    organization: 內政部國土管理署（住宅補貼資訊平臺）
+    provider_type: central_government
+    source_type: government_site
+  data.gov.tw:
+    organization: 政府資料開放平臺
+    provider_type: central_government
+    source_type: open_data
+  www.klcg.gov.tw:
+    organization: 基隆市政府
+    provider_type: local_government
+    source_type: government_site
+  www.doe.gov.taipei:
+    organization: 臺北市政府教育局
+    provider_type: local_government
+    source_type: government_site
+  dosw.gov.taipei:
+    organization: 臺北市政府社會局
+    provider_type: local_government
+    source_type: government_site
+  map.dosw.gov.taipei:
+    organization: 臺北市政府社會局（福利服務地圖）
+    provider_type: local_government
+    source_type: government_site
+  health.gov.taipei:
+    organization: 臺北市政府衛生局
+    provider_type: local_government
+    source_type: government_site
+  www-ws.gov.taipei:
+    organization: 臺北市政府（檔案伺服器）
+    provider_type: local_government
+    source_type: government_site
+  data.taipei:
+    organization: 臺北市政府資料開放平臺
+    provider_type: local_government
+    source_type: open_data
+  newdatacenter.taichung.gov.tw:
+    organization: 臺中市政府資料開放平臺
+    provider_type: local_government
+    source_type: open_data
+  www.ntpc.gov.tw:
+    organization: 新北市政府
+    provider_type: local_government
+    source_type: government_site
+  www.tycg.gov.tw:
+    organization: 桃園市政府
+    provider_type: local_government
+    source_type: government_site
+  stu.ntou.edu.tw:
+    organization: 國立臺灣海洋大學學生事務處
+    provider_type: school
+    source_type: school_site
+
+# 明確不是官方資料來源的網域（記錄原因，資料不進正式資料表）
+blocklist:
+  sloan.bot.com.tw: 臺灣銀行就學貸款入口（銀行網站，需登入；非官方公告內容）
+
+# 公立大專校院網域（edu.tw 下若符合這些 pattern，視為公立學校官方網站）
+public_school_domains:
+  - ntou.edu.tw   # 國立臺灣海洋大學
+  - ntu.edu.tw    # 國立臺灣大學
+  - ntnu.edu.tw   # 國立臺灣師範大學
+  - nccu.edu.tw   # 國立政治大學
+  - ncku.edu.tw   # 國立成功大學
+  - nchu.edu.tw   # 國立中興大學
+  - ncu.edu.tw    # 國立中央大學
+  - nsysu.edu.tw  # 國立中山大學
+  - ntust.edu.tw  # 國立臺灣科技大學
+  - ntpu.edu.tw   # 國立臺北大學
+  - ncnu.edu.tw   # 國立暨南國際大學
+  - nycu.edu.tw   # 國立陽明交通大學
+  - nthu.edu.tw   # 國立清華大學
+  - ntut.edu.tw   # 國立臺北科技大學
+  - nkust.edu.tw  # 國立高雄科技大學
+  - ntue.edu.tw   # 國立臺北教育大學
+  - niu.edu.tw    # 國立宜蘭大學
+  - ndhu.edu.tw   # 國立東華大學
+  - nuk.edu.tw    # 國立高雄大學
+  - ncyu.edu.tw   # 國立嘉義大學

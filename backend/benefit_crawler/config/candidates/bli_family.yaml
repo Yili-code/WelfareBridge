@@ -1,0 +1,47 @@
+id: bli_family
+name: 勞動部勞工保險局 — 生育給付（勞保、國保、農保）、勞工生育補助、育嬰留職停薪津貼
+organization: 勞動部勞工保險局
+provider_type: central_government
+source_type: government_site
+base_url: https://www.bli.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [勞工保險局]
+data_confidence: 100
+enabled: true
+domains: [labor, social_welfare]
+# 勞保局網站每頁都是 /NNNNNNN.html；主內容在 div.content > #divContent（h1 + .text-area + 最後更新日期），
+# 其後的 .fatfooter-zone 是全站選單，用 #divContent 才不會把選單當內文。
+content_selectors: ["#divContent", "div.content"]
+# 說明：勞保局把每項給付拆成「請領資格／給付標準／請領手續」三個分頁（各自一個 URL），沒有單頁完整說明；
+# 因此勞保生育給付、就保育嬰留職停薪津貼、國保生育給付各以 2～3 份文件收錄，標題以「方案名 — 段落名」標示，
+# 由主流程依方案名合併。農保生育給付、加給補助與各項「要點」則是單頁完整（資格＋金額＋手續）。
+# 所有網址不共用型態（純流水號），故不設 follow_links，只收明列的頁面。
+pages:
+  # ── 勞工保險 生育給付（含 115 年起勞工生育補助，每胎補足至 10 萬元） ──
+  - {url: "https://www.bli.gov.tw/0004844.html", title: "勞保生育給付（含勞工生育補助）— 請領資格", seed_category: birth_incentive}
+  - {url: "https://www.bli.gov.tw/0004845.html", title: "勞保生育給付（含勞工生育補助）— 給付標準", seed_category: birth_incentive}
+  - {url: "https://www.bli.gov.tw/0004846.html", title: "勞保生育給付（含勞工生育補助）— 請領手續", seed_category: birth_incentive}
+  - {url: "https://www.bli.gov.tw/0109619.html", title: "勞工生育補助要點（勞保生育給付加計補助至10萬元）", seed_category: birth_incentive}
+  # ── 就業保險 育嬰留職停薪津貼（含政府加發 20% 薪資補助） ──
+  - {url: "https://www.bli.gov.tw/0015726.html", title: "就保育嬰留職停薪津貼 — 請領資格", seed_category: parental_leave_allowance}
+  - {url: "https://www.bli.gov.tw/0015727.html", title: "就保育嬰留職停薪津貼 — 給付標準及期間", seed_category: parental_leave_allowance}
+  - {url: "https://www.bli.gov.tw/0015728.html", title: "就保育嬰留職停薪津貼 — 請領手續", seed_category: parental_leave_allowance}
+  - {url: "https://www.bli.gov.tw/0105471.html", title: "育嬰留職停薪薪資補助（政府加發20%）— 補助方式", seed_category: parental_leave_allowance}
+  # ── 國民年金 生育給付暨加給補助；未參加社會保險之生母生育補助 ──
+  - {url: "https://www.bli.gov.tw/0016966.html", title: "國民年金生育給付暨加給補助 — 請領資格及給付金額", seed_category: birth_incentive}
+  - {url: "https://www.bli.gov.tw/0016967.html", title: "國民年金生育給付暨加給補助 — 請領手續", seed_category: birth_incentive}
+  - {url: "https://www.bli.gov.tw/0109683.html", title: "未參加相關社會保險之我國籍新生兒之生母生育補助 — 請領資格及給付金額", seed_category: birth_incentive}
+  - {url: "https://www.bli.gov.tw/0109684.html", title: "未參加相關社會保險之我國籍新生兒之生母生育補助 — 請領手續", seed_category: birth_incentive}
+  # ── 農民健康保險 生育給付及加給補助（單頁完整） ──
+  - {url: "https://www.bli.gov.tw/0109674.html", title: "農保生育給付", seed_category: birth_incentive}
+  - {url: "https://www.bli.gov.tw/0109675.html", title: "農保生育給付加給補助", seed_category: birth_incentive}
+  - {url: "https://www.bli.gov.tw/0109678.html", title: "農民健康保險生育給付加給補助要點", seed_category: birth_incentive}
+  # ── 抓過但不收（目錄頁、只有連結或一句話的頁面） ──
+  - {url: "https://www.bli.gov.tw/0004836.html", title: "勞保生育給付（含勞工生育補助）", skip: true, skip_reason: "方案目錄頁：只有分頁連結、書表下載與常見問答清單，內文在 0004844／0004845／0004846"}
+  - {url: "https://www.bli.gov.tw/0015003.html", title: "就保育嬰留職停薪津貼", skip: true, skip_reason: "方案目錄頁：只有分頁連結、書表下載與常見問答清單，內文在 0015726／0015727／0015728"}
+  - {url: "https://www.bli.gov.tw/0016965.html", title: "國民年金生育給付", skip: true, skip_reason: "目錄頁：只列兩項方案的分頁連結"}
+  - {url: "https://www.bli.gov.tw/0006758.html", title: "農保生育給付及加給補助", skip: true, skip_reason: "目錄頁：只有兩個分頁連結，內文在 0109674／0109675"}
+  - {url: "https://www.bli.gov.tw/0100086.html", title: "寶貝誕生（分眾導覽）", skip: true, skip_reason: "分眾導覽目錄頁：只列各項給付的連結，沒有資格與金額內文"}
+  - {url: "https://www.bli.gov.tw/0109620.html", title: "勞工生育補助 — 補助方式", skip: true, skip_reason: "只有一句話（加計至10萬元、無須另行申請），內容已含在 0004845 給付標準與 0109619 要點"}
+  - {url: "https://www.bli.gov.tw/0105470.html", title: "育嬰留職停薪薪資補助 — 補助依據", skip: true, skip_reason: "只有一個法規連結，沒有內文"}
+  - {url: "https://www.bli.gov.tw/0100409.html", title: "國民年金生育給付金額試算", skip: true, skip_reason: "線上試算頁（收錄政策排除），相關規定內容已由 0016966 涵蓋"}

@@ -1,0 +1,86 @@
+id: keelung_sw
+name: 基隆市政府社會處 — 生育、育兒、社會救助、老人福利
+organization: 基隆市政府社會處
+provider_type: local_government
+source_type: government_site
+# 註：任務給的 https://social.klcg.gov.tw/ 會 Connection refused（DNS 解析到 223.200.168.117 但 443/80 都拒連）；
+# 社會處官網實際掛在市府主站底下：https://www.klcg.gov.tw/tw/social/ （www.klcg.gov.tw 為 gov.tw 網域）。
+base_url: https://www.klcg.gov.tw/tw/social/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [基隆市政府社會處, 基隆市政府]
+data_confidence: 100
+enabled: true
+domains: [social_welfare, long_term_care, disability]
+# 內容頁（/tw/social/<選單>-<編號>.html）的主內容區是 section.cp；目錄頁（/tw/social/<選單>.html）是 section.lp（放進來避免被當空殼頁重抓）。
+content_selectors: ["section.cp", "section.lp"]
+follow_links:
+  depth: 1
+  # 只追「社會福利專區」底下各方案目錄頁的內容頁：老人經濟扶助 2750、老人健康維護 2751、獨居老人 2754、
+  # 低(中低)收入戶 2810、急難救助 2811、身障經濟性補助 2798、身障照顧性服務 2799；
+  # 以及同一主站上兒少處「少子女化專區」4327（育兒津貼、托育補助）與民政處「婚育福利」2210（生育獎勵金）。
+  allow:
+    - "/tw/social/(2750|2751|2754|2810|2811|2798|2799)-\\d+\\.html"
+    - "/tw/children/4327-\\d+\\.html"
+    - "/tw/civil/2210-\\d+\\.html"
+  deny: ["sitemap", "\\.pdf", "\\.odt", "\\.docx?", "/en/", "faninsights"]
+  max_links: 40
+pages:
+  # ── 生育、育兒、托育（同一主站 www.klcg.gov.tw 上的民政處、兒童及少年事務處頁面；頁面「發布單位」會標明機關）──
+  - {url: "https://www.klcg.gov.tw/tw/civil/2210-300799.html", title: 基隆市生育獎勵金, seed_category: birth_incentive}
+  - {url: "https://www.klcg.gov.tw/tw/children/4327-289823.html", title: 育有未滿2歲兒童育兒津貼, seed_category: child_allowance}
+  - {url: "https://www.klcg.gov.tw/tw/children/4327-289822.html", title: 未滿2歲兒童托育補助, seed_category: childcare_subsidy}
+  # ── 社會救助 ──
+  - {url: "https://www.klcg.gov.tw/tw/social/2810-292783.html", title: 申請低收入戶、中低收入戶, seed_category: low_income_allowance}
+  - {url: "https://www.klcg.gov.tw/tw/social/2811-113174.html", title: 基隆市民眾急難救助, seed_category: emergency_relief}
+  - {url: "https://www.klcg.gov.tw/tw/social/2811-113176.html", title: 強化社會安全網－急難紓困實施方案, seed_category: emergency_relief}
+  - {url: "https://www.klcg.gov.tw/tw/social/2811-285340.html", title: 基隆市特殊境遇家庭扶助, seed_category: special_circumstances_aid}
+  # ── 老人福利 › 經濟扶助、健康維護 ──
+  - {url: "https://www.klcg.gov.tw/tw/social/2750-112778.html", title: 中低收入老人生活津貼, seed_category: elderly_allowance}
+  - {url: "https://www.klcg.gov.tw/tw/social/2751-279793.html", title: 中低收入老人補助裝置假牙實施計畫, seed_category: elderly_allowance}
+  - {url: "https://www.klcg.gov.tw/tw/social/2751-112785.html", title: 老人參加全民健康保險保險費自付額補助, seed_category: elderly_allowance}
+  - {url: "https://www.klcg.gov.tw/tw/social/2750-112782.html", title: 敬老三節慰問金, seed_category: elderly_allowance}
+  # ── 身心障礙 › 經濟性補助 ──
+  - {url: "https://www.klcg.gov.tw/tw/social/2798-113116.html", title: 身心障礙生活補助, seed_category: disability_living_allowance}
+  # ── 老人福利（其餘）──
+  - {url: "https://www.klcg.gov.tw/tw/social/2750-112781.html", title: 中低收入老人特別照顧津貼, seed_category: elderly_allowance}
+  - {url: "https://www.klcg.gov.tw/tw/social/2751-112787.html", title: 中低收入老人醫療費用補助, seed_category: elderly_allowance}
+  - {url: "https://www.klcg.gov.tw/tw/social/2751-112786.html", title: 中低收入老人重病住院看護補助, seed_category: elderly_allowance}
+  - {url: "https://www.klcg.gov.tw/tw/social/2751-307843.html", title: 基隆市政府115年度辦理老人老花眼鏡補助方式, seed_category: elderly_allowance}
+  - {url: "https://www.klcg.gov.tw/tw/social/2751-306881.html", title: 基隆市115年低收入戶老人配戴助聽器計畫, seed_category: assistive_device}
+  - {url: "https://www.klcg.gov.tw/tw/social/2750-112780.html", title: 中低收入老人住宅設施設備補助, seed_category: elderly_service}
+  - {url: "https://www.klcg.gov.tw/tw/social/2750-112779.html", title: 中低收入老人租賃房屋租金補助, seed_category: rental_subsidy}
+  - {url: "https://www.klcg.gov.tw/tw/social/2754-112795.html", title: 獨居老人緊急救援系統, seed_category: elderly_service}
+  # ── 社會救助（其餘）──
+  - {url: "https://www.klcg.gov.tw/tw/social/2817.html", title: 基隆市市民亡故慰問金}
+  - {url: "https://www.klcg.gov.tw/tw/social/2810-295856.html", title: 兒童及少年未來教育與發展帳戶, seed_category: low_income_allowance}
+  - {url: "https://www.klcg.gov.tw/tw/social/2810-261238.html", title: 基隆市「將士胸懷-翻轉未來」脫貧計畫, seed_category: low_income_allowance}
+  # ── 身心障礙（其餘）──
+  - {url: "https://www.klcg.gov.tw/tw/social/2798-113123.html", title: 身心障礙者日間照顧及住宿式照顧費用補助, seed_category: disability_care_subsidy}
+  - {url: "https://www.klcg.gov.tw/tw/social/2798-113115.html", title: 身心障礙者社會保險自付保險費補助, seed_category: disability_other}
+  - {url: "https://www.klcg.gov.tw/tw/social/2798-113122.html", title: 身心障礙者居家維生器材用電優惠, seed_category: disability_other}
+  - {url: "https://www.klcg.gov.tw/tw/social/2798-113119.html", title: 身心障礙者三節慰問金, seed_category: disability_other}
+  - {url: "https://www.klcg.gov.tw/tw/social/2798-113118.html", title: 身心障礙者首次購屋貸款利息補助, seed_category: disability_other}
+  - {url: "https://www.klcg.gov.tw/tw/social/2798-113117.html", title: 身心障礙房屋租賃補助, seed_category: rental_subsidy}
+  - {url: "https://www.klcg.gov.tw/tw/social/2799-113125.html", title: 身心障礙者臨時及短期照顧服務, seed_category: respite_care}
+  - {url: "https://www.klcg.gov.tw/tw/social/2799-113132.html", title: 身心障礙社區式日間照顧服務, seed_category: day_care}
+  - {url: "https://www.klcg.gov.tw/tw/social/2799-113135.html", title: 身心障礙家庭照顧者支持服務, seed_category: disability_other}
+  # ── 第一輪 follow_links 抓到的其他方案頁（已在乾跑輸出中確認有資格與給付內文）──
+  - {url: "https://www.klcg.gov.tw/tw/social/2751-279792.html", title: 115年弱勢老人口腔健康促進實施計畫, seed_category: elderly_allowance}
+  - {url: "https://www.klcg.gov.tw/tw/social/2810-297278.html", title: 基隆市兒童及少年未來教育與發展帳戶獎勵支持2.0計畫, seed_category: low_income_allowance}
+  - {url: "https://www.klcg.gov.tw/tw/social/2799-113131.html", title: 身心障礙社區日間作業設施服務(小作所), seed_category: day_care}
+  - {url: "https://www.klcg.gov.tw/tw/social/2799-113133.html", title: 視覺功能障礙者生活重建服務, seed_category: disability_other}
+  # ── 各方案目錄頁：標題用「總覽」讓收錄政策判為彙整頁，但仍會抓取並由 follow_links 追新方案 ──
+  - {url: "https://www.klcg.gov.tw/tw/social/2750.html", title: 老人福利經濟扶助總覽, seed_category: elderly_allowance}
+  - {url: "https://www.klcg.gov.tw/tw/social/2751.html", title: 老人福利健康維護總覽, seed_category: elderly_allowance}
+  - {url: "https://www.klcg.gov.tw/tw/social/2754.html", title: 獨居老人關懷總覽, seed_category: elderly_service}
+  - {url: "https://www.klcg.gov.tw/tw/social/2810.html", title: 低(中低)收入戶總覽, seed_category: low_income_allowance}
+  - {url: "https://www.klcg.gov.tw/tw/social/2811.html", title: 急難紓困、急難救助總覽, seed_category: emergency_relief}
+  - {url: "https://www.klcg.gov.tw/tw/social/2798.html", title: 身心障礙經濟性補助總覽, seed_category: disability_other}
+  - {url: "https://www.klcg.gov.tw/tw/social/2799.html", title: 身心障礙照顧性服務總覽, seed_category: disability_other}
+  - {url: "https://www.klcg.gov.tw/tw/children/4327.html", title: 少子女化專區總覽（育兒津貼、托育補助）, seed_category: child_allowance}
+  # ── 內文只在附件或圖片裡、抓不到文字的頁面 ──
+  - {url: "https://www.klcg.gov.tw/tw/social/2754-315781.html", title: 115年度擴大獨居老人服務實施計畫, skip: true, skip_reason: 頁面主內容區沒有文字（計畫內容只在附件）}
+  - {url: "https://www.klcg.gov.tw/tw/social/2807-297391.html", title: 基隆市輔具服務資源簡介, skip: true, skip_reason: 頁面主內容區沒有文字（只有圖片）}
+  - {url: "https://www.klcg.gov.tw/tw/social/2696-112613.html", title: 基隆市身心障礙者輔具費用補助相關規定, skip: true, skip_reason: 頁面只有一個外部連結，沒有資格與補助內容}
+  - {url: "https://www.klcg.gov.tw/tw/social/2810-113164.html", title: 基隆市低收入戶特殊救助項目補助辦法, skip: true, skip_reason: 頁面只有一句話，辦法內容與申請表都在附件}
+  - {url: "https://www.klcg.gov.tw/tw/social/2770-112911.html", title: 0-未滿2歲擴大育兒津貼（社會處舊頁）, skip: true, skip_reason: 頁面回傳空殼（沒有主內容區），育兒津貼已改由兒少處少子女化專區頁面提供}

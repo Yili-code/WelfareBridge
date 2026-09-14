@@ -1,0 +1,170 @@
+{
+  "labels": [
+    {
+      "id": "01ada091-8619-4718-a5e3-9b947bbec39b",
+      "title": "極端氣候及年節時期加強關懷弱勢民眾計畫",
+      "is_benefit": "no",
+      "kind": "other",
+      "category": "",
+      "secondary": [],
+      "closed": false,
+      "reason": "這是衛福部函頒給各級政府與民間團體執行的關懷計畫，內容為高低溫及年節期間的宣導、電話問安、關懷訪視與視需要提供禦寒物資、熱食、臨時收容，屬行政執行計畫而非民眾可申請的固定給付方案；春節慰問金也只是「視需要」由地方政府發放，沒有寫出可申請的資格與金額。",
+      "confidence": "medium"
+    },
+    {
+      "id": "0a11e34a-6409-4ed4-b238-2855c6dc50ce",
+      "title": "好孕專車車資補貼",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "health_service",
+      "secondary": ["birth_incentive"],
+      "closed": false,
+      "reason": "雖是問答表格式，但完整寫出補貼對象（設籍新北市之孕婦，屬低收／中低收入戶或夫妻最近一年綜合所得未達150萬元）與給付內容（審核通過發給乘車券，每趟次最高補貼200元、至多28趟次、每次懷孕限申請一次）；產檢交通補貼在分類表沒有精確對應，取健康服務並次列生育獎勵。",
+      "confidence": "medium"
+    },
+    {
+      "id": "bb9e35b8-5d0d-4c4d-9d94-b73bfd3ac6c5",
+      "title": "津貼及補助專區總覽（4）",
+      "is_benefit": "no",
+      "kind": "directory",
+      "category": "",
+      "secondary": [],
+      "closed": false,
+      "reason": "頁面只是申辦服務查詢的第4頁「表單下載列表」，列出三個標題（災害救助申請、急難救助、國民年金保費補助），沒有任何資格或給付內容，僅為選單。",
+      "confidence": "high"
+    },
+    {
+      "id": "0a48e366-9f93-4d64-9c72-1804c114049d",
+      "title": "中低收入老人租賃房屋租金補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "rental_subsidy",
+      "secondary": ["elderly_allowance"],
+      "closed": false,
+      "reason": "寫明申請對象（領有中低收入老人生活津貼、全家無自有住宅、設籍基隆市且租賃非三親等親屬合法房屋者）與補助標準（每坪每月200元、以租金50%為上限、單身最高5坪、二口7坪、三口以上10坪）。",
+      "confidence": "high"
+    },
+    {
+      "id": "e6c40379-e857-4ef9-9f3e-1cacca156cb5",
+      "title": "身心障礙者房屋租金補貼",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "rental_subsidy",
+      "secondary": ["disability_other"],
+      "closed": false,
+      "reason": "寫明申請資格（設籍桃園市身心障礙者、家庭總收入未達最低生活費2.5倍、無自有住宅、未受其他租金補貼等九款）與補助標準（單身每月最高1,600元、二口2,600元、三口以上3,600元，均以租金總額50%為上限）。",
+      "confidence": "high"
+    },
+    {
+      "id": "13e87199-a820-40b9-9acc-6083245a8b3e",
+      "title": "國民年金生育給付暨加給補助 — 請領手續",
+      "is_benefit": "no",
+      "kind": "fragment",
+      "category": "",
+      "secondary": [],
+      "closed": false,
+      "reason": "整頁只有「請領手續」分段，寫三種申請方式（戶政所通報、e化系統線上、紙本郵寄）與應備書件，沒有寫出給付對象資格或給付金額，屬方案頁的片段。",
+      "confidence": "high"
+    },
+    {
+      "id": "6c235721-5199-4311-a776-07933d502d48",
+      "title": "身心障礙家庭托顧服務計畫",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "family_care_home",
+      "secondary": ["disability_care_subsidy"],
+      "closed": false,
+      "reason": "寫明服務對象（設籍或實際居住嘉義市18至64歲、領有身心障礙證明且經需求評估核定有家庭托顧需求者）、服務內容（身體照顧、日常生活照顧、安全照顧）與補助額度（全日托每日760–1,040元、半日托380–520元、每人每月補助22天、一般戶自付190元、低收免付）；對象是身心障礙者而非長照失能者，故次列身心障礙照顧補助。",
+      "confidence": "medium"
+    },
+    {
+      "id": "66c52b17-e097-4aa2-a7c4-d58c3066b355",
+      "title": "115年度特殊境遇家庭扶助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "special_circumstances_aid",
+      "secondary": ["tuition_waiver", "medical_subsidy", "childcare_subsidy"],
+      "closed": false,
+      "reason": "寫明扶助對象（設籍桃園市、家庭收入每人每月未超過39,960元且符合特境條例七款情形之一）與各項扶助金額（緊急生活扶助每月17,186元最多3個月、子女生活津貼每月2,950元、子女學雜費減免60%、傷病醫療補助最高12萬元、托育津貼每月1,500元、法律訴訟補助5萬元、創業貸款利息補貼）。",
+      "confidence": "high"
+    },
+    {
+      "id": "76d2df2f-865c-452a-a318-57f2baee867b",
+      "title": "災害救助申請簡介",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "emergency_relief",
+      "secondary": [],
+      "closed": false,
+      "reason": "寫明救助對象（因風災、水災、震災、火災致死亡、失蹤、重傷、住屋毀損不堪居住或淹水50公分以上者）與核發標準（死亡／失蹤每人20萬元、重傷10萬元、安遷每人2萬元以5口為限、淹水1萬或2萬元）及應備文件；災害救助在分類表中以急難救助最接近。",
+      "confidence": "high"
+    },
+    {
+      "id": "2519d59f-d27c-40ce-8e9b-e038b9e2f606",
+      "title": "彰化縣重陽敬老禮金",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "寫明發放對象（115年1月1日前設籍彰化縣、年滿65歲長者及55–64歲原住民，福利身分戶另計）與金額（一般戶1,000元、福利身分戶依年齡3,000／6,000／9,000元、百歲人瑞1萬元）及115年9–12月發放期間。",
+      "confidence": "high"
+    },
+    {
+      "id": "5a62d1d5-2dda-4e50-9ca0-38b23bbe4926",
+      "title": "南投縣身心障礙者生活補助審核作業規定",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "disability_living_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "雖是審核作業規定，條文本身寫明補助對象（設籍南投縣領有身心障礙證明、實際居住縣內、未受安置，且為低收／中低收或家庭收入未達最低生活費2.5倍、存款與不動產未逾上限者）、申請方式（向鄉鎮市公所填申請單與切結書）與停發情形；金額僅引用「身心障礙者生活補助費發給辦法第三點」未列數字。",
+      "confidence": "medium"
+    },
+    {
+      "id": "dad66574-d66d-4dd3-af74-8a0239813a5e",
+      "title": "急難救助作業流程（社會救助法第21條急難救助對象）",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "emergency_relief",
+      "secondary": [],
+      "closed": false,
+      "reason": "內文列出社會救助法第21條六種可向戶籍所在地主管機關申請急難救助的情形（戶內人口死亡無力殮葬、重病致生活困境、主要生計者失業／入獄／服役無法工作、財產遭凍結、福利尚未核准期間、重大變故），寫出了「誰可以申請」；但頁面標題是作業流程、未寫救助金額，原文只有條文引用，判斷偏弱。",
+      "confidence": "medium"
+    },
+    {
+      "id": "53911e59-3cac-46e1-a4fb-05c8fffd5aa2",
+      "title": "申請社福卡(敬老卡、愛心卡、愛心陪伴卡)",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_service",
+      "secondary": ["disability_other"],
+      "closed": false,
+      "reason": "寫明申請資格（設籍台南市年滿65歲市民、55歲以上原住民、持身心障礙證明者及註記必要陪伴者）與給付內容（敬老卡、愛心卡不限次數免費搭乘市區公車，陪伴卡半價；初次辦卡免費），屬有經濟價值的交通服務。",
+      "confidence": "medium"
+    },
+    {
+      "id": "7d1a675b-08e5-47d4-889f-c69ddb36eb39",
+      "title": "申請低收入戶、中低收入戶",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "寫明審核標準（每人每月收入未超過最低生活費：低收15,515元、中低收23,273元；動產與不動產公告上限）與現金給付標準（第一款每人每月11,850元、第二款每戶6,825元、15歲以下兒童生活補助3,008元、高中職以上就學生活補助6,825元）。",
+      "confidence": "high"
+    },
+    {
+      "id": "aa5d09cb-3449-416a-b4cf-0576d5433e39",
+      "title": "特殊境遇家庭扶助專區",
+      "is_benefit": "no",
+      "kind": "directory",
+      "category": "",
+      "secondary": [],
+      "closed": false,
+      "reason": "頁面只是專區查詢列表，列出115、113、108年度特殊境遇家庭扶助三則公告的日期與標題，沒有資格或給付內容。",
+      "confidence": "high"
+    }
+  ],
+  "count": 15
+}

@@ -1,0 +1,68 @@
+name: welfarebridge
+services:
+  mongo:
+    image: mongo:7
+    ports: ["127.0.0.1:27017:27017"]
+    volumes: ["mongo_data:/data/db"]
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 }).ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  backend:
+    build: ./backend
+    env_file:
+      - path: .env
+        required: false
+    environment: &backend_environment
+      MONGODB_URL: mongodb://mongo:27017
+      MONGODB_DB: benefits
+      REDIS_URL: redis://redis:6379/0
+      DATA_DIR: /app/data
+      DEMO_SEED_PATH: /app/data/demo/seed_v2.json
+      DEMO_SEED_ON_STARTUP: "true"
+      CRAWL_ON_STARTUP: "false"
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+    extra_hosts: ["host.docker.internal:host-gateway"]
+    volumes: ["./data:/app/data"]
+    ports: ["127.0.0.1:8000:8000"]
+    depends_on:
+      mongo: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+  benefit_crawler:
+    build: ./backend
+    command: ["python", "-m", "benefit_crawler", "--worker", "--loop", "${CRAWL_INTERVAL_SECONDS:-0}"]
+    env_file:
+      - path: .env
+        required: false
+    environment: *backend_environment
+    extra_hosts: ["host.docker.internal:host-gateway"]
+    volumes: ["./data:/app/data"]
+    depends_on:
+      backend: { condition: service_healthy }
+  web:
+    build: .
+    env_file:
+      - path: .env.local
+        required: false
+    environment:
+      BENEFIT_API_URL: http://backend:8000
+      WELFARE_DB_PATH: /app/data/welfare.sqlite
+    ports: ["127.0.0.1:3000:3000"]
+    volumes: ["./data:/app/data"]
+    depends_on:
+      backend: { condition: service_healthy }
+volumes:
+  mongo_data:

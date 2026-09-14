@@ -1,0 +1,19 @@
+# 各縣市「最低生活費」（每人每月，新臺幣）。
+#
+# 用途：推導屬性 household.income_vs_poverty_line（家庭每人每月所得為最低生活費的幾倍）。
+# 重要：本表數值需依衛生福利部每年公告更新；verified=false 時系統不會用它做任何判定（推導結果為 unknown），
+#       只在 UI 提示「請至衛福部社會救助網查詢當年度最低生活費」。請核對官方公告後把 verified 改為 true 並填入 year / source_url。
+verified: false
+year: null
+source_url: https://www.mohw.gov.tw/  # 請填入當年度「最低生活費」公告網址
+values:
+  臺北市: null
+  新北市: null
+  桃園市: null
+  臺中市: null
+  臺南市: null
+  高雄市: null
+  金門縣: null
+  連江縣: null
+  # 其餘縣市適用臺灣省標準
+  臺灣省: null

@@ -1,0 +1,94 @@
+id: miaoli_sw
+name: 苗栗縣政府社會處 — 生育、育兒、社會救助、老人福利
+organization: 苗栗縣政府社會處
+provider_type: local_government
+source_type: government_site
+base_url: https://www.miaoli.gov.tw/social_affairs/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [社會處, 苗栗縣政府全球資訊網]
+data_confidence: 100
+enabled: true
+domains: [social_welfare, long_term_care, disability]
+# 社會處沒有獨立網域（social.miaoli.gov.tw 無法解析），網站是縣府全球資訊網的子站 www.miaoli.gov.tw/social_affairs/。
+# 方案內容頁網址型態：/social_affairs/News_Content.aspx?n=682&s=<id>（便民服務 > 申辦須知，共 3 頁、27 筆）；
+# 生育津貼、育兒津貼、特殊境遇家庭扶助的完整內文在縣府主站「婦女福利服務資源整合平台」/News_Content.aspx?n=5615&s=<id>。
+# 同為 CCMS 系統，內文在 #CCMS_Content。附件在 webws.miaoli.gov.tw/Download.ashx（gov.tw 網域）。
+content_selectors: ["#CCMS_Content", "#base-content"]
+follow_links:
+  depth: 1
+  allow: ['News_Content\.aspx\?n=682&s=']
+  deny: ['page=', 'News\.aspx', 'Download\.ashx', 'Default', 'SiteMap']
+  max_links: 40
+pages:
+  # ---------------------------------------------------------------- 生育、育兒、托育
+  - {url: "https://www.miaoli.gov.tw/News_Content.aspx?n=5615&s=820519", title: 苗栗縣114年生育津貼（民政處）, seed_category: birth_incentive}
+  - {url: "https://www.miaoli.gov.tw/News_Content.aspx?n=5615&s=260739", title: 苗栗縣113年生育津貼（民政處）, seed_category: birth_incentive}
+  - {url: "https://www.miaoli.gov.tw/News_Content.aspx?n=5615&s=260695", title: 苗栗縣育有未滿二歲兒童育兒津貼, seed_category: child_allowance}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=533082", title: 未滿二歲兒童托育準公共化服務費用申報, seed_category: childcare_subsidy}
+  # ---------------------------------------------------------------- 特殊境遇家庭
+  - {url: "https://www.miaoli.gov.tw/News_Content.aspx?n=5615&s=260665", title: 苗栗縣特殊境遇家庭扶助, seed_category: special_circumstances_aid}
+  # ---------------------------------------------------------------- 社會救助（低收／中低收、急難）
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=40640", title: 苗栗縣低收入戶及中低收入戶傷病住院看護費用補助, seed_category: low_income_allowance}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=249730", title: 苗栗縣低收及中低收入戶傷病醫療費用補助（醫療補助審核作業規定）, seed_category: low_income_allowance}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/cp.aspx?n=714", title: 急難紓困(原馬上關懷)、急難救助, seed_category: emergency_relief}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=938225", title: 苗栗縣弱勢家庭兒童及少年緊急生活扶助補助, seed_category: emergency_relief}
+  # ---------------------------------------------------------------- 老人福利
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=906617", title: 115年苗栗縣敬老禮金, seed_category: elderly_allowance}
+  # ---------------------------------------------------------------- 身心障礙
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=147151", title: 身心障礙者生活補助, seed_category: disability_living_allowance}
+  # ---------------------------------------------------------------- 老人福利（續）
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=497250", title: 苗栗縣政府老人聲請監護輔助宣告補助實施計畫, seed_category: elderly_allowance}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=404900", title: 苗栗縣敬老愛心卡, seed_category: elderly_service}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=40554", title: 苗栗縣愛心手鍊預防走失服務計畫, seed_category: elderly_service}
+  # ---------------------------------------------------------------- 社會救助（續）
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=652192", title: 苗栗縣低(中)低收入戶住屋災害保險申請須知, seed_category: low_income_allowance}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=460329", title: 短缺川資民眾返鄉乘車換票, seed_category: emergency_relief}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=938214", title: 苗栗縣兒童及少年生活扶助實施計畫（網頁）, seed_category: low_income_allowance, skip: true, skip_reason: 網頁內文只有目的與法令依據（141 字），扶助對象與金額在附件實施計畫 PDF（已另列為 pdf 頁面）}
+  - {url: "https://webws.miaoli.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDAyL3JlbGZpbGUvOTQ2OC85MzgyMTQvNTk5YjBjYzctNjk2Ni00ZTBjLWEyYjItM2E5ZGY4MmIxMDc4LnBkZg%3d%3d&n=6IuX5qCX57ij6L6m55CG5YWS5bCR55Sf5rS75om25Yqp5a%2bm5pa96KiI55WrMTA3MDIwNi5wZGY%3d", title: 苗栗縣辦理兒少生活扶助實施計畫, seed_category: low_income_allowance, format: pdf, source_page: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=938214"}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=938219", title: 弱勢兒童及少年醫療補助審查及作業規定（網頁）, seed_category: low_income_allowance, skip: true, skip_reason: 網頁內文只有目的與法令依據（179 字），補助對象與標準在附件作業規定 PDF（已另列為 pdf 頁面）}
+  - {url: "https://webws.miaoli.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDAyL3JlbGZpbGUvOTQ2OC85MzgyMTkvOTI2N2Y5ZTMtNjZlYy00MTQzLWJhMDEtMGZmMjA3NDk5OTVmLnBkZg%3d%3d&n=MTA15L%2bu5q2jIOiLl%2bagl%2be4o%2bi%2bpueQhuS9juaUtuWFpeaItuaaqOW8seWLouWFkuerpeWPiuWwkeW5tOmGq%2beZguijnOWKqeWvqeafpeWPiuS9nOalreimj%2bWumi5wZGY%3d", title: 苗栗縣辦理低收入戶暨弱勢兒童及少年醫療補助審查及作業規定, seed_category: low_income_allowance, format: pdf, source_page: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=938219"}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=320879", title: 兒童及少年未來教育與發展帳戶}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=406966", title: 苗栗縣實(食)物銀行計畫}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=902936", title: 苗栗縣未滿20歲懷孕青少女產檢暨產後就醫車資補助計畫}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=789415", title: 苗栗縣國民年金被保險人所得未達一定標準申請}
+  # ---------------------------------------------------------------- 身心障礙（續）
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=868784", title: 苗栗縣身心障礙者微型傷害保險, seed_category: disability_other}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=515115", title: 視覺障礙者生活重建及生活訓練服務, seed_category: disability_other}
+  # ---------------------------------------------------------------- 網頁只有附件、內文在 PDF 的方案（以 PDF 為主，網頁另列 skip）
+  - {url: "https://webws.miaoli.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDAyL3JlbGZpbGUvOTQ2OC8xNDcxNTYvYTg2YmE4NDUtNGU4ZS00NjRmLWE3MjktYmRlZGRkOTQ3YzI1LnBkZg%3d%3d&n=6IuX5qCX57ij6L6m55CG5L2O5pS25YWl5oi26IiH5Lit5L2O5pS25YWl5oi255Si5amm5Y%2bK5paw55Sf5YWS54ef6aSK6KOc5Yqp5a%2bm5pa96KiI55WrKDExNOS%2frikucGRm", title: 苗栗縣辦理低收入戶與中低收入戶產婦及新生兒營養補助實施計畫(114修), seed_category: low_income_allowance, format: pdf, source_page: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=147156"}
+  - {url: "https://webws.miaoli.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDEwL3JlbGZpbGUvOTQ2OC85MzgyMDkvNmRhYTU2NGEtZDY4My00NmZmLWFjMDEtNmQwOThjMDdiM2NlLnBkZg%3d%3d&n=5Lit5L2O5pS25YWl6ICB5Lq655Sf5rS75rSl6LK855m857Wm6L6m5rOVKOazleimjykucGRm", title: 中低收入老人生活津貼發給辦法, seed_category: elderly_allowance, format: pdf, source_page: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=938209"}
+  - {url: "https://webws.miaoli.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDEwL3JlbGZpbGUvOTQ2OC85MzgyMTMvM2IyMzlhYWItNmEzOS00Nzg0LThjMDEtMTQzOGRhYTE3OThiLnBkZg%3d%3d&n=5Lit5L2O5pS25YWl6ICB5Lq654m55Yil54Wn6aGn5rSl6LK855m857Wm6L6m5rOVKOazleimjykucGRm", title: 中低收入老人特別照顧津貼發給辦法, seed_category: elderly_allowance, format: pdf, source_page: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=938213"}
+  - {url: "https://webws.miaoli.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDAyL3JlbGZpbGUvOTQ2OC80MDYzMC9jYzc2OWJmNC05MGE4LTQ0NmItYmJiOS1jZWUxYmI5NWFkM2YucGRm&n=6IuX5qCX57ij6L6m55CG54m55q6K5aKD6YGH5a625bqt5om25Yqp5a%2bm5pa96KiI55WrLnBkZg%3d%3d", title: 苗栗縣辦理特殊境遇家庭扶助實施計畫, seed_category: special_circumstances_aid, format: pdf, source_page: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=40630"}
+  # ---------------------------------------------------------------- 申辦須知清單中「只有附件」的項目（連結是 RelData.aspx 彈窗或直接檔案），以 PDF 為主
+  - {url: "https://webws.miaoli.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDEwL3JlbGZpbGUvOTQ2OC80MDU1MS80NWMwZDdlZi0wYmNkLTRmNjktYjQ0Mi0xZDFkMzY4YjMyMjgucGRm&n=6IuX5qCX57ij5oCl6Zuj5pWR5Yqp5a%2bm5pa96L6m5rOV5L%2bu5q2jKDExMy4xMS4yNuS%2fruiogikucGRm", title: 苗栗縣急難救助實施辦法(113.11.26修正), seed_category: emergency_relief, format: pdf, source_page: "https://www.miaoli.gov.tw/social_affairs/RelData.aspx?sms=9468&ParentSN=40551"}
+  - {url: "https://webws.miaoli.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDEwL3JlbGZpbGUvOTQ2OC80MDY0My9jZjUzZWViYy00ZTU1LTQ5NTUtYmYwZC1iZjU3NGYwYzUwNTgucGRm&n=MTE05bm05Lit5L2O5pS25YWl6ICB5Lq66KOc5Yqp6KOd572u5YGH54mZ5a%2bm5pa96KiI55Wr5L%2bu5q2jLTExNDEwMzAucGRm", title: 114年中低收入老人補助裝置假牙實施計畫, seed_category: elderly_allowance, format: pdf, source_page: "https://www.miaoli.gov.tw/social_affairs/RelData.aspx?sms=9468&ParentSN=40643"}
+  - {url: "https://webws.miaoli.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDEwL3JlbGZpbGUvOTQ2OC80MDYyNy8wMjkyNTI0MS1kZWRjLTRmOGUtOWQyMS0zOGI0ZTZhYjk3OGMucGRm&n=6IuX5qCX57ij5Lit5L2O5pS25YWl6ICB5Lq65pyq5ru%2f5LiD5Y2B5q2y6ICF6KOc5Yqp5YWo5rCR5YGl5bq35L%2bd6Zqq6LK75Z%2b65rqW55Sz6KuL6KGoLnBkZg%3d%3d", title: 苗栗縣中低收入老人未滿七十歲者補助全民健康保險費基準（申請表）, seed_category: elderly_allowance, format: pdf, source_page: "https://www.miaoli.gov.tw/social_affairs/RelData.aspx?sms=9468&ParentSN=40627", skip: true, skip_reason: 申辦須知的「老人健保費補助基準」項目只附申請表 PDF（405 字、全是表格欄位），沒有寫資格與補助標準的文件}
+  - {url: "https://webws.miaoli.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDEwL3JlbGZpbGUvOTQ2OC8xNDcxNTUvNDU1OWM0NjQtZDE1Ny00YWViLTkwMWUtYWFlODFhOGRlNWRiLnBkZg%3d%3d&n=6IuX5qCX57ij5Lit5L2O5pS25YWl6ICB5Lq66YeN55eF5L2P6Zmi55yL6K236LK755So6KOc5Yqp6KiI55WrKOWQq%2bmZhOS7tikucGRm", title: 苗栗縣中低收入老人重病住院看護費用補助計畫, seed_category: elderly_allowance, format: pdf, source_page: "https://www.miaoli.gov.tw/social_affairs/RelData.aspx?sms=9468&ParentSN=147155"}
+  - {url: "https://webws.miaoli.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDEwL3JlbGZpbGUvOTQ2OC84NzQ3MzIvZTUxOGIzN2ItOWU2OC00NzJmLWFkMTEtMzczMWJmNjI2Njc4LnBkZg%3d%3d&n=6IuX5qCX57ij5L2O5pS25YWl5oi26ICB5Lq66YWN5oi05Yqp6IG95Zmo6KOc5Yqp6KiI55WrLnBkZg%3d%3d", title: 苗栗縣低收入戶老人配戴助聽器補助計畫, seed_category: assistive_device, format: pdf, source_page: "https://www.miaoli.gov.tw/social_affairs/RelData.aspx?sms=9468&ParentSN=874732"}
+  - {url: "https://webws.miaoli.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDEwL3JlbGZpbGUvOTQ2OC85MzMxOTIvZTljMmYyODYtMDdjMS00Mzc1LTg0MDEtMTBiMzIwYmExNjE0LnBkZg%3d%3d&n=6IuX5qCX57ij5Lit5L2O77yI5L2O77yJ5pS25YWl5oi26ICB5Lq66ICB6Iqx55y86Y%2bh6KOc5Yqp6KiI55WrKDEwOTAxMTfkv67oqIIpLnBkZg%3d%3d", title: 苗栗縣中低（低）收入戶老人老花眼鏡補助計畫, seed_category: assistive_device, format: pdf, source_page: "https://www.miaoli.gov.tw/social_affairs/RelData.aspx?sms=9468&ParentSN=933192"}
+  - {url: "https://webws.miaoli.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDAyL3JlbGZpbGUvOTQ2OC80MDYxOC81MWY2MjdmMi1mZTZiLTQ2MGEtOWZmMy03ZjZhNTNiZGRmNDEucGRm&n=6IuX5qCX57ij5pS%2f5bqc6L6m55CG6Lqr5b%2bD6Zqc56SZ6ICF5oi%2f5bGL56ef6YeR6KOc6LK85L2c5qWt6KaB6bueLnBkZg%3d%3d", title: 苗栗縣政府辦理身心障礙者房屋租金補貼作業要點, seed_category: rental_subsidy, format: pdf, source_page: "https://www.miaoli.gov.tw/social_affairs/RelData.aspx?sms=9468&ParentSN=40618"}
+  - {url: "https://webws.miaoli.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDEwL3JlbGZpbGUvOTQ2OC80MDY0NC82ZjIyYWNmNC1hNWE3LTQzYmQtOTY1OS04MDJkZjhhMTAyNTMucGRm&n=6IuX5qCX57ij6Lqr5b%2bD6Zqc56SZ6ICF5raI6ICX5oCn55So5ZOB6KOc5Yqp6KaB6bueMTEyMTAyNOS%2fruatoy5wZGY%3d", title: 苗栗縣身心障礙者消耗性用品補助要點, seed_category: disability_other, format: pdf, source_page: "https://www.miaoli.gov.tw/social_affairs/RelData.aspx?sms=9468&ParentSN=40644"}
+  - {url: "https://webws.miaoli.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDEwL3JlbGZpbGUvOTQ2OC85NzU3MTIvODM2YWExNjktMDhiOS00OGU4LTlkZDktYzAxY2FlNzQ4Nzk4LnBkZg%3d%3d&n=MTE15bm06IuX5qCX57ij5YWS56ul5pep5pyf55mC6IKy6LK755So6KOc5Yqp5a%2bm5pa96KiI55WrKDExNeW5tDfmnIgx5pel6LW35pa96KGMKS5wZGY%3d", title: 115年苗栗縣兒童早期療育費用補助實施計畫, format: pdf, source_page: "https://www.miaoli.gov.tw/social_affairs/RelData.aspx?sms=9468&ParentSN=975712"}
+  - {url: "https://webws.miaoli.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDEwL3JlbGZpbGUvOTQ2OC84MzY3NjUvYmE5Yjg1YTktZjI4Yy00ZDE4LWExZjItNWYwMGU2ZDRlZjYyLnBkZg%3d%3d&n=6IKy5pyJ5pyq5ru%2fMuatsuWFkuerpeiCsuWFkua0peiyvOeUs%2bmgmOS9nOalreimgem7ni5wZGY%3d", title: 育有未滿2歲兒童育兒津貼申領作業要點, seed_category: child_allowance, format: pdf, source_page: "https://www.miaoli.gov.tw/social_affairs/RelData.aspx?sms=9468&ParentSN=836765"}
+  - {url: "https://webws.miaoli.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDEwL3JlbGZpbGUvOTQ2OC85NTI0NjUvYzIyMGI2MDAtYTRiYi00MDU3LTgyYzktNmYzOWQwYmUwYWQ1LnBkZg%3d%3d&n=6IuX5qCX57ij6Lqr5b%2bD6Zqc56SZ6ICF5Y%2bD5Yqg5ZyL5a626ICD6Kmm6KOc57%2bS44CB5oqA6KGT5aOr5oqA6IO95qqi5a6a542O6KOc5Yqp5Z%2b36KGM6KaB6bueLnBkZg%3d%3d&icon=.pdf", title: 苗栗縣身心障礙者參加國家考試補習、技術士技能檢定獎勵金執行要點, seed_category: disability_other, format: pdf, source_page: "https://www.miaoli.gov.tw/social_affairs/News.aspx?n=682&sms=9468"}
+  - {url: "https://webws.miaoli.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDEwL3JlbGZpbGUvOTYwNS80MDYxMC9iMGRiNzM5OC1mYTdkLTQ5NDgtYjQ0My1kZDFmYzJjMDEwNGUuZG9j&n=MjAxNDEwMjEwNzM2MjY4MzkxNTU1Njc5LmRvYw%3d%3d&icon=.doc", title: 苗栗縣低收入戶中低收入戶調查及發放, seed_category: low_income_allowance, skip: true, skip_reason: 申辦須知清單直接連到 .doc 檔（沒有網頁與 PDF 版本），crawler 不支援 doc 格式}
+  # ---------------------------------------------------------------- 只留紀錄、不抓
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=147156", title: 修正苗栗縣辦理低收入戶與中低收入戶產婦及新生兒營養補助實施計畫（網頁）, seed_category: low_income_allowance, skip: true, skip_reason: 網頁只有標題與 3 個附件連結（237 字），計畫內文在附件 PDF（已另列為 pdf 頁面）}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=938209", title: 中低收入老人生活津貼發給辦法（網頁）, seed_category: elderly_allowance, skip: true, skip_reason: 網頁只有標題與附件連結（186 字），辦法內文在附件 PDF（已另列為 pdf 頁面）}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=938213", title: 中低收入老人特別照顧津貼發給辦法（網頁）, seed_category: elderly_allowance, skip: true, skip_reason: 網頁只有標題與附件連結（186 字），辦法內文在附件 PDF（已另列為 pdf 頁面）}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=40630", title: 苗栗縣特殊境遇家庭扶助計畫（網頁）, seed_category: special_circumstances_aid, skip: true, skip_reason: 網頁只有 11 個附件連結（申請表、切結書、流程圖、實施計畫），資格與給付內文在主站 n=5615&s=260665 與附件 PDF（已另列）}
+  - {url: "https://www.miaoli.gov.tw/News_Content.aspx?n=5615&s=260692", title: 未滿二歲兒童托育準公共化服務費用申報（主站轉載）, seed_category: childcare_subsidy, skip: true, skip_reason: 與社會處 n=682&s=533082 內容相同（同一方案的主站轉載）}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=825667", title: 苗栗縣中低收入老人住宅設施修繕設備補助辦法, seed_category: elderly_allowance, skip: true, skip_reason: 網頁只有標題與 doc/odt 附件（164 字），沒有 PDF 可抽取}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=868067", title: 苗栗縣政府推展老人福利服務補助作業要點, skip: true, skip_reason: 對象是團體／機構的補助作業要點，網頁只有 doc 附件（146 字）}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=712683", title: 苗栗縣政府辦理身心障礙者社會保險費補助異動書, skip: true, skip_reason: 純表單下載頁}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=682&s=993601", title: 權益一覽表, skip: true, skip_reason: 只有一個 4.5MB 的權益一覽表 PDF（多方案彙整表），不是單一方案頁}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=11024&s=981256", title: 未滿2歲兒童育兒津貼托育費用補助（家長專區）, seed_category: child_allowance, skip: true, skip_reason: 頁面只有圖片與問答集／作業要點 PDF（152 字），育兒津貼內文請見主站 n=5615&s=260695}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News_Content.aspx?n=11024&s=981258", title: 未滿2歲兒童托育公共化及準公共補助（家長專區）, seed_category: childcare_subsidy, skip: true, skip_reason: 頁面只有圖片（82 字），沒有可抽取內文}
+  - {url: "https://www.miaoli.gov.tw/News_Content2.aspx?n=295&s=723875", title: 113年度辦理原住民族長者裝置假牙執行計畫（原住民族事務中心）, seed_category: elderly_allowance, skip: true, skip_reason: 113 年度舊公告，網頁只有 doc/pdf/odt 附件（359 字）}
+  - {url: "https://www.miaoli.gov.tw/News.aspx?n=5615&sms=13027", title: 苗栗縣政府婦女福利服務資訊（目錄）, skip: true, skip_reason: 主站婦女福利服務資源整合平台的目錄頁，方案內容頁已逐一列入}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News.aspx?n=11024&sms=15349", title: 托育服務專區－家長專區－補助資訊（目錄）, skip: true, skip_reason: 目錄頁，兩個項目都只有圖片}
+  # ---------------------------------------------------------------- 申辦須知目錄頁（配合 follow_links 追新項目；27 筆內容頁已逐一列入）
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News.aspx?n=682&sms=9468", title: 社會處便民服務－申辦須知一覽表（第 1 頁）}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News.aspx?n=682&sms=9468&page=2&PageSize=20", title: 社會處便民服務－申辦須知一覽表（第 2 頁）}
+  - {url: "https://www.miaoli.gov.tw/social_affairs/News.aspx?n=682&sms=9468&page=3&PageSize=20", title: 社會處便民服務－申辦須知一覽表（第 3 頁）}
+notes: 苗栗縣政府社會處是縣府全球資訊網的子站（www.miaoli.gov.tw/social_affairs/），CCMS 系統，內文在 #CCMS_Content。方案頁集中在「便民服務 > 申辦須知」News_Content.aspx?n=682&s=<id>（3 頁共 27 筆，約三分之一只有附件）。生育津貼由民政處主辦、育兒津貼與特殊境遇家庭扶助的完整內文在主站「婦女福利服務資源整合平台」News_Content.aspx?n=5615&s=<id>。低收／中低收入戶生活補助、老人假牙、老人健保補助、輔具補助沒有獨立方案頁（只有科室業務概況與權益一覽表 PDF）。

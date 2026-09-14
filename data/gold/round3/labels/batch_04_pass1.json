@@ -1,0 +1,170 @@
+{
+  "labels": [
+    {
+      "id": "64887c18-c5a0-42d7-bcc5-50311a359ba7",
+      "title": "以工代賑臨時工申請須知",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": ["employment_incentive"],
+      "closed": false,
+      "reason": "依社會救助法辦理的以工代賑，寫明申請資格（16–65歲、本市列冊低收／中低收入戶）、任期上限與應備文件，提供有薪臨時工作，對申請人有經濟價值；因給付形式是工作機會而非現金，類別取最接近的低收入戶生活補助。",
+      "confidence": "medium"
+    },
+    {
+      "id": "ca7c8090-2d33-4e51-91ba-986889fd988b",
+      "title": "臺中市低收入戶三節慰問金補助計畫",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "補助對象為本市列冊低收入戶，補助標準寫明春節每戶2,500元、端午及中秋各1,500元，並說明撥款方式，為具體現金給付方案。",
+      "confidence": "high"
+    },
+    {
+      "id": "f9cebc28-4480-466a-abf9-f3403a4d66ea",
+      "title": "低收入戶及中低收入戶家庭自立脫貧-希望存摺投資方案",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": ["youth_development", "student_aid"],
+      "closed": false,
+      "reason": "實施對象為設籍本縣列冊低收／中低收入戶25歲以下在學學生，政府對每月自存款500–1,250元採1:1相對提撥，有具體經濟價值；報名期間為113年3–4月已過，但頁面未明說停辦。",
+      "confidence": "medium"
+    },
+    {
+      "id": "ee0912ad-0160-4155-93d5-80a50aa27481",
+      "title": "急難救助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "emergency_relief",
+      "secondary": [],
+      "confidence": "high",
+      "closed": false,
+      "reason": "彰化縣急難救助申辦說明，列出六類補助對象（無力殮葬、重病、主要生計者失業入獄等）與各情形應備證件、三個月內申請期限，屬急難救助方案。"
+    },
+    {
+      "id": "e4d4d854-7e91-4d26-87d1-1dafb0de3910",
+      "title": "苗栗縣實(食)物銀行計畫",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "emergency_relief",
+      "secondary": ["low_income_allowance"],
+      "closed": false,
+      "reason": "對居住本縣失業或遭逢變故致三餐難繼之家庭提供實物（食物）援助，列出七類發放優先順序（失業家計者、列冊低收／中低收、獨居老人、遊民等）與洽詢窗口，屬有經濟價值的實物給付。",
+      "confidence": "medium"
+    },
+    {
+      "id": "f24e3bea-bbc0-47ee-ad9f-46ab10623a04",
+      "title": "115年度「一般身分別老人」補助裝置假牙計畫",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_allowance",
+      "secondary": ["medical_subsidy"],
+      "closed": false,
+      "reason": "寫明凡年滿75歲且設籍嘉義市滿5年者終身可申請一次假牙補助（實物給付、由診所向府請款），並說明通知單發放與補發方式；依規則老人假牙歸 elderly_allowance。",
+      "confidence": "high"
+    },
+    {
+      "id": "32f6d368-d1b1-44ba-865a-2ee5eec454c9",
+      "title": "低收及中低收入戶傷病醫療費用補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "medical_subsidy",
+      "secondary": ["low_income_allowance"],
+      "closed": false,
+      "reason": "申請資格為設籍嘉義市之低收／中低收或收入未超過最低生活費1.5倍者，補助標準寫明低收全額、中低收超過3萬補80%、1.5倍以下超過5萬補70%、每年上限30萬元。",
+      "confidence": "high"
+    },
+    {
+      "id": "8586af2d-1986-43de-9d7c-577717dba29d",
+      "title": "新竹市115年度設籍前新住民遭逢特殊境遇扶助計畫",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "special_circumstances_aid",
+      "secondary": ["emergency_relief", "medical_subsidy", "childcare_subsidy"],
+      "closed": false,
+      "reason": "核定計畫全文寫明扶助對象（設籍前新住民，收入未超過最低生活費2.5倍且有喪偶、家暴、單親等情形）與六項補助基準（緊急生活扶助、子女生活津貼、托育津貼1,500元、傷病醫療最高12萬、法律訴訟5萬、返鄉機票2萬），為具體方案；末段略有截斷但不影響判斷。",
+      "confidence": "high"
+    },
+    {
+      "id": "3a2369ff-53b3-4980-b7db-41d14e180fde",
+      "title": "特殊境遇家庭扶助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "special_circumstances_aid",
+      "secondary": ["medical_subsidy", "childcare_subsidy", "tuition_waiver"],
+      "closed": false,
+      "reason": "新竹縣特境扶助頁，列七項扶助（緊急生活扶助14,230元、子女生活津貼2,747元、學雜費減免60%、傷病醫療、托育津貼1,500元、法律訴訟5萬、創業貸款）與服務對象七款情形、應備文件及各公所窗口。",
+      "confidence": "high"
+    },
+    {
+      "id": "5e90f99b-8357-4d04-8e93-dd1286697240",
+      "title": "老人生活照顧總覽",
+      "is_benefit": "portal",
+      "kind": "portal",
+      "category": "",
+      "secondary": ["elderly_service", "elderly_allowance", "assistive_device"],
+      "closed": false,
+      "reason": "頁面只是桃園市社會局老人照顧專區的文章列表（關懷據點、住屋修繕補助、機構專案補助、輔具服務、緊急救援等十項標題與日期），無任何資格或給付內容，屬整理多項方案的目錄頁。",
+      "confidence": "medium"
+    },
+    {
+      "id": "ffc694e3-8381-41e1-8e8a-81222944f385",
+      "title": "敬老優惠措施",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_service",
+      "secondary": ["disability_other"],
+      "closed": false,
+      "reason": "寫明持臺南市敬老卡、愛心卡可免費無限次搭市公車、外縣市公車捷運半價、YouBike與運動中心優惠，屬對長者有經濟價值的交通優惠服務；未寫敬老卡本身的資格條件，內容簡短。",
+      "confidence": "medium"
+    },
+    {
+      "id": "9b05e760-01de-4c29-8ea4-04bd03fa8c16",
+      "title": "115年苗栗縣敬老禮金",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "發放對象為114年1月1日前設籍苗栗縣且年滿65歲（原住民55歲）長者，每人每節1,000元於春節、端午、重陽前匯入本人帳戶，並說明匯款同意書送件期限，屬敬老金類現金給付。",
+      "confidence": "high"
+    },
+    {
+      "id": "17d6a02e-1791-405c-ab93-786e4c63af14",
+      "title": "苗栗縣辦理低收入戶與中低收入戶產婦及新生兒營養補助實施計畫(114修)",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "birth_incentive",
+      "secondary": ["low_income_allowance"],
+      "closed": false,
+      "reason": "實施計畫條文本身寫明補助對象（本縣列冊低收／中低收產婦及新生兒）與補助標準（低收產婦及新生兒各7,500元、中低收各5,000元）、六個月內向公所申請，屬因生育給付的現金補助，依規則以 birth_incentive 為主類別。",
+      "confidence": "high"
+    },
+    {
+      "id": "9658b62b-31ca-4ce6-aa32-9b4310ebfc32",
+      "title": "中低收入戶",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": ["medical_subsidy", "tuition_waiver", "disability_living_allowance", "elderly_allowance"],
+      "closed": false,
+      "reason": "新竹縣中低收入戶資格說明頁，寫明審核標準（每人每月不超過最低生活費1.5倍即23,273元、動產14萬4,000元、不動產577萬元）與給付項目（健保費補助二分之一、學雜費減免、身障生活補助、老人生活津貼）及應備文件，依規則屬 yes。",
+      "confidence": "high"
+    },
+    {
+      "id": "ebf61b8c-9de1-4089-8132-aa359f581d52",
+      "title": "身心障礙者生活補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "disability_living_allowance",
+      "secondary": ["low_income_allowance"],
+      "closed": false,
+      "reason": "高雄市身障生活補助頁，申請資格寫明領有身障證明、設籍實居、收入財產門檻，福利內容列出低收9,485／5,437元、中低收及一般5,437／4,049元之每月補助金額與應備表件。",
+      "confidence": "high"
+    }
+  ],
+  "count": 15
+}

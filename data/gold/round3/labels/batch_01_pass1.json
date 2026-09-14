@@ -1,0 +1,170 @@
+{
+  "labels": [
+    {
+      "id": "e0bc6250-1061-49f9-9ccc-c8e2f24d2479",
+      "title": "身心障礙者臨時暨短期照顧服務",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "disability_care_subsidy",
+      "secondary": ["respite_care"],
+      "closed": false,
+      "reason": "原文列出服務對象（設籍本市領有身心障礙證明且未使用喘息服務等）、服務內容與補助標準（低收全額、中低收90%、一般戶70%），是對身障家庭有經濟價值的臨時／短期照顧服務。",
+      "confidence": "high"
+    },
+    {
+      "id": "6bc88176-5a4c-40de-9ab1-c5729fc683f2",
+      "title": "國民年金被保險人所得未達一定標準資格申請簡介",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文寫出申請資格（國保身分、25–65歲、設籍本市、家庭每人每月所得在26,640或39,960元以下）與給付（政府補助國保保費70%或55%），屬所得審查型保費補助；taxonomy 沒有國民年金類別，取最接近的社會救助所得審查類。",
+      "confidence": "medium"
+    },
+    {
+      "id": "638288ad-f202-4d3c-92be-5b800a2577df",
+      "title": "育有未滿2歲兒童育兒津貼",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "child_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文明列發放金額（第1名每月5,000元起）與申辦資格（未滿2歲、未送公共化托育等），是0–2歲育兒津貼方案。",
+      "confidence": "high"
+    },
+    {
+      "id": "e02c2ae7-1d07-4c9d-9d4d-3a591d1099c6",
+      "title": "強化社會安全網－急難紓困實施方案",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "emergency_relief",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文寫出服務對象（家庭成員死亡、失蹤、重傷病、失業致生活陷困者）並以速評速發方式提供救助金，附應備文件，是急難救助方案；未列具體金額。",
+      "confidence": "high"
+    },
+    {
+      "id": "d57370cf-6a0d-4f9a-b0a3-5c8b3ca2bee8",
+      "title": "南投縣兒童及少年生活扶助審核作業規定",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "special_circumstances_aid",
+      "secondary": ["low_income_allowance"],
+      "closed": false,
+      "reason": "作業規定本文寫明補助對象（設籍南投未滿18歲、中低收入戶內或父母雙亡／離異／服刑等遭遇困境之兒少）與按月發給生活扶助費，屬條文含資格與給付的辦法；弱勢兒少生活扶助在 taxonomy 無專屬類別，取特殊境遇扶助為最接近。",
+      "confidence": "medium"
+    },
+    {
+      "id": "072bab26-03c7-4f53-ac91-58c19dbfb8a1",
+      "title": "補助親屬接受委託照顧兒少費用計畫",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "childcare_subsidy",
+      "secondary": ["special_circumstances_aid"],
+      "closed": false,
+      "reason": "計畫書寫明補助對象（依兒少權法第62條採親屬安置之兒少，以低收、中低收、特境、單親為原則）與補助基準（每名個案每月最高1萬元照顧費），對象為直轄市縣市政府再撥予親屬照顧家庭；委託照顧費用在 taxonomy 無精確類別，取托育補助為最接近。",
+      "confidence": "medium"
+    },
+    {
+      "id": "139c7804-c07c-4c58-ba44-316f38afe5c9",
+      "title": "勞保生育給付（含勞工生育補助）— 請領資格",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "birth_incentive",
+      "secondary": ["worker_welfare"],
+      "closed": false,
+      "reason": "原文完整寫出勞保生育給付請領資格（女性被保險人參加保險滿280日分娩或181日早產等）及115年起勞工生育補助對象，符合「誰可以申請」；本頁未列給付金額。",
+      "confidence": "high"
+    },
+    {
+      "id": "04cd1703-bfa3-498f-8670-7bcd6bf33b8e",
+      "title": "苗栗縣政府老人聲請監護輔助宣告補助實施計畫",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "實施計畫寫明補助對象（設籍本縣65歲以上低收或中低收入戶、需辦監護或輔助宣告者）與補助標準（法院規費及鑑定費覈實支付，每案最高1萬元），屬對老人的現金補助；taxonomy 無專屬類別，取老人津貼類。",
+      "confidence": "medium"
+    },
+    {
+      "id": "4a4907a7-55c9-4594-82c2-69266658b3ca",
+      "title": "民眾急難救助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "emergency_relief",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文列出救助對象（設籍本市最近3個月內遭急難致生活陷困者）與各事由的救助金額（殮葬20,000／15,000／6,000元等），是完整的急難救助方案。",
+      "confidence": "high"
+    },
+    {
+      "id": "73cd24b1-77c7-4f5f-a301-60224c38dea1",
+      "title": "臺中市低收入戶三項生活補助費調整公告",
+      "is_benefit": "no",
+      "kind": "notice",
+      "category": "low_income_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文是「主旨：公告自113年1月1日起調增低收入戶生活扶助金額」的行政公告，只列調整後金額，沒有申請資格與申辦方式，依規則行政公告不收。",
+      "confidence": "medium"
+    },
+    {
+      "id": "b957671b-1e45-44f8-a389-0dbff32e475a",
+      "title": "申請使用牌照稅身心障礙者免稅（請逕洽基隆市稅務局）",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "disability_other",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文為使用牌照稅免稅的申辦說明，寫出誰可申請（身心障礙者本人所有並供本人使用之車輛，每人1輛；或無駕照者由配偶／二親等親屬名下車輛）與應備證件，稅賦減免對申請人有經濟價值；但頁面偏重證件清單且註明以稅務局公告為準。",
+      "confidence": "medium"
+    },
+    {
+      "id": "bc0b7656-be75-4068-9d32-9f3cc4acf81b",
+      "title": "災害救助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "emergency_relief",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文寫出補助對象（受風災、震災、火災、水災之民眾）與補助標準（死亡／失蹤20萬、重傷10萬、安遷每人2萬、淹水5,000至1萬元），並列各項應備證件，是災害救助金方案。",
+      "confidence": "high"
+    },
+    {
+      "id": "1547b154-2dd8-49ff-a527-028d85f51ecb",
+      "title": "社會救助業務總覽",
+      "is_benefit": "portal",
+      "kind": "portal",
+      "category": "",
+      "secondary": ["low_income_allowance", "emergency_relief", "elderly_allowance", "disability_living_allowance", "medical_subsidy"],
+      "closed": false,
+      "reason": "原文只是社會救助專區目錄，列出低收入戶生活補助、中低收入老人生活津貼、急難救助、災害救助、脫貧計畫等多項方案名稱，沒有任何一項的資格或給付內容。",
+      "confidence": "high"
+    },
+    {
+      "id": "0259eab7-1151-4816-acfb-ce0490352716",
+      "title": "中低收入老人重病住院看護費用補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_allowance",
+      "secondary": ["medical_subsidy"],
+      "closed": false,
+      "reason": "原文寫明補助對象（設籍本市65歲以上、重病住院需專人看護之低收入戶或領中低收入老人生活津貼者）與補助標準（每日最高1,800或900元，年度上限216,000或108,000元），是老人看護費用現金補助。",
+      "confidence": "high"
+    },
+    {
+      "id": "4a52759b-ef79-4b4a-add9-395d3262b103",
+      "title": "臺南市育有未滿二歲兒童育兒津貼",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "child_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文列出補助對象（完成出生登記之未滿二歲兒童、未經公費安置、未接受公共化或準公共托育）與應附文件，符合「誰可以申請」；本頁未寫發放金額。",
+      "confidence": "high"
+    }
+  ],
+  "count": 15
+}

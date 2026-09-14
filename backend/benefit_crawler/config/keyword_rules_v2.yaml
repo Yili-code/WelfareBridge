@@ -1,0 +1,4251 @@
+version: 2
+source: mined
+generated_at: '2026-09-13T06:48:25.619749+00:00'
+method: 'log-odds ratio with informative Dirichlet prior over character n-grams (2-6), document frequency; signal: z >= 3 and lift >= 3 (pos_rate / neg_rate) and neg_rate <= 0.30, region names excluded,
+  term must occur in >= 2 sources; category: z >= 2 and other-category rate <= 0.30, >= 2 sources'
+corpus:
+  documents: 1255
+  positives: 1056
+  negatives: 199
+  unlabeled: 0
+  seed_labeled: 764
+  pseudo_labeled:
+    positive: 78
+    negative: 81
+    undecided: 103
+    structural_negative: 43
+    gold: 286
+  categories:
+    scholarship: 78
+    child_allowance: 46
+    unemployment_benefit: 2
+    training_allowance: 1
+    tuition_waiver: 5
+    low_income_allowance: 141
+    rental_subsidy: 28
+    meal_service: 10
+    family_care_home: 9
+    day_care: 10
+    institutional_care_subsidy: 25
+    elderly_allowance: 135
+    emergency_relief: 87
+    disability_living_allowance: 21
+    transport_service: 10
+    assistive_device: 38
+    home_care: 4
+    education_subsidy: 16
+    employment_incentive: 24
+    housing_support: 4
+    birth_incentive: 39
+    childcare_subsidy: 37
+    elderly_service: 56
+    special_circumstances_aid: 43
+    disability_care_subsidy: 29
+    insurance_premium_subsidy: 4
+    disability_other: 89
+    respite_care: 13
+    medical_subsidy: 17
+    parental_leave_allowance: 5
+    student_aid: 19
+    youth_employment: 2
+    emergency_aid_student: 2
+    ltc_general: 3
+    employer_subsidy: 2
+    housing_loan_subsidy: 1
+    health_service: 1
+  sources:
+  - bli_family
+  - changhua_sw
+  - chiayi_city_sw
+  - chiayi_county_sw
+  - cip_regulations
+  - ece_moe
+  - gov_tw_services
+  - helpdreams_gov
+  - helpdreams_private
+  - hsinchu_city_sw
+  - hsinchu_county_sw
+  - hualien_sw
+  - kaohsiung_sw
+  - keelung_edu
+  - keelung_sw
+  - kinmen_sw
+  - ltc_1966
+  - miaoli_sw
+  - moe_law
+  - moe_programs
+  - mohw_gov
+  - mohw_social_assistance
+  - moi_pip
+  - mol_gov
+  - nantou_sw
+  - ntou_stu
+  - ntpc_banqiao_office
+  - ntpc_sw
+  - penghu_sw
+  - sfaa_childcare
+  - taichung_opendata
+  - taichung_sw
+  - tainan_east_office
+  - tainan_sw
+  - taipei_daan_office
+  - taipei_doe
+  - taipei_dosw
+  - taipei_health
+  - taipei_opendata
+  - taipei_ws_files
+  - taoyuan_sw
+  - taoyuan_zhongli_office
+  - wda_emps
+  - yilan_sw
+  sentences: 42933
+  condition_sentences: 9587
+benefit_signal:
+  threshold: 14
+  title_bonus: 2
+  keywords:
+  - term: 補助
+    weight: 5
+    z: 17.72
+    df: 843
+    pos_rate: 0.798
+    neg_rate: 0.176
+    lift: 4.54
+  - term: 文件
+    weight: 5
+    z: 16.83
+    df: 798
+    pos_rate: 0.756
+    neg_rate: 0.181
+    lift: 4.18
+  - term: 對象
+    weight: 5
+    z: 16.05
+    df: 757
+    pos_rate: 0.717
+    neg_rate: 0.191
+    lift: 3.75
+  - term: 證明
+    weight: 5
+    z: 15.9
+    df: 774
+    pos_rate: 0.733
+    neg_rate: 0.141
+    lift: 5.21
+  - term: 戶籍
+    weight: 5
+    z: 13.79
+    df: 702
+    pos_rate: 0.665
+    neg_rate: 0.09
+    lift: 7.35
+  - term: 符合
+    weight: 5
+    z: 12.94
+    df: 658
+    pos_rate: 0.623
+    neg_rate: 0.08
+    lift: 7.75
+  - term: 資格
+    weight: 5
+    z: 12.5
+    df: 596
+    pos_rate: 0.564
+    neg_rate: 0.101
+    lift: 5.62
+  - term: 設籍
+    weight: 5
+    z: 11.39
+    df: 596
+    pos_rate: 0.564
+    neg_rate: 0.055
+    lift: 10.21
+  - term: 低收入戶
+    weight: 5
+    z: 11.31
+    df: 509
+    pos_rate: 0.482
+    neg_rate: 0.116
+    lift: 4.17
+  - term: 方式
+    weight: 5
+    z: 10.82
+    df: 482
+    pos_rate: 0.456
+    neg_rate: 0.151
+    lift: 3.03
+  - term: 申請人
+    weight: 5
+    z: 10.63
+    df: 543
+    pos_rate: 0.514
+    neg_rate: 0.05
+    lift: 10.23
+  - term: 金額
+    weight: 5
+    z: 10.47
+    df: 481
+    pos_rate: 0.455
+    neg_rate: 0.07
+    lift: 6.47
+  - term: 個月
+    weight: 5
+    z: 10.39
+    df: 566
+    pos_rate: 0.536
+    neg_rate: 0.04
+    lift: 13.33
+  - term: 實際
+    weight: 5
+    z: 10.28
+    df: 453
+    pos_rate: 0.429
+    neg_rate: 0.085
+    lift: 5.02
+  - term: 費用
+    weight: 5
+    z: 10.26
+    df: 447
+    pos_rate: 0.423
+    neg_rate: 0.131
+    lift: 3.24
+  - term: 每月
+    weight: 5
+    z: 10.03
+    df: 442
+    pos_rate: 0.419
+    neg_rate: 0.075
+    lift: 5.55
+  - term: 檢附
+    weight: 5
+    z: 9.76
+    df: 461
+    pos_rate: 0.437
+    neg_rate: 0.05
+    lift: 8.69
+  - term: 新臺幣
+    weight: 5
+    z: 9.52
+    df: 474
+    pos_rate: 0.449
+    neg_rate: 0.04
+    lift: 11.17
+  - term: 居住
+    weight: 5
+    z: 9.47
+    df: 402
+    pos_rate: 0.381
+    neg_rate: 0.075
+    lift: 5.05
+  - term: 應備文件
+    weight: 5
+    z: 9.47
+    df: 424
+    pos_rate: 0.402
+    neg_rate: 0.055
+    lift: 7.26
+  - term: 聯絡
+    weight: 5
+    z: 9.26
+    df: 384
+    pos_rate: 0.364
+    neg_rate: 0.095
+    lift: 3.81
+  - term: 證明文件
+    weight: 5
+    z: 9.25
+    df: 416
+    pos_rate: 0.394
+    neg_rate: 0.05
+    lift: 7.84
+  - term: 身分證
+    weight: 5
+    z: 9.22
+    df: 413
+    pos_rate: 0.391
+    neg_rate: 0.05
+    lift: 7.78
+  - term: 期間
+    weight: 5
+    z: 9.18
+    df: 379
+    pos_rate: 0.359
+    neg_rate: 0.09
+    lift: 3.97
+  - term: 受理
+    weight: 5
+    z: 9.12
+    df: 417
+    pos_rate: 0.395
+    neg_rate: 0.045
+    lift: 8.73
+  - term: 提出申請
+    weight: 4
+    z: 8.99
+    df: 421
+    pos_rate: 0.399
+    neg_rate: 0.04
+    lift: 9.92
+  - term: 領有
+    weight: 4
+    z: 8.91
+    df: 373
+    pos_rate: 0.353
+    neg_rate: 0.06
+    lift: 5.86
+  - term: 申請表
+    weight: 4
+    z: 8.9
+    df: 386
+    pos_rate: 0.366
+    neg_rate: 0.05
+    lift: 7.27
+  - term: 萬元
+    weight: 4
+    z: 8.59
+    df: 370
+    pos_rate: 0.35
+    neg_rate: 0.045
+    lift: 7.75
+  - term: 情形
+    weight: 4
+    z: 8.58
+    df: 343
+    pos_rate: 0.325
+    neg_rate: 0.075
+    lift: 4.31
+  - term: 標準
+    weight: 4
+    z: 8.41
+    df: 508
+    pos_rate: 0.481
+    neg_rate: 0.02
+    lift: 23.93
+  - term: 戶籍所在地
+    weight: 4
+    z: 8.26
+    df: 369
+    pos_rate: 0.349
+    neg_rate: 0.035
+    lift: 9.93
+  - term: 日起
+    weight: 4
+    z: 7.99
+    df: 312
+    pos_rate: 0.295
+    neg_rate: 0.095
+    lift: 3.09
+  - term: 超過
+    weight: 4
+    z: 7.95
+    df: 318
+    pos_rate: 0.301
+    neg_rate: 0.045
+    lift: 6.66
+  - term: 核定
+    weight: 4
+    z: 7.95
+    df: 304
+    pos_rate: 0.288
+    neg_rate: 0.07
+    lift: 4.09
+  - term: 不得
+    weight: 4
+    z: 7.86
+    df: 305
+    pos_rate: 0.289
+    neg_rate: 0.05
+    lift: 5.75
+  - term: 證明書
+    weight: 4
+    z: 7.8
+    df: 306
+    pos_rate: 0.29
+    neg_rate: 0.045
+    lift: 6.41
+  - term: 區公
+    weight: 4
+    z: 7.78
+    df: 305
+    pos_rate: 0.289
+    neg_rate: 0.045
+    lift: 6.39
+  - term: 未滿
+    weight: 4
+    z: 7.73
+    df: 296
+    pos_rate: 0.28
+    neg_rate: 0.05
+    lift: 5.58
+  - term: 個月內
+    weight: 4
+    z: 7.68
+    df: 359
+    pos_rate: 0.34
+    neg_rate: 0.025
+    lift: 13.53
+  - term: 人口
+    weight: 4
+    z: 7.62
+    df: 286
+    pos_rate: 0.271
+    neg_rate: 0.055
+    lift: 4.9
+  - term: 地區
+    weight: 4
+    z: 7.59
+    df: 289
+    pos_rate: 0.274
+    neg_rate: 0.09
+    lift: 3.03
+  - term: 安置
+    weight: 4
+    z: 7.56
+    df: 282
+    pos_rate: 0.267
+    neg_rate: 0.055
+    lift: 4.83
+  - term: 接受
+    weight: 4
+    z: 7.48
+    df: 279
+    pos_rate: 0.264
+    neg_rate: 0.08
+    lift: 3.29
+  - term: 身心障礙證明
+    weight: 4
+    z: 7.35
+    df: 270
+    pos_rate: 0.256
+    neg_rate: 0.05
+    lift: 5.09
+  - term: 申請書
+    weight: 4
+    z: 7.29
+    df: 266
+    pos_rate: 0.252
+    neg_rate: 0.07
+    lift: 3.58
+  - term: 最高
+    weight: 4
+    z: 7.27
+    df: 281
+    pos_rate: 0.266
+    neg_rate: 0.035
+    lift: 7.56
+  - term: 郵局
+    weight: 4
+    z: 7.22
+    df: 310
+    pos_rate: 0.294
+    neg_rate: 0.025
+    lift: 11.68
+  - term: 每人
+    weight: 4
+    z: 7.14
+    df: 400
+    pos_rate: 0.379
+    neg_rate: 0.015
+    lift: 25.13
+  - term: 審核
+    weight: 4
+    z: 7.14
+    df: 259
+    pos_rate: 0.245
+    neg_rate: 0.045
+    lift: 5.42
+  - term: 最近
+    weight: 4
+    z: 7.1
+    df: 298
+    pos_rate: 0.282
+    neg_rate: 0.025
+    lift: 11.23
+  - term: 條件
+    weight: 4
+    z: 7.07
+    df: 265
+    pos_rate: 0.251
+    neg_rate: 0.035
+    lift: 7.13
+  - term: 特殊
+    weight: 4
+    z: 7.04
+    df: 250
+    pos_rate: 0.237
+    neg_rate: 0.05
+    lift: 4.71
+  - term: 委託
+    weight: 3
+    z: 6.99
+    df: 248
+    pos_rate: 0.235
+    neg_rate: 0.065
+    lift: 3.59
+  - term: 子女
+    weight: 3
+    z: 6.88
+    df: 242
+    pos_rate: 0.229
+    neg_rate: 0.045
+    lift: 5.07
+  - term: 負擔
+    weight: 3
+    z: 6.82
+    df: 237
+    pos_rate: 0.224
+    neg_rate: 0.05
+    lift: 4.47
+  - term: 計算
+    weight: 3
+    z: 6.79
+    df: 235
+    pos_rate: 0.223
+    neg_rate: 0.055
+    lift: 4.03
+  - term: 帳戶
+    weight: 3
+    z: 6.64
+    df: 233
+    pos_rate: 0.221
+    neg_rate: 0.035
+    lift: 6.27
+  - term: 存摺
+    weight: 3
+    z: 6.64
+    df: 254
+    pos_rate: 0.241
+    neg_rate: 0.025
+    lift: 9.57
+  - term: 年滿
+    weight: 3
+    z: 6.63
+    df: 240
+    pos_rate: 0.227
+    neg_rate: 0.03
+    lift: 7.54
+  - term: 每年
+    weight: 3
+    z: 6.63
+    df: 226
+    pos_rate: 0.214
+    neg_rate: 0.055
+    lift: 3.87
+  - term: 期限
+    weight: 3
+    z: 6.6
+    df: 251
+    pos_rate: 0.238
+    neg_rate: 0.025
+    lift: 9.46
+  - term: 收據
+    weight: 3
+    z: 6.58
+    df: 249
+    pos_rate: 0.236
+    neg_rate: 0.025
+    lift: 9.38
+  - term: 符合下列
+    weight: 3
+    z: 6.55
+    df: 315
+    pos_rate: 0.298
+    neg_rate: 0.015
+    lift: 19.79
+  - term: 分機
+    weight: 3
+    z: 6.51
+    df: 221
+    pos_rate: 0.209
+    neg_rate: 0.06
+    lift: 3.47
+  - term: 列冊
+    weight: 3
+    z: 6.49
+    df: 229
+    pos_rate: 0.217
+    neg_rate: 0.03
+    lift: 7.19
+  - term: 登記
+    weight: 3
+    z: 6.46
+    df: 216
+    pos_rate: 0.205
+    neg_rate: 0.05
+    lift: 4.07
+  - term: 發給
+    weight: 3
+    z: 6.42
+    df: 224
+    pos_rate: 0.212
+    neg_rate: 0.03
+    lift: 7.04
+  - term: 申請方式
+    weight: 3
+    z: 6.4
+    df: 254
+    pos_rate: 0.241
+    neg_rate: 0.02
+    lift: 11.97
+  - term: 學生
+    weight: 3
+    z: 6.39
+    df: 233
+    pos_rate: 0.221
+    neg_rate: 0.025
+    lift: 8.78
+  - term: 通知
+    weight: 3
+    z: 6.36
+    df: 211
+    pos_rate: 0.2
+    neg_rate: 0.04
+    lift: 4.97
+  - term: 申請資格
+    weight: 3
+    z: 6.34
+    df: 248
+    pos_rate: 0.235
+    neg_rate: 0.02
+    lift: 11.68
+  - term: 領取
+    weight: 3
+    z: 6.29
+    df: 282
+    pos_rate: 0.267
+    neg_rate: 0.015
+    lift: 17.71
+  - term: 福利科
+    weight: 3
+    z: 6.27
+    df: 209
+    pos_rate: 0.198
+    neg_rate: 0.06
+    lift: 3.28
+  - term: 實際居住
+    weight: 3
+    z: 6.27
+    df: 279
+    pos_rate: 0.264
+    neg_rate: 0.015
+    lift: 17.53
+  - term: 每人每月
+    weight: 3
+    z: 6.26
+    df: 278
+    pos_rate: 0.263
+    neg_rate: 0.015
+    lift: 17.46
+  - term: 平均
+    weight: 3
+    z: 6.26
+    df: 278
+    pos_rate: 0.263
+    neg_rate: 0.015
+    lift: 17.46
+  - term: 無法
+    weight: 3
+    z: 6.17
+    df: 215
+    pos_rate: 0.204
+    neg_rate: 0.025
+    lift: 8.1
+  - term: 死亡
+    weight: 3
+    z: 6.16
+    df: 214
+    pos_rate: 0.203
+    neg_rate: 0.025
+    lift: 8.07
+  - term: 費用補助
+    weight: 3
+    z: 6.15
+    df: 203
+    pos_rate: 0.192
+    neg_rate: 0.06
+    lift: 3.19
+  negative:
+  - term: 資料來源
+    weight: -4
+    z: -8.67
+    df: 56
+  - term: 更新時間
+    weight: -4
+    z: -8.44
+    df: 54
+  - term: 建檔日期
+    weight: -4
+    z: -8.3
+    df: 52
+  - term: 長期照顧司
+    weight: -4
+    z: -7.08
+    df: 41
+  - term: 附件下載
+    weight: -3
+    z: -6.41
+    df: 32
+  - term: 長照服務
+    weight: -3
+    z: -6.37
+    df: 31
+  - term: 每頁顯示
+    weight: -2
+    z: -4.78
+    df: 19
+  - term: pdf115
+    weight: -2
+    z: -4.28
+    df: 14
+  - term: 北市信義區
+    weight: -2
+    z: -4.05
+    df: 13
+  - term: 職訓
+    weight: -2
+    z: -4.05
+    df: 13
+  - term: 服務計畫
+    weight: -2
+    z: -4.02
+    df: 18
+  - term: 業技能
+    weight: -2
+    z: -3.97
+    df: 12
+  - term: 政策
+    weight: -2
+    z: -3.95
+    df: 21
+  - term: 洽辦資訊
+    weight: -2
+    z: -3.92
+    df: 14
+  - term: 成果報告
+    weight: -2
+    z: -3.85
+    df: 12
+  - term: 費項目及基準
+    weight: -2
+    z: -3.79
+    df: 11
+  - term: 成果
+    weight: -2
+    z: -3.78
+    df: 18
+  - term: 計畫個案
+    weight: -2
+    z: -3.74
+    df: 11
+  - term: 提升就業
+    weight: -2
+    z: -3.74
+    df: 11
+  - term: 津貼領
+    weight: -2
+    z: -3.63
+    df: 11
+  - term: 年職
+    weight: -2
+    z: -3.63
+    df: 11
+  - term: 導計畫
+    weight: -2
+    z: -3.61
+    df: 13
+  - term: 就業服務計畫
+    weight: -2
+    z: -3.61
+    df: 10
+  - term: 職場體驗
+    weight: -2
+    z: -3.61
+    df: 10
+  - term: 就業準備
+    weight: -2
+    z: -3.61
+    df: 10
+  - term: 輔導紀錄
+    weight: -2
+    z: -3.61
+    df: 10
+  - term: 檢視
+    weight: -2
+    z: -3.6
+    df: 12
+  - term: 經費項目及基
+    weight: -2
+    z: -3.59
+    df: 10
+  - term: 有就業需求
+    weight: -2
+    z: -3.59
+    df: 10
+  - term: 訪視紀錄表
+    weight: -2
+    z: -3.59
+    df: 10
+  - term: 單位輔導
+    weight: -2
+    z: -3.59
+    df: 10
+  - term: 體驗意願
+    weight: -2
+    z: -3.59
+    df: 10
+  - term: 助費領據
+    weight: -2
+    z: -3.59
+    df: 10
+  - term: 單位訪視
+    weight: -2
+    z: -3.59
+    df: 10
+  - term: 少年就業
+    weight: -2
+    z: -3.59
+    df: 10
+  - term: 意願書
+    weight: -2
+    z: -3.59
+    df: 10
+  - term: 協助有
+    weight: -2
+    z: -3.59
+    df: 10
+  - term: 忠孝
+    weight: -2
+    z: -3.59
+    df: 10
+  - term: 部令
+    weight: -2
+    z: -3.59
+    df: 10
+  - term: 注意事項說明
+    weight: -2
+    z: -3.52
+    df: 10
+  - term: 招標
+    weight: -5
+    z: null
+    df: null
+    seed: true
+  - term: 決標
+    weight: -5
+    z: null
+    df: null
+    seed: true
+  - term: 採購
+    weight: -4
+    z: null
+    df: null
+    seed: true
+  - term: 徵才
+    weight: -4
+    z: null
+    df: null
+    seed: true
+  - term: 甄選結果
+    weight: -4
+    z: null
+    df: null
+    seed: true
+  - term: 隱私權政策
+    weight: -3
+    z: null
+    df: null
+    seed: true
+  - term: 網站導覽
+    weight: -2
+    z: null
+    df: null
+    seed: true
+  - term: 資訊安全政策
+    weight: -3
+    z: null
+    df: null
+    seed: true
+  - term: 瀏覽人次
+    weight: -1
+    z: null
+    df: null
+    seed: true
+  - term: 新聞稿
+    weight: -2
+    z: null
+    df: null
+    seed: true
+  - term: 草案
+    weight: -4
+    z: null
+    df: null
+    seed: true
+  - term: 修正草案
+    weight: -4
+    z: null
+    df: null
+    seed: true
+  - term: 公聽會
+    weight: -3
+    z: null
+    df: null
+    seed: true
+  - term: 徵求意見
+    weight: -3
+    z: null
+    df: null
+    seed: true
+  - term: 招生簡章
+    weight: -2
+    z: null
+    df: null
+    seed: true
+  - term: 研習
+    weight: -2
+    z: null
+    df: null
+    seed: true
+  - term: 課程表
+    weight: -2
+    z: null
+    df: null
+    seed: true
+  - term: 秩序冊
+    weight: -3
+    z: null
+    df: null
+    seed: true
+  - term: 民意信箱
+    weight: -1
+    z: null
+    df: null
+    seed: true
+  - term: 網站地圖
+    weight: -2
+    z: null
+    df: null
+    seed: true
+  calibration:
+    method: 在標記語料（補助頁 1056、非補助頁 199）上以探勘規則計算訊號分數；門檻取「非補助頁通過率 <= 5%」中 F1 最高者
+    chosen: &id001
+      threshold: 14
+      precision: 0.943
+      recall: 0.977
+      f1: 0.96
+      negative_pass_rate: 0.312
+      tp: 1032
+      fp: 62
+    curve:
+    - threshold: 4
+      precision: 0.913
+      recall: 0.989
+      f1: 0.95
+      negative_pass_rate: 0.497
+      tp: 1044
+      fp: 99
+    - threshold: 6
+      precision: 0.921
+      recall: 0.987
+      f1: 0.953
+      negative_pass_rate: 0.447
+      tp: 1042
+      fp: 89
+    - threshold: 8
+      precision: 0.928
+      recall: 0.986
+      f1: 0.956
+      negative_pass_rate: 0.407
+      tp: 1041
+      fp: 81
+    - threshold: 10
+      precision: 0.931
+      recall: 0.983
+      f1: 0.956
+      negative_pass_rate: 0.387
+      tp: 1038
+      fp: 77
+    - threshold: 12
+      precision: 0.936
+      recall: 0.979
+      f1: 0.957
+      negative_pass_rate: 0.357
+      tp: 1034
+      fp: 71
+    - *id001
+    - threshold: 16
+      precision: 0.943
+      recall: 0.973
+      f1: 0.958
+      negative_pass_rate: 0.312
+      tp: 1027
+      fp: 62
+    - threshold: 18
+      precision: 0.946
+      recall: 0.968
+      f1: 0.957
+      negative_pass_rate: 0.291
+      tp: 1022
+      fp: 58
+    - threshold: 20
+      precision: 0.949
+      recall: 0.964
+      f1: 0.956
+      negative_pass_rate: 0.276
+      tp: 1018
+      fp: 55
+    - threshold: 24
+      precision: 0.958
+      recall: 0.958
+      f1: 0.958
+      negative_pass_rate: 0.221
+      tp: 1012
+      fp: 44
+    - threshold: 28
+      precision: 0.96
+      recall: 0.951
+      f1: 0.955
+      negative_pass_rate: 0.211
+      tp: 1004
+      fp: 42
+    - threshold: 32
+      precision: 0.966
+      recall: 0.944
+      f1: 0.955
+      negative_pass_rate: 0.176
+      tp: 997
+      fp: 35
+    - threshold: 36
+      precision: 0.971
+      recall: 0.933
+      f1: 0.952
+      negative_pass_rate: 0.146
+      tp: 985
+      fp: 29
+    - threshold: 40
+      precision: 0.972
+      recall: 0.925
+      f1: 0.948
+      negative_pass_rate: 0.141
+      tp: 977
+      fp: 28
+condition_cues:
+- term: 身心障礙
+  z: 51.75
+  df: 2072
+- term: 補助
+  z: 36.13
+  df: 2567
+- term: 生活
+  z: 33.79
+  df: 1249
+- term: 設籍
+  z: 31.52
+  df: 695
+- term: 個月
+  z: 29.3
+  df: 811
+- term: 家庭
+  z: 28.61
+  df: 1012
+- term: 未滿
+  z: 27.22
+  df: 708
+- term: 每月
+  z: 26.45
+  df: 647
+- term: 津貼
+  z: 25.53
+  df: 691
+- term: 領有
+  z: 25.47
+  df: 468
+- term: 平均
+  z: 25.32
+  df: 454
+- term: 每人每月
+  z: 24.81
+  df: 439
+- term: 證明
+  z: 24.33
+  df: 1162
+- term: 子女
+  z: 23.43
+  df: 521
+- term: 超過
+  z: 22.97
+  df: 442
+- term: 新臺幣
+  z: 21.39
+  df: 574
+- term: 列冊
+  z: 21.12
+  df: 383
+- term: 特殊
+  z: 20.6
+  df: 364
+- term: 學生
+  z: 20.45
+  df: 539
+- term: 生活補助
+  z: 20.44
+  df: 307
+- term: 家庭總收
+  z: 20.36
+  df: 297
+- term: 庭總收入
+  z: 20.32
+  df: 296
+- term: 住民
+  z: 20.0
+  df: 444
+- term: 個月內
+  z: 19.96
+  df: 387
+- term: 生活津貼
+  z: 19.9
+  df: 307
+- term: 全家人口
+  z: 19.59
+  df: 289
+- term: 最低生活
+  z: 19.53
+  df: 331
+- term: 低生活費
+  z: 19.37
+  df: 328
+- term: 年度
+  z: 19.07
+  df: 527
+- term: 最近
+  z: 18.45
+  df: 311
+- term: 傷病
+  z: 17.98
+  df: 262
+- term: 居住
+  z: 17.87
+  df: 351
+- term: 未超過
+  z: 17.46
+  df: 235
+- term: 未達
+  z: 17.15
+  df: 219
+- term: 實際居住
+  z: 17.04
+  df: 234
+- term: 萬元
+  z: 16.59
+  df: 438
+- term: 租金
+  z: 16.48
+  df: 226
+- term: 符合
+  z: 16.42
+  df: 602
+- term: 費用補助
+  z: 16.09
+  df: 282
+- term: 房屋
+  z: 15.92
+  df: 258
+categories:
+  scholarship:
+    label: 獎學金
+    source: mined
+    documents: 78
+    keywords:
+    - term: 成績
+      weight: 4
+      z: 14.42
+      df: 75
+    - term: 學期
+      weight: 4
+      z: 14.24
+      df: 70
+    - term: 研究
+      weight: 4
+      z: 12.51
+      df: 60
+    - term: 獎學金名稱
+      weight: 4
+      z: 12.49
+      df: 63
+    - term: 大專院校
+      weight: 4
+      z: 12.45
+      df: 57
+    - term: 大學
+      weight: 4
+      z: 12.34
+      df: 60
+    - term: 申請期間
+      weight: 4
+      z: 11.87
+      df: 53
+    - term: 學制
+      weight: 4
+      z: 11.78
+      df: 55
+    - term: 學年度
+      weight: 4
+      z: 11.57
+      df: 51
+    - term: 獎助學金金
+      weight: 4
+      z: 11.24
+      df: 51
+    - term: 助學金金額
+      weight: 4
+      z: 11.24
+      df: 51
+    - term: 預計總名額
+      weight: 4
+      z: 11.24
+      df: 51
+    - term: 每名獎助學
+      weight: 4
+      z: 11.24
+      df: 51
+    - term: 金金額範圍
+      weight: 4
+      z: 11.24
+      df: 51
+    - term: 名獎助學金
+      weight: 4
+      z: 11.24
+      df: 51
+    - term: 戶籍地限制
+      weight: 4
+      z: 11.24
+      df: 51
+    - term: 學金金額範
+      weight: 4
+      z: 11.24
+      df: 51
+    - term: 獎助身分
+      weight: 4
+      z: 11.24
+      df: 51
+    - term: 獎助資格
+      weight: 4
+      z: 11.24
+      df: 51
+    - term: 獎助內容
+      weight: 4
+      z: 11.24
+      df: 51
+    - term: 限制條件
+      weight: 4
+      z: 11.24
+      df: 51
+    - term: 不拘
+      weight: 4
+      z: 11.24
+      df: 51
+    - term: 學門
+      weight: 4
+      z: 11.24
+      df: 51
+    - term: 申請說明
+      weight: 4
+      z: 10.75
+      df: 52
+    - term: 不限
+      weight: 4
+      z: 10.73
+      df: 45
+    - term: 獎學金
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 優秀學生
+      weight: 1
+      z: null
+      df: null
+      seed: true
+  student_aid:
+    label: 助學金
+    source: mined
+    documents: 19
+    keywords:
+    - term: 軍警
+      weight: 2
+      z: 3.86
+      df: 6
+    - term: 該基金會
+      weight: 2
+      z: 3.6
+      df: 9
+    - term: 助學金申請
+      weight: 2
+      z: 3.34
+      df: 6
+    - term: 推薦
+      weight: 2
+      z: 3.05
+      df: 8
+    - term: 未定
+      weight: 1
+      z: 2.74
+      df: 6
+    - term: 助學金
+      weight: 1
+      z: 2.72
+      df: 15
+    - term: 申請期間
+      weight: 1
+      z: 2.27
+      df: 13
+    - term: 空中大學
+      weight: 1
+      z: 2.06
+      df: 9
+    - term: 弱勢助學
+      weight: 2
+      z: null
+      df: null
+      seed: true
+    - term: 安心就學
+      weight: 2
+      z: null
+      df: null
+      seed: true
+  tuition_waiver:
+    label: 學雜費減免
+    source: mined
+    documents: 5
+    keywords:
+    - term: 女就讀高級
+      weight: 2
+      z: 3.05
+      df: 3
+    - term: 現役軍人子
+      weight: 2
+      z: 3.05
+      df: 3
+    - term: 役軍人子女
+      weight: 2
+      z: 3.05
+      df: 3
+    - term: 軍公教遺族
+      weight: 2
+      z: 3.05
+      df: 3
+    - term: 戶學生就讀
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 濟弱勢學生
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 學校助學補
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 學補助系統
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 學費用優待
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 校助學補助
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 就學費用優
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 校學雜費減
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 經濟弱勢學
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 庭子女或孫
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 助學補助系
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 學雜費全免
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 鼓勵學生
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 教育部全
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 雜費補助
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 依各該
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 類科
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 障礙人士子
+      weight: 1
+      z: 2.44
+      df: 3
+    - term: 礙人士子女
+      weight: 1
+      z: 2.44
+      df: 3
+    - term: 校減免學
+      weight: 1
+      z: 2.44
+      df: 3
+    - term: 免學費
+      weight: 1
+      z: 2.44
+      df: 3
+    - term: 學雜費減免
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 就學費用補助
+      weight: 2
+      z: null
+      df: null
+      seed: true
+  education_subsidy:
+    label: 就學補助
+    source: mined
+    documents: 16
+    keywords:
+    - term: 就學補助
+      weight: 2
+      z: 4.14
+      df: 8
+    - term: 學費
+      weight: 2
+      z: 3.81
+      df: 8
+    - term: 幼兒就學
+      weight: 2
+      z: 3.54
+      df: 5
+    - term: 教保服務
+      weight: 2
+      z: 3.25
+      df: 5
+    - term: 入國
+      weight: 1
+      z: 2.97
+      df: 5
+    - term: 國民小學
+      weight: 1
+      z: 2.47
+      df: 5
+    - term: 家長
+      weight: 1
+      z: 2.44
+      df: 10
+    - term: 每學期
+      weight: 1
+      z: 2.38
+      df: 8
+    - term: 就學補助金
+      weight: 2
+      z: null
+      df: null
+      seed: true
+    - term: 在學子女
+      weight: 1
+      z: null
+      df: null
+      seed: true
+  housing_support:
+    label: 住宿補助
+    source: mined
+    documents: 4
+    keywords:
+    - term: 違反其他
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 宣導摺頁
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 住宅法第
+      weight: 1
+      z: 2.42
+      df: 2
+    - term: 海報
+      weight: 1
+      z: 2.42
+      df: 2
+    - term: 制定
+      weight: 1
+      z: 2.42
+      df: 2
+    - term: 府有
+      weight: 1
+      z: 2.42
+      df: 2
+    - term: 有什麼
+      weight: 1
+      z: 2.21
+      df: 2
+    - term: 補貼方
+      weight: 1
+      z: 2.21
+      df: 2
+    - term: 住宿補貼
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 住宿補助
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 校內住宿
+      weight: 2
+      z: null
+      df: null
+      seed: true
+  emergency_aid_student:
+    label: 學生急難救助
+    source: seed
+    documents: 2
+    keywords:
+    - term: 急難救助
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 學生
+      weight: 1
+      z: null
+      df: null
+      seed: true
+  student_loan:
+    label: 就學貸款
+    source: seed
+    documents: 0
+    keywords:
+    - term: 就學貸款
+      weight: 4
+      z: null
+      df: null
+      seed: true
+  study_abroad:
+    label: 留學獎助
+    source: seed
+    documents: 0
+    keywords:
+    - term: 留學
+      weight: 4
+      z: null
+      df: null
+      seed: true
+    - term: 出國
+      weight: 2
+      z: null
+      df: null
+      seed: true
+  youth_employment:
+    label: 青年就業獎勵
+    source: mined
+    documents: 2
+    keywords:
+    - term: 年就業
+      weight: 1
+      z: 2.23
+      df: 2
+    - term: 年職
+      weight: 1
+      z: 2.23
+      df: 2
+    - term: 青年就業
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 尋職
+      weight: 1
+      z: null
+      df: null
+      seed: true
+    - term: 就業獎勵
+      weight: 2
+      z: null
+      df: null
+      seed: true
+  youth_entrepreneurship:
+    label: 青年創業
+    source: seed
+    documents: 0
+    keywords:
+    - term: 青年創業
+      weight: 4
+      z: null
+      df: null
+      seed: true
+    - term: 創業貸款
+      weight: 3
+      z: null
+      df: null
+      seed: true
+  youth_development:
+    label: 青年發展
+    source: seed
+    documents: 0
+    keywords:
+    - term: 壯遊
+      weight: 4
+      z: null
+      df: null
+      seed: true
+    - term: 青年發展
+      weight: 3
+      z: null
+      df: null
+      seed: true
+  low_income_allowance:
+    label: 低收入戶生活補助
+    source: mined
+    documents: 141
+    keywords:
+    - term: 社會救助
+      weight: 4
+      z: 8.65
+      df: 78
+    - term: 戶及中低收
+      weight: 4
+      z: 7.99
+      df: 45
+    - term: 入戶及中低
+      weight: 4
+      z: 7.99
+      df: 45
+    - term: 列冊
+      weight: 3
+      z: 6.58
+      df: 75
+    - term: 冊低收入戶
+      weight: 2
+      z: 4.29
+      df: 44
+    - term: 列冊低收入
+      weight: 2
+      z: 4.12
+      df: 44
+    - term: 扶助
+      weight: 2
+      z: 3.12
+      df: 51
+    - term: 最低生活費
+      weight: 1
+      z: 2.13
+      df: 48
+    - term: 診斷
+      weight: 1
+      z: 2.13
+      df: 60
+    - term: 每人每月
+      weight: 1
+      z: 2.13
+      df: 64
+    - term: 低收入戶生活補助
+      weight: 4
+      z: null
+      df: null
+      seed: true
+    - term: 生活補助
+      weight: 2
+      z: null
+      df: null
+      seed: true
+    - term: 生活扶助
+      weight: 2
+      z: null
+      df: null
+      seed: true
+    - term: 家庭生活補助
+      weight: 2
+      z: null
+      df: null
+      seed: true
+    - term: 低收入戶
+      weight: 1
+      z: null
+      df: null
+      seed: true
+    - term: 中低收入戶
+      weight: 1
+      z: null
+      df: null
+      seed: true
+  special_circumstances_aid:
+    label: 特殊境遇家庭扶助
+    source: mined
+    documents: 43
+    keywords:
+    - term: 特殊境遇家
+      weight: 4
+      z: 9.67
+      df: 42
+    - term: 殊境遇家庭
+      weight: 4
+      z: 9.67
+      df: 42
+    - term: 協尋未獲達
+      weight: 4
+      z: 9.0
+      df: 28
+    - term: 年以上之徒
+      weight: 4
+      z: 9.0
+      df: 28
+    - term: 無工作能力
+      weight: 4
+      z: 9.0
+      df: 28
+    - term: 配偶死亡
+      weight: 4
+      z: 8.87
+      df: 28
+    - term: 徒刑或受拘
+      weight: 4
+      z: 8.82
+      df: 27
+    - term: 刑或受拘束
+      weight: 4
+      z: 8.82
+      df: 27
+    - term: 受拘束人身
+      weight: 4
+      z: 8.82
+      df: 27
+    - term: 且在執行
+      weight: 4
+      z: 8.82
+      df: 27
+    - term: 喪偶
+      weight: 4
+      z: 8.8
+      df: 27
+    - term: 歲以下子女
+      weight: 4
+      z: 8.71
+      df: 27
+    - term: 保安處分
+      weight: 4
+      z: 8.67
+      df: 27
+    - term: 願性失業
+      weight: 4
+      z: 8.6
+      df: 26
+    - term: 失蹤經向警
+      weight: 4
+      z: 8.57
+      df: 26
+    - term: 蹤經向警察
+      weight: 4
+      z: 8.57
+      df: 26
+    - term: 致不能工作
+      weight: 4
+      z: 8.57
+      df: 27
+    - term: 有工作能力
+      weight: 4
+      z: 8.46
+      df: 28
+    - term: 機關報案協
+      weight: 4
+      z: 8.34
+      df: 27
+    - term: 報案協尋未
+      weight: 4
+      z: 8.34
+      df: 27
+    - term: 關報案協尋
+      weight: 4
+      z: 8.34
+      df: 27
+    - term: 案協尋未獲
+      weight: 4
+      z: 8.34
+      df: 27
+    - term: 因離婚
+      weight: 4
+      z: 8.31
+      df: 25
+    - term: 察機關報案
+      weight: 4
+      z: 8.22
+      df: 27
+    - term: 警察機關報
+      weight: 4
+      z: 8.22
+      df: 27
+    - term: 特殊境遇
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 緊急生活扶助
+      weight: 2
+      z: null
+      df: null
+      seed: true
+  birth_incentive:
+    label: 生育獎勵金
+    source: mined
+    documents: 39
+    keywords:
+    - term: 生育
+      weight: 4
+      z: 9.87
+      df: 36
+    - term: 新生兒出生
+      weight: 4
+      z: 7.86
+      df: 23
+    - term: 出生登記
+      weight: 4
+      z: 7.18
+      df: 24
+    - term: 胞胎
+      weight: 3
+      z: 6.57
+      df: 16
+    - term: 戶政事務
+      weight: 3
+      z: 6.51
+      df: 19
+    - term: 初設戶籍
+      weight: 3
+      z: 6.51
+      df: 19
+    - term: 申請生
+      weight: 3
+      z: 5.79
+      df: 13
+    - term: 兒之父
+      weight: 3
+      z: 5.72
+      df: 12
+    - term: 產婦
+      weight: 3
+      z: 5.71
+      df: 13
+    - term: 生產
+      weight: 3
+      z: 5.67
+      df: 14
+    - term: 辦理出生登
+      weight: 3
+      z: 5.64
+      df: 12
+    - term: 理出生登記
+      weight: 3
+      z: 5.64
+      df: 12
+    - term: 出生日
+      weight: 3
+      z: 5.6
+      df: 15
+    - term: 記或初設戶
+      weight: 3
+      z: 5.36
+      df: 15
+    - term: 登記或初設
+      weight: 3
+      z: 5.36
+      df: 15
+    - term: 生登記或初
+      weight: 3
+      z: 5.03
+      df: 14
+    - term: 設戶籍登記
+      weight: 2
+      z: 4.59
+      df: 13
+    - term: 初設戶籍登
+      weight: 2
+      z: 4.59
+      df: 13
+    - term: 父或母
+      weight: 2
+      z: 4.31
+      df: 12
+    - term: 婦女
+      weight: 2
+      z: 3.91
+      df: 22
+    - term: 完成出生
+      weight: 2
+      z: 3.77
+      df: 12
+    - term: 分娩
+      weight: 2
+      z: 3.5
+      df: 13
+    - term: 遷出
+      weight: 2
+      z: 3.28
+      df: 12
+    - term: 育補助
+      weight: 2
+      z: 3.14
+      df: 18
+    - term: 施行
+      weight: 1
+      z: 2.35
+      df: 15
+    - term: 生育獎勵
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 生育津貼
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 生育補助
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 生育給付
+      weight: 2
+      z: null
+      df: null
+      seed: true
+    - term: 新生兒
+      weight: 1
+      z: null
+      df: null
+      seed: true
+  insurance_premium_subsidy:
+    label: 保險費補助
+    source: mined
+    documents: 4
+    keywords:
+    - term: 保保險費
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 政府主動
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 辦理保險
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 年金保險費
+      weight: 1
+      z: 2.42
+      df: 2
+    - term: 重度或極重
+      weight: 1
+      z: 2.42
+      df: 2
+    - term: 度或極重度
+      weight: 1
+      z: 2.42
+      df: 2
+    - term: 費政
+      weight: 1
+      z: 2.42
+      df: 2
+    - term: 補助事宜
+      weight: 1
+      z: 2.21
+      df: 2
+    - term: 養老
+      weight: 1
+      z: 2.21
+      df: 2
+    - term: 健保費補助
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 保險費補助
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 自付保險費
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 健保保險費
+      weight: 2
+      z: null
+      df: null
+      seed: true
+    - term: 全民健康保險保險費
+      weight: 2
+      z: null
+      df: null
+      seed: true
+    - term: 國民年金保險費
+      weight: 2
+      z: null
+      df: null
+      seed: true
+    - term: 保險費自付額
+      weight: 2
+      z: null
+      df: null
+      seed: true
+    - term: 健保費
+      weight: 1
+      z: null
+      df: null
+      seed: true
+  child_allowance:
+    label: 育兒津貼
+    source: mined
+    documents: 46
+    keywords:
+    - term: 童育兒津貼
+      weight: 4
+      z: 8.7
+      df: 29
+    - term: 歲兒童育兒
+      weight: 4
+      z: 8.7
+      df: 29
+    - term: 兒童育兒津
+      weight: 4
+      z: 8.7
+      df: 29
+    - term: 育有未滿
+      weight: 4
+      z: 8.7
+      df: 28
+    - term: 費安置收容
+      weight: 4
+      z: 8.35
+      df: 25
+    - term: 公費安置收
+      weight: 4
+      z: 8.35
+      df: 25
+    - term: 政府公費安
+      weight: 4
+      z: 8.01
+      df: 24
+    - term: 府公費安置
+      weight: 4
+      z: 8.01
+      df: 24
+    - term: 經政府公費
+      weight: 4
+      z: 7.95
+      df: 24
+    - term: 公共化
+      weight: 4
+      z: 7.92
+      df: 27
+    - term: 未經政府公
+      weight: 4
+      z: 7.72
+      df: 23
+    - term: 未接受公
+      weight: 4
+      z: 7.57
+      df: 24
+    - term: 雙方
+      weight: 4
+      z: 7.39
+      df: 26
+    - term: 名以上子女
+      weight: 4
+      z: 7.28
+      df: 20
+    - term: 兒童戶籍
+      weight: 4
+      z: 7.18
+      df: 19
+    - term: 設戶籍登記
+      weight: 4
+      z: 7.11
+      df: 20
+    - term: 初設戶籍登
+      weight: 4
+      z: 7.11
+      df: 20
+    - term: 未滿二歲兒
+      weight: 3
+      z: 6.97
+      df: 20
+    - term: 滿二歲兒童
+      weight: 3
+      z: 6.97
+      df: 20
+    - term: 公共托育服
+      weight: 3
+      z: 6.9
+      df: 18
+    - term: 共托育服務
+      weight: 3
+      z: 6.9
+      df: 18
+    - term: 我國籍
+      weight: 3
+      z: 6.86
+      df: 18
+    - term: 實際照顧
+      weight: 3
+      z: 6.83
+      df: 22
+    - term: 生登記或初
+      weight: 3
+      z: 6.78
+      df: 19
+    - term: 名子女
+      weight: 3
+      z: 6.75
+      df: 20
+    - term: 育兒津貼
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 幼兒
+      weight: 1
+      z: null
+      df: null
+      seed: true
+    - term: 入國民小學前
+      weight: 2
+      z: null
+      df: null
+      seed: true
+  childcare_subsidy:
+    label: 托育補助
+    source: mined
+    documents: 37
+    keywords:
+    - term: 托嬰中心
+      weight: 4
+      z: 9.4
+      df: 30
+    - term: 托育費用
+      weight: 4
+      z: 8.92
+      df: 28
+    - term: 兒童托育
+      weight: 4
+      z: 8.43
+      df: 27
+    - term: 送托
+      weight: 4
+      z: 8.12
+      df: 23
+    - term: 托育補助
+      weight: 4
+      z: 7.97
+      df: 22
+    - term: 家托育服務
+      weight: 4
+      z: 7.71
+      df: 23
+    - term: 居家托育服
+      weight: 4
+      z: 7.71
+      df: 23
+    - term: 發展遲緩
+      weight: 4
+      z: 7.66
+      df: 25
+    - term: 幼兒
+      weight: 4
+      z: 7.61
+      df: 29
+    - term: 公共化
+      weight: 4
+      z: 7.59
+      df: 25
+    - term: 家托育人員
+      weight: 4
+      z: 7.55
+      df: 22
+    - term: 居家托育人
+      weight: 4
+      z: 7.55
+      df: 22
+    - term: 準公共
+      weight: 4
+      z: 7.45
+      df: 25
+    - term: 歲兒童托育
+      weight: 3
+      z: 6.95
+      df: 17
+    - term: 收托
+      weight: 3
+      z: 6.82
+      df: 18
+    - term: 立托嬰中心
+      weight: 3
+      z: 6.71
+      df: 20
+    - term: 私立托嬰
+      weight: 3
+      z: 6.71
+      df: 20
+    - term: 準公共化
+      weight: 3
+      z: 6.62
+      df: 17
+    - term: 公共化及準
+      weight: 3
+      z: 6.6
+      df: 16
+    - term: 化及準公共
+      weight: 3
+      z: 6.6
+      df: 16
+    - term: 共化及準公
+      weight: 3
+      z: 6.6
+      df: 16
+    - term: 全日托
+      weight: 3
+      z: 6.47
+      df: 15
+    - term: 日間托育
+      weight: 3
+      z: 6.28
+      df: 15
+    - term: 育服務中心
+      weight: 3
+      z: 6.24
+      df: 21
+    - term: 托育費用補
+      weight: 3
+      z: 6.21
+      df: 14
+    - term: 托育
+      weight: 1
+      z: null
+      df: null
+      seed: true
+  parental_leave_allowance:
+    label: 育嬰留停津貼
+    source: mined
+    documents: 5
+    keywords:
+    - term: 留職停薪津
+      weight: 2
+      z: 3.97
+      df: 5
+    - term: 職停薪津貼
+      weight: 2
+      z: 3.97
+      df: 5
+    - term: 育嬰留職停
+      weight: 2
+      z: 3.73
+      df: 5
+    - term: 嬰留職停薪
+      weight: 2
+      z: 3.73
+      df: 5
+    - term: 請領育
+      weight: 2
+      z: 3.61
+      df: 4
+    - term: 就保育嬰留
+      weight: 2
+      z: 3.56
+      df: 4
+    - term: 保育嬰留職
+      weight: 2
+      z: 3.56
+      df: 4
+    - term: 被保險人同
+      weight: 2
+      z: 3.13
+      df: 4
+    - term: 須另行申請
+      weight: 2
+      z: 3.1
+      df: 3
+    - term: 薪資補
+      weight: 2
+      z: 3.1
+      df: 3
+    - term: 政府加
+      weight: 2
+      z: 3.1
+      df: 3
+    - term: 職停薪期間
+      weight: 2
+      z: 3.05
+      df: 3
+    - term: 留職停薪期
+      weight: 2
+      z: 3.05
+      df: 3
+    - term: 無須另行申
+      weight: 2
+      z: 3.05
+      df: 3
+    - term: 保險人同時
+      weight: 1
+      z: 2.79
+      df: 3
+    - term: 合併發給
+      weight: 1
+      z: 2.79
+      df: 3
+    - term: 最後更新日
+      weight: 1
+      z: 2.69
+      df: 4
+    - term: 資補助
+      weight: 1
+      z: 2.61
+      df: 3
+    - term: 居留證明文
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 留證明文件
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 名以上未滿
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 按比例計算
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 需另行檢附
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 項辦理即可
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 用行動電話
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 育嬰留職停薪
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 育嬰
+      weight: 2
+      z: null
+      df: null
+      seed: true
+  emergency_relief:
+    label: 急難救助
+    source: mined
+    documents: 87
+    keywords:
+    - term: 活陷於困境
+      weight: 4
+      z: 11.01
+      df: 49
+    - term: 罹患重
+      weight: 4
+      z: 11.0
+      df: 49
+    - term: 生活陷於困
+      weight: 4
+      z: 10.92
+      df: 49
+    - term: 急難救助
+      weight: 4
+      z: 9.84
+      df: 43
+    - term: 無法工作
+      weight: 4
+      z: 9.59
+      df: 39
+    - term: 致生活陷
+      weight: 4
+      z: 9.36
+      df: 38
+    - term: 失蹤
+      weight: 4
+      z: 9.32
+      df: 61
+    - term: 他原因
+      weight: 4
+      z: 8.58
+      df: 37
+    - term: 死亡
+      weight: 4
+      z: 8.5
+      df: 67
+    - term: 戶內人口
+      weight: 4
+      z: 8.41
+      df: 31
+    - term: 遭受
+      weight: 4
+      z: 8.27
+      df: 33
+    - term: 死亡證明書
+      weight: 4
+      z: 8.26
+      df: 30
+    - term: 失業
+      weight: 4
+      z: 8.08
+      df: 51
+    - term: 變故
+      weight: 4
+      z: 7.84
+      df: 43
+    - term: 救助金
+      weight: 4
+      z: 7.81
+      df: 43
+    - term: 生計
+      weight: 4
+      z: 7.67
+      df: 30
+    - term: 同一事
+      weight: 4
+      z: 7.32
+      df: 28
+    - term: 訪視評估
+      weight: 4
+      z: 7.32
+      df: 29
+    - term: 意外
+      weight: 4
+      z: 7.32
+      df: 29
+    - term: 救助
+      weight: 4
+      z: 7.05
+      df: 73
+    - term: 他因遭
+      weight: 3
+      z: 6.97
+      df: 30
+    - term: 入獄
+      weight: 3
+      z: 6.91
+      df: 33
+    - term: 保險給付
+      weight: 3
+      z: 6.73
+      df: 28
+    - term: 家庭生活
+      weight: 3
+      z: 6.66
+      df: 27
+    - term: 無力
+      weight: 3
+      z: 6.29
+      df: 38
+    - term: 急難
+      weight: 2
+      z: null
+      df: null
+      seed: true
+  elderly_allowance:
+    label: 老人生活津貼
+    source: mined
+    documents: 135
+    keywords:
+    - term: 低收入老人
+      weight: 4
+      z: 14.8
+      df: 95
+    - term: 入老人生活
+      weight: 4
+      z: 13.42
+      df: 82
+    - term: 收入老人生
+      weight: 4
+      z: 13.42
+      df: 82
+    - term: 老人生活津
+      weight: 4
+      z: 12.88
+      df: 81
+    - term: 人生活津貼
+      weight: 4
+      z: 12.85
+      df: 81
+    - term: 年滿
+      weight: 4
+      z: 11.12
+      df: 97
+    - term: 收容安置
+      weight: 4
+      z: 7.51
+      df: 51
+    - term: 老人生活津貼
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 特別照顧津貼
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 中低收入老人
+      weight: 2
+      z: null
+      df: null
+      seed: true
+  elderly_service:
+    label: 老人福利服務
+    source: mined
+    documents: 56
+    keywords:
+    - term: 獨居老人
+      weight: 4
+      z: 7.7
+      df: 23
+    - term: 愛心
+      weight: 3
+      z: 6.38
+      df: 17
+    - term: 照片
+      weight: 2
+      z: 4.04
+      df: 21
+    - term: 老人
+      weight: 1
+      z: 2.89
+      df: 47
+    - term: 免費
+      weight: 1
+      z: 2.37
+      df: 23
+    - term: 年滿
+      weight: 1
+      z: 2.29
+      df: 39
+    - term: 老人福利
+      weight: 2
+      z: null
+      df: null
+      seed: true
+    - term: 收容安置
+      weight: 2
+      z: null
+      df: null
+      seed: true
+  home_care:
+    label: 居家服務
+    source: mined
+    documents: 4
+    keywords:
+    - term: 失能身心障
+      weight: 1
+      z: 2.63
+      df: 3
+    - term: 能身心障礙
+      weight: 1
+      z: 2.63
+      df: 3
+    - term: 家務
+      weight: 1
+      z: 2.63
+      df: 3
+    - term: 協助沐浴
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 務及日
+      weight: 1
+      z: 2.54
+      df: 2
+    - term: 員到宅
+      weight: 1
+      z: 2.42
+      df: 2
+    - term: 歲以上失能
+      weight: 1
+      z: 2.21
+      df: 2
+    - term: 常生活照顧
+      weight: 1
+      z: 2.14
+      df: 3
+    - term: 日常生活照
+      weight: 1
+      z: 2.14
+      df: 3
+    - term: 居家服務
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 居家照顧
+      weight: 2
+      z: null
+      df: null
+      seed: true
+    - term: 照顧服務員
+      weight: 1
+      z: null
+      df: null
+      seed: true
+  day_care:
+    label: 日間照顧
+    source: mined
+    documents: 10
+    keywords:
+    - term: 式日間照顧
+      weight: 2
+      z: 4.26
+      df: 6
+    - term: 社區式日間
+      weight: 2
+      z: 4.26
+      df: 6
+    - term: 區式日間照
+      weight: 2
+      z: 4.26
+      df: 6
+    - term: 休閒活動
+      weight: 2
+      z: 3.97
+      df: 5
+    - term: 休閒
+      weight: 2
+      z: 3.65
+      df: 8
+    - term: 日照
+      weight: 2
+      z: 3.55
+      df: 4
+    - term: 我照顧能力
+      weight: 2
+      z: 3.49
+      df: 4
+    - term: 促進服務
+      weight: 2
+      z: 3.37
+      df: 4
+    - term: 休閒生活
+      weight: 2
+      z: 3.37
+      df: 4
+    - term: 聯誼
+      weight: 2
+      z: 3.37
+      df: 4
+    - term: 人際關係
+      weight: 2
+      z: 3.36
+      df: 4
+    - term: 間照顧服務
+      weight: 2
+      z: 3.27
+      df: 8
+    - term: 日間照顧服
+      weight: 2
+      z: 3.27
+      df: 8
+    - term: 評估核定
+      weight: 2
+      z: 3.22
+      df: 5
+    - term: 詢及轉介服
+      weight: 2
+      z: 3.04
+      df: 3
+    - term: 照顧服務需
+      weight: 2
+      z: 3.04
+      df: 3
+    - term: 培養
+      weight: 2
+      z: 3.04
+      df: 3
+    - term: 有日間照顧
+      weight: 2
+      z: 3.0
+      df: 3
+    - term: 服務內容包
+      weight: 2
+      z: 3.0
+      df: 3
+    - term: 務內容包含
+      weight: 2
+      z: 3.0
+      df: 3
+    - term: 礙者社區式
+      weight: 2
+      z: 3.0
+      df: 3
+    - term: 社交技巧
+      weight: 2
+      z: 3.0
+      df: 3
+    - term: 家屬教育
+      weight: 2
+      z: 3.0
+      df: 3
+    - term: 提供福利
+      weight: 2
+      z: 3.0
+      df: 3
+    - term: 技巧訓練
+      weight: 2
+      z: 3.0
+      df: 3
+    - term: 日間照顧
+      weight: 3
+      z: null
+      df: null
+      seed: true
+  family_care_home:
+    label: 家庭托顧
+    source: mined
+    documents: 9
+    keywords:
+    - term: 庭托顧服務
+      weight: 3
+      z: 5.3
+      df: 9
+    - term: 家庭托顧服
+      weight: 3
+      z: 5.3
+      df: 9
+    - term: 常生活照顧
+      weight: 2
+      z: 4.75
+      df: 7
+    - term: 日常生活照
+      weight: 2
+      z: 4.75
+      df: 7
+    - term: 型住宿機構
+      weight: 2
+      z: 4.58
+      df: 7
+    - term: 活照顧服務
+      weight: 2
+      z: 4.52
+      df: 7
+    - term: 身體照顧服
+      weight: 2
+      z: 4.4
+      df: 7
+    - term: 生活照顧服
+      weight: 2
+      z: 4.4
+      df: 7
+    - term: 教育費
+      weight: 2
+      z: 4.36
+      df: 6
+    - term: 同性質之照
+      weight: 2
+      z: 4.3
+      df: 6
+    - term: 性質之照顧
+      weight: 2
+      z: 4.3
+      df: 6
+    - term: 礙者家庭托
+      weight: 2
+      z: 4.3
+      df: 6
+    - term: 全日型住宿
+      weight: 2
+      z: 4.08
+      df: 7
+    - term: 住宿機構服
+      weight: 2
+      z: 3.96
+      df: 5
+    - term: 助使用日常
+      weight: 2
+      z: 3.96
+      df: 5
+    - term: 使用日常生
+      weight: 2
+      z: 3.96
+      df: 5
+    - term: 協助使用日
+      weight: 2
+      z: 3.96
+      df: 5
+    - term: 器具及其他
+      weight: 2
+      z: 3.96
+      df: 5
+    - term: 用日常生活
+      weight: 2
+      z: 3.96
+      df: 5
+    - term: 日常生活輔
+      weight: 2
+      z: 3.96
+      df: 5
+    - term: 宿機構服務
+      weight: 2
+      z: 3.96
+      df: 5
+    - term: 社區活動
+      weight: 2
+      z: 3.96
+      df: 5
+    - term: 穿換衣服
+      weight: 2
+      z: 3.96
+      df: 5
+    - term: 助參
+      weight: 2
+      z: 3.96
+      df: 5
+    - term: 口腔清潔
+      weight: 2
+      z: 3.91
+      df: 5
+    - term: 家庭托顧
+      weight: 3
+      z: null
+      df: null
+      seed: true
+  transport_service:
+    label: 交通接送
+    source: mined
+    documents: 10
+    keywords:
+    - term: 復康巴士
+      weight: 2
+      z: 4.37
+      df: 6
+    - term: 服務區域
+      weight: 2
+      z: 4.03
+      df: 6
+    - term: 用車
+      weight: 2
+      z: 3.97
+      df: 5
+    - term: 預約
+      weight: 2
+      z: 3.79
+      df: 7
+    - term: 乘客
+      weight: 2
+      z: 3.77
+      df: 5
+    - term: 長照交通接
+      weight: 2
+      z: 3.37
+      df: 4
+    - term: 照交通接送
+      weight: 2
+      z: 3.37
+      df: 4
+    - term: 通接送服務
+      weight: 2
+      z: 3.22
+      df: 5
+    - term: 交通接送服
+      weight: 2
+      z: 3.22
+      df: 5
+    - term: 預約服務
+      weight: 2
+      z: 3.04
+      df: 3
+    - term: 乘車時
+      weight: 2
+      z: 3.04
+      df: 3
+    - term: 計價
+      weight: 2
+      z: 3.04
+      df: 3
+    - term: 日上午
+      weight: 1
+      z: 2.9
+      df: 4
+    - term: 週日
+      weight: 1
+      z: 2.72
+      df: 3
+    - term: 每趟
+      weight: 1
+      z: 2.6
+      df: 4
+    - term: 脊髓損傷
+      weight: 1
+      z: 2.54
+      df: 3
+    - term: 時止
+      weight: 1
+      z: 2.54
+      df: 3
+    - term: 營運
+      weight: 1
+      z: 2.37
+      df: 3
+    - term: 乘車
+      weight: 1
+      z: 2.26
+      df: 5
+    - term: 障礙證明且
+      weight: 1
+      z: 2.2
+      df: 3
+    - term: 善事業基金
+      weight: 1
+      z: 2.2
+      df: 3
+    - term: 慈善事業基
+      weight: 1
+      z: 2.2
+      df: 3
+    - term: 利慈善事業
+      weight: 1
+      z: 2.2
+      df: 3
+    - term: 福利慈善事
+      weight: 1
+      z: 2.2
+      df: 3
+    - term: 經長期照
+      weight: 1
+      z: 2.2
+      df: 3
+    - term: 交通接送
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 接送服務
+      weight: 2
+      z: null
+      df: null
+      seed: true
+  assistive_device:
+    label: 輔具與無障礙
+    source: mined
+    documents: 38
+    keywords:
+    - term: 障礙者輔具
+      weight: 4
+      z: 8.31
+      df: 26
+    - term: 心障礙者輔
+      weight: 4
+      z: 8.31
+      df: 26
+    - term: 購買
+      weight: 4
+      z: 8.01
+      df: 28
+    - term: 評估報告書
+      weight: 4
+      z: 7.78
+      df: 21
+    - term: 輔具補助
+      weight: 4
+      z: 7.35
+      df: 19
+    - term: 具費用補助
+      weight: 4
+      z: 7.31
+      df: 19
+    - term: 輔具費用補
+      weight: 4
+      z: 7.31
+      df: 19
+    - term: 輔具評估報
+      weight: 3
+      z: 6.92
+      df: 17
+    - term: 礙者輔具費
+      weight: 3
+      z: 6.86
+      df: 17
+    - term: 具評估報告
+      weight: 3
+      z: 6.85
+      df: 17
+    - term: 核銷
+      weight: 3
+      z: 6.51
+      df: 23
+    - term: 補助基準表
+      weight: 3
+      z: 6.27
+      df: 15
+    - term: 輔具資源
+      weight: 3
+      z: 6.27
+      df: 15
+    - term: 約廠商
+      weight: 3
+      z: 6.18
+      df: 16
+    - term: 請款
+      weight: 3
+      z: 6.07
+      df: 19
+    - term: 具資源中心
+      weight: 3
+      z: 6.03
+      df: 15
+    - term: 銷請
+      weight: 3
+      z: 5.74
+      df: 12
+    - term: 輔具中心
+      weight: 3
+      z: 5.59
+      df: 12
+    - term: 代償墊付
+      weight: 3
+      z: 5.53
+      df: 12
+    - term: 合約
+      weight: 3
+      z: 5.13
+      df: 15
+    - term: 發票
+      weight: 3
+      z: 5.03
+      df: 12
+    - term: 核定補助
+      weight: 2
+      z: 4.78
+      df: 14
+    - term: 購置
+      weight: 2
+      z: 4.52
+      df: 13
+    - term: 無障礙
+      weight: 2
+      z: 4.43
+      df: 13
+    - term: 公文
+      weight: 2
+      z: 3.73
+      df: 14
+    - term: 輔具
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 無障礙環境改善
+      weight: 2
+      z: null
+      df: null
+      seed: true
+    - term: 居家無障礙
+      weight: 2
+      z: null
+      df: null
+      seed: true
+  respite_care:
+    label: 喘息服務
+    source: mined
+    documents: 13
+    keywords:
+    - term: 就業服務法
+      weight: 3
+      z: 5.92
+      df: 11
+    - term: 喘息服務
+      weight: 3
+      z: 5.81
+      df: 11
+    - term: 照顧服務法
+      weight: 3
+      z: 5.03
+      df: 8
+    - term: 顧服務法第
+      weight: 2
+      z: 4.97
+      df: 8
+    - term: 未聘僱看護
+      weight: 2
+      z: 4.94
+      df: 8
+    - term: 時及短期照
+      weight: 2
+      z: 4.94
+      df: 8
+    - term: 臨時及短期
+      weight: 2
+      z: 4.94
+      df: 8
+    - term: 短期照顧服
+      weight: 2
+      z: 4.76
+      df: 8
+    - term: 體照顧服務
+      weight: 2
+      z: 4.76
+      df: 9
+    - term: 直系姻親
+      weight: 2
+      z: 4.68
+      df: 7
+    - term: 心障礙者臨
+      weight: 2
+      z: 4.63
+      df: 7
+    - term: 障礙者臨時
+      weight: 2
+      z: 4.63
+      df: 7
+    - term: 續達
+      weight: 2
+      z: 4.57
+      df: 10
+    - term: 日間及住宿
+      weight: 2
+      z: 4.54
+      df: 7
+    - term: 間及住宿式
+      weight: 2
+      z: 4.54
+      df: 7
+    - term: 未接受日間
+      weight: 2
+      z: 4.53
+      df: 7
+    - term: 照顧者年滿
+      weight: 2
+      z: 4.53
+      df: 7
+    - term: 社區式
+      weight: 2
+      z: 4.48
+      df: 10
+    - term: 宿式照顧服
+      weight: 2
+      z: 4.44
+      df: 7
+    - term: 極重度身心
+      weight: 2
+      z: 4.33
+      df: 6
+    - term: 外籍看護工
+      weight: 2
+      z: 4.32
+      df: 7
+    - term: 礙證明之身
+      weight: 2
+      z: 4.32
+      df: 7
+    - term: 工有下列情
+      weight: 2
+      z: 4.24
+      df: 6
+    - term: 服務或居家
+      weight: 2
+      z: 4.24
+      df: 6
+    - term: 臨時照顧
+      weight: 2
+      z: 4.24
+      df: 6
+    - term: 喘息
+      weight: 2
+      z: null
+      df: null
+      seed: true
+  meal_service:
+    label: 營養餐飲
+    source: mined
+    documents: 10
+    keywords:
+    - term: 餐飲服務
+      weight: 2
+      z: 4.72
+      df: 7
+    - term: 老人營養
+      weight: 2
+      z: 3.95
+      df: 5
+    - term: 備餐
+      weight: 2
+      z: 3.77
+      df: 6
+    - term: 餐服務
+      weight: 2
+      z: 3.64
+      df: 5
+    - term: 餐食
+      weight: 2
+      z: 3.64
+      df: 5
+    - term: 用餐
+      weight: 2
+      z: 3.55
+      df: 4
+    - term: 營養
+      weight: 2
+      z: 3.08
+      df: 9
+    - term: 生活補助資
+      weight: 2
+      z: 3.05
+      df: 4
+    - term: 活補助資格
+      weight: 2
+      z: 3.05
+      df: 4
+    - term: 期照顧十年
+      weight: 2
+      z: 3.04
+      df: 3
+    - term: 照顧十年計
+      weight: 2
+      z: 3.04
+      df: 3
+    - term: 顧十年計畫
+      weight: 2
+      z: 3.04
+      df: 3
+    - term: 無法外出
+      weight: 2
+      z: 3.04
+      df: 3
+    - term: 提供餐
+      weight: 2
+      z: 3.04
+      df: 3
+    - term: 餐餐
+      weight: 2
+      z: 3.04
+      df: 3
+    - term: 晚餐
+      weight: 2
+      z: 3.04
+      df: 3
+    - term: 第二款津貼
+      weight: 2
+      z: 3.0
+      df: 3
+    - term: 性日常生活
+      weight: 2
+      z: 3.0
+      df: 3
+    - term: 具性日常生
+      weight: 2
+      z: 3.0
+      df: 3
+    - term: 工具性日常
+      weight: 2
+      z: 3.0
+      df: 3
+    - term: 項第二款津
+      weight: 2
+      z: 3.0
+      df: 3
+    - term: 且獨居
+      weight: 2
+      z: 3.0
+      df: 3
+    - term: 失能原住民
+      weight: 1
+      z: 2.9
+      df: 3
+    - term: 心評估符合
+      weight: 1
+      z: 2.9
+      df: 3
+    - term: 合領取中低
+      weight: 1
+      z: 2.9
+      df: 3
+    - term: 營養餐飲
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 送餐
+      weight: 2
+      z: null
+      df: null
+      seed: true
+  institutional_care_subsidy:
+    label: 機構住宿補助
+    source: mined
+    documents: 25
+    keywords:
+    - term: 入住
+      weight: 3
+      z: 6.2
+      df: 21
+    - term: 失能老人
+      weight: 3
+      z: 6.1
+      df: 13
+    - term: 護理之家
+      weight: 3
+      z: 5.93
+      df: 16
+    - term: 入住機構
+      weight: 3
+      z: 5.92
+      df: 12
+    - term: 重度失能
+      weight: 3
+      z: 5.89
+      df: 16
+    - term: 安置費
+      weight: 3
+      z: 5.89
+      df: 12
+    - term: 住宿式服務
+      weight: 3
+      z: 5.34
+      df: 12
+    - term: 人福利機構
+      weight: 3
+      z: 5.09
+      df: 10
+    - term: 老人福利機
+      weight: 3
+      z: 5.09
+      df: 10
+    - term: 安養
+      weight: 3
+      z: 5.09
+      df: 10
+    - term: 務機構使用
+      weight: 3
+      z: 5.06
+      df: 9
+    - term: 低收入失能
+      weight: 3
+      z: 5.06
+      df: 9
+    - term: 服務機構使
+      weight: 3
+      z: 5.06
+      df: 9
+    - term: 期照顧機構
+      weight: 2
+      z: 4.84
+      df: 9
+    - term: 長期照顧機
+      weight: 2
+      z: 4.84
+      df: 9
+    - term: 養護
+      weight: 2
+      z: 4.82
+      df: 14
+    - term: 月實際
+      weight: 2
+      z: 4.8
+      df: 8
+    - term: 人機
+      weight: 2
+      z: 4.8
+      df: 8
+    - term: 進住
+      weight: 2
+      z: 4.72
+      df: 8
+    - term: 長期照顧
+      weight: 2
+      z: 4.68
+      df: 20
+    - term: 顧服務機構
+      weight: 2
+      z: 4.63
+      df: 8
+    - term: 照顧服務機
+      weight: 2
+      z: 4.63
+      df: 8
+    - term: 式服務機構
+      weight: 2
+      z: 4.38
+      df: 10
+    - term: 宿式服務機
+      weight: 2
+      z: 4.38
+      df: 10
+    - term: 構使用者補
+      weight: 2
+      z: 4.24
+      df: 9
+    - term: 住宿式機構
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 機構收容安置
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 機構住宿
+      weight: 2
+      z: null
+      df: null
+      seed: true
+  ltc_general:
+    label: 長照服務總覽
+    source: mined
+    documents: 3
+    keywords:
+    - term: 顧及專業服
+      weight: 1
+      z: 2.55
+      df: 2
+    - term: 照顧及專業
+      weight: 1
+      z: 2.55
+      df: 2
+    - term: 身心失能
+      weight: 1
+      z: 2.55
+      df: 2
+    - term: 屬長
+      weight: 1
+      z: 2.55
+      df: 2
+    - term: 合長照
+      weight: 1
+      z: 2.43
+      df: 2
+    - term: 長照服務
+      weight: 1
+      z: 2.01
+      df: 3
+    - term: 符合長
+      weight: 1
+      z: 2.01
+      df: 2
+    - term: 長期照顧
+      weight: 1
+      z: null
+      df: null
+      seed: true
+    - term: 給付及支付
+      weight: 2
+      z: null
+      df: null
+      seed: true
+    - term: 1966
+      weight: 1
+      z: null
+      df: null
+      seed: true
+  disability_living_allowance:
+    label: 身心障礙者生活補助
+    source: mined
+    documents: 21
+    keywords:
+    - term: 府補助收容
+      weight: 3
+      z: 6.06
+      df: 12
+    - term: 政府補助收
+      weight: 3
+      z: 6.04
+      df: 12
+    - term: 每增加
+      weight: 3
+      z: 5.97
+      df: 16
+    - term: 增加新臺幣
+      weight: 3
+      z: 5.88
+      df: 13
+    - term: 經政府補助
+      weight: 3
+      z: 5.78
+      df: 11
+    - term: 安置於機構
+      weight: 3
+      z: 5.57
+      df: 11
+    - term: 時為新臺幣
+      weight: 3
+      z: 5.48
+      df: 10
+    - term: 人時為新臺
+      weight: 3
+      z: 5.48
+      df: 10
+    - term: 就養金
+      weight: 3
+      z: 5.36
+      df: 11
+    - term: 金及有價證
+      weight: 3
+      z: 5.27
+      df: 10
+    - term: 款本金及有
+      weight: 3
+      z: 5.27
+      df: 10
+    - term: 且未超過臺
+      weight: 3
+      z: 5.27
+      df: 14
+    - term: 全日住宿式
+      weight: 3
+      z: 5.25
+      df: 11
+    - term: 入應計算人
+      weight: 3
+      z: 5.2
+      df: 9
+    - term: 計不得超過
+      weight: 3
+      z: 5.15
+      df: 9
+    - term: 有土地及房
+      weight: 3
+      z: 5.12
+      df: 9
+    - term: 能擇一領取
+      weight: 3
+      z: 5.12
+      df: 9
+    - term: 土地及房屋
+      weight: 3
+      z: 5.02
+      df: 14
+    - term: 住宿式服務
+      weight: 2
+      z: 4.97
+      df: 11
+    - term: 夜間式或全
+      weight: 2
+      z: 4.88
+      df: 9
+    - term: 間式或全日
+      weight: 2
+      z: 4.88
+      df: 9
+    - term: 未經政府補
+      weight: 2
+      z: 4.88
+      df: 9
+    - term: 式或全日住
+      weight: 2
+      z: 4.88
+      df: 9
+    - term: 地及房屋價
+      weight: 2
+      z: 4.88
+      df: 12
+    - term: 補助收容安
+      weight: 2
+      z: 4.88
+      df: 12
+    - term: 身心障礙者生活補助
+      weight: 4
+      z: null
+      df: null
+      seed: true
+    - term: 生活補助費
+      weight: 2
+      z: null
+      df: null
+      seed: true
+    - term: 身心障礙
+      weight: 1
+      z: null
+      df: null
+      seed: true
+  disability_assistive_device:
+    label: 身心障礙輔具補助
+    source: seed
+    documents: 0
+    keywords:
+    - term: 身心障礙者輔具
+      weight: 4
+      z: null
+      df: null
+      seed: true
+    - term: 輔具費用補助
+      weight: 4
+      z: null
+      df: null
+      seed: true
+  disability_care_subsidy:
+    label: 身心障礙照顧補助
+    source: mined
+    documents: 29
+    keywords:
+    - term: 顧費用補助
+      weight: 4
+      z: 7.56
+      df: 25
+    - term: 照顧費用補
+      weight: 4
+      z: 7.56
+      df: 25
+    - term: 障礙者日間
+      weight: 4
+      z: 7.33
+      df: 23
+    - term: 心障礙者日
+      weight: 4
+      z: 7.26
+      df: 23
+    - term: 顧及住宿式
+      weight: 4
+      z: 7.19
+      df: 22
+    - term: 照顧及住宿
+      weight: 4
+      z: 7.12
+      df: 22
+    - term: 間照顧及住
+      weight: 4
+      z: 7.12
+      df: 22
+    - term: 礙者日間照
+      weight: 3
+      z: 6.75
+      df: 21
+    - term: 宿式照顧費
+      weight: 3
+      z: 6.35
+      df: 22
+    - term: 式照顧費用
+      weight: 3
+      z: 6.35
+      df: 22
+    - term: 住宿式照顧
+      weight: 3
+      z: 6.29
+      df: 24
+    - term: 障礙福利機
+      weight: 3
+      z: 5.92
+      df: 14
+    - term: 礙福利機構
+      weight: 3
+      z: 5.92
+      df: 14
+    - term: 日間照顧
+      weight: 2
+      z: 4.56
+      df: 24
+    - term: 護理之家
+      weight: 2
+      z: 4.04
+      df: 12
+    - term: 相同性質
+      weight: 1
+      z: 2.9
+      df: 9
+    - term: 入住
+      weight: 1
+      z: 2.83
+      df: 13
+    - term: 身心障礙福
+      weight: 1
+      z: 2.67
+      df: 17
+    - term: 心障礙福利
+      weight: 1
+      z: 2.67
+      df: 17
+    - term: 身心障礙者日間照顧
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 住宿式照顧費用
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 照顧費用補助
+      weight: 2
+      z: null
+      df: null
+      seed: true
+  disability_other:
+    label: 身心障礙其他福利
+    source: mined
+    documents: 89
+    keywords:
+    - term: 障礙福利科
+      weight: 3
+      z: 6.6
+      df: 28
+    - term: 身心障礙福
+      weight: 3
+      z: 5.43
+      df: 32
+    - term: 心障礙福利
+      weight: 3
+      z: 5.43
+      df: 32
+    - term: 身心障礙證
+      weight: 2
+      z: 4.81
+      df: 62
+    - term: 心障礙證明
+      weight: 2
+      z: 4.61
+      df: 61
+    - term: 有身心障礙
+      weight: 2
+      z: 4.37
+      df: 49
+    - term: 領有身心障
+      weight: 2
+      z: 4.33
+      df: 45
+    - term: 身心障礙者
+      weight: 1
+      z: null
+      df: null
+      seed: true
+    - term: 福利
+      weight: 1
+      z: null
+      df: null
+      seed: true
+  unemployment_benefit:
+    label: 失業給付
+    source: seed
+    documents: 2
+    keywords:
+    - term: 失業給付
+      weight: 5
+      z: null
+      df: null
+      seed: true
+    - term: 提早就業獎助津貼
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 失業認定
+      weight: 2
+      z: null
+      df: null
+      seed: true
+  training_allowance:
+    label: 職業訓練生活津貼
+    source: seed
+    documents: 1
+    keywords:
+    - term: 職業訓練生活津貼
+      weight: 5
+      z: null
+      df: null
+      seed: true
+    - term: 職業訓練
+      weight: 2
+      z: null
+      df: null
+      seed: true
+    - term: 職訓
+      weight: 2
+      z: null
+      df: null
+      seed: true
+  employment_incentive:
+    label: 就業促進津貼
+    source: mined
+    documents: 24
+    keywords:
+    - term: 檢核
+      weight: 4
+      z: 8.25
+      df: 23
+    - term: 適用對象
+      weight: 4
+      z: 8.05
+      df: 21
+    - term: 服務機構辦
+      weight: 4
+      z: 7.93
+      df: 20
+    - term: 務機構辦理
+      weight: 4
+      z: 7.93
+      df: 20
+    - term: 法令規定
+      weight: 4
+      z: 7.89
+      df: 21
+    - term: 推介
+      weight: 4
+      z: 7.88
+      df: 20
+    - term: 公立就業服
+      weight: 4
+      z: 7.84
+      df: 20
+    - term: 相關連結
+      weight: 4
+      z: 7.8
+      df: 23
+    - term: 業服務機構
+      weight: 4
+      z: 7.79
+      df: 20
+    - term: 立就業服務
+      weight: 4
+      z: 7.79
+      df: 20
+    - term: 就業服務機
+      weight: 4
+      z: 7.79
+      df: 20
+    - term: 理求職登記
+      weight: 4
+      z: 7.7
+      df: 19
+    - term: 機構辦理求
+      weight: 4
+      z: 7.7
+      df: 19
+    - term: 辦理求職登
+      weight: 4
+      z: 7.7
+      df: 19
+    - term: 構辦理求職
+      weight: 4
+      z: 7.7
+      df: 19
+    - term: 方式及申請
+      weight: 4
+      z: 7.68
+      df: 19
+    - term: 雇主
+      weight: 4
+      z: 7.67
+      df: 19
+    - term: 給付標準
+      weight: 4
+      z: 7.63
+      df: 19
+    - term: 分署
+      weight: 4
+      z: 7.48
+      df: 18
+    - term: 向公立就業
+      weight: 4
+      z: 7.42
+      df: 18
+    - term: 受僱
+      weight: 4
+      z: 7.37
+      df: 18
+    - term: 併領
+      weight: 4
+      z: 7.34
+      df: 18
+    - term: 實施辦法
+      weight: 4
+      z: 7.24
+      df: 17
+    - term: 雲嘉
+      weight: 4
+      z: 7.24
+      df: 17
+    - term: 金馬
+      weight: 4
+      z: 7.24
+      df: 17
+    - term: 跨域就業
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 求職交通補助
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 臨工津貼
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 就業獎勵
+      weight: 2
+      z: null
+      df: null
+      seed: true
+    - term: 僱用安定
+      weight: 2
+      z: null
+      df: null
+      seed: true
+  employer_subsidy:
+    label: 雇主補助
+    source: mined
+    documents: 2
+    keywords:
+    - term: 招募
+      weight: 1
+      z: 2.02
+      df: 2
+    - term: 僱用獎助
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 減班休息
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 雇主
+      weight: 1
+      z: null
+      df: null
+      seed: true
+  worker_welfare:
+    label: 勞工福利
+    source: seed
+    documents: 0
+    keywords:
+    - term: 勞工子女
+      weight: 4
+      z: null
+      df: null
+      seed: true
+    - term: 職工福利
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 失業勞工
+      weight: 3
+      z: null
+      df: null
+      seed: true
+  rental_subsidy:
+    label: 租金補貼
+    source: mined
+    documents: 28
+    keywords:
+    - term: 房屋租金補
+      weight: 4
+      z: 8.25
+      df: 24
+    - term: 租賃房屋
+      weight: 4
+      z: 8.16
+      df: 22
+    - term: 平價
+      weight: 4
+      z: 7.82
+      df: 20
+    - term: 無自有住宅
+      weight: 4
+      z: 7.53
+      df: 19
+    - term: 租金補貼
+      weight: 4
+      z: 7.34
+      df: 18
+    - term: 貸款
+      weight: 3
+      z: 6.92
+      df: 24
+    - term: 均無自有住
+      weight: 3
+      z: 6.61
+      df: 16
+    - term: 礙者房屋租
+      weight: 3
+      z: 6.05
+      df: 13
+    - term: 心障礙者房
+      weight: 3
+      z: 6.05
+      df: 13
+    - term: 障礙者房屋
+      weight: 3
+      z: 6.05
+      df: 13
+    - term: 屋租金補助
+      weight: 3
+      z: 5.96
+      df: 17
+    - term: 租賃房屋租
+      weight: 3
+      z: 5.84
+      df: 12
+    - term: 府補助住宿
+      weight: 3
+      z: 5.73
+      df: 15
+    - term: 賃房屋租金
+      weight: 3
+      z: 5.67
+      df: 12
+    - term: 偶及其戶籍
+      weight: 3
+      z: 5.67
+      df: 12
+    - term: 配偶及其戶
+      weight: 3
+      z: 5.67
+      df: 12
+    - term: 未使用
+      weight: 3
+      z: 5.63
+      df: 12
+    - term: 屋租金補貼
+      weight: 3
+      z: 5.61
+      df: 11
+    - term: 政府補助住
+      weight: 3
+      z: 5.6
+      df: 14
+    - term: 房屋租賃契
+      weight: 3
+      z: 5.47
+      df: 11
+    - term: 屋租賃契約
+      weight: 3
+      z: 5.47
+      df: 11
+    - term: 現未接受政
+      weight: 3
+      z: 5.47
+      df: 11
+    - term: 戶籍內之直
+      weight: 3
+      z: 5.47
+      df: 11
+    - term: 內之直系親
+      weight: 3
+      z: 5.47
+      df: 11
+    - term: 籍內之直系
+      weight: 3
+      z: 5.47
+      df: 11
+    - term: 租金
+      weight: 1
+      z: null
+      df: null
+      seed: true
+    - term: 租屋
+      weight: 1
+      z: null
+      df: null
+      seed: true
+  housing_loan_subsidy:
+    label: 住宅貸款利息補貼
+    source: seed
+    documents: 1
+    keywords:
+    - term: 利息補貼
+      weight: 4
+      z: null
+      df: null
+      seed: true
+    - term: 購置住宅
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 修繕住宅
+      weight: 3
+      z: null
+      df: null
+      seed: true
+  social_housing:
+    label: 社會住宅
+    source: seed
+    documents: 0
+    keywords:
+    - term: 社會住宅
+      weight: 5
+      z: null
+      df: null
+      seed: true
+    - term: 包租代管
+      weight: 4
+      z: null
+      df: null
+      seed: true
+  medical_subsidy:
+    label: 醫療費用補助
+    source: mined
+    documents: 17
+    keywords:
+    - term: 見疾病或領
+      weight: 3
+      z: 5.26
+      df: 9
+    - term: 病或領有全
+      weight: 3
+      z: 5.26
+      df: 9
+    - term: 疾病或領有
+      weight: 3
+      z: 5.26
+      df: 9
+    - term: 醫療行
+      weight: 3
+      z: 5.23
+      df: 9
+    - term: 公告之罕見
+      weight: 3
+      z: 5.16
+      df: 9
+    - term: 告之罕見疾
+      weight: 3
+      z: 5.16
+      df: 9
+    - term: 險重大傷病
+      weight: 3
+      z: 5.16
+      df: 9
+    - term: 保險重大傷
+      weight: 3
+      z: 5.16
+      df: 9
+    - term: 康保險重大
+      weight: 3
+      z: 5.16
+      df: 9
+    - term: 領有全民健
+      weight: 3
+      z: 5.08
+      df: 9
+    - term: 健康保險重
+      weight: 3
+      z: 5.08
+      df: 9
+    - term: 有全民健康
+      weight: 3
+      z: 5.08
+      df: 9
+    - term: 早產兒
+      weight: 3
+      z: 5.08
+      df: 9
+    - term: 童及少年醫
+      weight: 2
+      z: 4.87
+      df: 10
+    - term: 條例第九條
+      weight: 2
+      z: 4.87
+      df: 8
+    - term: 例第九條規
+      weight: 2
+      z: 4.87
+      df: 8
+    - term: 家庭之兒童
+      weight: 2
+      z: 4.78
+      df: 8
+    - term: 行負擔之住
+      weight: 2
+      z: 4.78
+      df: 8
+    - term: 負擔之住院
+      weight: 2
+      z: 4.78
+      df: 8
+    - term: 住院費用
+      weight: 2
+      z: 4.78
+      df: 8
+    - term: 第九條規定
+      weight: 2
+      z: 4.68
+      df: 8
+    - term: 保護之兒童
+      weight: 2
+      z: 4.62
+      df: 7
+    - term: 病證明之兒
+      weight: 2
+      z: 4.62
+      df: 7
+    - term: 評估有必要
+      weight: 2
+      z: 4.57
+      df: 8
+    - term: 有補助必要
+      weight: 2
+      z: 4.56
+      df: 7
+    - term: 醫療補助
+      weight: 3
+      z: null
+      df: null
+      seed: true
+    - term: 醫療費用
+      weight: 2
+      z: null
+      df: null
+      seed: true
+    - term: 住院看護
+      weight: 2
+      z: null
+      df: null
+      seed: true
+    - term: 傷病醫療
+      weight: 2
+      z: null
+      df: null
+      seed: true
+  health_service:
+    label: 健康服務
+    source: seed
+    documents: 1
+    keywords:
+    - term: 心理諮商
+      weight: 4
+      z: null
+      df: null
+      seed: true
+    - term: 健康檢查
+      weight: 3
+      z: null
+      df: null
+      seed: true

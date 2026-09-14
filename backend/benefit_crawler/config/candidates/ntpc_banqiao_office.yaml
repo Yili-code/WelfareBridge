@@ -1,0 +1,33 @@
+# 新北市板橋區公所（新北市各區公所共用樣板：home.jsp?id=<16 hex>）
+# 社會課的方案說明不是 HTML 內文，而是「常見問題 > 社會福利業務」清單裡直接連到的 PDF（問答表格式，含資格／金額／應備文件）
+#   清單頁：home.jsp?id=cde22cf69925c531（&pagesize=100 可一頁列全）；PDF 網址型態：/uploaddowndoc?file=banqiao02/<yyyymmddhhmmss>0.pdf&filedisplay=…&flag=doc
+#   HTML 內容頁（home.jsp?id=…&act=…&dataserno=…）多半只有附件清單，沒有內文
+id: ntpc_banqiao_office
+name: 新北市板橋區公所 — 社會課受理的補助與救助
+organization: 新北市板橋區公所
+provider_type: township
+source_type: government_site
+base_url: https://www.banqiao.ntpc.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [新北市板橋區公所, 板橋區公所]
+data_confidence: 95
+enabled: true
+domains: [social_welfare, disability]
+content_selectors: ["#content_text"]
+pages:
+  - {url: "https://www.banqiao.ntpc.gov.tw/uploaddowndoc?file=banqiao02/202304261042480.pdf&filedisplay=0%E8%87%B32%E6%AD%B2%E8%82%B2%E5%85%92%E6%B4%A5%E8%B2%BC.pdf&flag=doc", title: 育有未滿二歲兒童育兒津貼, format: pdf, seed_category: child_allowance}
+  - {url: "https://www.banqiao.ntpc.gov.tw/uploaddowndoc?file=banqiao02/202502181029590.pdf&filedisplay=20250218-01.pdf&flag=doc", title: 2至未滿5歲育兒津貼及5歲至入國民小學前幼兒就學補助, format: pdf, seed_category: child_allowance}
+  - {url: "https://www.banqiao.ntpc.gov.tw/uploaddowndoc?file=banqiao02/202304261515550.pdf&filedisplay=%E4%BD%8E%E6%94%B6%E5%85%A5%E6%88%B6%E7%94%A2%E5%A9%A6%E7%94%9F%E8%82%B2%E5%8F%8A%E7%87%9F%E9%A4%8A%E8%A3%9C%E5%8A%A9.pdf&flag=doc", title: 低收入戶產婦生育及營養補助, format: pdf, seed_category: child_allowance}
+  - {url: "https://www.banqiao.ntpc.gov.tw/uploaddowndoc?file=banqiao02/202304251633310.pdf&filedisplay=%E5%A5%BD%E5%AD%95%E5%B0%88%E8%BB%8A%E8%BB%8A%E8%B3%87%E8%A3%9C%E8%B2%BC.pdf&flag=doc", title: 好孕專車車資補貼, format: pdf, seed_category: ""}
+  - {url: "https://www.banqiao.ntpc.gov.tw/uploaddowndoc?file=banqiao02/202304251640020.pdf&filedisplay=%E5%BC%B1%E5%8B%A2%E5%85%92%E5%B0%91.pdf&flag=doc", title: 弱勢兒童及少年生活扶助, format: pdf, skip: true, skip_reason: PDF 只有兩題問答（健保費、其他福利），沒有完整申請資格（410 字）}
+  - {url: "https://www.banqiao.ntpc.gov.tw/uploaddowndoc?file=banqiao02/202504151521280.pdf&filedisplay=20250415-02.pdf&flag=doc", title: 低收入戶申請資格與補助, format: pdf, seed_category: low_income_allowance}
+  - {url: "https://www.banqiao.ntpc.gov.tw/uploaddowndoc?file=banqiao02/202304251640520.pdf&filedisplay=%E7%89%B9%E6%AE%8A%E5%A2%83%E9%81%87%E5%AE%B6%E5%BA%AD%E7%9A%84%E7%9B%B8%E9%97%9C%E7%A6%8F%E5%88%A9.pdf&flag=doc", title: 特殊境遇家庭的相關福利, format: pdf, seed_category: special_circumstances_aid}
+  - {url: "https://www.banqiao.ntpc.gov.tw/uploaddowndoc?file=banqiao02/202504111724270.pdf&filedisplay=20250411-16.pdf&flag=doc", title: 中低收入老人生活津貼, format: pdf, seed_category: elderly_allowance}
+  - {url: "https://www.banqiao.ntpc.gov.tw/uploaddowndoc?file=banqiao02/202305010858500.pdf&filedisplay=%E6%80%A5%E9%9B%A3%E6%95%91%E5%8A%A9%E8%B3%87%E6%BA%90.pdf&flag=doc", title: 急難救助, format: pdf, seed_category: emergency_relief}
+  - {url: "https://www.banqiao.ntpc.gov.tw/uploaddowndoc?file=banqiao02/202305010857450.pdf&filedisplay=%E5%B8%82%E6%B0%91%E6%84%8F%E5%A4%96%E6%95%91%E5%8A%A9.pdf&flag=doc", title: 市民意外救助, format: pdf, seed_category: emergency_relief}
+  - {url: "https://www.banqiao.ntpc.gov.tw/uploaddowndoc?dis=banqiao02&file=banqiao02/202305010900060.pdf&filedisplay=%E6%80%A5%E9%9B%A3%E7%B4%93%E5%9B%B0%E5%AF%A6%E6%96%BD%E6%96%B9%E6%A1%88.pdf&flag=doc", title: 強化社會安全網-急難紓困實施方案, format: pdf, skip: true, skip_reason: PDF 只有服務對象與申請程序、沒有給付金額（433 字），內容不足以成為一筆方案}
+  - {url: "https://www.banqiao.ntpc.gov.tw/uploaddowndoc?file=banqiao02/202304251638320.pdf&filedisplay=%E8%BA%AB%E5%BF%83%E9%9A%9C%E7%A4%99%E8%80%85%E7%A6%8F%E5%88%A9.pdf&flag=doc", title: 身心障礙者生活補助及走失手鍊, format: pdf, seed_category: disability_living_allowance}
+  - {url: "https://www.banqiao.ntpc.gov.tw/uploaddowndoc?file=banqiao02/202304251637460.pdf&filedisplay=%E8%BA%AB%E5%BF%83%E9%9A%9C%E7%A4%99%E8%80%85%E6%88%BF%E5%B1%8B%E7%A7%9F%E9%87%91%E8%A3%9C%E8%B2%BC.pdf&flag=doc", title: 身心障礙者房屋租金補貼, format: pdf, seed_category: rental_subsidy}
+  - {url: "https://www.banqiao.ntpc.gov.tw/home.jsp?id=626b55e7122050f7", title: 國民年金保險費補助（所得未達一定標準）, seed_category: ""}
+  - {url: "https://www.banqiao.ntpc.gov.tw/home.jsp?id=cde22cf69925c531&pagesize=100&page=1", title: 社會福利業務（常見問題清單）, skip: true, skip_reason: 目錄頁：17 筆社福業務清單，各項目直接連到 PDF，方案內容已分別列在 pages}
+  - {url: "https://www.banqiao.ntpc.gov.tw/home.jsp?id=a1889b4d7b31ee0e", title: 板橋區社會福利表格下載區, skip: true, skip_reason: 只有申請表單下載，沒有方案內文}

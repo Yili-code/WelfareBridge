@@ -1,0 +1,36 @@
+id: kaohsiung_sanmin_office
+name: 高雄市三民區公所 — 社會課受理的補助與救助
+organization: 高雄市三民區公所
+provider_type: township
+source_type: government_site
+base_url: https://smd.kcg.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [三民區公所]
+data_confidence: 100
+enabled: true
+domains: [social_welfare, disability]
+# 高雄市各區公所共用樣板（高雄市政府 CMS，與臺北 CCMS 同一家系）。網址型態：
+#   cp.aspx?n=<單元>[&s=<子頁>]                    課室介紹等靜態頁（主內容 #ContentPlaceHolder1_data_midlle_cp）
+#   News.aspx?n=<單元>&sms=<子單元>[&page=N]        清單頁（單一窗口服務事項、表單下載、常見問答、申請案件作業流程圖…）
+#   News_Content.aspx?n=<單元>&sms=<子單元>&s=<文章>  內容頁（主內容 #data_midlle；#content_middle 會多帶麵包屑與「回上一頁」）
+#   Content_List.aspx?n=<單元>                        分類目錄頁（只有選單）
+# <title> 格式「三民區公所-<頁名>」；內文標題在 .data_midlle_news_box01 dt。
+# 三民區公所真正寫出資格＋給付＋申請方式的 HTML 頁只有「單一窗口服務事項」的老人健保費補助與「表單下載」的急難救助須知；
+# 「申請案件作業流程圖」各頁只有一句公文流程、「表單下載」的各項須知只有附件、社政業務申辦頁只是業務清單；
+# 各方案的金額與資格條件都寫在「常見問答(FAQ)／社政業務」的 Q: 頁（收錄政策排除 FAQ，故只列 skip 供參考）。
+content_selectors: ["#data_midlle", "#ContentPlaceHolder1_data_midlle_cp", "#content_middle"]
+pages:
+  # 單一窗口服務事項（n=69D083FFFA8AF09C&sms=AB96D01E0E4055FD）
+  - {url: "https://smd.kcg.gov.tw/News_Content.aspx?n=69D083FFFA8AF09C&sms=AB96D01E0E4055FD&s=71E6645E7D7D6DAE", title: 全民健保老人健保費自付額補助, seed_category: elderly_allowance}
+  # 表單下載（n=1EF1FA5ED5ECF95F&sms=2E59065EFDA66C87）裡唯一有內文的須知
+  - {url: "https://smd.kcg.gov.tw/News_Content.aspx?n=1EF1FA5ED5ECF95F&sms=2E59065EFDA66C87&s=CD0F7F0FED3179B6", title: 高雄市急難救助（急難救助須知）, seed_category: emergency_relief}
+  # 以下為抓過但不收的頁面
+  - {url: "https://smd.kcg.gov.tw/News_Content.aspx?n=2E0126E9F93BE8BE&sms=A8E9528272738F2D&s=CC055889A4EF8A63", title: 社政業務申辦, skip: true, skip_reason: 只是社會課受理業務名稱清單加一個應備書表附件，沒有任何方案的資格與給付}
+  - {url: "https://smd.kcg.gov.tw/cp.aspx?n=EA9D0A1D49312505&s=C62EFA0AA57DF971", title: 社會課連絡電話及服務項目, skip: true, skip_reason: 課室分機與業務職掌表，不是方案頁}
+  - {url: "https://smd.kcg.gov.tw/News_Content.aspx?n=293134A590DD6DED&sms=0387D78EF7226EF1&s=BA1CDED32208B363", title: 低收入戶申請（作業流程圖）, skip: true, skip_reason: 「申請案件作業流程圖／社會課」9 頁都只有一句公文流程（由里幹事送社會課審核、課長決行），沒有資格與給付}
+  - {url: "https://smd.kcg.gov.tw/News_Content.aspx?n=1EF1FA5ED5ECF95F&sms=2E59065EFDA66C87&s=4175C3869A8854E6", title: 114年身心障礙者生活補助須知, skip: true, skip_reason: 頁面只有附件連結（須知在 PDF／ODT 裡），沒有內文；同類還有 114 年低收入戶生活補助、中低收入戶資格認定、中低收入老人生活津貼、弱勢單親家庭子女生活補助須知}
+  - {url: "https://smd.kcg.gov.tw/News_Content.aspx?n=1EF1FA5ED5ECF95F&sms=2E59065EFDA66C87&s=AC316E54D7896ED3", title: 2-5歲育兒津貼申請表, skip: true, skip_reason: 只有申請表附件，沒有方案內文；育兒津貼方案頁已由 kaohsiung_sw 收錄}
+  - {url: "https://smd.kcg.gov.tw/News_Content.aspx?n=2ADC1F007BB59AFE&sms=F5738A5DB8E5BD32&s=1F5B272CB6C980D1", title: "Q:申請急難救助之發放標準為何？", skip: true, skip_reason: 常見問答(FAQ)頁，收錄政策排除；內容其實有各項急難救助金額（2萬／1.5萬／6千…）與急難紓困對象}
+  - {url: "https://smd.kcg.gov.tw/News_Content.aspx?n=2ADC1F007BB59AFE&sms=F5738A5DB8E5BD32&s=42F9AABAB44B1377", title: "Q:中低收入老人生活津貼補助標準？", skip: true, skip_reason: 常見問答(FAQ)頁，收錄政策排除；內容有補助金額 8,329／4,164 元}
+  - {url: "https://smd.kcg.gov.tw/News_Content.aspx?n=2ADC1F007BB59AFE&sms=F5738A5DB8E5BD32&s=DE50EBF705E309B2", title: "Q:身心障礙者生活補助標準？", skip: true, skip_reason: 常見問答(FAQ)頁，收錄政策排除；內容有補助金額 5,065／3,772／8,836 元}
+  - {url: "https://smd.kcg.gov.tw/News_Content.aspx?n=2ADC1F007BB59AFE&sms=F5738A5DB8E5BD32&s=EC31F648EE834137", title: "Q:災害救助之對象、種類、核發標準及應備文件？", skip: true, skip_reason: 常見問答(FAQ)頁，收錄政策排除；內容有完整的災害救助對象、種類與金額}

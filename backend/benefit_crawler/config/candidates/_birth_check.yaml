@@ -1,0 +1,23 @@
+sources:
+  - id: _birth_check_tainan
+    name: 檢查 — 臺南市生育獎勵金（民政局）
+    organization: 臺南市政府社會局
+    provider_type: local_government
+    base_url: https://sab.tainan.gov.tw/
+    crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+    expected_title_keywords: [臺南市政府社會局]
+    domains: [social_welfare]
+    content_selectors: ["#CCMS_Content", "#base-content"]
+    pages:
+      - {url: "https://people.tainan.gov.tw/cp.aspx?n=32018", title: 臺南市生育獎勵金, seed_category: birth_incentive, organization: 臺南市政府民政局}
+  - id: _birth_check_hsinchu
+    name: 檢查 — 新竹市生育津貼（民政處）
+    organization: 新竹市政府社會處
+    provider_type: local_government
+    base_url: https://society.hccg.gov.tw/
+    crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+    expected_title_keywords: [新竹市政府社會處]
+    domains: [social_welfare]
+    content_selectors: ["#fontcontent"]
+    pages:
+      - {url: "https://dep-civil.hccg.gov.tw/ch/home.jsp?id=272&parentpath=0,4,51", title: 新竹市生育津貼, seed_category: birth_incentive, organization: 新竹市政府民政處}

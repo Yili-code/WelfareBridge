@@ -1,0 +1,170 @@
+{
+  "labels": [
+    {
+      "id": "286a2c99-1d63-4ea2-8bb8-4eea7afdc68d",
+      "title": "改善低收入戶住宅設施設備補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文寫明補助對象為低收入戶、補助標準第一至三款最高5萬/4萬/3萬元、申請單位與期限，是對申請人有現金價值的方案；分類無住宅修繕專類，以低收入戶補助歸類。",
+      "confidence": "high"
+    },
+    {
+      "id": "3823538d-69ae-49e0-bfea-d5455ab96552",
+      "title": "衛生福利部辦理兒童及少年未來教育與發展帳戶",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": ["education_subsidy"],
+      "closed": false,
+      "reason": "原文寫明對象為低收／中低收入戶105年後出生兒童、政府每年最高提撥1萬5,000元存入帳戶，是政府現金給付；以低收入戶身分為資格故主類歸低收入戶補助，用途為教育基金列次類。",
+      "confidence": "medium"
+    },
+    {
+      "id": "d83705b7-5c03-4d76-b483-9893671eb0b5",
+      "title": "中低收入老人補助裝置假牙實施計畫",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_allowance",
+      "secondary": ["medical_subsidy"],
+      "closed": false,
+      "reason": "計畫本文寫明服務對象（65歲以上或55歲以上原住民且具低收／中低收等資格）、5年內最高補助4萬4,000元及申請程序；依規則老人假牙補助歸elderly_allowance。",
+      "confidence": "high"
+    },
+    {
+      "id": "4bbec9b9-e936-4f22-9b9d-19a25abbacb2",
+      "title": "身心障礙社區日間作業設施服務(小作所)",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "disability_other",
+      "secondary": ["day_care"],
+      "closed": false,
+      "reason": "原文寫明服務對象（設籍基隆市15歲以上領有身心障礙證明者及三項條件）與服務內容（作業活動、生活訓練、個別化服務計畫）及服務單位，是政府委辦的日間照顧型福利服務；但頁面未寫收費或補助額度，經濟價值屬隱含。",
+      "confidence": "medium"
+    },
+    {
+      "id": "8e03292e-c1d8-413b-a825-acf46c11542c",
+      "title": "補助托嬰中心及居家式托育服務提供者收托身心障礙暨疑似發展遲緩幼兒實施計畫",
+      "is_benefit": "no",
+      "kind": "attachment",
+      "category": "",
+      "secondary": [],
+      "closed": false,
+      "reason": "頁面內容只有計畫名稱與相關檔案下載清單（計畫PDF、申請表、名冊、領據），沒有任何資格或給付內容。",
+      "confidence": "high"
+    },
+    {
+      "id": "840e0f15-e392-4ac1-be25-5608c51f8b0d",
+      "title": "老人營養送餐服務",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "meal_service",
+      "secondary": ["elderly_service"],
+      "closed": false,
+      "reason": "原文寫明服務對象（低收／中低收長照失能獨居老人）與補助標準（低收全額補助每日2餐、中低收每餐補助90元自付10元）及申請流程，是有經濟價值的餐飲服務。",
+      "confidence": "high"
+    },
+    {
+      "id": "cffc4433-d38e-46c2-859c-bb808e3455ff",
+      "title": "低收入戶微型火災保險（微型住宅綠能保險）",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": ["emergency_relief"],
+      "closed": false,
+      "reason": "市府主動為列冊低收／中低收入戶投保，保費由慈善會全額捐助，火災時可獲8,000元定額給付或動產補償、臨時住宿等保障，對申請人有經濟價值且寫明實施對象；非民眾自費購買的商業商品，但分類無保險專類故信心中等。",
+      "confidence": "medium"
+    },
+    {
+      "id": "96d76853-e7ed-4573-98de-9f73bb8c1b2d",
+      "title": "衛生福利部社會及家庭署115年第2階段單親培力計畫",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "education_subsidy",
+      "secondary": ["special_circumstances_aid", "childcare_subsidy"],
+      "closed": false,
+      "reason": "原文寫明補助對象（獨自撫養未滿18歲子女的單親家長並符合收入條件）、補助標準（高中職每學期8,000元、國立大專12,000元、私立18,000元及臨時托育費）與申請時間文件。",
+      "confidence": "high"
+    },
+    {
+      "id": "8a166819-ce0e-4842-8559-e38ee23e0a0e",
+      "title": "臺南市5歲至入國民小學前幼兒就學補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "education_subsidy",
+      "secondary": ["child_allowance"],
+      "closed": false,
+      "reason": "區公所業務頁寫明對象（學齡滿5歲至入小學前本國籍幼兒、就讀平價教保者不得領取）與應附文件，但未寫補助金額；性質接近5歲幼兒育兒津貼延伸，故列child_allowance為次類。",
+      "confidence": "medium"
+    },
+    {
+      "id": "31f179c5-ceb5-4140-a6d4-7765efafd876",
+      "title": "身心障礙者托育養護補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "disability_care_subsidy",
+      "secondary": ["institutional_care_subsidy"],
+      "closed": false,
+      "reason": "原文寫明服務對象（領有身心障礙證明、居住國內超過183日、家庭總收入符合補助基準、未重複領取）與應附文件，是身心障礙者機構托育養護費用補助；金額僅說「符合本辦法補助基準」未列出。",
+      "confidence": "high"
+    },
+    {
+      "id": "6b5821c1-5559-4bbe-a526-9a8948dfb703",
+      "title": "原住民學生獎助學金",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "scholarship",
+      "secondary": ["student_aid"],
+      "closed": false,
+      "reason": "原文寫明對象（具原住民身分或平埔族群註記之大專以下在籍學生，排除夜間部等）與應附文件（成績單、郵局帳戶），是獎助學金方案；金額請下載須知未列於頁面。",
+      "confidence": "high"
+    },
+    {
+      "id": "22c32e8d-6404-4338-b894-af2a28a48a5d",
+      "title": "低收入戶三節慰問金",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文寫明服務對象為設籍本市列冊低收入戶、春節每戶2,500元、端午及中秋每戶2,000元慰問金，列冊者免另申請。",
+      "confidence": "high"
+    },
+    {
+      "id": "a1ab3da1-fd2f-43d5-8745-75a9827811b6",
+      "title": "新北市中低收入戶老人住宅修繕補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_allowance",
+      "secondary": ["low_income_allowance"],
+      "closed": false,
+      "reason": "原文寫明補助對象（年滿65歲領有中低收入老人生活津貼、實際居住滿6個月）、補助項目與額度最高5萬元及兩階段申請方式；為老人現金補助，分類無住宅修繕專類故歸elderly_allowance。",
+      "confidence": "medium"
+    },
+    {
+      "id": "a0a566cf-02f9-4a08-8bc5-46566eab70d5",
+      "title": "高雄市經濟弱勢市民醫療補助(含看護費補助)",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "medical_subsidy",
+      "secondary": ["low_income_allowance"],
+      "closed": false,
+      "reason": "原文寫明申請資格（列冊低收／中低收入戶、中低收老人津貼或身障生活補助者）與福利內容（醫療費低收全額、中低收超過3萬部分80%、每年15萬上限；看護費每日最高1,200元或500元）。",
+      "confidence": "high"
+    },
+    {
+      "id": "4d7fe638-c923-4796-8b1c-9afd52513ddf",
+      "title": "市民意外救助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "emergency_relief",
+      "secondary": ["low_income_allowance"],
+      "closed": false,
+      "reason": "PDF雖為題號／問題／解答的表格且部分文字重複亂排，但可讀出補助對象（設籍本市因意外事故致死、六個月內向區公所申請）與救助標準（低收50萬、中低收30萬、一般市民15萬），資格與給付皆具備。",
+      "confidence": "medium"
+    }
+  ],
+  "count": 15
+}

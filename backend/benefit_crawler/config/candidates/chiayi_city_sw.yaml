@@ -1,0 +1,91 @@
+id: chiayi_city_sw
+name: 嘉義市政府社會處 — 生育、育兒、社會救助、老人福利
+organization: 嘉義市政府社會處
+provider_type: local_government
+source_type: government_site
+base_url: https://social.chiayi.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [嘉義市政府社會處]
+data_confidence: 100
+enabled: true
+domains: [social_welfare, long_term_care, disability]
+# 方案內容頁網址型態：https://social.chiayi.gov.tw/News_Content.aspx?n=<分類>&s=<文章id>
+#   n=397 社會救助、n=1101 老人福利、n=401 兒童少年福利、n=1157 兒少科（育兒津貼／托育補助）、n=403 婦女福利、n=393 身心障礙福利
+# 內文在 #CCMS_Content（同臺北市社會局的 CCMS 站台）；.area-essay 是純內文區、.file-download-multiple 是附件清單
+content_selectors: ["#CCMS_Content"]
+pages:
+  # ---------------------------------------------------------------- 生育、育兒、托育
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=403&s=782684", title: 嘉義市生育津貼, seed_category: birth_incentive}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=1157&s=420734", title: 育有未滿二歲兒童育兒津貼, seed_category: child_allowance}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=1157&s=807122", title: 未滿二歲兒童托育公共化及準公共托育費用補助, seed_category: childcare_subsidy}
+  # ---------------------------------------------------------------- 低收入戶／中低收入戶、急難救助、特殊境遇家庭
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=397&s=843107", title: 嘉義市低收入戶, seed_category: low_income_allowance}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=397&s=843108", title: 嘉義市中低收入戶, seed_category: low_income_allowance}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=397&s=293328", title: 嘉義市急難救助, seed_category: emergency_relief}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=403&s=293368", title: 特殊境遇家庭扶助, seed_category: special_circumstances_aid}
+  # ---------------------------------------------------------------- 老人福利（津貼、健保、假牙、敬老金）
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=397&s=293333", title: 中低收入老人生活津貼, seed_category: elderly_allowance}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=1101&s=404270", title: 中低收入老人特別照顧津貼, seed_category: elderly_allowance}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=397&s=780560", title: 65-69歲中低收入老人健保補助, seed_category: elderly_allowance}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=1101&s=943980", title: 嘉義市政府80歲以上老人全民健康保險自付保險費補助試辦計畫, seed_category: elderly_allowance}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=1101&s=404272", title: 115年度「中低收入老人」補助裝置假牙計畫, seed_category: elderly_allowance}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=1101&s=782706", title: 115年度「一般身分別老人」補助裝置假牙計畫, seed_category: elderly_allowance}
+  - {url: "https://icmp-ws.chiayi.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDA4L3JlbGZpbGUvOTU1NS80MDQzOTkvNzg4OWQxODktMTY0OS00ZmUwLThiMDYtZWQzNGNhMmFhZjliLnBkZg%3d%3d&n=YjkzM2MyZjAtNmJhOS00MzQ5LWEyZWUtMzJkYTk5MmQ1YTIzLnBkZg%3d%3d", title: 嘉義市政府重陽節敬老禮金發放實施要點, seed_category: elderly_allowance, format: pdf, source_page: "https://social.chiayi.gov.tw/News_Content.aspx?n=1101&s=404399"}
+  - {url: "https://icmp-ws.chiayi.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDA4L3JlbGZpbGUvOTU1NS80MDQzOTgvYzliMDAxM2YtMmE4OS00MmFiLTkxYmUtZTE3MzFiNGI1N2Q1LnBkZg%3d%3d&n=MmM2ODg5NTAtMzgwYi00NmUzLWEwYWYtN2ZhNzdmNzhjM2EucGRm", title: 嘉義市百歲人瑞營養禮金發放作業要點, seed_category: elderly_allowance, format: pdf, source_page: "https://social.chiayi.gov.tw/News_Content.aspx?n=1101&s=404398"}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=1101&s=404269", title: 中低收入老人重病住院看護費補助, seed_category: elderly_allowance}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=1101&s=404271", title: 中低收入老人修繕住屋補助, seed_category: elderly_allowance}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=1101&s=404403", title: 中低收入老人免費配戴老花眼鏡補助, seed_category: assistive_device}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=1101&s=909655", title: 低收入戶老人助聽器補助, seed_category: assistive_device}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=397&s=293336", title: 中、低收入戶失能老人機構公費安置, seed_category: institutional_care_subsidy}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=1101&s=404402", title: 老人暨身心障礙者免費乘車補助（敬老、愛心悠遊卡）, seed_category: elderly_service}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=1101&s=909422", title: 關懷獨居老人服務, seed_category: elderly_service}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=1101&s=909420", title: 嘉義市115年獨居老人居家安全設備裝置計畫, seed_category: elderly_service}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=1101&s=909418", title: 嘉義市115年獨居老人居家用電安全檢測及照明修繕汰換計畫, seed_category: elderly_service}
+  # ---------------------------------------------------------------- 社會救助（其他）
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=397&s=293331", title: 嘉義市天然災害救助, seed_category: emergency_relief}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=397&s=293332", title: 短缺川資補助, seed_category: emergency_relief}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=397&s=776030", title: 低收入戶喪葬補助, seed_category: low_income_allowance}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=397&s=293330", title: 低收及中低收入戶重傷病住院看護費補助, seed_category: low_income_allowance}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=397&s=293329", title: 低收及中低收入戶傷病醫療費用補助, seed_category: low_income_allowance}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=397&s=912505", title: 低收入戶微型火災保險（微型住宅綠能保險）, seed_category: low_income_allowance}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=397&s=912496", title: 弱勢家庭微型團體傷害保險, seed_category: low_income_allowance}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=397&s=843112", title: 嘉義市實物銀行}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=397&s=779694", title: 以工代賑實施計畫}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=397&s=937549", title: 兒童及少年未來教育與發展帳戶}
+  # ---------------------------------------------------------------- 兒少、婦女（其他）
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=401&s=293358", title: 兒童少年生活扶助}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=401&s=293558", title: 弱勢家庭兒童及少年緊急生活扶助, seed_category: emergency_relief}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=403&s=293638", title: 嘉義市115年度「嘉有好孕」乘車補助計畫}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=403&s=603052", title: 嘉義市到宅坐月子服務}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=403&s=293371", title: 嘉義市育兒照顧喘息服務}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=403&s=603053", title: 嘉義市育兒指導服務方案}
+  # ---------------------------------------------------------------- 身心障礙
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=393&s=293314", title: 身心障礙者生活補助, seed_category: disability_living_allowance}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=393&s=293316", title: 身心障礙者輔助器具補助, seed_category: assistive_device}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=393&s=776110", title: 輔助器具免費借用、回收及維修, seed_category: assistive_device}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=393&s=851253", title: 嘉義市115年身心障礙者育兒輔具費用補助, seed_category: assistive_device}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=393&s=293317", title: 身心障礙者日間照顧及住宿式照顧費用補助, seed_category: disability_care_subsidy}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=393&s=293528", title: 身心障礙者租賃房屋租金補助, seed_category: rental_subsidy}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=393&s=293318", title: 身心障礙者參加社會保險保險費補助, seed_category: disability_other}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=393&s=293324", title: 身心障礙者購買停車位貸款利息補貼或承租停車位補助, seed_category: disability_other}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=393&s=293527", title: 身心障礙者臨時暨短期照顧服務, seed_category: respite_care}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=393&s=642204", title: 身心障礙家庭托顧服務計畫, seed_category: family_care_home}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=393&s=836077", title: 嘉義市身心障礙者復康巴士交通服務, seed_category: transport_service}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=393&s=857164", title: 身心障礙者在宅緊急救援服務, seed_category: disability_other}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=393&s=776038", title: 身心障礙者自立生活支持服務, seed_category: disability_other}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=393&s=293320", title: 身心障礙學生、身心障礙人士及低收入戶子女就學減免、補助學雜費, seed_category: education_subsidy}
+  # ---------------------------------------------------------------- 只留紀錄、不抓
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=1101&s=404399", title: 嘉義市政府重陽節敬老禮金發放實施要點（網頁）, seed_category: elderly_allowance, skip: true, skip_reason: 網頁只有附件清單（doc/pdf/odt）沒有內文；要點 PDF 已另列為 pdf 頁面}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=1101&s=560020", title: 嘉義市政府重陽節敬老禮金發放作業要點（舊版網頁）, seed_category: elderly_allowance, skip: true, skip_reason: 2020 年舊版，只有附件 PDF 沒有內文；以 2021 年上版的實施要點 PDF 為準}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=1101&s=293578", title: 嘉義市重陽節敬老禮金發放實施要點（2018 舊版網頁）, seed_category: elderly_allowance, skip: true, skip_reason: 2018 年舊版，只有 doc 附件沒有內文}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=1101&s=404398", title: 嘉義市百歲人瑞營養禮金發放（網頁）, seed_category: elderly_allowance, skip: true, skip_reason: 網頁只有附件清單沒有內文；作業要點 PDF 已另列為 pdf 頁面}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=401&s=293560", title: 嘉義市兒童及少年津貼補助一覽表, skip: true, skip_reason: 一覽表，網頁本身沒有內文（0 字）只有附件}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=401&s=293357", title: 弱勢兒童及少年生活扶助與托育及醫療費用補助辦法, skip: true, skip_reason: 轉載衛福部中央法規全文（3,579 字），嘉義市自己的方案頁「兒童少年生活扶助」已列入}
+  - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=401&s=293362", title: 嘉義市發展遲緩兒童早期療育服務, skip: true, skip_reason: 內文是通報轉介中心的服務業務說明，沒有個人申請資格與給付內容}
+  - {url: "https://social.chiayi.gov.tw/News.aspx?n=397&sms=9377", title: 社會救助（目錄）, skip: true, skip_reason: 分類目錄頁，方案內容頁已逐一列入}
+  - {url: "https://social.chiayi.gov.tw/News.aspx?n=1101&sms=9555", title: 老人福利（目錄）, skip: true, skip_reason: 分類目錄頁（兩頁、共 36 筆，夾雜課程招生與活動公告），方案內容頁已逐一列入}
+  - {url: "https://social.chiayi.gov.tw/News.aspx?n=401&sms=9380", title: 兒童少年福利（目錄）, skip: true, skip_reason: 分類目錄頁，方案內容頁已逐一列入}
+  - {url: "https://social.chiayi.gov.tw/News.aspx?n=393&sms=9376", title: 身心障礙福利（目錄）, skip: true, skip_reason: 分類目錄頁（約 50 筆），方案內容頁已逐一列入}
+  - {url: "https://social.chiayi.gov.tw/cl.aspx?n=3833", title: 家庭福利（目錄）, skip: true, skip_reason: 分類目錄頁（含婦女福利、生育津貼），方案內容頁已逐一列入}
+  - {url: "https://social.chiayi.gov.tw/infant.htm", title: 育兒專區, skip: true, skip_reason: 育兒專區入口頁（連到生育津貼、育兒津貼、托育補助等），方案內容頁已逐一列入}
+notes: 嘉義市政府社會處全球資訊網（CCMS 站台）。內容頁網址為 News_Content.aspx?n=<分類>&s=<id>，內文在 #CCMS_Content。列表頁 20 筆一頁（&page=2&PageSize=20 可翻頁）。附件放在 icmp-ws.chiayi.gov.tw/Download.ashx（gov.tw 網域）；重陽敬老禮金與百歲人瑞禮金的網頁沒有內文，只能抓附件 PDF。

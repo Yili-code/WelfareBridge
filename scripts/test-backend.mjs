@@ -1,0 +1,10 @@
+import { spawnSync } from "node:child_process";
+import { mkdirSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+mkdirSync(path.join(root, "test-results"), { recursive: true });
+const python = path.join(root, "backend/.venv", process.platform === "win32" ? "Scripts/python.exe" : "bin/python");
+const result = spawnSync(python, ["-m", "pytest", "backend/tests", "-m", "not network", "--basetemp=test-results/pytest", "-p", "no:cacheprovider", ...process.argv.slice(2)], { cwd: root, stdio: "inherit", windowsHide: true });
+if (result.error) console.error(result.error.message);
+process.exit(result.status ?? 1);

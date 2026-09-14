@@ -1,0 +1,120 @@
+id: tainan_sw
+name: 臺南市政府社會局 — 生育、育兒、社會救助、老人福利
+organization: 臺南市政府社會局
+provider_type: local_government
+source_type: government_site
+# social.tainan.gov.tw 會 302 轉到 sab.tainan.gov.tw（同機關的正式網址），直接用 sab
+base_url: https://sab.tainan.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [臺南市政府社會局]
+data_confidence: 100
+enabled: true
+domains: [social_welfare, long_term_care, disability]
+# 網址型態：分類頁 cl.aspx?n=、清單頁 News.aspx?n=<清單>&sms=、方案內容頁 News_Content.aspx?n=<清單>&s=<方案>、少數固定頁 cp.aspx?n=
+# 與臺北市社會局同一套 CCMS：主內容在 #CCMS_Content（含方案標題 h2 與「一、承辦人員／服務對象／服務內容／申請方式」條文）
+content_selectors: ["#CCMS_Content", "#base-content"]
+follow_links:
+  depth: 1
+  # 只追「經濟補助／救助／津貼」清單底下的方案內容頁（n= 為清單 id）：
+  #   21390 低收入戶｜21391 中低收入戶｜21392 急難救助｜21398 醫療補助｜22471 特殊境遇家庭經濟補助｜
+  #   21369 老人經濟補助｜21368 敬老服務｜21370 老人健康及住宅維護｜21372 獨居老人服務｜
+  #   21384 身障經濟補助｜21344 兒少經濟補助｜21444 托育補助｜21448 育兒津貼
+  allow: ['News_Content\.aspx\?n=(21390|21391|21392|21398|22471|21369|21368|21370|21372|21384|21344|21444|21448)&s=\d+$']
+  # 已看過但不是方案頁：s=8717027 宣導短片、7570707/8597675 特約廠商名單與簽約公告、7795051/7795050 條例與作業要點本文、
+  # 7774564 公開徵信成果表、8829033 實地訪查作業說明、4378480 災區創業貸款作業辦法、7755541/8693059 0-6歲國家一起養（宣導頁）、
+  # 7670425 只有作業要點附件（已列為 skip 頁）
+  deny: ["News\\.aspx", "News_Video", "cl\\.aspx", "Default", "SiteMap", "OldPSubsidy", "advanced_search", 's=(8717027|7570707|8597675|7795051|7795050|7774564|8829033|4378480|7755541|8693059|7670425)$']
+  max_links: 40
+pages:
+  # ---------------------------------------------------------------- 育兒、托育（育兒資訊專區）
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21448&s=7910061", title: 育有未滿2歲兒童育兒津貼, seed_category: child_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21444&s=4378800", title: 未滿二歲兒童托育準公共化服務（托育補助）, seed_category: childcare_subsidy}
+  # ---------------------------------------------------------------- 低收入戶／中低收入戶
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21390&s=4378483", title: 低收入戶家庭生活補助, seed_category: low_income_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21391&s=4378487", title: 中低收入戶資格認定, seed_category: low_income_allowance}
+  # ---------------------------------------------------------------- 急難救助
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21392&s=4378494", title: 臺南市急難救助－生活救助, seed_category: emergency_relief}
+  # ---------------------------------------------------------------- 特殊境遇家庭
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=22471&s=7620778", title: 特殊境遇家庭子女生活津貼, seed_category: special_circumstances_aid}
+  # ---------------------------------------------------------------- 老人福利
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21369&s=4378297", title: 中低收入老人生活津貼, seed_category: elderly_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21368&s=7803998", title: 重陽敬老金, seed_category: elderly_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21368&s=8536733", title: 老人健保費自付額補助, seed_category: elderly_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21370&s=4378300", title: 臺南市政府中低收入老人補助裝置假牙實施計畫, seed_category: elderly_allowance}
+  # ---------------------------------------------------------------- 身心障礙
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21384&s=4378407", title: 身心障礙者生活補助費, seed_category: disability_living_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21384&s=4378408", title: 身心障礙者輔具費用補助（含居家無障礙設施）, seed_category: assistive_device}
+  # ================================================================ 以下為同分類的其他方案頁（乾跑 --max-items 12 只到上面為止）
+  # 生育、育兒、托育
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21390&s=4378484", title: 低收入戶孕產婦及嬰兒營養補助, seed_category: low_income_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21365&s=7795171", title: 臺南市政府居家安胎服務補助}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21344&s=4378094", title: 臺南市危機家庭兒童托育費用補助, seed_category: childcare_subsidy}
+  - {url: "https://sab.tainan.gov.tw/cp.aspx?n=42991", title: 補助托嬰中心及居家式托育服務提供者收托身心障礙暨疑似發展遲緩幼兒實施計畫, seed_category: childcare_subsidy}
+  # 低收入戶／中低收入戶
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21390&s=4378473", title: 低收入戶資格認定, seed_category: low_income_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21390&s=4378479", title: 低收入戶內15歲以下兒童生活補助費, seed_category: low_income_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21390&s=4378475", title: 低收入戶高中職以上就學生活補助, seed_category: low_income_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21390&s=4378482", title: 低收入戶三節慰問金, seed_category: low_income_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21391&s=4378486", title: 中低收入戶春節慰問金, seed_category: low_income_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21390&s=4378478", title: 低收入戶全民健康保險費補助, seed_category: low_income_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21390&s=4378481", title: 低收入戶傷病住院看護費用補助, seed_category: low_income_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21390&s=4378485", title: 低收入戶學生就學費用減免, seed_category: education_subsidy}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21390&s=4378474", title: 低收入戶以工代賑, seed_category: low_income_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21398&s=4378562", title: 醫療補助（低收入戶及中低收入戶）, seed_category: low_income_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21344&s=4378091", title: 中低收入戶內兒童及少年健保費自付額全額補助, seed_category: low_income_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21344&s=4378096", title: 臺南市弱勢兒童及少年醫療費用補助, seed_category: low_income_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21344&s=4378095", title: 臺南市經濟弱勢家庭兒童及少年生活扶助, seed_category: low_income_allowance}
+  # 急難救助
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21392&s=4378491", title: 臺南市急難救助－傷病救助, seed_category: emergency_relief}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21392&s=4378493", title: 臺南市急難救助－喪葬救助, seed_category: emergency_relief}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21392&s=4378490", title: 臺南市急難救助－行旅川資救助, seed_category: emergency_relief}
+  - {url: "https://sab.tainan.gov.tw/cp.aspx?n=22162", title: 強化社會安全網－急難紓困實施方案, seed_category: emergency_relief}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21344&s=4378092", title: 弱勢家庭兒童及少年緊急生活扶助計畫, seed_category: emergency_relief}
+  # 特殊境遇家庭
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=22471&s=7620790", title: 特殊境遇家庭緊急生活扶助, seed_category: special_circumstances_aid}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=22471&s=7620788", title: 特殊境遇家庭兒童托育津貼, seed_category: childcare_subsidy}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=22471&s=7620785", title: 特殊境遇家庭傷病醫療補助, seed_category: special_circumstances_aid}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=22471&s=7620777", title: 特殊境遇家庭法律訴訟補助, seed_category: special_circumstances_aid}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=22471&s=7620783", title: 特殊境遇家庭子女教育補助, seed_category: special_circumstances_aid}
+  # 老人福利
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21369&s=4378296", title: 中低收入老人特別照顧津貼, seed_category: elderly_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21368&s=8716658", title: 補助以基本工資投保職業工會之老人自付健保費超過本府補助額度, seed_category: elderly_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21370&s=4378302", title: 中低收入老人健保費自付額補助, seed_category: elderly_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21370&s=4378301", title: 一般戶老人假牙補助, seed_category: elderly_allowance, skip: true, skip_reason: 內文只有「洽辦單位：衛生局」與電話，資格與補助金額在衛生局網站}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21370&s=8554009", title: 中低收入老人醫療補助, seed_category: elderly_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21370&s=4378299", title: 中低收入老人重病住院看護費用補助, seed_category: elderly_allowance}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21370&s=4888850", title: 低、中低收入老人改善住宅補助, seed_category: elderly_service}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21368&s=8632395", title: 敬老優惠措施, seed_category: elderly_service}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21368&s=4378295", title: 社福卡, seed_category: elderly_service}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21369&s=4378298", title: 國民年金老年基本保證年金（原敬老福利生活津貼）, skip: true, skip_reason: 只有一段說明改由勞保局依國民年金法發給，資格與金額請見勞保局（mol_gov／勞保局來源）}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21372&s=4888858", title: 關懷獨居老人服務計畫, seed_category: elderly_service, skip: true, skip_reason: 網頁只有承辦人與附件（服務計畫 PDF），沒有服務對象與內容條文}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21368&s=7802115", title: 永久居留外籍人士乘車敬老優惠, seed_category: elderly_service}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21372&s=4888859", title: 獨居老人在宅緊急救援服務, seed_category: elderly_service}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21372&s=4888857", title: 獨居老人預防走失愛心手鍊, seed_category: elderly_service}
+  # 身心障礙
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21384&s=4378403", title: 身心障礙者日間／住宿式照顧服務費用補助, seed_category: disability_care_subsidy}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21384&s=4378402", title: 身心障礙者房屋租金補貼及購屋貸款利息補貼, seed_category: rental_subsidy}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21384&s=4378404", title: 身心障礙者社會保險費補助, seed_category: disability_other}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21384&s=4378405", title: 六十五歲以上身心障礙者全民健康保險自付保險費補助, seed_category: disability_other}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21384&s=4378401", title: 居家身心障礙者維生器材及必要生活輔具用電優惠, seed_category: disability_other, skip: true, skip_reason: 內文只有承辦人與「服務內容、服務對象同經濟部、衛福部公告」一句，沒有資格與優惠內容}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21384&s=7670425", title: 不列入媒體資料交換之身心障礙者社會保險費補助, seed_category: disability_other, skip: true, skip_reason: 網頁只有附件清單（作業要點令與表單 PDF），沒有方案內文}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21384&s=8799778", title: 身心障礙者購買停車位貸款利息補貼或承租停車位補助, seed_category: disability_other}
+  - {url: "https://w3fs.tainan.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvMTc3L3JlbGZpbGUvMTk1MDgvNDM3ODQwMC9hMWMwZGJjYi1iYTM2LTQ0MjQtYjg3Yy04ZTI1MGMyNmM0MWUucGRm&n=6Ie65Y2X5biC5pS%2f5bqc6L6m55CG6Lqr5b%2bD6Zqc56SZ6ICF6LO86LK35oiW5om%2f56ef5ZWG5bqX5pSk6LKp5L2O5Yip6LK45qy%2b5oiW56ef6YeR6KOc6LK85a%2bm5pa96KiI55WrLnBkZg%3d%3d", title: 臺南市政府辦理身心障礙者購買或承租商店攤販低利貸款或租金補貼實施計畫, seed_category: disability_other, format: pdf, source_page: "https://sab.tainan.gov.tw/News_Content.aspx?n=21384&s=4378400"}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21384&s=4378400", title: 身心障礙者購買或承租商店攤販低利貸款或租金補貼（網頁）, seed_category: disability_other, skip: true, skip_reason: 網頁只有附件清單（令、實施計畫、申請表），資格與補貼標準在實施計畫 PDF（已另列為 pdf 頁面）}
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21344&s=8743392", title: 兒童及少年療育訓練費用補助}
+  # 宣導頁（沒有資格與給付條文）
+  - {url: "https://sab.tainan.gov.tw/News_Content.aspx?n=21444&s=7755541", title: 0-6歲國家一起養, skip: true, skip_reason: 政策宣導頁，只有一段政策說明與圖片，資格與金額在育兒津貼／托育補助頁}
+  # 清單頁：標題加「總覽」讓收錄政策判為彙整頁（portal，不進清單與媒合），配合 follow_links 追各清單裡新增的方案頁
+  - {url: "https://sab.tainan.gov.tw/News.aspx?n=21390&sms=19513", title: 低收入戶總覽}
+  - {url: "https://sab.tainan.gov.tw/News.aspx?n=21391&sms=19514", title: 中低收入戶總覽}
+  - {url: "https://sab.tainan.gov.tw/News.aspx?n=21392&sms=19515", title: 臺南市急難救助總覽}
+  - {url: "https://sab.tainan.gov.tw/News.aspx?n=22471&sms=20014", title: 特殊境遇家庭經濟補助項目及內容總覽}
+  - {url: "https://sab.tainan.gov.tw/News.aspx?n=21369&sms=19496", title: 老人經濟補助總覽}
+  - {url: "https://sab.tainan.gov.tw/News.aspx?n=21368&sms=19495", title: 敬老服務總覽}
+  - {url: "https://sab.tainan.gov.tw/News.aspx?n=21370&sms=19497", title: 老人健康及住宅維護總覽}
+  - {url: "https://sab.tainan.gov.tw/News.aspx?n=21384&sms=19508", title: 身心障礙者經濟補助總覽}
+  - {url: "https://sab.tainan.gov.tw/News.aspx?n=21344&sms=19473", title: 兒童少年經濟補助總覽}
+  - {url: "https://sab.tainan.gov.tw/News.aspx?n=21444&sms=19550", title: 托育補助總覽}
+  - {url: "https://sab.tainan.gov.tw/News.aspx?n=21448&sms=19675", title: 育有未滿2歲兒童育兒津貼總覽}
+  # 生育獎勵金由民政局／戶政事務所受理（不在社會局網站）：逐頁覆寫主辦機關
+  - {url: "https://people.tainan.gov.tw/cp.aspx?n=32018", title: 臺南市生育獎勵金, seed_category: birth_incentive, organization: 臺南市政府民政局}

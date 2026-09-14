@@ -1,0 +1,93 @@
+id: lienchiang_sw
+name: 連江縣政府民政社會處／衛生福利局 — 生育、社會救助、老人福利、身心障礙、長照
+# 連江縣的社會福利（生育補助、社會救助、老人福利、身障福利）由「連江縣政府民政社會處 社會福利科」主辦，
+# 頁面在縣府主站 www.matsu.gov.tw 的民政社會處子站（/chhtml/…/371030000A0001/…）與縣府主管法規系統 law.matsu.gov.tw；
+# 衛生福利局網站 www.matsuhb.gov.tw 只有「高齡暨長照科」的長照服務頁（逐頁以 organization 覆寫）。
+organization: 連江縣政府民政社會處
+provider_type: local_government
+source_type: government_site
+base_url: https://www.matsu.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+# 縣府主站 <title>「馬祖-連江縣政府」；法規系統「連江縣政府主管法規共用系統」；衛福局「連江縣衛生福利局-…」
+expected_title_keywords: [連江縣政府, 連江縣衛生福利局]
+data_confidence: 100
+enabled: true
+domains: [social_welfare, long_term_care, disability]
+# .law-reg-content：law.matsu.gov.tw 法規本文（條文全文，含資格、金額、申請方式）
+# #printcontent：matsuhb.gov.tw 長照服務分頁（頁名 + .content_font 內文）
+# div.FROM：www.matsu.gov.tw 民政社會處子站的內容頁主區塊
+content_selectors: [".law-reg-content", "#printcontent", "div.FROM"]
+# 不用 follow_links：民政社會處子站的方案內文幾乎都只在附件（多數為 docx/odt，只能收 PDF），
+# 法規系統目錄頁會連到大量非補助法規（設置要點、裁罰基準、已廢止條例），因此逐頁明列。
+pages:
+  # ── 生育、兒少（縣府主管法規系統：自治條例／行政規則全文）──
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000234", title: 連江縣婦女生產補助自治條例, seed_category: birth_incentive}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000424", title: 連江縣新生兒育兒箱發送辦法, seed_category: birth_incentive, organization: 連江縣衛生福利局}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000304", title: 連江縣縣民接受人工生殖技術費用補助辦法, organization: 連江縣衛生福利局}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000403", title: 連江縣辦理弱勢家庭兒童及少年緊急生活扶助補助及核發作業規定, seed_category: child_allowance}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000399", title: 連江縣低收入戶及弱勢兒童及少年醫療補助審查及核發作業規定, seed_category: low_income_allowance}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000535", title: 連江縣辦理發展遲緩兒童早期療育費用補助實施計畫}
+  # ── 社會救助 ──
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000391", title: 連江縣低收入戶及中低收入戶調查暨生活扶助核發作業要點, seed_category: low_income_allowance}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000417", title: 連江縣政府辦理以工代賑實施要點, seed_category: low_income_allowance}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000392", title: 連江縣政府辦理發放幸福福袋作業要點, seed_category: low_income_allowance}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000064", title: 連江縣政府民眾急難救助自治條例, seed_category: emergency_relief}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000149", title: 連江縣災害救助金核發自治條例, seed_category: emergency_relief}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000671", title: 連江縣縣民遭受意外身故濟助金補助要點, seed_category: emergency_relief}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000409", title: 連江縣政府辦理發放住院醫療慰問金及死亡家屬慰問金作業要點, seed_category: emergency_relief}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000400", title: 連江縣特殊境遇家庭扶助條例補充說明注意事項, seed_category: special_circumstances_aid}
+  - {url: "https://www.matsu.gov.tw/upload/pdf-20231211101609.pdf", title: 連江縣政府特殊境遇家庭扶助申請標準作業程序, seed_category: special_circumstances_aid, format: pdf, source_page: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5978"}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000649", title: 連江縣政府家庭暴力及性侵害被害人補助要點}
+  # ── 老人福利 ──
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000440", title: 連江縣六十五歲以上老人居家生活補助費自治條例, seed_category: elderly_allowance}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000405", title: 連江縣試辦六十五歲以上老人居家生活補助費實施要點, seed_category: elderly_allowance}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000404", title: 連江縣中低收入戶老人生活津貼審核作業規定, seed_category: elderly_allowance}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000396", title: 連江縣政府辦理老人裝置假牙補助要點, seed_category: elderly_allowance}
+  - {url: "https://www.matsu.gov.tw/upload/f-20240517102037.pdf", title: 連江縣辦理老人裝置假牙補助要點（113年修正版）, seed_category: elderly_allowance, format: pdf, source_page: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5972"}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000672", title: 連江縣65歲以上長者老花眼鏡配置補助實施要點, seed_category: elderly_allowance}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000680", title: 連江縣失能老人營養保健及醫護用品補助實施要點, seed_category: elderly_allowance}
+  - {url: "https://www.matsu.gov.tw/upload/f-20240516090936.pdf", title: 連江縣發放重陽禮金實施要點, seed_category: elderly_allowance, format: pdf, source_page: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5972"}
+  - {url: "https://www.matsu.gov.tw/upload/f-20240516090750.pdf", title: 連江縣辦理老人、身心障礙者春節慰問金發放實施要點, seed_category: elderly_allowance, format: pdf, source_page: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5972"}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000365", title: 連江縣高齡老人壽誕日祝壽活動實施要點, seed_category: elderly_allowance}
+  - {url: "https://www.matsu.gov.tw/upload/f-20231231144814.pdf", title: 離島地區六十五歲以上老人全民健康保險應自付保險費補助作業要點, seed_category: elderly_allowance, format: pdf, source_page: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5972", skip: true, skip_reason: 掃描影像 PDF（1.5MB、pypdf 抽不到任何文字），資格與補助內容無法判讀}
+  - {url: "https://www.matsu.gov.tw/upload/f-20240516091347.pdf", title: 連江縣老人輔具購買、租借及居家無障礙環境改善服務計畫, seed_category: assistive_device, format: pdf, source_page: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5972"}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000658", title: 連江縣65歲以上長者赴大坵島交通船補助實施要點, seed_category: elderly_service}
+  - {url: "https://www.matsu.gov.tw/upload/f-20240517102001.pdf", title: 連江縣辦理65歲以上老人赴大陸交通船費補助實施要點, seed_category: elderly_service, format: pdf, source_page: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5972"}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000421", title: 連江縣老人、身心障礙者及六歲以下兒童乘車、船補助要點, seed_category: transport_service}
+  # ── 身心障礙 ──
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000413", title: 連江縣政府發放身心障礙者生活津貼實施要點, seed_category: disability_living_allowance}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000571", title: 連江縣身心障礙者輔具費用補助審核要點, seed_category: assistive_device}
+  - {url: "https://www.matsu.gov.tw/upload/f-20240507211607.pdf", title: 連江縣輔具資源中心輔具借用管理辦法, seed_category: assistive_device, format: pdf, source_page: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5988"}
+  - {url: "https://www.matsu.gov.tw/chhtml/content/371030000A0001/5974", title: 連江縣輔具資源中心輔具補助及服務, seed_category: assistive_device}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000652", title: 連江縣身心障礙者臨時及短期照顧服務實施計畫, seed_category: respite_care}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000570", title: 連江縣補助地區身障者轉診赴台就醫交通費、自費醫療費實施計畫, seed_category: disability_other}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000569", title: 連江縣辦理身心障礙者赴大陸交通船費補助實施要點, seed_category: disability_other}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000360", title: 連江縣精神病患赴台就醫交通費補助辦法, seed_category: disability_other, organization: 連江縣衛生福利局}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000476", title: 連江縣身心障礙者久任職場津貼補助實施要點, seed_category: disability_other}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000641", title: 連江縣身心障礙者自立生活支持服務及督考計畫, seed_category: disability_other}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000657", title: 連江縣肢體障礙者生活重建服務計畫, seed_category: disability_other}
+  # ── 衛生福利局（衛生類法規）──
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000479", title: 連江縣政府補助門診掛號費用實施要點, organization: 連江縣衛生福利局}
+  - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000178", title: 連江縣民眾空運安寧(息)返鄉交通費用補助自治條例, organization: 連江縣衛生福利局}
+  # ── 衛生福利局 長期照顧服務（www.matsuhb.gov.tw，Chhtml/content/2298?mcid=<分頁>；內文在 #printcontent）──
+  - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=47008&webaid=", title: 連江縣長照交通接送服務, seed_category: transport_service, organization: 連江縣衛生福利局}
+  - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=47006&webaid=", title: 連江縣長照居家服務, seed_category: home_care, organization: 連江縣衛生福利局}
+  - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=47007&webaid=", title: 連江縣長照日間照顧服務, seed_category: day_care, organization: 連江縣衛生福利局}
+  - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=47004&webaid=", title: 連江縣長照機構／居家喘息服務, seed_category: respite_care, organization: 連江縣衛生福利局}
+  - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=47012&webaid=", title: 連江縣長照輔具及居家無障礙環境改善服務, seed_category: assistive_device, organization: 連江縣衛生福利局}
+  - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=47002&webaid=", title: 連江縣長照居家復能服務, organization: 連江縣衛生福利局}
+  - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=46999&webaid=", title: 連江縣長照居家護理指導與諮詢, organization: 連江縣衛生福利局}
+  - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=47013&webaid=", title: 連江縣居家失能個案家庭醫師照護方案, organization: 連江縣衛生福利局}
+  - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=71254&webaid=", title: 連江縣住宿式服務機構使用者補助方案, seed_category: institutional_care_subsidy, organization: 連江縣衛生福利局}
+  - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=47011&webaid=", title: 連江縣長期照顧機構服務（低收入戶老人公費安置、身心障礙者日間及住宿式照顧費用補助）, seed_category: institutional_care_subsidy, organization: 連江縣衛生福利局}
+  - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=47009&webaid=", title: 連江縣失能老人營養餐飲服務, seed_category: meal_service, organization: 連江縣衛生福利局}
+  - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2300?mcid=47048&webaid=", title: 連江縣家庭照顧者支持服務, organization: 連江縣衛生福利局}
+  # ── 目錄／簡介頁（不抓：僅供查閱來源結構）──
+  - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2296", title: 連江縣長期照顧管理中心簡介總覽, organization: 連江縣衛生福利局, skip: true, skip_reason: 長照管理中心簡介（成立宗旨、服務對象、聯絡方式），各項服務內文在 content/2298 的分頁}
+  - {url: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5972", title: 民政社會處老人福利下載專區總覽, skip: true, skip_reason: 附件下載清單（老人福利各要點多為 PDF，已逐一登錄；其餘為床位數統計與申請書）}
+  - {url: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5978", title: 民政社會處社會救助服務下載專區總覽, skip: true, skip_reason: 附件下載清單；急難救助金自治條例、中低收入老人生活津貼審核作業辦法、三節慰問金、奶粉尿布補助、傷病醫療看護費用補助等只有 docx/odt，GenericPageCrawler 不支援，改收 law.matsu.gov.tw 法規全文}
+  - {url: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/7117", title: 民政社會處身心障礙者福利服務下載專區總覽, skip: true, skip_reason: 附件下載清單，全部為 docx/odt（身心障礙者生活津貼、日間及住宿式照顧費用補助、租金及購屋貸款利息補助等），改收 law.matsu.gov.tw 法規全文}
+  - {url: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5981", title: 民政社會處婦女福利下載專區總覽, skip: true, skip_reason: 只有婦女生育補助申請表、孕婦營養補助申請表（表單）與婦女福利工作計畫，沒有方案內文}
+  - {url: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5982", title: 民政社會處托育專區下載總覽, skip: true, skip_reason: 只有托育補助申請表、評鑑計畫、候補名單與中央作業要點，沒有本縣托育補助方案內文}
+  - {url: "https://www.matsu.gov.tw/chhtml/news/371030000A0001/5975", title: 民政社會處兒童及少年福利公告總覽, skip: true, skip_reason: 只有育兒津貼申請表（ods）、奶粉尿布補助作業要點（odt）等附件公告，沒有 HTML 方案內文}
+  - {url: "https://law.matsu.gov.tw/LawCategoryContentList.aspx?CategoryID=19", title: 連江縣政府主管法規民社類目錄總覽, skip: true, skip_reason: 法規目錄頁（含設置要點、裁罰基準與已廢止條例），補助相關法規已逐一登錄}

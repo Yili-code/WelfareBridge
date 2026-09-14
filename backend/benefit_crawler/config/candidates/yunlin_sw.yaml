@@ -1,0 +1,25 @@
+# 候選來源：雲林縣政府社會處（social.yunlin.gov.tw）
+# 結論：reject。整個 *.yunlin.gov.tw（含 www、social、dl、ylshb…）前面有 Cloudflare WAF，
+# 對非瀏覽器用戶端（本專案 PoliteHttpClient/httpx、curl、WebFetch，換 Chrome UA/標頭/cipher 都一樣）一律回 403
+# 「Sorry, you have been blocked」；只有 robots.txt 回 200。真實瀏覽器可正常開啟。
+# 乾跑（scratchpad/yunlin_sw_dryrun2.txt）：official=True，discovered=5 fetched=0 failed=5 documents=0。
+# 下面的網址是用瀏覽器確認過的方案頁，內文確實有資格＋金額＋申請方式，但爬蟲抓不到，所以全部 skip、enabled: false。
+# 網址型態：方案內容頁 News_Content.aspx?n=<清單id>&s=<文章id>；分類目錄 News.aspx?n=…&sms=… 與 cl.aspx?n=…
+id: yunlin_sw
+name: 雲林縣政府社會處 — 生育、育兒、社會救助、老人福利
+organization: 雲林縣政府社會處
+provider_type: local_government
+source_type: government_site
+base_url: https://social.yunlin.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [雲林縣政府社會處]
+data_confidence: 100
+enabled: false
+domains: [social_welfare, long_term_care, disability]
+content_selectors: ["#CCMS_Content", "#base-content"]
+pages:
+  - {url: "https://social.yunlin.gov.tw/News_Content.aspx?n=20588&s=454991", title: 育有未滿2歲兒童育兒津貼-申請辦法, seed_category: child_allowance, skip: true, skip_reason: Cloudflare WAF 對爬蟲回 HTTP 403（瀏覽器可開，內文有金額與資格）}
+  - {url: "https://social.yunlin.gov.tw/News_Content.aspx?n=7361&s=454946", title: 113年度低收入戶及中低收入戶申請資格、方式、流程及補助額度, seed_category: low_income_allowance, skip: true, skip_reason: Cloudflare WAF 對爬蟲回 HTTP 403（瀏覽器可開，內文有資格與補助額度）}
+  - {url: "https://social.yunlin.gov.tw/cl.aspx?n=22197", title: 雲林縣補助生育津貼, seed_category: birth_incentive, skip: true, skip_reason: Cloudflare WAF 對爬蟲回 HTTP 403；且頁面本身只有「1150101生育津貼實施要點」.doc 附件，沒有內文}
+  - {url: "https://social.yunlin.gov.tw/cl.aspx?n=22756", title: 老人福利津貼及補助類, seed_category: elderly_allowance, skip: true, skip_reason: Cloudflare WAF 對爬蟲回 HTTP 403；此頁為目錄（中低收入老人生活津貼／特別照顧津貼／假牙／健保費補助等 8 項子頁）}
+  - {url: "https://social.yunlin.gov.tw/News.aspx?n=22338&sms=21788", title: 重陽敬老, seed_category: elderly_allowance, skip: true, skip_reason: Cloudflare WAF 對爬蟲回 HTTP 403；此頁為清單頁}

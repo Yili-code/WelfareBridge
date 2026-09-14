@@ -1,0 +1,170 @@
+{
+  "labels": [
+    {
+      "id": "01ada091-8619-4718-a5e3-9b947bbec39b",
+      "title": "極端氣候及年節時期加強關懷弱勢民眾計畫",
+      "is_benefit": "no",
+      "kind": "other",
+      "category": "",
+      "secondary": [],
+      "closed": false,
+      "reason": "衛福部函頒給各級政府執行的行政計畫，內容是高低溫及年節期間的關懷訪視、宣導與物資提供機制（「各地方政府結合社工、志工…提供電話問安、關懷訪視」），雖列有服務對象與熱食、禦寒物資、臨時收容等內容，但沒有民眾申請程序或給付標準，屬機關間執行指引而非可申請的方案。",
+      "confidence": "medium"
+    },
+    {
+      "id": "0a11e34a-6409-4ed4-b238-2855c6dc50ce",
+      "title": "好孕專車車資補貼",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "health_service",
+      "secondary": ["birth_incentive"],
+      "closed": false,
+      "reason": "雖為問答表格式，但完整寫出補貼對象（設籍本市孕婦且為低收／中低收入戶或夫妻最近一年綜合所得未達150萬元）與給付內容（審核通過發給乘車券，每趟次最高200元、至多28趟次、每次懷孕限申請一次），屬有經濟價值的孕婦產檢交通補貼；分類上沒有孕婦交通補貼專屬類別，取最接近的健康服務並以生育類為次類別。",
+      "confidence": "medium"
+    },
+    {
+      "id": "bb9e35b8-5d0d-4c4d-9d94-b73bfd3ac6c5",
+      "title": "津貼及補助專區總覽（4）",
+      "is_benefit": "portal",
+      "kind": "portal",
+      "category": "",
+      "secondary": [],
+      "closed": false,
+      "reason": "為「津貼及補助專區」共33筆結果的第4頁清單，只列出「5-2 災害救助申請」「5-3 急難救助」「5-4 國民年金所得未達一定標準保險費補助」三個不同方案的標題連結，沒有任何資格或給付內容，屬多方案的專區目錄頁。",
+      "confidence": "medium"
+    },
+    {
+      "id": "0a48e366-9f93-4d64-9c72-1804c114049d",
+      "title": "中低收入老人租賃房屋租金補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "rental_subsidy",
+      "secondary": ["elderly_allowance"],
+      "closed": false,
+      "reason": "寫明申請對象（領有中低收入老人生活津貼、全家無自有住宅、設籍本市滿三個月、未獲同性質補助等）與補助標準（每月每坪200元、以租金50%為上限、單身最高5坪至三口以上10坪）及檢附文件與受理單位，是中低收入老人的租金補助方案。",
+      "confidence": "high"
+    },
+    {
+      "id": "e6c40379-e857-4ef9-9f3e-1cacca156cb5",
+      "title": "身心障礙者房屋租金補貼",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "rental_subsidy",
+      "secondary": ["disability_other"],
+      "closed": false,
+      "reason": "寫明申請資格（設籍本市身心障礙者、家庭總收入未達最低生活費2.5倍、無自有住宅等九項）與補助標準（單身每月最高1,600元、二口2,600元、三口以上3,600元，並以租金總額50%為上限）及應備文件，是身心障礙者的租金補貼方案。",
+      "confidence": "high"
+    },
+    {
+      "id": "13e87199-a820-40b9-9acc-6083245a8b3e",
+      "title": "國民年金生育給付暨加給補助 — 請領手續",
+      "is_benefit": "no",
+      "kind": "fragment",
+      "category": "",
+      "secondary": [],
+      "closed": false,
+      "reason": "整頁只有國民年金生育給付的「請領手續」分段（戶政事務所通報、e化服務系統線上申請、紙本郵寄三種方式與應備書件），沒有請領資格條件與給付金額，屬方案頁的段落片段；相關方案類別為生育給付（birth_incentive）。",
+      "confidence": "medium"
+    },
+    {
+      "id": "6c235721-5199-4311-a776-07933d502d48",
+      "title": "身心障礙家庭托顧服務計畫",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "family_care_home",
+      "secondary": ["disability_care_subsidy"],
+      "closed": false,
+      "reason": "寫明服務對象（設籍或實際居住本市18至64歲、領有身心障礙證明且經需求評估核定有家庭托顧需求者）、服務內容與補助額度（全日托依障礙程度每日760至1,040元、每位補助22天為限、民眾自付額一般戶190元、中低收114元、低收免付）及申請單位，是身心障礙者的家庭托顧服務補助。",
+      "confidence": "high"
+    },
+    {
+      "id": "66c52b17-e097-4aa2-a7c4-d58c3066b355",
+      "title": "115年度特殊境遇家庭扶助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "special_circumstances_aid",
+      "secondary": ["tuition_waiver", "medical_subsidy", "childcare_subsidy"],
+      "closed": false,
+      "reason": "寫明扶助對象（設籍且實際居住本市、家庭收入每人每月未超過平均消費支出1.5倍即39,960元、符合特境條例七款情形）與七項扶助金額（緊急生活扶助每月17,186元最多3個月、子女生活津貼每月2,950元、學雜費減免60%、傷病醫療補助每年最高12萬元、托育津貼每月1,500元、法律訴訟補助5萬元、創業貸款前3年免息）及應備文件。",
+      "confidence": "high"
+    },
+    {
+      "id": "76d2df2f-865c-452a-a318-57f2baee867b",
+      "title": "災害救助申請簡介",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "emergency_relief",
+      "secondary": [],
+      "closed": false,
+      "reason": "寫明救助種類與對象（因風災、水災、震災、火災致死亡、失蹤、重傷、住屋毀損不堪居住、淹水50公分以上）、救助金核發標準（死亡與失蹤各20萬元、重傷10萬元、安遷每人2萬元以5口為限、淹水1萬或2萬元）及應備文件，是災害救助金方案；分類上無災害救助專屬類別，歸最接近的急難救助。",
+      "confidence": "high"
+    },
+    {
+      "id": "2519d59f-d27c-40ce-8e9b-e038b9e2f606",
+      "title": "彰化縣重陽敬老禮金",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "寫明發放對象（115年1月1日前設籍本縣且未遷出、年滿65歲長者及55至64歲原住民，分一般戶與福利身分戶）與發放金額（一般戶1,000元，福利身分戶依年齡3,000元至9,000元，百歲人瑞1萬元）及現金與匯款發放期間，重陽敬老禮金依規則歸老人生活津貼類。",
+      "confidence": "high"
+    },
+    {
+      "id": "5a62d1d5-2dda-4e50-9ca0-38b23bbe4926",
+      "title": "南投縣身心障礙者生活補助審核作業規定",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "disability_living_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "作業規定本文詳列補助對象（設籍本縣領有身心障礙證明、實際居住、最近一年居住國內逾183日、未受政府補助安置，且為低收／中低收或家庭收入未達最低生活費2.5倍、存款不超過200萬元、不動產不超過650萬元）、申請方式、停發情形與家庭人口及收入計算方式，給付標準則援引中央發給辦法第三點；依規則「辦法／要點寫了資格」即算方案。",
+      "confidence": "high"
+    },
+    {
+      "id": "dad66574-d66d-4dd3-af74-8a0239813a5e",
+      "title": "急難救助作業流程（社會救助法第21條急難救助對象）",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "emergency_relief",
+      "secondary": [],
+      "closed": false,
+      "reason": "頁面雖題為作業流程，內文寫出社會救助法第21條六種可向戶籍所在地主管機關申請急難救助的情形（戶內人口死亡無力殮葬、遭受意外傷害或罹患重病、主要生計者失業失蹤入獄等致生活陷困、帳戶遭強制執行、已申請福利尚未核准期間、其他重大變故），具備「誰可以申請」；但無給付金額，且原頁可能以流程圖為主，判斷保留。",
+      "confidence": "medium"
+    },
+    {
+      "id": "53911e59-3cac-46e1-a4fb-05c8fffd5aa2",
+      "title": "申請社福卡(敬老卡、愛心卡、愛心陪伴卡)",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_service",
+      "secondary": ["disability_other"],
+      "closed": false,
+      "reason": "寫明服務內容（持敬老卡、愛心卡可不限次數搭乘市區公車，愛心陪伴卡半價搭乘）與申請對象資格（設籍本市年滿65歲市民、55歲以上原住民、持身心障礙證明者、證明註記必要陪伴者）及辦卡費用（初次免費）與應附文件，是有經濟價值的老人與身心障礙者交通福利服務。",
+      "confidence": "high"
+    },
+    {
+      "id": "7d1a675b-08e5-47d4-889f-c69ddb36eb39",
+      "title": "申請低收入戶、中低收入戶",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "寫明低收入戶與中低收入戶的審核標準（114至115年度最低生活費15,515元與23,273元、動產與不動產公告限額）、申請程序、應備文件、三款生活扶助等級與現金給付標準（第一款每人每月11,850元、第二款每戶6,825元、兒童生活補助3,008元、就學生活補助6,825元），符合規則中的低收資格說明頁。",
+      "confidence": "high"
+    },
+    {
+      "id": "aa5d09cb-3449-416a-b4cf-0576d5433e39",
+      "title": "特殊境遇家庭扶助專區",
+      "is_benefit": "no",
+      "kind": "directory",
+      "category": "",
+      "secondary": [],
+      "closed": false,
+      "reason": "頁面只有「特殊境遇家庭扶助專區」的三筆公告標題連結與上版日期（115年度、113年、108年特殊境遇家庭扶助），沒有任何資格或給付內容；三筆為同一方案的不同年度公告，不算多方案總整理，只是選單清單。",
+      "confidence": "medium"
+    }
+  ],
+  "count": 15
+}

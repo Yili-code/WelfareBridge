@@ -1,0 +1,20 @@
+id: mohw_dops
+name: 衛生福利部保護服務司 — 特殊境遇家庭扶助
+organization: 衛生福利部保護服務司
+provider_type: central_government
+source_type: government_site
+base_url: https://dep.mohw.gov.tw/DOPS/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [保護服務司, 衛生福利部]
+data_confidence: 100
+enabled: true
+domains: [social_welfare]
+content_selectors: ['section.cp', 'article.cpArticle', 'main']
+pages:
+  - {url: 'https://dep.mohw.gov.tw/dops/cp-1287-14940-105.html', title: 特殊境遇家庭扶助條例（緊急生活扶助、子女生活津貼、子女教育補助、傷病醫療補助、兒童托育津貼、法律訴訟補助、創業貸款補助）, seed_category: special_circumstances_aid}
+  - {url: 'https://www.mohw.gov.tw/dl-53580-fd7439fb-8931-4fef-9359-e4e7ebc98d3a.html', title: 特殊境遇家庭扶助條例（PDF）, format: pdf, seed_category: special_circumstances_aid, source_page: 'https://dep.mohw.gov.tw/dops/cp-1287-14940-105.html', skip: true, skip_reason: 與 cp-1287-14940-105 HTML 頁全文相同（乾跑 3649 字 vs 3732 字，重複），只收 HTML 版}
+  - {url: 'https://dep.mohw.gov.tw/DOPS/cp-1287-76875-105.html', title: 縣市辦理性侵害被害人補助申請原則（範例）, skip: true, skip_reason: 供直轄市、縣市政府訂定補助辦法用的範本（「縣、市全銜」），補助項目與金額為範例值，不是民眾可直接申請的方案頁；實際方案由各縣市自訂}
+  - {url: 'https://swis2.sfaa.gov.tw/swis2_online/apply01_step01.jsp', title: 特殊境遇家庭扶助申請須知（線上申辦）, seed_category: special_circumstances_aid, skip: true, skip_reason: 線上申辦流程的核取頁，只有 7 款申請條件（353 字），沒有給付內容；依收錄政策屬表單／流程頁}
+  - {url: 'https://swis2.sfaa.gov.tw/swis2_online/', title: 特殊境遇家庭暨弱勢兒童及少年生活扶助線上申辦首頁, skip: true, skip_reason: 線上申辦入口頁，只有三個申辦連結，沒有可抽取的內文}
+  - {url: 'https://dep.mohw.gov.tw/DOPS/lp-1287-105.html', title: 保護服務司法令規章, skip: true, skip_reason: 法規目錄頁，只有各法規連結（多數指向全國法規資料庫 law.moj.gov.tw）}
+notes: 保護服務司網站只有「特殊境遇家庭扶助條例」全文頁（第 4 條資格、第 6～12 條七項扶助的給付標準、向戶籍地主管機關申請）；七項扶助沒有各自獨立的方案頁，各縣市實際金額在地方政府網站。社家署舊站 Detail.aspx?nodeid=99 頁面為 JavaScript 空殼，抓不到內文。

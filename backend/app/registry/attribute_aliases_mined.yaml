@@ -1,0 +1,2618 @@
+version: 2
+generated_at: '2026-09-13T06:48:25.619749+00:00'
+note: 由語料統計（同句共現 log-odds）產生的屬性別名候選；載入時只採用 z >= 3 者
+attributes:
+- id: applicant.age
+  aliases:
+  - term: 兒童
+    z: 31.98
+    df: 343
+    sentences_with_seed: 1544
+  - term: 育兒津貼
+    z: 28.51
+    df: 156
+    sentences_with_seed: 1544
+  - term: 原住民
+    z: 22.82
+    df: 119
+    sentences_with_seed: 1544
+  - term: 實際
+    z: 20.96
+    df: 167
+    sentences_with_seed: 1544
+  - term: 孫子女
+    z: 19.69
+    df: 78
+    sentences_with_seed: 1544
+  - term: 際居住
+    z: 19.49
+    df: 103
+    sentences_with_seed: 1544
+  - term: 實際居
+    z: 19.44
+    df: 103
+    sentences_with_seed: 1544
+  - term: 設籍本市
+    z: 18.09
+    df: 75
+    sentences_with_seed: 1544
+- id: applicant.is_elderly
+  aliases:
+  - term: 活津貼
+    z: 35.94
+    df: 245
+    sentences_with_seed: 1429
+  - term: 獨居
+    z: 21.75
+    df: 96
+    sentences_with_seed: 1429
+  - term: 福利
+    z: 19.89
+    df: 194
+    sentences_with_seed: 1429
+  - term: 照顧津貼
+    z: 18.11
+    df: 65
+    sentences_with_seed: 1429
+  - term: 特別照顧
+    z: 18.05
+    df: 65
+    sentences_with_seed: 1429
+  - term: 別照顧津
+    z: 17.99
+    df: 65
+    sentences_with_seed: 1429
+  - term: 假牙
+    z: 17.23
+    df: 87
+    sentences_with_seed: 1429
+  - term: 福利科
+    z: 16.91
+    df: 80
+    sentences_with_seed: 1429
+- id: applicant.gender
+  aliases:
+  - term: 分娩
+    z: 20.04
+    df: 39
+    sentences_with_seed: 204
+  - term: 未婚懷孕
+    z: 16.25
+    df: 26
+    sentences_with_seed: 204
+  - term: 生育
+    z: 16.07
+    df: 39
+    sentences_with_seed: 204
+  - term: 懷胎
+    z: 14.81
+    df: 35
+    sentences_with_seed: 204
+  - term: 孕婦
+    z: 14.2
+    df: 25
+    sentences_with_seed: 204
+  - term: 女生
+    z: 13.47
+    df: 22
+    sentences_with_seed: 204
+  - term: 生育補助
+    z: 12.53
+    df: 17
+    sentences_with_seed: 204
+  - term: 社會處婦
+    z: 9.98
+    df: 10
+    sentences_with_seed: 204
+- id: applicant.nationality
+  aliases:
+  - term: 居留
+    z: 29.4
+    df: 89
+    sentences_with_seed: 258
+  - term: 居留證
+    z: 24.6
+    df: 62
+    sentences_with_seed: 258
+  - term: 我國
+    z: 21.85
+    df: 49
+    sentences_with_seed: 258
+  - term: 人士
+    z: 21.51
+    df: 50
+    sentences_with_seed: 258
+  - term: 看護
+    z: 16.53
+    df: 57
+    sentences_with_seed: 258
+  - term: 籍人
+    z: 15.05
+    df: 48
+    sentences_with_seed: 258
+  - term: 護照
+    z: 14.85
+    df: 24
+    sentences_with_seed: 258
+  - term: 永久居留
+    z: 13.91
+    df: 22
+    sentences_with_seed: 258
+- id: applicant.marital_status
+  aliases:
+  - term: 直系
+    z: 29.8
+    df: 114
+    sentences_with_seed: 629
+  - term: 親屬
+    z: 26.85
+    df: 106
+    sentences_with_seed: 629
+  - term: 扶養
+    z: 22.04
+    df: 80
+    sentences_with_seed: 629
+  - term: 懷孕
+    z: 21.32
+    df: 60
+    sentences_with_seed: 629
+  - term: 協議
+    z: 20.91
+    df: 74
+    sentences_with_seed: 629
+  - term: 父母
+    z: 20.76
+    df: 82
+    sentences_with_seed: 629
+  - term: 判決
+    z: 20.02
+    df: 62
+    sentences_with_seed: 629
+  - term: 直系血親
+    z: 19.77
+    df: 57
+    sentences_with_seed: 629
+- id: applicant.is_student
+  aliases:
+  - term: 大學
+    z: 11.16
+    df: 22
+    sentences_with_seed: 85
+  - term: 學生證
+    z: 9.08
+    df: 15
+    sentences_with_seed: 85
+  - term: 高中職
+    z: 8.66
+    df: 15
+    sentences_with_seed: 85
+  - term: 空中大學
+    z: 8.54
+    df: 9
+    sentences_with_seed: 85
+  - term: 學生證影
+    z: 8.43
+    df: 10
+    sentences_with_seed: 85
+  - term: 校在學
+    z: 8.24
+    df: 6
+    sentences_with_seed: 85
+  - term: 就讀
+    z: 8.22
+    df: 20
+    sentences_with_seed: 85
+  - term: 夜間部
+    z: 7.93
+    df: 7
+    sentences_with_seed: 85
+- id: education.level
+  aliases:
+  - term: 私立
+    z: 26.7
+    df: 125
+    sentences_with_seed: 1152
+  - term: 每名
+    z: 24.63
+    df: 115
+    sentences_with_seed: 1152
+  - term: 國內
+    z: 24.61
+    df: 108
+    sentences_with_seed: 1152
+  - term: 年級
+    z: 22.55
+    df: 112
+    sentences_with_seed: 1152
+  - term: 公私立
+    z: 20.42
+    df: 71
+    sentences_with_seed: 1152
+  - term: 每名新臺
+    z: 18.88
+    df: 61
+    sentences_with_seed: 1152
+  - term: 名新臺幣
+    z: 18.86
+    df: 61
+    sentences_with_seed: 1152
+  - term: 就學
+    z: 18.78
+    df: 84
+    sentences_with_seed: 1152
+- id: education.grade
+  aliases:
+  - term: 出生
+    z: 33.85
+    df: 126
+    sentences_with_seed: 405
+  - term: 出生登記
+    z: 18.17
+    df: 39
+    sentences_with_seed: 405
+  - term: 初設戶籍
+    z: 17.63
+    df: 36
+    sentences_with_seed: 405
+  - term: 登記
+    z: 17.59
+    df: 60
+    sentences_with_seed: 405
+  - term: 大學
+    z: 17.04
+    df: 47
+    sentences_with_seed: 405
+  - term: 設戶籍登
+    z: 14.88
+    df: 26
+    sentences_with_seed: 405
+  - term: 專科學校
+    z: 14.84
+    df: 30
+    sentences_with_seed: 405
+  - term: 成績
+    z: 14.61
+    df: 54
+    sentences_with_seed: 405
+- id: education.school
+  aliases:
+  - term: 獎學金
+    z: 23.85
+    df: 122
+    sentences_with_seed: 789
+  - term: 高級
+    z: 22.98
+    df: 149
+    sentences_with_seed: 789
+  - term: 清寒
+    z: 22.86
+    df: 83
+    sentences_with_seed: 789
+  - term: 學期
+    z: 22.51
+    df: 113
+    sentences_with_seed: 789
+  - term: 優秀學生
+    z: 21.67
+    df: 71
+    sentences_with_seed: 789
+  - term: 生獎學金
+    z: 19.94
+    df: 58
+    sentences_with_seed: 789
+  - term: 私立
+    z: 19.85
+    df: 75
+    sentences_with_seed: 789
+  - term: 秀學生獎
+    z: 19.12
+    df: 56
+    sentences_with_seed: 789
+- id: education.school_type
+  aliases:
+  - term: 國內公
+    z: 18.34
+    df: 34
+    sentences_with_seed: 123
+  - term: 私立大
+    z: 18.21
+    df: 35
+    sentences_with_seed: 123
+  - term: 私立高
+    z: 14.33
+    df: 20
+    sentences_with_seed: 123
+  - term: 寄養家庭
+    z: 14.04
+    df: 18
+    sentences_with_seed: 123
+  - term: 私立大專
+    z: 13.58
+    df: 21
+    sentences_with_seed: 123
+  - term: 就讀
+    z: 12.94
+    df: 33
+    sentences_with_seed: 123
+  - term: 教養機構
+    z: 12.37
+    df: 16
+    sentences_with_seed: 123
+  - term: 少年安置
+    z: 12.37
+    df: 16
+    sentences_with_seed: 123
+- id: education.school_city
+  aliases:
+  - term: 醫院
+    z: 11.25
+    df: 24
+    sentences_with_seed: 61
+  - term: 高雄市
+    z: 9.8
+    df: 21
+    sentences_with_seed: 61
+  - term: 山醫院
+    z: 9.26
+    df: 8
+    sentences_with_seed: 61
+  - term: 藝文場館
+    z: 8.55
+    df: 8
+    sentences_with_seed: 61
+  - term: 健身俱樂
+    z: 8.1
+    df: 6
+    sentences_with_seed: 61
+  - term: 身俱樂部
+    z: 8.1
+    df: 6
+    sentences_with_seed: 61
+  - term: 髮健身俱
+    z: 8.1
+    df: 6
+    sentences_with_seed: 61
+  - term: 銀髮健身
+    z: 8.1
+    df: 6
+    sentences_with_seed: 61
+- id: education.department
+  aliases:
+  - term: 相關科
+    z: 12.0
+    df: 14
+    sentences_with_seed: 49
+  - term: 領域
+    z: 9.66
+    df: 8
+    sentences_with_seed: 49
+  - term: 工程
+    z: 8.95
+    df: 9
+    sentences_with_seed: 49
+  - term: 單位洽詢
+    z: 8.38
+    df: 6
+    sentences_with_seed: 49
+  - term: 依各校規
+    z: 8.23
+    df: 6
+    sentences_with_seed: 49
+  - term: 教務處
+    z: 8.18
+    df: 6
+    sentences_with_seed: 49
+  - term: 學士
+    z: 8.18
+    df: 6
+    sentences_with_seed: 49
+  - term: 校規定
+    z: 7.62
+    df: 6
+    sentences_with_seed: 49
+- id: education.program_type
+  aliases:
+  - term: 不含
+    z: 20.25
+    df: 39
+    sentences_with_seed: 129
+  - term: 國內
+    z: 15.57
+    df: 35
+    sentences_with_seed: 129
+  - term: 研究
+    z: 14.09
+    df: 28
+    sentences_with_seed: 129
+  - term: 不包
+    z: 12.48
+    df: 19
+    sentences_with_seed: 129
+  - term: 學學生
+    z: 12.4
+    df: 18
+    sentences_with_seed: 129
+  - term: 部學
+    z: 12.31
+    df: 14
+    sentences_with_seed: 129
+  - term: 博士班
+    z: 12.11
+    df: 14
+    sentences_with_seed: 129
+  - term: 不包括
+    z: 11.2
+    df: 12
+    sentences_with_seed: 129
+- id: education.extended_study
+  aliases:
+  - term: 學分班
+    z: 8.9
+    df: 8
+    sentences_with_seed: 23
+  - term: 公費生
+    z: 7.79
+    df: 5
+    sentences_with_seed: 23
+  - term: 間部
+    z: 6.68
+    df: 6
+    sentences_with_seed: 23
+  - term: 學士
+    z: 6.3
+    df: 4
+    sentences_with_seed: 23
+  - term: 推廣
+    z: 6.21
+    df: 5
+    sentences_with_seed: 23
+  - term: 學生不
+    z: 6.05
+    df: 3
+    sentences_with_seed: 23
+  - term: 修學分
+    z: 6.01
+    df: 3
+    sentences_with_seed: 23
+  - term: 間部學
+    z: 5.96
+    df: 3
+    sentences_with_seed: 23
+- id: education.years_in_program
+  aliases:
+  - term: 年限內
+    z: 15.59
+    df: 23
+    sentences_with_seed: 44
+  - term: 延長
+    z: 10.6
+    df: 13
+    sentences_with_seed: 44
+  - term: 每名每學
+    z: 8.94
+    df: 9
+    sentences_with_seed: 44
+  - term: 每學期最
+    z: 8.94
+    df: 9
+    sentences_with_seed: 44
+  - term: 內每
+    z: 8.94
+    df: 9
+    sentences_with_seed: 44
+  - term: 學分
+    z: 8.37
+    df: 9
+    sentences_with_seed: 44
+  - term: 學期最高
+    z: 8.14
+    df: 9
+    sentences_with_seed: 44
+  - term: 名每學期
+    z: 8.14
+    df: 9
+    sentences_with_seed: 44
+- id: education.is_freshman
+  aliases:
+  - term: 出生
+    z: 34.93
+    df: 126
+    sentences_with_seed: 338
+  - term: 出生登記
+    z: 18.69
+    df: 39
+    sentences_with_seed: 338
+  - term: 登記
+    z: 18.66
+    df: 61
+    sentences_with_seed: 338
+  - term: 初設戶籍
+    z: 18.1
+    df: 36
+    sentences_with_seed: 338
+  - term: 設戶籍登
+    z: 15.28
+    df: 26
+    sentences_with_seed: 338
+  - term: 登記或初
+    z: 14.28
+    df: 23
+    sentences_with_seed: 338
+  - term: 記或初設
+    z: 14.28
+    df: 23
+    sentences_with_seed: 338
+  - term: 戶籍登記
+    z: 14.05
+    df: 27
+    sentences_with_seed: 338
+- id: academic.average_score
+  aliases:
+  - term: 學年
+    z: 20.19
+    df: 57
+    sentences_with_seed: 240
+  - term: 操行
+    z: 15.4
+    df: 28
+    sentences_with_seed: 240
+  - term: 成績單
+    z: 15.04
+    df: 25
+    sentences_with_seed: 240
+  - term: 成績證明
+    z: 14.23
+    df: 21
+    sentences_with_seed: 240
+  - term: 分數
+    z: 14.14
+    df: 22
+    sentences_with_seed: 240
+  - term: 學年度
+    z: 14.03
+    df: 29
+    sentences_with_seed: 240
+  - term: 操行成績
+    z: 13.17
+    df: 18
+    sentences_with_seed: 240
+  - term: 學期學業
+    z: 11.91
+    df: 22
+    sentences_with_seed: 240
+- id: academic.gpa
+  aliases:
+  - term: 分數
+    z: 7.56
+    df: 6
+    sentences_with_seed: 8
+  - term: 業平均成
+    z: 6.83
+    df: 4
+    sentences_with_seed: 8
+  - term: 學業平均
+    z: 6.76
+    df: 4
+    sentences_with_seed: 8
+  - term: 分數成績
+    z: 5.24
+    df: 3
+    sentences_with_seed: 8
+  - term: 相對應
+    z: 5.24
+    df: 3
+    sentences_with_seed: 8
+  - term: 對照
+    z: 5.22
+    df: 3
+    sentences_with_seed: 8
+  - term: 平均成績
+    z: 5.03
+    df: 4
+    sentences_with_seed: 8
+  - term: 百分
+    z: 3.72
+    df: 6
+    sentences_with_seed: 8
+- id: academic.ranking_percent
+  aliases:
+  - term: 學期學業
+    z: 8.82
+    df: 7
+    sentences_with_seed: 22
+  - term: 學業
+    z: 7.42
+    df: 11
+    sentences_with_seed: 22
+  - term: 成績
+    z: 7.11
+    df: 18
+    sentences_with_seed: 22
+  - term: 期學業成
+    z: 6.31
+    df: 4
+    sentences_with_seed: 22
+  - term: 業總成績
+    z: 6.05
+    df: 3
+    sentences_with_seed: 22
+  - term: 全校
+    z: 5.96
+    df: 3
+    sentences_with_seed: 22
+  - term: 學業成績
+    z: 5.84
+    df: 7
+    sentences_with_seed: 22
+  - term: 學業總成
+    z: 5.82
+    df: 3
+    sentences_with_seed: 22
+- id: academic.conduct_score
+  aliases:
+  - term: 體育
+    z: 23.45
+    df: 51
+    sentences_with_seed: 111
+  - term: 不限
+    z: 23.29
+    df: 49
+    sentences_with_seed: 111
+  - term: 智育
+    z: 15.99
+    df: 50
+    sentences_with_seed: 111
+  - term: 成績平均
+    z: 12.28
+    df: 14
+    sentences_with_seed: 111
+  - term: 學業成績
+    z: 11.52
+    df: 17
+    sentences_with_seed: 111
+  - term: 懲處
+    z: 11.47
+    df: 12
+    sentences_with_seed: 111
+  - term: 業成績平
+    z: 9.88
+    df: 9
+    sentences_with_seed: 111
+  - term: 德行
+    z: 8.77
+    df: 7
+    sentences_with_seed: 111
+- id: academic.subject_min_score
+  aliases:
+  - term: 總平均
+    z: 6.7
+    df: 6
+    sentences_with_seed: 15
+  - term: 成績符合
+    z: 6.24
+    df: 6
+    sentences_with_seed: 15
+  - term: 成績均
+    z: 6.08
+    df: 3
+    sentences_with_seed: 15
+  - term: 合下列標
+    z: 6.05
+    df: 3
+    sentences_with_seed: 15
+  - term: 績總平均
+    z: 6.01
+    df: 4
+    sentences_with_seed: 15
+  - term: 成績總平
+    z: 6.01
+    df: 4
+    sentences_with_seed: 15
+  - term: 學業成績
+    z: 5.9
+    df: 7
+    sentences_with_seed: 15
+  - term: 年學業成
+    z: 5.66
+    df: 3
+    sentences_with_seed: 15
+- id: academic.no_disciplinary_record
+  aliases:
+  - term: 操行成績
+    z: 13.17
+    df: 15
+    sentences_with_seed: 51
+  - term: 成績
+    z: 12.73
+    df: 33
+    sentences_with_seed: 51
+  - term: 評量
+    z: 10.86
+    df: 10
+    sentences_with_seed: 51
+  - term: 學業成績
+    z: 10.39
+    df: 14
+    sentences_with_seed: 51
+  - term: 德行
+    z: 9.95
+    df: 9
+    sentences_with_seed: 51
+  - term: 行評
+    z: 8.59
+    df: 8
+    sentences_with_seed: 51
+  - term: 學期
+    z: 7.62
+    df: 22
+    sentences_with_seed: 51
+  - term: 學期平均
+    z: 7.43
+    df: 5
+    sentences_with_seed: 51
+- id: academic.no_failed_subject
+  aliases:
+  - term: 學業成績
+    z: 12.46
+    df: 17
+    sentences_with_seed: 25
+  - term: 成績平均
+    z: 9.73
+    df: 9
+    sentences_with_seed: 25
+  - term: 業成績平
+    z: 8.96
+    df: 7
+    sentences_with_seed: 25
+  - term: 業成績總
+    z: 7.51
+    df: 5
+    sentences_with_seed: 25
+  - term: 且無任何
+    z: 7.23
+    df: 13
+    sentences_with_seed: 25
+  - term: 績總平均
+    z: 7.04
+    df: 5
+    sentences_with_seed: 25
+  - term: 成績總平
+    z: 7.04
+    df: 5
+    sentences_with_seed: 25
+  - term: 期學業成
+    z: 6.29
+    df: 4
+    sentences_with_seed: 25
+- id: residence.household_city
+  aliases:
+  - term: 區公
+    z: 32.23
+    df: 353
+    sentences_with_seed: 3245
+  - term: 實際居
+    z: 25.92
+    df: 325
+    sentences_with_seed: 3245
+  - term: 際居住
+    z: 25.87
+    df: 323
+    sentences_with_seed: 3245
+  - term: 戶口名簿
+    z: 23.39
+    df: 176
+    sentences_with_seed: 3245
+  - term: 月內
+    z: 22.93
+    df: 235
+    sentences_with_seed: 3245
+  - term: 年滿
+    z: 22.8
+    df: 174
+    sentences_with_seed: 3245
+  - term: 出生
+    z: 22.34
+    df: 162
+    sentences_with_seed: 3245
+  - term: 登記
+    z: 21.59
+    df: 171
+    sentences_with_seed: 3245
+- id: residence.household_district
+  aliases:
+  - term: 籍所在地
+    z: 40.49
+    df: 214
+    sentences_with_seed: 727
+  - term: 公所社
+    z: 30.81
+    df: 149
+    sentences_with_seed: 727
+  - term: 社會課
+    z: 26.32
+    df: 95
+    sentences_with_seed: 727
+  - term: 公所社會
+    z: 25.49
+    df: 93
+    sentences_with_seed: 727
+  - term: 戶籍地
+    z: 20.37
+    df: 71
+    sentences_with_seed: 727
+  - term: 公所提出
+    z: 19.67
+    df: 58
+    sentences_with_seed: 727
+  - term: 社會
+    z: 18.86
+    df: 169
+    sentences_with_seed: 727
+  - term: 向戶籍
+    z: 18.61
+    df: 58
+    sentences_with_seed: 727
+- id: residence.duration_months
+  aliases:
+  - term: 生兒出生
+    z: 11.15
+    df: 13
+    sentences_with_seed: 37
+  - term: 新生兒出
+    z: 10.53
+    df: 12
+    sentences_with_seed: 37
+  - term: 籍本縣滿
+    z: 9.8
+    df: 8
+    sentences_with_seed: 37
+  - term: 兒出生日
+    z: 9.04
+    df: 7
+    sentences_with_seed: 37
+  - term: 出生之日
+    z: 7.72
+    df: 5
+    sentences_with_seed: 37
+  - term: 往前推算
+    z: 7.37
+    df: 5
+    sentences_with_seed: 37
+  - term: 兒之父
+    z: 7.17
+    df: 5
+    sentences_with_seed: 37
+  - term: 母或父
+    z: 6.9
+    df: 5
+    sentences_with_seed: 37
+- id: residence.current_city
+  aliases:
+  - term: 且實際
+    z: 24.27
+    df: 76
+    sentences_with_seed: 388
+  - term: 居住國內
+    z: 20.36
+    df: 50
+    sentences_with_seed: 388
+  - term: 國內超過
+    z: 19.63
+    df: 49
+    sentences_with_seed: 388
+  - term: 住國內超
+    z: 19.36
+    df: 48
+    sentences_with_seed: 388
+  - term: 年居住國
+    z: 18.76
+    df: 43
+    sentences_with_seed: 388
+  - term: 居住本縣
+    z: 18.61
+    df: 62
+    sentences_with_seed: 388
+  - term: 最近一年
+    z: 17.88
+    df: 43
+    sentences_with_seed: 388
+  - term: 近一年居
+    z: 17.27
+    df: 40
+    sentences_with_seed: 388
+- id: residence.same_household_as_parent
+  aliases:
+  - term: 直系血親
+    z: 31.29
+    df: 90
+    sentences_with_seed: 182
+  - term: 扶養
+    z: 18.82
+    df: 49
+    sentences_with_seed: 182
+  - term: 配偶
+    z: 18.77
+    df: 54
+    sentences_with_seed: 182
+  - term: 親屬
+    z: 18.5
+    df: 50
+    sentences_with_seed: 182
+  - term: 義務
+    z: 14.31
+    df: 33
+    sentences_with_seed: 182
+  - term: 納稅義務
+    z: 13.56
+    df: 19
+    sentences_with_seed: 182
+  - term: 稅義務人
+    z: 13.56
+    df: 19
+    sentences_with_seed: 182
+  - term: 扶養親屬
+    z: 13.39
+    df: 18
+    sentences_with_seed: 182
+- id: household.size
+  aliases:
+  - term: 家庭總
+    z: 43.66
+    df: 201
+    sentences_with_seed: 440
+  - term: 總收入
+    z: 43.54
+    df: 200
+    sentences_with_seed: 440
+  - term: 庭總收
+    z: 43.39
+    df: 199
+    sentences_with_seed: 440
+  - term: 人每月
+    z: 38.94
+    df: 178
+    sentences_with_seed: 440
+  - term: 最低生
+    z: 38.54
+    df: 161
+    sentences_with_seed: 440
+  - term: 每人每
+    z: 38.46
+    df: 193
+    sentences_with_seed: 440
+  - term: 未超
+    z: 38.4
+    df: 166
+    sentences_with_seed: 440
+  - term: 低生活
+    z: 38.39
+    df: 160
+    sentences_with_seed: 440
+- id: household.income_year
+  aliases:
+  - term: 人每月
+    z: 49.24
+    df: 261
+    sentences_with_seed: 530
+  - term: 每人每
+    z: 47.84
+    df: 265
+    sentences_with_seed: 530
+  - term: 生活費
+    z: 46.21
+    df: 258
+    sentences_with_seed: 530
+  - term: 最低生
+    z: 45.15
+    df: 258
+    sentences_with_seed: 530
+  - term: 低生活
+    z: 45.08
+    df: 258
+    sentences_with_seed: 530
+  - term: 家人口
+    z: 43.08
+    df: 208
+    sentences_with_seed: 530
+  - term: 全家人
+    z: 43.07
+    df: 208
+    sentences_with_seed: 530
+  - term: 當年度
+    z: 36.27
+    df: 156
+    sentences_with_seed: 530
+- id: household.income_month
+  aliases:
+  - term: 收入未
+    z: 5.72
+    df: 3
+    sentences_with_seed: 4
+  - term: 配全家人
+    z: 3.47
+    df: 4
+    sentences_with_seed: 4
+  - term: 均分配全
+    z: 3.41
+    df: 4
+    sentences_with_seed: 4
+  - term: 分配全家
+    z: 3.39
+    df: 4
+    sentences_with_seed: 4
+  - term: 入平均分
+    z: 3.39
+    df: 4
+    sentences_with_seed: 4
+- id: household.income_per_capita
+  aliases:
+  - term: 生活費
+    z: 46.16
+    df: 178
+    sentences_with_seed: 207
+  - term: 最低生
+    z: 46.04
+    df: 178
+    sentences_with_seed: 207
+  - term: 低生活
+    z: 46.03
+    df: 178
+    sentences_with_seed: 207
+  - term: 未超
+    z: 34.15
+    df: 107
+    sentences_with_seed: 207
+  - term: 當年度
+    z: 30.88
+    df: 99
+    sentences_with_seed: 207
+  - term: 每月最低
+    z: 28.6
+    df: 77
+    sentences_with_seed: 207
+  - term: 月最低生
+    z: 28.57
+    df: 77
+    sentences_with_seed: 207
+  - term: 人每月最
+    z: 28.03
+    df: 75
+    sentences_with_seed: 207
+- id: household.income_vs_poverty_line
+  aliases:
+  - term: 每人每
+    z: 57.11
+    df: 293
+    sentences_with_seed: 360
+  - term: 人每月
+    z: 56.84
+    df: 287
+    sentences_with_seed: 360
+  - term: 家庭總
+    z: 49.24
+    df: 256
+    sentences_with_seed: 360
+  - term: 庭總收
+    z: 48.87
+    df: 256
+    sentences_with_seed: 360
+  - term: 當年度
+    z: 40.81
+    df: 167
+    sentences_with_seed: 360
+  - term: 家人口
+    z: 39.14
+    df: 158
+    sentences_with_seed: 360
+  - term: 全家人
+    z: 39.0
+    df: 157
+    sentences_with_seed: 360
+  - term: 未超
+    z: 36.32
+    df: 136
+    sentences_with_seed: 360
+- id: household.assets
+  aliases:
+  - term: 全家人
+    z: 35.33
+    df: 154
+    sentences_with_seed: 549
+  - term: 家人口
+    z: 35.3
+    df: 154
+    sentences_with_seed: 549
+  - term: 未超
+    z: 32.28
+    df: 126
+    sentences_with_seed: 549
+  - term: 合計
+    z: 22.51
+    df: 66
+    sentences_with_seed: 549
+  - term: 總收入
+    z: 21.63
+    df: 81
+    sentences_with_seed: 549
+  - term: 庭總收
+    z: 21.49
+    df: 80
+    sentences_with_seed: 549
+  - term: 家庭總
+    z: 21.38
+    df: 80
+    sentences_with_seed: 549
+  - term: 清單
+    z: 20.08
+    df: 51
+    sentences_with_seed: 549
+- id: household.dependents
+  aliases:
+  - term: 義務
+    z: 39.49
+    df: 172
+    sentences_with_seed: 308
+  - term: 義務人
+    z: 22.24
+    df: 105
+    sentences_with_seed: 308
+  - term: 合所得稅
+    z: 22.1
+    df: 52
+    sentences_with_seed: 308
+  - term: 綜合所得
+    z: 21.91
+    df: 52
+    sentences_with_seed: 308
+  - term: 無力
+    z: 20.93
+    df: 55
+    sentences_with_seed: 308
+  - term: 能力
+    z: 20.18
+    df: 55
+    sentences_with_seed: 308
+  - term: 共同生活
+    z: 19.85
+    df: 44
+    sentences_with_seed: 308
+  - term: 離婚
+    z: 19.81
+    df: 48
+    sentences_with_seed: 308
+- id: financial.receiving_public_funding
+  aliases:
+  - term: 安置
+    z: 35.91
+    df: 128
+    sentences_with_seed: 209
+  - term: 收容
+    z: 31.12
+    df: 90
+    sentences_with_seed: 209
+  - term: 收容安置
+    z: 22.17
+    df: 49
+    sentences_with_seed: 209
+  - term: 未接受
+    z: 19.27
+    df: 42
+    sentences_with_seed: 209
+  - term: 未經政府
+    z: 17.55
+    df: 44
+    sentences_with_seed: 209
+  - term: 政府
+    z: 17.27
+    df: 103
+    sentences_with_seed: 209
+  - term: 未接受公
+    z: 16.82
+    df: 29
+    sentences_with_seed: 209
+  - term: 政府其他
+    z: 13.82
+    df: 20
+    sentences_with_seed: 209
+- id: financial.receiving_other_benefit
+  aliases:
+  - term: 重複申請
+    z: 18.11
+    df: 40
+    sentences_with_seed: 377
+  - term: 返還
+    z: 14.41
+    df: 24
+    sentences_with_seed: 377
+  - term: 相同
+    z: 13.16
+    df: 24
+    sentences_with_seed: 377
+  - term: 追回已
+    z: 13.12
+    df: 20
+    sentences_with_seed: 377
+  - term: 請領
+    z: 13.03
+    df: 37
+    sentences_with_seed: 377
+  - term: 相同性質
+    z: 11.17
+    df: 15
+    sentences_with_seed: 377
+  - term: 同時符合
+    z: 10.96
+    df: 16
+    sentences_with_seed: 377
+  - term: 重複請領
+    z: 10.63
+    df: 13
+    sentences_with_seed: 377
+- id: financial.student_loan
+  aliases:
+  - term: 通知書
+    z: 6.66
+    df: 6
+    sentences_with_seed: 9
+  - term: 加蓋印章
+    z: 6.06
+    df: 3
+    sentences_with_seed: 9
+  - term: 繳費單影
+    z: 5.87
+    df: 3
+    sentences_with_seed: 9
+  - term: 除須
+    z: 5.87
+    df: 3
+    sentences_with_seed: 9
+  - term: 費明細
+    z: 5.69
+    df: 3
+    sentences_with_seed: 9
+  - term: 辦理就學
+    z: 5.24
+    df: 3
+    sentences_with_seed: 9
+  - term: 學校加蓋
+    z: 5.24
+    df: 3
+    sentences_with_seed: 9
+  - term: 檢附銀行
+    z: 5.24
+    df: 3
+    sentences_with_seed: 9
+- id: financial.labor_insured
+  aliases:
+  - term: 給付
+    z: 24.32
+    df: 103
+    sentences_with_seed: 492
+  - term: 失業
+    z: 19.49
+    df: 69
+    sentences_with_seed: 492
+  - term: 保局
+    z: 17.64
+    df: 67
+    sentences_with_seed: 492
+  - term: 國民年金
+    z: 17.2
+    df: 37
+    sentences_with_seed: 492
+  - term: 參加
+    z: 17.2
+    df: 52
+    sentences_with_seed: 492
+  - term: 生育給付
+    z: 16.92
+    df: 37
+    sentences_with_seed: 492
+  - term: 薪資
+    z: 16.19
+    df: 39
+    sentences_with_seed: 492
+  - term: 失業給付
+    z: 16.07
+    df: 32
+    sentences_with_seed: 492
+- id: identity.low_income
+  aliases:
+  - term: 活津貼
+    z: 31.45
+    df: 239
+    sentences_with_seed: 2321
+  - term: 活補助
+    z: 19.97
+    df: 138
+    sentences_with_seed: 2321
+  - term: 生活補
+    z: 19.97
+    df: 138
+    sentences_with_seed: 2321
+  - term: 老人生活
+    z: 18.64
+    df: 237
+    sentences_with_seed: 2321
+  - term: 人生活津
+    z: 16.61
+    df: 235
+    sentences_with_seed: 2321
+  - term: 看護
+    z: 16.53
+    df: 131
+    sentences_with_seed: 2321
+  - term: 看護費
+    z: 16.46
+    df: 87
+    sentences_with_seed: 2321
+  - term: 住院看護
+    z: 15.91
+    df: 69
+    sentences_with_seed: 2321
+- id: identity.middle_low_income
+  aliases:
+  - term: 活津貼
+    z: 35.63
+    df: 230
+    sentences_with_seed: 1386
+  - term: 收入老人
+    z: 26.61
+    df: 464
+    sentences_with_seed: 1386
+  - term: 低收入老
+    z: 26.01
+    df: 465
+    sentences_with_seed: 1386
+  - term: 入戶證明
+    z: 24.53
+    df: 111
+    sentences_with_seed: 1386
+  - term: 收入戶證
+    z: 24.42
+    df: 110
+    sentences_with_seed: 1386
+  - term: 老人生活
+    z: 22.92
+    df: 232
+    sentences_with_seed: 1386
+  - term: 列冊低收
+    z: 22.23
+    df: 95
+    sentences_with_seed: 1386
+  - term: 冊低收入
+    z: 21.62
+    df: 91
+    sentences_with_seed: 1386
+- id: identity.economic_hardship
+  aliases:
+  - term: 獎學金
+    z: 28.12
+    df: 104
+    sentences_with_seed: 240
+  - term: 優秀學生
+    z: 25.73
+    df: 76
+    sentences_with_seed: 240
+  - term: 生獎學金
+    z: 23.14
+    df: 54
+    sentences_with_seed: 240
+  - term: 秀學生獎
+    z: 22.56
+    df: 58
+    sentences_with_seed: 240
+  - term: 學生獎學
+    z: 22.17
+    df: 54
+    sentences_with_seed: 240
+  - term: 學校
+    z: 20.61
+    df: 83
+    sentences_with_seed: 240
+  - term: 獎助資格
+    z: 16.56
+    df: 28
+    sentences_with_seed: 240
+  - term: 學年度第
+    z: 15.97
+    df: 26
+    sentences_with_seed: 240
+- id: identity.special_circumstances
+  aliases:
+  - term: 家庭扶助
+    z: 26.85
+    df: 137
+    sentences_with_seed: 314
+  - term: 家庭子女
+    z: 17.45
+    df: 34
+    sentences_with_seed: 314
+  - term: 條例第
+    z: 14.99
+    df: 25
+    sentences_with_seed: 314
+  - term: 遇家庭扶
+    z: 14.24
+    df: 133
+    sentences_with_seed: 314
+  - term: 歲之兒童
+    z: 12.47
+    df: 17
+    sentences_with_seed: 314
+  - term: 女生活津
+    z: 12.14
+    df: 17
+    sentences_with_seed: 314
+  - term: 符合特
+    z: 12.1
+    df: 16
+    sentences_with_seed: 314
+  - term: 庭扶助條
+    z: 12.08
+    df: 51
+    sentences_with_seed: 314
+- id: identity.indigenous
+  aliases:
+  - term: 年滿
+    z: 22.72
+    df: 73
+    sentences_with_seed: 327
+  - term: 委員會
+    z: 18.27
+    df: 38
+    sentences_with_seed: 327
+  - term: 資料來源
+    z: 13.33
+    df: 24
+    sentences_with_seed: 327
+  - term: 市年滿
+    z: 13.12
+    df: 19
+    sentences_with_seed: 327
+  - term: 民身分
+    z: 12.88
+    df: 25
+    sentences_with_seed: 327
+  - term: 設籍本市
+    z: 12.8
+    df: 30
+    sentences_with_seed: 327
+  - term: 籍本市年
+    z: 11.94
+    df: 16
+    sentences_with_seed: 327
+  - term: 生助學金
+    z: 10.8
+    df: 13
+    sentences_with_seed: 327
+- id: identity.indigenous_tribe
+  aliases:
+  - term: 設籍臺東
+    z: 8.01
+    df: 6
+    sentences_with_seed: 7
+  - term: 般助學金
+    z: 6.87
+    df: 4
+    sentences_with_seed: 7
+  - term: 籍臺東縣
+    z: 6.87
+    df: 4
+    sentences_with_seed: 7
+  - term: 蘭嶼鄉
+    z: 6.26
+    df: 6
+    sentences_with_seed: 7
+  - term: 族身分
+    z: 6.26
+    df: 6
+    sentences_with_seed: 7
+  - term: 申請一般
+    z: 6.12
+    df: 3
+    sentences_with_seed: 7
+  - term: 縣蘭
+    z: 5.68
+    df: 4
+    sentences_with_seed: 7
+  - term: 成績達
+    z: 4.71
+    df: 3
+    sentences_with_seed: 7
+- id: identity.new_immigrant
+  aliases:
+  - term: 居留證
+    z: 11.81
+    df: 18
+    sentences_with_seed: 114
+  - term: 遭逢特殊
+    z: 10.0
+    df: 12
+    sentences_with_seed: 114
+  - term: 逢特殊境
+    z: 10.0
+    df: 12
+    sentences_with_seed: 114
+  - term: 社會處婦
+    z: 9.86
+    df: 9
+    sentences_with_seed: 114
+  - term: 民遭
+    z: 9.45
+    df: 10
+    sentences_with_seed: 114
+  - term: 機票
+    z: 9.13
+    df: 8
+    sentences_with_seed: 114
+  - term: 培力
+    z: 8.96
+    df: 9
+    sentences_with_seed: 114
+  - term: 設籍前新
+    z: 8.69
+    df: 52
+    sentences_with_seed: 114
+- id: identity.single_parent
+  aliases:
+  - term: 培力
+    z: 15.99
+    df: 23
+    sentences_with_seed: 91
+  - term: 未成年
+    z: 12.7
+    df: 18
+    sentences_with_seed: 91
+  - term: 扶養
+    z: 12.07
+    df: 27
+    sentences_with_seed: 91
+  - term: 扶養事實
+    z: 10.86
+    df: 12
+    sentences_with_seed: 91
+  - term: 無扶養事
+    z: 10.11
+    df: 12
+    sentences_with_seed: 91
+  - term: 子女共同
+    z: 9.53
+    df: 9
+    sentences_with_seed: 91
+  - term: 家長
+    z: 9.51
+    df: 13
+    sentences_with_seed: 91
+  - term: 年子女權
+    z: 9.46
+    df: 8
+    sentences_with_seed: 91
+- id: identity.orphan
+  aliases:
+  - term: 依兒童
+    z: 8.26
+    df: 6
+    sentences_with_seed: 9
+  - term: 困苦
+    z: 8.0
+    df: 6
+    sentences_with_seed: 9
+  - term: 助要點
+    z: 5.8
+    df: 4
+    sentences_with_seed: 9
+  - term: 年生活扶
+    z: 5.17
+    df: 6
+    sentences_with_seed: 9
+  - term: 少年生活
+    z: 5.05
+    df: 6
+    sentences_with_seed: 9
+  - term: 湖縣政府
+    z: 3.57
+    df: 4
+    sentences_with_seed: 9
+  - term: 澎湖縣政
+    z: 3.57
+    df: 4
+    sentences_with_seed: 9
+- id: identity.veteran_family
+  aliases:
+  - term: 就養
+    z: 16.83
+    df: 35
+    sentences_with_seed: 97
+  - term: 子女獎
+    z: 11.61
+    df: 12
+    sentences_with_seed: 97
+  - term: 民就
+    z: 10.55
+    df: 14
+    sentences_with_seed: 97
+  - term: 入戶生活
+    z: 9.85
+    df: 10
+    sentences_with_seed: 97
+  - term: 收入戶生
+    z: 9.61
+    df: 10
+    sentences_with_seed: 97
+  - term: 服務處
+    z: 9.55
+    df: 9
+    sentences_with_seed: 97
+  - term: 外就
+    z: 9.41
+    df: 19
+    sentences_with_seed: 97
+  - term: 民之家
+    z: 9.12
+    df: 8
+    sentences_with_seed: 97
+- id: identity.military_civil_bereaved
+  aliases:
+  - term: 優待
+    z: 8.63
+    df: 7
+    sentences_with_seed: 17
+  - term: 傷殘
+    z: 7.45
+    df: 5
+    sentences_with_seed: 17
+  - term: 族就
+    z: 7.45
+    df: 5
+    sentences_with_seed: 17
+  - term: 軍公教人
+    z: 6.07
+    df: 3
+    sentences_with_seed: 17
+  - term: 眷子女
+    z: 6.07
+    df: 3
+    sentences_with_seed: 17
+  - term: 公教人員
+    z: 5.99
+    df: 3
+    sentences_with_seed: 17
+  - term: 因公
+    z: 5.65
+    df: 4
+    sentences_with_seed: 17
+  - term: 用優
+    z: 5.65
+    df: 4
+    sentences_with_seed: 17
+- id: identity.unemployed_worker_child
+  aliases:
+  - term: 子女就學
+    z: 7.91
+    df: 6
+    sentences_with_seed: 42
+  - term: 女就學補
+    z: 7.3
+    df: 6
+    sentences_with_seed: 42
+  - term: 離職證明
+    z: 7.27
+    df: 5
+    sentences_with_seed: 42
+  - term: 合計滿
+    z: 6.89
+    df: 4
+    sentences_with_seed: 42
+  - term: 定期契約
+    z: 5.94
+    df: 3
+    sentences_with_seed: 42
+  - term: 未請領
+    z: 5.94
+    df: 3
+    sentences_with_seed: 42
+  - term: 老年給付
+    z: 5.88
+    df: 3
+    sentences_with_seed: 42
+  - term: 保險人因
+    z: 5.76
+    df: 3
+    sentences_with_seed: 42
+- id: identity.overseas_chinese
+  aliases:
+  - term: 行優
+    z: 6.84
+    df: 4
+    sentences_with_seed: 14
+  - term: 優良
+    z: 6.29
+    df: 4
+    sentences_with_seed: 14
+  - term: 僑務委員
+    z: 6.06
+    df: 3
+    sentences_with_seed: 14
+  - term: 務委員會
+    z: 6.0
+    df: 3
+    sentences_with_seed: 14
+  - term: 生獎學金
+    z: 5.22
+    df: 6
+    sentences_with_seed: 14
+  - term: 公告標題
+    z: 5.04
+    df: 3
+    sentences_with_seed: 14
+  - term: 學校學
+    z: 3.96
+    df: 3
+    sentences_with_seed: 14
+  - term: 慰問金
+    z: 3.55
+    df: 3
+    sentences_with_seed: 14
+- id: disability.has_certificate
+  aliases:
+  - term: 活補助
+    z: 27.52
+    df: 182
+    sentences_with_seed: 1960
+  - term: 生活補
+    z: 27.52
+    df: 182
+    sentences_with_seed: 1960
+  - term: 用補助
+    z: 25.42
+    df: 180
+    sentences_with_seed: 1960
+  - term: 費用補
+    z: 25.26
+    df: 182
+    sentences_with_seed: 1960
+  - term: 日間照顧
+    z: 23.23
+    df: 122
+    sentences_with_seed: 1960
+  - term: 有身心障
+    z: 23.21
+    df: 251
+    sentences_with_seed: 1960
+  - term: 照顧費用
+    z: 21.89
+    df: 107
+    sentences_with_seed: 1960
+  - term: 住宿式照
+    z: 21.46
+    df: 116
+    sentences_with_seed: 1960
+- id: disability.certificate_level
+  aliases:
+  - term: 失能
+    z: 23.86
+    df: 65
+    sentences_with_seed: 338
+  - term: 度身心障
+    z: 22.1
+    df: 85
+    sentences_with_seed: 338
+  - term: 每月補助
+    z: 18.83
+    df: 47
+    sentences_with_seed: 338
+  - term: 常生活活
+    z: 15.68
+    df: 28
+    sentences_with_seed: 338
+  - term: 生活活動
+    z: 15.68
+    df: 28
+    sentences_with_seed: 338
+  - term: 日常生活
+    z: 15.41
+    df: 29
+    sentences_with_seed: 338
+  - term: 人每月
+    z: 15.38
+    df: 59
+    sentences_with_seed: 338
+  - term: 活活動功
+    z: 15.31
+    df: 27
+    sentences_with_seed: 338
+- id: disability.category
+  aliases:
+  - term: 訓練服務
+    z: 8.31
+    df: 6
+    sentences_with_seed: 63
+  - term: 精神病
+    z: 8.3
+    df: 6
+    sentences_with_seed: 63
+  - term: 障礙者個
+    z: 8.22
+    df: 6
+    sentences_with_seed: 63
+  - term: 個別化
+    z: 8.22
+    df: 6
+    sentences_with_seed: 63
+  - term: 失智症
+    z: 8.13
+    df: 7
+    sentences_with_seed: 63
+  - term: 視力
+    z: 7.61
+    df: 5
+    sentences_with_seed: 63
+  - term: 彈性
+    z: 7.48
+    df: 5
+    sentences_with_seed: 63
+  - term: 針對
+    z: 7.37
+    df: 8
+    sentences_with_seed: 63
+- id: disability.family_member_has_certificate
+  aliases:
+  - term: 障礙學生
+    z: 14.03
+    df: 16
+    sentences_with_seed: 20
+  - term: 心障礙學
+    z: 14.03
+    df: 16
+    sentences_with_seed: 20
+  - term: 費用減免
+    z: 8.99
+    df: 7
+    sentences_with_seed: 20
+  - term: 子女就學
+    z: 8.95
+    df: 7
+    sentences_with_seed: 20
+  - term: 學費用減
+    z: 8.37
+    df: 7
+    sentences_with_seed: 20
+  - term: 就學費用
+    z: 8.33
+    df: 7
+    sentences_with_seed: 20
+  - term: 女就學費
+    z: 7.71
+    df: 7
+    sentences_with_seed: 20
+  - term: 減免辦法
+    z: 6.84
+    df: 4
+    sentences_with_seed: 20
+- id: care.cms_level
+  aliases:
+  - term: 經評估
+    z: 9.52
+    df: 15
+    sentences_with_seed: 89
+  - term: 期照顧管
+    z: 9.32
+    df: 11
+    sentences_with_seed: 89
+  - term: 管理中心
+    z: 9.05
+    df: 11
+    sentences_with_seed: 89
+  - term: 心評估
+    z: 8.84
+    df: 8
+    sentences_with_seed: 89
+  - term: 長期照顧
+    z: 8.53
+    df: 16
+    sentences_with_seed: 89
+  - term: 經長
+    z: 8.22
+    df: 6
+    sentences_with_seed: 89
+  - term: 要等級第
+    z: 8.19
+    df: 10
+    sentences_with_seed: 89
+  - term: 適用長照
+    z: 7.99
+    df: 28
+    sentences_with_seed: 89
+- id: care.needs_care
+  aliases:
+  - term: 重度
+    z: 21.99
+    df: 52
+    sentences_with_seed: 206
+  - term: 評估
+    z: 19.54
+    df: 82
+    sentences_with_seed: 206
+  - term: 長期照顧
+    z: 17.67
+    df: 41
+    sentences_with_seed: 206
+  - term: 生活活動
+    z: 16.32
+    df: 27
+    sentences_with_seed: 206
+  - term: 常生活活
+    z: 16.32
+    df: 27
+    sentences_with_seed: 206
+  - term: 活活動功
+    z: 16.12
+    df: 27
+    sentences_with_seed: 206
+  - term: 活動功能
+    z: 16.12
+    df: 27
+    sentences_with_seed: 206
+  - term: 期照顧管
+    z: 13.95
+    df: 21
+    sentences_with_seed: 206
+- id: care.adl_score
+  aliases:
+  - term: 失能
+    z: 15.51
+    df: 29
+    sentences_with_seed: 63
+  - term: 失能程度
+    z: 13.53
+    df: 18
+    sentences_with_seed: 63
+  - term: 估為重度
+    z: 12.18
+    df: 23
+    sentences_with_seed: 63
+  - term: 評估為重
+    z: 12.18
+    df: 23
+    sentences_with_seed: 63
+  - term: 作日
+    z: 12.06
+    df: 13
+    sentences_with_seed: 63
+  - term: 家人照顧
+    z: 10.69
+    df: 12
+    sentences_with_seed: 63
+  - term: 評估
+    z: 10.65
+    df: 39
+    sentences_with_seed: 63
+  - term: 能量
+    z: 10.61
+    df: 34
+    sentences_with_seed: 63
+- id: care.institutional_placement
+  aliases:
+  - term: 福利機構
+    z: 17.13
+    df: 30
+    sentences_with_seed: 148
+  - term: 住宿式服
+    z: 16.05
+    df: 24
+    sentences_with_seed: 148
+  - term: 宿式服務
+    z: 16.05
+    df: 24
+    sentences_with_seed: 148
+  - term: 精神
+    z: 14.69
+    df: 25
+    sentences_with_seed: 148
+  - term: 會福利機
+    z: 12.1
+    df: 14
+    sentences_with_seed: 148
+  - term: 長期照顧
+    z: 11.7
+    df: 24
+    sentences_with_seed: 148
+  - term: 實際入住
+    z: 11.45
+    df: 13
+    sentences_with_seed: 148
+  - term: 人福利機
+    z: 11.28
+    df: 12
+    sentences_with_seed: 148
+- id: care.has_foreign_caregiver
+  aliases:
+  - term: 業服務法
+    z: 10.36
+    df: 9
+    sentences_with_seed: 42
+  - term: 依就業
+    z: 10.33
+    df: 9
+    sentences_with_seed: 42
+  - term: 法相關規
+    z: 10.3
+    df: 9
+    sentences_with_seed: 42
+  - term: 工同
+    z: 8.95
+    df: 9
+    sentences_with_seed: 42
+  - term: 請假
+    z: 8.42
+    df: 6
+    sentences_with_seed: 42
+  - term: 籍看護工
+    z: 8.17
+    df: 29
+    sentences_with_seed: 42
+  - term: 無法協助
+    z: 8.16
+    df: 6
+    sentences_with_seed: 42
+  - term: 同住
+    z: 8.14
+    df: 10
+    sentences_with_seed: 42
+- id: care.is_primary_caregiver
+  aliases:
+  - term: 實際照顧
+    z: 20.33
+    df: 47
+    sentences_with_seed: 379
+  - term: 受照顧
+    z: 19.37
+    df: 88
+    sentences_with_seed: 379
+  - term: 實際
+    z: 18.92
+    df: 88
+    sentences_with_seed: 379
+  - term: 應符合
+    z: 14.82
+    df: 27
+    sentences_with_seed: 379
+  - term: 合下列規
+    z: 14.18
+    df: 25
+    sentences_with_seed: 379
+  - term: 列規定
+    z: 13.91
+    df: 26
+    sentences_with_seed: 379
+  - term: 人照顧
+    z: 13.27
+    df: 22
+    sentences_with_seed: 379
+  - term: 失能程度
+    z: 10.62
+    df: 13
+    sentences_with_seed: 379
+- id: care.dementia_diagnosis
+  aliases:
+  - term: 民之家
+    z: 10.79
+    df: 10
+    sentences_with_seed: 55
+  - term: 走失
+    z: 9.98
+    df: 10
+    sentences_with_seed: 55
+  - term: 精神
+    z: 9.97
+    df: 14
+    sentences_with_seed: 55
+  - term: 歲以上失
+    z: 9.58
+    df: 8
+    sentences_with_seed: 55
+  - term: 輔導會
+    z: 9.06
+    df: 7
+    sentences_with_seed: 55
+  - term: 養護
+    z: 8.4
+    df: 10
+    sentences_with_seed: 55
+  - term: 有走失
+    z: 8.38
+    df: 6
+    sentences_with_seed: 55
+  - term: 會所屬
+    z: 8.26
+    df: 6
+    sentences_with_seed: 55
+- id: health.catastrophic_illness
+  aliases:
+  - term: 疾病
+    z: 21.41
+    df: 47
+    sentences_with_seed: 165
+  - term: 有工作能
+    z: 19.6
+    df: 36
+    sentences_with_seed: 165
+  - term: 父母
+    z: 19.48
+    df: 55
+    sentences_with_seed: 165
+  - term: 工作能力
+    z: 19.32
+    df: 36
+    sentences_with_seed: 165
+  - term: 遭遇重大
+    z: 19.1
+    df: 35
+    sentences_with_seed: 165
+  - term: 致不能工
+    z: 18.8
+    df: 34
+    sentences_with_seed: 165
+  - term: 不能工作
+    z: 18.76
+    df: 34
+    sentences_with_seed: 165
+  - term: 孫子女
+    z: 18.57
+    df: 35
+    sentences_with_seed: 165
+- id: health.specific_disease
+  aliases:
+  - term: 重大傷病
+    z: 15.84
+    df: 28
+    sentences_with_seed: 58
+  - term: 符合衛生
+    z: 12.59
+    df: 14
+    sentences_with_seed: 58
+  - term: 利部公告
+    z: 12.47
+    df: 14
+    sentences_with_seed: 58
+  - term: 福利部公
+    z: 12.39
+    df: 14
+    sentences_with_seed: 58
+  - term: 合衛生福
+    z: 12.35
+    df: 13
+    sentences_with_seed: 58
+  - term: 大傷病證
+    z: 12.35
+    df: 14
+    sentences_with_seed: 58
+  - term: 傷病證明
+    z: 12.27
+    df: 14
+    sentences_with_seed: 58
+  - term: 康保險重
+    z: 10.51
+    df: 17
+    sentences_with_seed: 58
+- id: employment.status
+  aliases:
+  - term: 勞工
+    z: 25.17
+    df: 92
+    sentences_with_seed: 592
+  - term: 就業服務
+    z: 22.37
+    df: 66
+    sentences_with_seed: 592
+  - term: 就業保險
+    z: 19.94
+    df: 53
+    sentences_with_seed: 592
+  - term: 公立就業
+    z: 19.9
+    df: 54
+    sentences_with_seed: 592
+  - term: 失蹤
+    z: 19.84
+    df: 64
+    sentences_with_seed: 592
+  - term: 業服務機
+    z: 19.84
+    df: 54
+    sentences_with_seed: 592
+  - term: 立就業服
+    z: 19.8
+    df: 53
+    sentences_with_seed: 592
+  - term: 服務機構
+    z: 19.65
+    df: 55
+    sentences_with_seed: 592
+- id: employment.unemployed_months
+  aliases:
+  - term: 連續達
+    z: 13.09
+    df: 14
+    sentences_with_seed: 15
+- id: employment.involuntary_separation
+  aliases:
+  - term: 失業給付
+    z: 10.69
+    df: 13
+    sentences_with_seed: 77
+  - term: 領失業給
+    z: 8.94
+    df: 7
+    sentences_with_seed: 77
+  - term: 就業保險
+    z: 8.77
+    df: 11
+    sentences_with_seed: 77
+  - term: 失業證明
+    z: 8.27
+    df: 6
+    sentences_with_seed: 77
+  - term: 業保險法
+    z: 7.95
+    df: 6
+    sentences_with_seed: 77
+  - term: 請領條件
+    z: 7.52
+    df: 5
+    sentences_with_seed: 77
+  - term: 件及相關
+    z: 7.52
+    df: 5
+    sentences_with_seed: 77
+  - term: 合就業
+    z: 7.42
+    df: 5
+    sentences_with_seed: 77
+- id: employment.insured_years
+  aliases:
+  - term: 合計滿
+    z: 8.31
+    df: 6
+    sentences_with_seed: 9
+- id: employment.is_middle_aged
+  aliases:
+  - term: 失業
+    z: 20.08
+    df: 49
+    sentences_with_seed: 51
+  - term: 就業保險
+    z: 18.06
+    df: 28
+    sentences_with_seed: 51
+  - term: 就業
+    z: 15.79
+    df: 47
+    sentences_with_seed: 51
+  - term: 住處所距
+    z: 15.08
+    df: 19
+    sentences_with_seed: 51
+  - term: 處所距離
+    z: 15.08
+    df: 19
+    sentences_with_seed: 51
+  - term: 原日常居
+    z: 15.05
+    df: 19
+    sentences_with_seed: 51
+  - term: 就業地點
+    z: 14.97
+    df: 19
+    sentences_with_seed: 51
+  - term: 地點與原
+    z: 14.78
+    df: 19
+    sentences_with_seed: 51
+- id: employment.in_training
+  aliases:
+  - term: 活津貼
+    z: 12.26
+    df: 29
+    sentences_with_seed: 88
+  - term: 生活津
+    z: 12.25
+    df: 29
+    sentences_with_seed: 88
+  - term: 失業給付
+    z: 11.81
+    df: 15
+    sentences_with_seed: 88
+  - term: 核付
+    z: 10.08
+    df: 9
+    sentences_with_seed: 88
+  - term: 就業
+    z: 10.06
+    df: 32
+    sentences_with_seed: 88
+  - term: 業保險法
+    z: 9.45
+    df: 8
+    sentences_with_seed: 88
+  - term: 安排
+    z: 9.38
+    df: 8
+    sentences_with_seed: 88
+  - term: 就業保險
+    z: 9.33
+    df: 12
+    sentences_with_seed: 88
+- id: housing.tenure
+  aliases:
+  - term: 日間照顧
+    z: 28.97
+    df: 127
+    sentences_with_seed: 947
+  - term: 契約
+    z: 28.71
+    df: 130
+    sentences_with_seed: 947
+  - term: 照顧費用
+    z: 26.51
+    df: 122
+    sentences_with_seed: 947
+  - term: 心障礙
+    z: 22.33
+    df: 237
+    sentences_with_seed: 947
+  - term: 身心障
+    z: 22.32
+    df: 237
+    sentences_with_seed: 947
+  - term: 顧費用補
+    z: 21.65
+    df: 82
+    sentences_with_seed: 947
+  - term: 租金補
+    z: 20.75
+    df: 75
+    sentences_with_seed: 947
+  - term: 房屋租
+    z: 20.53
+    df: 67
+    sentences_with_seed: 947
+- id: housing.rent_month
+  aliases:
+  - term: 補貼
+    z: 45.27
+    df: 198
+    sentences_with_seed: 354
+  - term: 金補
+    z: 33.17
+    df: 212
+    sentences_with_seed: 354
+  - term: 房屋租
+    z: 27.92
+    df: 118
+    sentences_with_seed: 354
+  - term: 金補助
+    z: 24.29
+    df: 82
+    sentences_with_seed: 354
+  - term: 貸款利息
+    z: 22.09
+    df: 55
+    sentences_with_seed: 354
+  - term: 利息補貼
+    z: 21.99
+    df: 54
+    sentences_with_seed: 354
+  - term: 款利息補
+    z: 21.94
+    df: 54
+    sentences_with_seed: 354
+  - term: 租賃
+    z: 20.27
+    df: 62
+    sentences_with_seed: 354
+- id: housing.owns_property
+  aliases:
+  - term: 租賃
+    z: 33.65
+    df: 133
+    sentences_with_seed: 503
+  - term: 土地
+    z: 26.4
+    df: 91
+    sentences_with_seed: 503
+  - term: 價值
+    z: 21.38
+    df: 56
+    sentences_with_seed: 503
+  - term: 有權
+    z: 21.0
+    df: 54
+    sentences_with_seed: 503
+  - term: 租金補助
+    z: 20.11
+    df: 53
+    sentences_with_seed: 503
+  - term: 租賃契約
+    z: 19.1
+    df: 46
+    sentences_with_seed: 503
+  - term: 建物
+    z: 18.64
+    df: 44
+    sentences_with_seed: 503
+  - term: 補貼
+    z: 18.32
+    df: 70
+    sentences_with_seed: 503
+- id: family.children_count
+  aliases:
+  - term: 扶養
+    z: 23.93
+    df: 100
+    sentences_with_seed: 903
+  - term: 離婚
+    z: 20.14
+    df: 67
+    sentences_with_seed: 903
+  - term: 父母
+    z: 19.72
+    df: 88
+    sentences_with_seed: 903
+  - term: 未婚
+    z: 18.07
+    df: 51
+    sentences_with_seed: 903
+  - term: 遭遇
+    z: 17.9
+    df: 54
+    sentences_with_seed: 903
+  - term: 義務
+    z: 15.55
+    df: 56
+    sentences_with_seed: 903
+  - term: 婚生子
+    z: 15.42
+    df: 68
+    sentences_with_seed: 903
+  - term: 懷孕
+    z: 15.37
+    df: 41
+    sentences_with_seed: 903
+- id: family.youngest_child_age
+  aliases:
+  - term: 育兒津貼
+    z: 34.09
+    df: 138
+    sentences_with_seed: 534
+  - term: 歲兒童
+    z: 23.43
+    df: 73
+    sentences_with_seed: 534
+  - term: 兒童育兒
+    z: 19.78
+    df: 49
+    sentences_with_seed: 534
+  - term: 歲兒童育
+    z: 19.78
+    df: 49
+    sentences_with_seed: 534
+  - term: 童育兒津
+    z: 19.78
+    df: 49
+    sentences_with_seed: 534
+  - term: 就學補助
+    z: 19.08
+    df: 49
+    sentences_with_seed: 534
+  - term: 育有未滿
+    z: 18.69
+    df: 44
+    sentences_with_seed: 534
+  - term: 監護人
+    z: 17.87
+    df: 51
+    sentences_with_seed: 534
+- id: family.pregnant
+  aliases:
+  - term: 未婚
+    z: 25.55
+    df: 59
+    sentences_with_seed: 138
+  - term: 分娩
+    z: 18.27
+    df: 31
+    sentences_with_seed: 138
+  - term: 婦女
+    z: 17.28
+    df: 34
+    sentences_with_seed: 138
+  - term: 遭遇困境
+    z: 16.74
+    df: 31
+    sentences_with_seed: 138
+  - term: 生育
+    z: 16.22
+    df: 37
+    sentences_with_seed: 138
+  - term: 流產
+    z: 15.75
+    df: 27
+    sentences_with_seed: 138
+  - term: 生產
+    z: 14.59
+    df: 20
+    sentences_with_seed: 138
+  - term: 婚生子女
+    z: 13.12
+    df: 16
+    sentences_with_seed: 138
+- id: family.child_in_public_daycare
+  aliases:
+  - term: 托育服務
+    z: 33.26
+    df: 149
+    sentences_with_seed: 530
+  - term: 托育人員
+    z: 30.88
+    df: 128
+    sentences_with_seed: 530
+  - term: 服務
+    z: 27.37
+    df: 247
+    sentences_with_seed: 530
+  - term: 服務中心
+    z: 25.1
+    df: 79
+    sentences_with_seed: 530
+  - term: 歲兒童
+    z: 20.8
+    df: 62
+    sentences_with_seed: 530
+  - term: 兒童托育
+    z: 18.76
+    df: 46
+    sentences_with_seed: 530
+  - term: 公共化
+    z: 18.18
+    df: 131
+    sentences_with_seed: 530
+  - term: 服務費用
+    z: 16.87
+    df: 38
+    sentences_with_seed: 530
+- id: family.on_parental_leave
+  aliases:
+  - term: 就保
+    z: 13.63
+    df: 19
+    sentences_with_seed: 86
+  - term: 薪資補
+    z: 12.17
+    df: 13
+    sentences_with_seed: 86
+  - term: 保育
+    z: 12.14
+    df: 19
+    sentences_with_seed: 86
+  - term: 資補助
+    z: 11.65
+    df: 13
+    sentences_with_seed: 86
+  - term: 被保險人
+    z: 11.21
+    df: 18
+    sentences_with_seed: 86
+  - term: 請領
+    z: 10.32
+    df: 22
+    sentences_with_seed: 86
+  - term: 得請領
+    z: 9.08
+    df: 8
+    sentences_with_seed: 86
+  - term: 請領育
+    z: 8.2
+    df: 10
+    sentences_with_seed: 86

@@ -1,0 +1,101 @@
+# 候選來源：臺東縣政府社會處（taisoc.taitung.gov.tw）＋ 生育補助（縣府民政處方案；戶政事務所網站與縣府 TTBABY 育兒入口網各有一頁）
+# 網站結構（social.taitung.gov.tw 不存在，社會處官網是 taisoc.taitung.gov.tw，首頁轉址到 /WebSite/Page/index.aspx）：
+#   服務項目總覽 /WebSite/Service/serviceMain.aspx?menuid=lW%2bfKiAxClc%3d（科 → 類 → 子類）
+#   分類頁 /WebSite/Service/service.aspx?menuid=…&cate=<類>；子類清單 /WebSite/Service/servicelist.aspx?menuid=…&cate=<子類>&listall=1
+#   方案內容頁 /WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=<base64 id>（id 內的 / 以 !0! 表示、+ 以 %2b 表示）
+#   內容頁是靜態 HTML：div.inside_main 內一個 table，固定欄位「類別／申請項目／申請期限／申請地點／申請條件／申請須檢附文件／補助金額／作業天數／連絡窗口／備註／相關檔案」，
+#   <title> 一律是「臺東縣政府社會處-服務項目」，方案名稱取 pages 的 title。
+#   robots.txt：Allow /WebSite/*，Disallow /App_ → 附件 (/App_File/File.ashx) 與清單頁的跳轉連結 (/App_File/Link.ashx → 301 → serviceDetail.aspx) 都不能抓，
+#   所以不設 follow_links（清單頁只透過 Link.ashx 連到內容頁），也不登錄 PDF 附件；只在內文寫「詳如附件」的方案不收。
+# 生育補助：社會處網站沒有；縣府「生育補助實施計畫」（民政處戶政科主辦、戶政事務所受理）在臺東戶政事務所網站 tth.taitung.gov.tw（114.02.11 修訂版，主內容 div.blog-content）
+#   與縣府育兒入口網 ttbaby.taitung.gov.tw（舊版文字，主內容 div.doc-content）各一頁；兩站 robots.txt 都允許。
+# 社會處網站沒有「低收入戶／中低收入戶生活扶助」與「身心障礙者生活補助」的專頁（服務項目與全站搜尋都找不到；身障「身心津貼轉型專區」是空的）。
+id: taitung_sw
+name: 臺東縣政府社會處 — 生育、育兒、社會救助、老人福利
+organization: 臺東縣政府社會處
+provider_type: local_government
+source_type: government_site
+base_url: https://taisoc.taitung.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [臺東縣政府社會處]
+data_confidence: 100
+enabled: true
+domains: [social_welfare, long_term_care, disability]
+content_selectors: [".inside_main table", ".blog-content", ".doc-content", ".inside_main"]
+pages:
+  # ---------------------------------------------------------------- 生育（縣府民政處方案，戶政事務所受理）
+  - {url: "https://tth.taitung.gov.tw/service/detail/GGMGLAJJAL", title: 臺東縣政府生育補助實施計畫（婦女生育補助費）, seed_category: birth_incentive, organization: 臺東縣政府民政處}
+  - {url: "https://ttbaby.taitung.gov.tw/articles/29/", title: 臺東縣政府生育補助實施計畫（TTBABY 育兒入口網）, seed_category: birth_incentive, organization: 臺東縣政府民政處, skip: true, skip_reason: 與臺東戶政事務所網站的同一方案重複，且此頁仍是 113 年版文字（戶政所頁為 114.02.11 修訂版）}
+  - {url: "https://ttbaby.taitung.gov.tw/articles/221/", title: 臺東縣TT BABY育兒生日禮2.0（新生兒育兒禮包）, seed_category: birth_incentive}
+  # ---------------------------------------------------------------- 育兒、托育（兒少及婦女福利科）
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=%2bgJT0m7Gp!0!c%3d", title: 育有未滿二歲兒童育兒津貼（臺東縣）, seed_category: child_allowance}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=v6%2bBqThbd3w%3d", title: 未滿2歲（含延長2至未滿3歲）兒童托育公共化及準公共服務費用補助（臺東縣）, seed_category: childcare_subsidy}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=jTQzpn!0!OpPU%3d", title: 臺東縣定點臨時托育服務, seed_category: ""}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=uWnUjbUPVIo%3d", title: 臺東縣政府未滿六歲幼兒全民健康保險自付保險費補助, seed_category: ""}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=sc7ZPkAD5rU%3d", title: 臺東縣政府育兒指導服務（到宅育兒指導）, seed_category: ""}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=gNiet7!0!HDx4%3d", title: 臺東縣居家式托育服務（托育人員登記）, skip: true, skip_reason: 內容是居家托育人員（保母）登記資格與程序，不是家長的補助}
+  # ---------------------------------------------------------------- 兒童及少年
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=fhjWcVFLwBQ%3d", title: 臺東縣兒童及少年生活扶助, seed_category: low_income_allowance}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=ZFokpInvAnU%3d", title: 臺東縣弱勢兒童及少年托育及醫療費用補助, seed_category: ""}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=Av!0!RQg32b5A%3d", title: 臺東縣弱勢家庭兒童及少年緊急生活扶助, seed_category: emergency_relief}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=tQYeCFx9IZQ%3d", title: 臺東縣未滿20歲懷孕者孕期及產後與月子餐食及租屋補助計畫, seed_category: ""}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=cSzHjjUosWE%3d", title: 臺東縣未婚媽媽新生兒營養補助, seed_category: ""}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=xLk3pSDOrTU%3d", title: 兒童及少年未來教育及發展帳戶（臺東縣受理）, seed_category: ""}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=4PToPWDHy04%3d", title: 臺東縣未婚媽媽新生兒營養扶助（未滿20歲懷孕專區）, skip: true, skip_reason: 欄位全是「.」的空白頁（135 字），方案內容在 cSzHjjUosWE 那頁}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=LfxkoGJijY4%3d", title: 弱勢兒童及少年緊急生活扶助（未滿20歲懷孕專區）, skip: true, skip_reason: 欄位全是「.」的空白頁（134 字），方案內容在 Av!0!RQg32b5A 那頁}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=BCRpwsyRCCI%3d", title: 臺東縣彩繪人生基金, skip: true, skip_reason: 對象是公所、社會團體與社福機構的計畫補助，不是民眾補助}
+  # ---------------------------------------------------------------- 社會救助（社會救助及社工科）
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=cwKrUeIfktA%3d", title: 臺東縣急難救助金, seed_category: emergency_relief}
+  # 站上標題是「急難紓困實施方案申請書」，但內文是對象、金額（1 萬至 3 萬）、3 天核定與受理公所，依內容命名
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=Zcm4GrctbRY%3d", title: 強化社會安全網－急難紓困實施方案（臺東縣受理）, seed_category: emergency_relief}
+  # 站上標題「臺東縣災害救助金核發辦法」，內文是死亡／失蹤／重傷／安遷／淹水救助的對象與金額，依內容命名
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=aOeD0UWR4EU%3d", title: 臺東縣災害救助金（死亡、失蹤、重傷、安遷、淹水救助）, seed_category: emergency_relief}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=9lCIZbQ!0!3FY%3d", title: 115年臺東縣低收入戶喪葬生活補助實施計畫, seed_category: low_income_allowance}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=eFndNrSd4DI%3d", title: 115年度臺東縣政府辦理（中）低收入戶及弱勢家戶住宅修繕補助計畫, seed_category: low_income_allowance}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=6D3p8Ssl4lQ%3d", title: 臺東縣低收入戶暨中低收入戶重病住院看護費用補助, seed_category: low_income_allowance}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=Iv8nUWDTvq4%3d", title: 臺東縣中低收入戶傷病醫療費用補助, seed_category: low_income_allowance}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=pKJCfMLiUNA%3d", title: 臺東縣政府115年度脫貧支持服務計畫－學習資源補助方案, seed_category: low_income_allowance}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=RHHXYUMJCc4%3d", title: 臺東縣微加保障守護幸福微型團體傷害保險計畫（低收、中低收、身障免費投保）, seed_category: ""}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=MYt5VmMLqdc%3d", title: 臺東縣政府中低收入老人生活津貼（社會救助分類）, seed_category: elderly_allowance, skip: true, skip_reason: 與老人福利分類下 PTpncovlsK0 那頁同一方案、內容相同}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=v05rKMIFYs0%3d", title: 臺東縣政府辦理以工代賑實施要點, skip: true, skip_reason: 內文只有「詳如附件」（202 字），要點只有 docx／odt 附件且附件路徑 /App_File 被 robots.txt 禁止}
+  # ---------------------------------------------------------------- 老人福利（長青及身障福利科）
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=PTpncovlsK0%3d", title: 臺東縣政府中低收入老人生活津貼, seed_category: elderly_allowance}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=iRWQf5%2bqCNU%3d", title: 臺東縣中低收入老人特別照顧津貼, seed_category: elderly_allowance}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=ZJqHdEXzlRQ%3d", title: 臺東縣百歲人瑞營養補助, seed_category: elderly_allowance}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=ezkow17c7S4%3d", title: 臺東縣低收入及中低收入老人重病住院看護費用補助實施計畫, seed_category: elderly_allowance}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=GBvBdC1azfM%3d", title: 臺東縣中低收入老人補助裝置假牙實施計畫, seed_category: elderly_allowance}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=wbR891ZKh0Y%3d", title: 臺東縣中低收入老人傷病醫療補助, seed_category: elderly_allowance}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=M156J1Qi0II%3d", title: 臺東縣政府70歲以上老人全民健康保險自付保險費補助, seed_category: elderly_allowance}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=6LJKsrufaMA%3d", title: 65歲至69歲中低收入老人、70歲以上老人及離島地區老人健保費補助（臺東縣）, seed_category: elderly_allowance}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=DMiUkxhZcSE%3d", title: 臺東縣敬老重陽節禮金, seed_category: elderly_allowance}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=M80KSGMCoKs%3d", title: 臺東縣政府辦理銀健康樂齡健康檢查補助實施計畫, seed_category: elderly_service}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=9358%2b5!0!yna4%3d", title: 臺東卡（敬老卡、博愛卡）每月1,500點乘車補助, seed_category: elderly_service}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=GQaCOiO1nvE%3d", title: 臺東縣政府115年補助辦理低收入戶老人轉介機構收容照顧實施計畫, seed_category: institutional_care_subsidy}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=T66ZgwqRlG4%3d", title: 臺東縣中低收入老人住宅改善補助, seed_category: ""}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=!0!pWpWgRZWqs%3d", title: 臺東縣獨老智能守護緊急救援服務, seed_category: elderly_service}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=fLQ!0!Cc11odA%3d", title: 臺東縣關懷獨居老人服務計畫, seed_category: elderly_service}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=Ku1z25PNtK0%3d", title: 預防老人走失－愛的手鍊服務實施計畫（臺東縣）, seed_category: elderly_service}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=KHNa!0!pg9NBQ%3d", title: 居家清潔亮晶晶服務計畫, skip: true, skip_reason: 內文只有連絡窗口與附件清單（197 字），計畫內容在 /App_File 附件（robots.txt 禁止）}
+  # ---------------------------------------------------------------- 身心障礙福利（長青及身障福利科）
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=Lyay2YDZVPU%3d", title: 身心障礙者日間照顧及住宿式照顧費用補助（臺東縣）, seed_category: disability_care_subsidy}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=aftgxwqlCJI%3d", title: 身心障礙者參加社會保險保險費補助（臺東縣）, seed_category: disability_other}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=wQoyaK%2bRVsI%3d", title: 臺東縣呼吸治療弱勢家庭補助計畫, seed_category: disability_other}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=XJET1WRAI9M%3d", title: 臺東縣身心障礙者家庭托顧服務計畫, seed_category: family_care_home}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=e%2bNsMDR29R8%3d", title: 臺東縣身心障礙者臨時暨短期照顧服務, seed_category: respite_care}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=YCNRacyGpiw%3d", title: 臺東縣身心障礙者生活輔具費用補助, seed_category: assistive_device}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=nEDkNKNoiVs%3d", title: 居家身心障礙者使用維生器材及必要生活輔具用電優惠（臺東縣）, seed_category: disability_other}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=2jzShXOeq2E%3d", title: 臺東縣小型復康巴士服務, seed_category: transport_service}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=X6oTrjHZwt4%3d", title: 臺東縣身心障礙者自立生活支持服務（個人助理）, seed_category: disability_other}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=G27AuVeQ06A%3d", title: 臺東縣家庭照顧者支持服務計畫, seed_category: ""}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=ImNPACJy9XY%3d", title: 臺東縣身心障礙者社區式日間照顧服務, seed_category: day_care}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=Tv9%2bLGXUyOo%3d", title: 臺東縣家庭暴力及性侵害被害人補助, seed_category: ""}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=3%2bvRNLACiME%3d", title: 身心障礙者房屋租金及購屋貸款利息補貼, seed_category: rental_subsidy, skip: true, skip_reason: 欄位全是「*」（258 字），作業規定只有 .doc 附件且 /App_File 被 robots.txt 禁止}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=8eCMtcFseqI%3d", title: 未成年身心障礙者緊急照顧服務計畫, skip: true, skip_reason: 只有「方案詳如附件，請身障機構來函申請」（207 字），對象是機構}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=VIbU7WTjge4%3d", title: 115年身心障礙者醫療平權跨區牙科就醫支持補助計畫, skip: true, skip_reason: 補助對象是身障福利機構與團體（申請單位），不是個人}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=zUmK80TA0Xk%3d", title: 失能長照輔具補助給付標準, skip: true, skip_reason: 只有衛生局長照科聯絡電話與附件（305 字），沒有資格與給付}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=GZcL80oUFdw%3d", title: 身心障礙者風景區康樂場所文教設施優惠措施, skip: true, skip_reason: 內文只有「詳如附件」（260 字）}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=kJfVD!0!VqH0Q%3d", title: 中型復康巴士（團體預約）, skip: true, skip_reason: 對象是身障團體、機構與學校的團體借車服務}
+  # ---------------------------------------------------------------- 特殊境遇家庭（兒少及婦女福利科）
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=Q4Cf!0!fSg5T8%3d", title: 臺東縣特殊境遇家庭各項扶助（緊急生活扶助、子女生活津貼、傷病醫療、兒童托育、法律訴訟津貼）, seed_category: special_circumstances_aid}
+  - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=7oke3LNba4s%3d", title: 特殊境遇家庭生活扶助各式表件下載, seed_category: special_circumstances_aid, skip: true, skip_reason: 只有申請表附件清單（373 字）}
+notes: 臺東縣政府社會處官網（taisoc.taitung.gov.tw）。方案內容頁 /WebSite/Service/serviceDetail.aspx?…&id=<id> 為靜態 HTML，固定欄位表格（申請條件、應備文件、補助金額、作業天數、連絡窗口）都在頁面內文；robots.txt 禁止 /App_ 路徑，所以附件（File.ashx）與清單頁的跳轉連結（Link.ashx）都不抓，不設 follow_links、不登錄 PDF。生育補助（縣府民政處方案、戶政事務所受理）收臺東戶政事務所網站頁；縣府 TTBABY 育兒入口網另收育兒生日禮。站上沒有低收入戶生活扶助與身心障礙者生活補助專頁。

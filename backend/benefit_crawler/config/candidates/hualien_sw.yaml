@@ -1,0 +1,89 @@
+id: hualien_sw
+name: 花蓮縣政府社會處 — 生育、育兒、社會救助、老人福利
+organization: 花蓮縣政府社會處
+provider_type: local_government
+source_type: government_site
+base_url: https://sa.hl.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [花蓮縣政府社會處]
+data_confidence: 100
+enabled: true
+domains: [social_welfare, long_term_care, disability]
+# 網站結構：
+#   分類目錄頁 /List_sp/<guid>（巢狀：業務資訊 → 老人福利／社會救助… → 老人經濟補助／經濟扶助…），方案內容頁 /Detail_sp/<guid>。
+#   內容頁是靜態 HTML（無 JavaScript 動態載入），主內容區 div.detail_box（含 .title 分類名、發布日期／科室、.edit_box 內文、.dw 相關附件）。
+#   <title> 只有「花蓮縣政府社會處 - <分類>」，方案名稱取 pages 的 title。
+#   站台憑證缺 Subject Key Identifier（與南投相同），需 ssl_strict_x509=false（專案預設）。robots.txt 為 404，無爬蟲限制。
+content_selectors: [".detail_box"]
+follow_links:
+  depth: 1
+  allow: ["Detail_sp/"]
+  # deny 前三個：每頁共用的導覽列 Detail_sp（預告統計資料發佈時間表、歷史沿革、社會福利法規及資源工作手冊）；
+  # ce82ded9／456e45a4：老人福利、身障福利分類下重複張貼的「低(中低)收入戶及弱勢族群醫療及住院照顧費用補助規定」（已收社會救助分類 d61cc5dc）；
+  # 6f3a2418：社會救助分類下重複的「身心障礙者參加社會保險保險費補助」（已收 c300ed15）；8faa34b5 社會救助專戶、07deccf8 社會救助通報：不是補助方案
+  deny: ["c0f7077e06b340adba1c8ecd4a98aae7", "5fafac4560e0474889bf70a72c64df51", "9f313bc61e794cd99a4d84b05a4c64de",
+         "ce82ded9ecad469380d1311da6cecf28", "456e45a40d7f44c7a14eb687e1d6f373", "6f3a241822594b2eb75f960ad6eeda55",
+         "8faa34b5ffa446039bee3c75e92afd3d", "07deccf8e94e4baba365ad9dc8425e62", "List_sp", "page="]
+  max_links: 30
+pages:
+  # ---------------------------------------------------------------- 生育、育兒、托育
+  # 花蓮縣婦女生育補助：社會處婦幼科主辦，向戶政事務所申請（實施計畫全文：設籍一年、每胎 2 萬元、出生後 60 日內）
+  - {url: "https://sa.hl.gov.tw/Detail_sp/933bc57c73ce40f0997247a34148bd85", title: 花蓮縣婦女生育補助, seed_category: birth_incentive}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/5e3b2c931b1c46ccbd50376ac60eafeb", title: 育有未滿2歲兒童育兒津貼, seed_category: child_allowance}
+  # 頁面選單名為「托育公共及準公共化(特約托育補助)相關表件」，但內文是托育補助的發放對象、金額與申請方式（表件只是附件），依內容命名
+  - {url: "https://sa.hl.gov.tw/Detail_sp/383016d0b49b40dc92a2c8dba17e7a56", title: 花蓮縣未滿2歲兒童托育補助（公共及準公共化特約托育補助）, seed_category: childcare_subsidy}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/09989e21ef6447a7b12d21098251b291", title: 花蓮縣弱勢家庭臨時托育服務計畫, seed_category: childcare_subsidy}
+  # 對象是準公共居家托育人員／托嬰中心托育人員的獎勵（不是家長補助），不給種子類別
+  - {url: "https://sa.hl.gov.tw/Detail_sp/1f12319f0c794f72b10f896671daf170", title: 花蓮縣準公共友善托育獎勵措施實施計畫}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/890444d3c3824890baea1b38802a20dc", title: 低收入戶產婦及嬰兒營養補助, seed_category: low_income_allowance}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/8fa4681a2f1c46d0be1924fab8164637", title: 花蓮縣公共化及準公共化托育服務價格上限, skip: true, skip_reason: 內文只有圖片（抽出 0 字）}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/9e48aee2f7d840a884ac24476a4d096f", title: 花蓮縣坐月子到宅服務, skip: true, skip_reason: 內文只有外部網站連結（56 字），沒有資格與給付}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/54afc740c3ff4cff908bf8dceff5cb6d", title: 定點臨時托育服務, skip: true, skip_reason: 社福中心臨托服務時段說明，沒有補助資格與給付內容}
+  # ---------------------------------------------------------------- 兒童及少年
+  - {url: "https://sa.hl.gov.tw/Detail_sp/a1599aa303bc4b7a922cd879005ec8ff", title: 弱勢家庭兒童及少年緊急生活扶助, seed_category: emergency_relief}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/c8559fe9e63a4a428aa82200a1ddb0b1", title: 花蓮縣兒童及少年生活扶助}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/87f98787adf94260a5ccf839f8f64812", title: 花蓮縣弱勢兒童及少年醫療費用補助}
+  # ---------------------------------------------------------------- 社會救助
+  - {url: "https://sa.hl.gov.tw/Detail_sp/e600e5783a3d43859f310d41a8d2a089", title: 低收入戶及中低收入戶補助, seed_category: low_income_allowance}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/ce71b2c5d6024dfca9eb1d6f87ba2974", title: 花蓮縣急難救助, seed_category: emergency_relief}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/0c12ced48f2346f58b6221c3694e8d8b", title: 強化社會安全網－急難紓困實施方案, seed_category: emergency_relief}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/d47283b84bc94887acd4a167e1c4412d", title: 低收入戶喪葬補助, seed_category: low_income_allowance}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/39819a2b979641ba8363a5e3c13ad355", title: 低收入戶住宅修繕補助, seed_category: low_income_allowance}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/d61cc5dc99424f1d906097ba018b8847", title: 花蓮縣低(中低)收入戶及弱勢族群醫療及住院照顧費用補助, seed_category: low_income_allowance}
+  # 中央方案，由縣府列冊發放；頁面寫出資格、每月加發金額與發給期間
+  - {url: "https://sa.hl.gov.tw/Detail_sp/65906e10ac1b4b80bcc18e70665408a7", title: 115年衛生福利部關懷弱勢加發生活補助（花蓮縣）, seed_category: low_income_allowance}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/5daca8b22de147aca19d9677f525ec88", title: 國民年金所得未達一定標準保費補助}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/c6ac0148af9446619fd3783b63547c6a", title: 短缺川資民眾返鄉乘車換票, seed_category: emergency_relief}
+  # ---------------------------------------------------------------- 老人福利
+  - {url: "https://sa.hl.gov.tw/Detail_sp/dc1acc8d6464424787aead9e1052f4e5", title: 中低收入老人生活津貼, seed_category: elderly_allowance}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/2215b1ced5254f79acc3d689e1ed0297", title: 中低收入老人特別照顧津貼, seed_category: elderly_allowance}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/5484af3f35b0491eb9c4ce603bd07aa9", title: 花蓮縣65歲以上老人全民健康保險自付保險費補助, seed_category: elderly_allowance}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/1d9e430707144c7482f7aa8db508e4dd", title: 花蓮縣65歲以上長者假牙補助, seed_category: elderly_allowance}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/f923207ab1ea462abf4e8a092c881e98", title: 花蓮縣政府重陽節敬老禮金, seed_category: elderly_allowance}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/687abdf8844b42579f218ff41a88e201", title: 住宿式機構服務使用者補助方案, seed_category: institutional_care_subsidy}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/e95bd424080646168d181523f90ad21f", title: 低（中低）收入戶老人公費安置, seed_category: institutional_care_subsidy}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/dc9d008bbda849009dc1bf2be5712753", title: 獨居老人緊急救援連線服務, seed_category: elderly_service}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/a5f00ac066a8472299c7d37b47175e70", title: 中低收入老人生活津貼（社會救助分類）, seed_category: elderly_allowance, skip: true, skip_reason: 與老人福利分類下的 dc1acc8d… 同一方案、內容相同}
+  # ---------------------------------------------------------------- 身心障礙福利
+  - {url: "https://sa.hl.gov.tw/Detail_sp/919c84e122a24e86ba3ffddffbad4eb6", title: 身心障礙者生活補助, seed_category: disability_living_allowance}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/11fd53f5764b48d792acb7a6bec111e5", title: 身心障礙者生活補助（身心障礙福利分類）, seed_category: disability_living_allowance, skip: true, skip_reason: 與社會救助分類下的 919c84e1… 同一方案，此頁仍是 113 年度門檻數字}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/662fed91a0744d67b768f1acef4c91ec", title: 身心障礙者生活輔具費用補助, seed_category: assistive_device}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/012d480232f7468ea021e6f3251924b3", title: 身障生活輔具代償墊付民眾專區, seed_category: assistive_device, skip: true, skip_reason: 只有申請流程與購買應附資料（243 字），資格與給付在 662fed91… 輔具費用補助頁}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/4ec7b8804cf044c8987ce30029ba4497", title: 身心障礙者日間照顧及住宿式照顧費用補助, seed_category: disability_care_subsidy}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/4bdd41ca02524fd7b17e94d10ef314f1", title: 身心障礙者房屋租金補助, seed_category: rental_subsidy}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/7a0ebe1d2c3e4c98a6ba9eb2aa80273c", title: 身心障礙者首次購屋貸款利息補貼, seed_category: disability_other}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/50f8a75b3c474efd8db8904a52026292", title: 身心障礙者購買停車位貸款利息補貼或承租停車位補助, seed_category: disability_other}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/70c6a5c4d7914d26879eb94ea0629b05", title: 身心障礙者承租商店攤販租金補助, seed_category: disability_other}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/c300ed153670423fbb1540511c741fd4", title: 身心障礙者參加社會保險保險費補助, seed_category: disability_other}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/ba647c63e70345ee9d22fb48b2d7167f", title: 居家身心障礙者使用維生器材及必要生活輔具用電優惠, seed_category: disability_other}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/e78898305a204f78879819617462189d", title: 身心障礙者臨時及短期照顧服務, seed_category: respite_care}
+  - {url: "https://sa.hl.gov.tw/Detail_sp/88a6177c24e74eb594408377ce49f36e", title: 身心障礙者家庭托顧服務, seed_category: family_care_home}
+  # ---------------------------------------------------------------- 特殊境遇家庭
+  - {url: "https://sa.hl.gov.tw/Detail_sp/6b0bf4041af04cb992338e22d08080ce", title: 特殊境遇家庭扶助, seed_category: special_circumstances_aid}
+  # ---------------------------------------------------------------- 分類目錄頁（配合 follow_links 追新方案；本身會被判為彙整頁）
+  - {url: "https://sa.hl.gov.tw/List_sp/d8578e37dd774fec9efe178e2f7eb963", title: 老人經濟補助總覽}
+  - {url: "https://sa.hl.gov.tw/List_sp/22d432f786034a91ba984af389017f88", title: 兒少經濟補助總覽}
+  - {url: "https://sa.hl.gov.tw/List_sp/df505e0d35c548d4bc57470513f7782d", title: 社會救助經濟扶助總覽}
+  - {url: "https://sa.hl.gov.tw/List_sp/8749c6132a3d47dfadfae08657fe79c6", title: 身心障礙者經濟扶助總覽}
+  # 婦女福利分類（List_sp/6b226974…）不作目錄追連結：除生育補助外都是施政計畫、需求調查、場地租借、得獎名單與給團體的補助計畫申請
+notes: 花蓮縣政府社會處官網（sa.hl.gov.tw）。方案內容頁為靜態 HTML（/Detail_sp/<guid>，主內容區 div.detail_box），資格、給付、申請窗口與應備文件都在頁面內文，相關附件（實施計畫 PDF、申請表）列在同一區塊。生育補助（花蓮縣婦女生育補助）由社會處婦幼科主辦、戶政事務所受理，頁面就在本站婦女福利分類下。

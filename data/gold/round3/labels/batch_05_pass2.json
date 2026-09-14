@@ -1,0 +1,170 @@
+{
+  "labels": [
+    {
+      "id": "c53c4c9b-2631-477f-ab8d-81661825f2e7",
+      "title": "新竹縣社勞政聯合促進低收入戶及中低收入戶 就業服務指引",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "employment_incentive",
+      "secondary": ["low_income_allowance", "childcare_subsidy"],
+      "closed": false,
+      "reason": "原文寫明服務對象為有工作能力之低收入戶、中低收入戶，並列出三項具體給付：交通費用補助（每趟200–500元、每月最高1,500元、最多6個月）、托育/安親費用補助（每名孩童每月最高3,000元）及儲蓄相對配合款（1:1、最多12個月），屬促進就業之現金補助，故主類別取就業促進津貼、次類別標低收與托育。",
+      "confidence": "medium"
+    },
+    {
+      "id": "6d507969-ba12-475e-aaec-47116852e42b",
+      "title": "大安區公所社會課業務簡介一覽",
+      "is_benefit": "portal",
+      "kind": "portal",
+      "category": "",
+      "secondary": ["child_allowance", "disability_living_allowance", "disability_other", "emergency_relief", "low_income_allowance"],
+      "closed": false,
+      "reason": "整頁只有查詢框與10筆文章標題及日期（國民年金所得未達一定標準、育兒津貼、身障生活補助、災害救助、以工代賑等），沒有任何資格或給付內容，屬社會課業務的專區目錄；依規則區公所多項業務清單標 portal，若視為純選單亦可歸 no/directory。",
+      "confidence": "medium"
+    },
+    {
+      "id": "b9616582-66b8-4364-8a49-18662a44f91a",
+      "title": "新北市身心障礙者參加全民健康保險及社會保險自付保費補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "disability_other",
+      "secondary": ["medical_subsidy"],
+      "closed": false,
+      "reason": "原文說明身心障礙者參加勞保、健保、農保之自付保費由政府主動申報並直接補助（公保、軍保需向投保單位申請），並列出申請不列入媒體交換與申請自付額補助退費的應備證件及21天處理期限；對象為身障者、給付為保費補助，但頁面未寫補助比率，屬身心障礙者保險費補助類其他福利。",
+      "confidence": "medium"
+    },
+    {
+      "id": "1569d52f-29ac-4e92-8f57-7946ead501a9",
+      "title": "急難救助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "emergency_relief",
+      "secondary": [],
+      "closed": false,
+      "reason": "注意事項寫明申請人需設籍臺南市東區，因戶內人口死亡無力殮葬、罹患重病、失業或其他原因致生活陷困者可以戶為單位申請，並列出應附文件（除戶謄本、喪葬費收據、診斷書、求職三次未果證明等），屬區公所急難救助方案頁；頁面未寫救助金額。",
+      "confidence": "high"
+    },
+    {
+      "id": "9cec0e8e-ae06-4042-b2d5-049e57978447",
+      "title": "中低收入戶資格認定",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文列出115年度中低收入戶審核標準（每人每月收入23,273元以下、動產每人每年14萬4,000元以下、不動產每戶578萬元以下）、申請單位為戶籍地公所及應備文件，屬中低收入戶資格說明頁，依規則歸 low_income_allowance；但頁面未列出取得資格後的給付項目，故信心中等。",
+      "confidence": "medium"
+    },
+    {
+      "id": "9938df59-7072-405d-b371-ab1c1059a5b3",
+      "title": "社區式日間照顧服務",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "disability_care_subsidy",
+      "secondary": ["day_care"],
+      "closed": false,
+      "reason": "原文為新竹市社會處委託民間單位提供之身心障礙者社區式日間照顧服務，寫明服務對象（領有身心障礙證明、經需求評估核定有日照需求、18–64歲設籍新竹市者優先）、服務時間、每人每月4,000元收費（含餐費）及生活技能訓練等服務內容，屬有經濟價值之照顧服務；對象是身障者而非長照日照中心，故主類別取身心障礙照顧補助，次類別標日間照顧。",
+      "confidence": "medium"
+    },
+    {
+      "id": "e64f754a-1e03-4e78-899b-2cb1b3282ba9",
+      "title": "急難救助（衛生福利e寶箱）",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "emergency_relief",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文說明急難紓困的救助對象（負擔家庭主要生計者死亡、失蹤、罹患重傷病、失業或其他原因無法工作致家庭陷困）與給付（依認定基準表發放關懷救助金一至三萬元），並說明紓困後仍陷困者可依社會救助法第21條申請地方政府急難救助及衛福部急難救助，主題單一皆屬急難救助；惟頁面屬e寶箱資源綜覽，其他細節與窗口僅以附件連結呈現，故信心中等。",
+      "confidence": "medium"
+    },
+    {
+      "id": "bed9693f-2b29-4057-a0f0-57d14fffb869",
+      "title": "身心障礙者生活補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "disability_living_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文寫明服務對象（設籍並實際居住臺南市、領有身心障礙手冊、未安置機構）、擇一領取規定、應計人口及審核標準（所得每人每月低於38,788元、動產1人200萬元、不動產770萬元）與應附文件，屬身心障礙者生活補助方案頁；未寫補助金額。",
+      "confidence": "high"
+    },
+    {
+      "id": "7b6855e8-f589-4cad-acd8-ec048ecf7e0e",
+      "title": "托育人員、托嬰中心參與準公共化托育服務簽約相關規定",
+      "is_benefit": "no",
+      "kind": "other",
+      "category": "",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文只寫托育人員、托嬰中心、托育家園加入準公共化服務的簽約資格（登記證書、設立許可）、簽約規定（收費上限、未違規、投保勞保、評鑑等第）及應備文件，是服務提供者端的行政簽約規範，全文沒有任何給申請人的補助金額或給付內容，屬機構導向規定而非補助方案。",
+      "confidence": "medium"
+    },
+    {
+      "id": "b3ed0b33-a682-4f89-b40d-d2588671c5fa",
+      "title": "苗栗縣國民年金被保險人所得未達一定標準申請",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文寫明給付：家庭總收入每人每月未達最低生活費1.5倍者政府補助70%國民年金保費、未達2倍者補助55%；服務對象為25–64歲設籍苗栗縣且未參加勞農公軍保之國民，並列出各公所窗口與應備證件，屬所得審查的保險費補助方案；規則允許的類別中沒有保險費補助專屬類別（taxonomy.yaml 另有 insurance_premium_subsidy 但未列入規則），依其比照中低收入標準的性質暫歸低收入戶生活補助。",
+      "confidence": "medium"
+    },
+    {
+      "id": "546844af-a23e-4f14-8154-14081ba5dff9",
+      "title": "中低收入戶春節慰問金",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文寫明服務對象為當年度春節當日仍核列中低收入戶者，給付為春節慰問金每戶500元，由區公所逕撥入郵政（農會）帳戶，屬中低收入戶現金給付方案。",
+      "confidence": "high"
+    },
+    {
+      "id": "3f93f3c3-5460-4cc2-9e18-4c23807f5c8a",
+      "title": "低收入戶全民健康保險補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": ["medical_subsidy"],
+      "closed": false,
+      "reason": "原文寫明申請資格為本市列冊低收入戶、福利內容為全額補助健保費、受理單位為戶籍地區公所社政課，資格與給付俱備；對象限低收入戶，故主類別歸低收入戶生活補助，健保費補助另標 medical_subsidy 為次類別（規則列表無保險費補助專屬類別）。",
+      "confidence": "medium"
+    },
+    {
+      "id": "9506e8b0-a9cc-4acb-9828-47a861dc74ad",
+      "title": "兒童與少年未來教育及發展帳戶",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": ["education_subsidy"],
+      "closed": false,
+      "reason": "原文寫明服務對象（105年1月1日以後出生之低收入戶、中低收入戶兒少，或安置2年以上兒少）、給付（兒少每月自存500/1,000/1,250元，政府每半年1:1相對提撥，滿18歲後限用於高等教育、職訓、創業）及應備文件，屬低收入戶兒少脫貧儲蓄方案，主類別取低收入戶生活補助、次類別標就學補助。",
+      "confidence": "medium"
+    },
+    {
+      "id": "7e809dac-c226-45a5-ae96-2bde29927b55",
+      "title": "115年度特殊境遇家庭扶助申請規定及應備文件",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "special_circumstances_aid",
+      "secondary": ["tuition_waiver", "childcare_subsidy", "medical_subsidy"],
+      "closed": false,
+      "reason": "PDF內文完整列出115年度桃園市特殊境遇家庭扶助的七款補助對象、八項扶助項目（緊急生活扶助、子女生活津貼、子女教育補助減免學雜費60%、傷病醫療補助最高70%每年12萬元、兒童托育津貼每月1,500元、法律訴訟補助5萬元、創業貸款利息補貼）、申請標準（每人每月39,960元、動產150萬元起、不動產650萬元）與應備文件，資格與給付俱備。",
+      "confidence": "high"
+    },
+    {
+      "id": "a005231a-e33d-4af5-aba3-73aa89b5f837",
+      "title": "就保育嬰留職停薪津貼 — 給付標準及期間",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "parental_leave_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文寫明給付標準（按育嬰留停當月起前6個月平均月投保薪資60%按月發給，每一子女最長6個月，另加發20%薪資補助合併發給）、給付期間計算方式與試算例，以及父母可同時請領合計12個月等注意事項；雖是勞保局專區的「給付標準及期間」子頁，但已具體寫出給什麼，屬育嬰留停津貼方案內容。",
+      "confidence": "high"
+    }
+  ],
+  "count": 15
+}

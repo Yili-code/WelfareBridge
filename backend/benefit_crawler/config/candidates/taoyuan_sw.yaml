@@ -1,0 +1,78 @@
+id: taoyuan_sw
+name: 桃園市政府社會局 — 社會救助、兒少福利、老人福利、身心障礙
+organization: 桃園市政府社會局
+provider_type: local_government
+source_type: government_site
+base_url: https://sab.tycg.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [桃園市政府社會局]
+data_confidence: 100
+enabled: true
+domains: [social_welfare, long_term_care, disability]
+# 主內容區：cp.aspx / News_Content.aspx 都放在 #CCMS_Content。
+# 注意：本站偶爾會回傳只有選單的空殼頁（約 46.7KB、沒有 #CCMS_Content），重抓即可。
+content_selectors: ["#CCMS_Content"]
+follow_links:
+  depth: 1
+  # 只追各方案清單頁（News.aspx?n=…）底下的方案內容頁 News_Content.aspx?n=…&s=…
+  allow: ["News_Content\\.aspx\\?n=(7355|7344|7371|7372|7374|7375|7324|21505)&s="]
+  deny: ["News\\.aspx", "cl\\.aspx", "Default", "SiteMap", "Advanced_Search", "Download\\.ashx", "ENews", "ActiveList", "Questionnaire"]
+  max_links: 40
+pages:
+  # ── 社會救助 ──
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7355&s=684769", title: 低收、中低收入戶申請資格, seed_category: low_income_allowance}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7355&s=684770", title: 低收入戶生活扶助, seed_category: low_income_allowance}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7355&s=684773", title: 低收入戶就學生活扶助, seed_category: low_income_allowance}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7355&s=684776", title: 桃園市低收入戶及中低收入戶傷病看護費用補助, seed_category: low_income_allowance}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7355&s=684771", title: 低收入戶孕產婦及嬰兒營養品代金補助, seed_category: low_income_allowance}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7355&s=684772", title: 低收入戶三節慰問金, seed_category: low_income_allowance}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7355&s=684774", title: 桃園市市民醫療補助, seed_category: low_income_allowance}
+  - {url: "https://sab.tycg.gov.tw/cp.aspx?n=26662", title: 桃園市急難救助, seed_category: emergency_relief}
+  - {url: "https://sab.tycg.gov.tw/cp.aspx?n=26663", title: 強化社會安全網—急難紓困, seed_category: emergency_relief}
+  - {url: "https://sab.tycg.gov.tw/cp.aspx?n=7357", title: 中低收入老人生活津貼, seed_category: elderly_allowance}
+  - {url: "https://sab.tycg.gov.tw/cp.aspx?n=7356", title: 身心障礙者生活補助, seed_category: disability_living_allowance}
+  # ── 兒少福利 › 經濟補助 ──
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7344&s=769885", title: 弱勢兒童及少年生活扶助, seed_category: child_allowance}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7344&s=769886", title: 弱勢家庭兒童及少年緊急生活扶助, seed_category: child_allowance}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7344&s=769887", title: 弱勢兒童及少年醫療補助}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7344&s=769888", title: 桃園市少年自立生活經濟扶助計畫}
+  # ── 老人福利 ──
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7371&s=684791", title: 中低收入老人特別照顧津貼, seed_category: elderly_allowance}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7371&s=684792", title: 65歲以上老人健保自付額補助, seed_category: elderly_allowance}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7372&s=684796", title: 桃園市重陽敬老禮金, seed_category: elderly_allowance}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7372&s=684794", title: 桃園市老年市民三節禮金, seed_category: elderly_allowance}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7374&s=684803", title: 中低收入老人裝置假牙補助, seed_category: elderly_allowance}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7374&s=684802", title: 中低收入老人重病住院看護費用補助, seed_category: elderly_allowance}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7375&s=684815", title: 中低收入老人住屋修繕補助, seed_category: elderly_service}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7375&s=684810", title: 失能老人接受長期照顧機構服務, seed_category: institutional_care_subsidy}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7375&s=684823", title: 住宿式服務機構使用者專案補助, seed_category: institutional_care_subsidy}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7375&s=684813", title: 獨居老人服務, seed_category: elderly_service}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7375&s=684808", title: 老人緊急救援服務, seed_category: elderly_service}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=21505&s=1412270", title: 老人營養送餐服務, seed_category: meal_service}
+  # ── 身心障礙者福利 › 身障福利補助 ──
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7324&s=684515", title: 身心障礙者輔具費用補助, seed_category: assistive_device}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7324&s=684517", title: 身心障礙者房屋租金補貼, seed_category: rental_subsidy}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7324&s=684516", title: 身心障礙者日間照顧及住宿式照顧費用補助, seed_category: disability_care_subsidy}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7324&s=684519", title: 身心障礙者參加社會保險保險費補助, seed_category: disability_other}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7324&s=684518", title: 身心障礙者購屋貸款利息補貼, seed_category: disability_other}
+  # ── 第一輪 follow_links 抓到的其他方案頁（已在乾跑輸出中確認）──
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7355&s=684777", title: 低收及中低收促進就業服務, seed_category: low_income_allowance}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7355&s=684775", title: 低收入戶以工代賑, seed_category: low_income_allowance}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7372&s=684795", title: 桃園市市民卡(含桃樂卡)-敬老愛心卡, seed_category: elderly_service}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7372&s=684797", title: 外籍人士（持永久居留證）敬老卡, seed_category: elderly_service}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7375&s=684816", title: 社區照顧關懷據點及巷弄長照站, seed_category: elderly_service}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7375&s=684814", title: 預防走失愛的手鍊, seed_category: elderly_service}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7324&s=1593561", title: 身心障礙者購買、租賃發電機或供電設備補助, seed_category: disability_other}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7324&s=684514", title: 居家身心障礙者使用維生器材及必要生活輔具用電優惠, seed_category: disability_other}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7324&s=684513", title: 身心障礙者購買停車位貸款利息補貼或承租停車位補助, seed_category: disability_other}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7324&s=684521", title: 身障者搭乘救護車費用補助, seed_category: disability_other}
+  - {url: "https://sab.tycg.gov.tw/News_Content.aspx?n=7324&s=684520", title: 身心障礙者搭乘捷運半價補助, seed_category: disability_other}
+  # ── 各方案清單頁：標題用「總覽」讓收錄政策判為彙整頁（不進清單與媒合），但仍會抓取並由 follow_links 追新方案 ──
+  - {url: "https://sab.tycg.gov.tw/News.aspx?n=7355&sms=11896", title: 低收及中低收入戶服務總覽, seed_category: low_income_allowance}
+  - {url: "https://sab.tycg.gov.tw/News.aspx?n=7344&sms=11887", title: 兒少經濟補助總覽, seed_category: child_allowance}
+  - {url: "https://sab.tycg.gov.tw/News.aspx?n=7371&sms=11904", title: 老人經濟補助總覽, seed_category: elderly_allowance}
+  - {url: "https://sab.tycg.gov.tw/News.aspx?n=7372&sms=11905", title: 敬老優待總覽, seed_category: elderly_allowance}
+  - {url: "https://sab.tycg.gov.tw/News.aspx?n=7374&sms=11907", title: 老人健康維護總覽, seed_category: elderly_allowance}
+  - {url: "https://sab.tycg.gov.tw/News.aspx?n=7375&sms=11908", title: 老人生活照顧總覽, seed_category: elderly_service}
+  - {url: "https://sab.tycg.gov.tw/News.aspx?n=7324&sms=11871", title: 身障福利補助總覽, seed_category: disability_other}
+  - {url: "https://sab.tycg.gov.tw/cl.aspx?n=7354", title: 社會救助業務總覽, skip: true, skip_reason: 只是分類目錄頁（子項已逐一列在 pages）}

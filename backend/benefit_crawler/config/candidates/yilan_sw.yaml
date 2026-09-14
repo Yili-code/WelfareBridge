@@ -1,0 +1,76 @@
+# 候選來源：宜蘭縣政府社會處（sntroot.e-land.gov.tw）
+# 任務給的起點 social.e-land.gov.tw 雖可解析 DNS（CNAME 到 sintel.e-land.gov.tw / 210.69.148.15），但 80/443 連線逾時／拒絕，
+# 用 WebSearch 確認社會處官方網址為 https://sntroot.e-land.gov.tw/（宜蘭縣政府主站首頁「社會處」連結亦指向此處）。
+# robots.txt 回 404（無爬蟲限制）；所有頁面主內容都在 #CCMS_Content。
+# 網址型態：
+#   新版方案內容頁 News_Content.aspx?n=<分類id>&s=<文章id>（分類：11275 兒少、11276 嬰幼兒、11277 銀髮族、11278 社會救助、11280 身心障礙）
+#   分類目錄頁     News.aspx?n=<分類id>&sms=<id>
+#   舊版方案頁     cp.aspx?n=<5位數字>（舊 hex id 會 302 轉到數字 id；未在選單連結但仍可開，內容較完整）
+# 「宜蘭縣重陽節敬老禮金實施要點」頁面本身只有附件，直接登錄 PDF。
+# 各科（n=10124/10125/10127）的 News.aspx 列表只有法規／要點（法律本文，收錄政策排除），不收。
+# 輔具補助不在社會處網站（宜蘭由長期照護服務管理所／輔具資源中心辦理，屬另一機關網站），本來源未收。
+id: yilan_sw
+name: 宜蘭縣政府社會處 — 生育、育兒、社會救助、老人福利
+organization: 宜蘭縣政府社會處
+provider_type: local_government
+source_type: government_site
+base_url: https://sntroot.e-land.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [宜蘭縣政府, 宜蘭縣]
+data_confidence: 100
+enabled: true
+domains: [social_welfare, long_term_care, disability]
+content_selectors: ["#CCMS_Content", "#base-content"]
+pages:
+  # 生育、育兒、托育
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11276&s=133324", title: 宜蘭縣婦女生育津貼, seed_category: birth_incentive}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11276&s=133348", title: 育有未滿2歲兒童育兒津貼, seed_category: child_allowance}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11276&s=133332", title: 未滿二歲兒童托育準公共化服務, seed_category: childcare_subsidy}
+  # 兒少、特殊境遇家庭
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11275&s=133154", title: 宜蘭縣特殊境遇家庭與兒童及少年生活扶助（含弱勢兒少緊急生活扶助）, seed_category: special_circumstances_aid}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11275&s=133148", title: 弱勢兒童及少年醫療補助}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11278&s=245934", title: 兒童及少年未來教育與發展帳戶}
+  - {url: "https://sntroot.e-land.gov.tw/cp.aspx?n=10389", title: 發展遲緩兒童早期療育（含療育費及交通費補助）}
+  # 社會救助
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11278&s=133542", title: 低收入戶生活扶助, seed_category: low_income_allowance}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11278&s=133540", title: 民眾急難救助, seed_category: emergency_relief}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11278&s=133525", title: 低收入戶及中低收入傷病醫療、照顧服務費用補助, seed_category: low_income_allowance}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11278&s=133567", title: 低收入戶喪葬補助, seed_category: low_income_allowance}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11278&s=133560", title: 宜蘭縣中低收入戶老人及低收入戶住宅設施設備修繕補助, seed_category: low_income_allowance}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11278&s=400354", title: 115年度宜蘭縣低收入戶購置電腦設備補助計畫, seed_category: student_aid}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11278&s=394775", title: 115年-117年宜蘭縣展翼飛揚脫貧計畫}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11278&s=133576", title: 川資(車資返鄉補助), seed_category: emergency_relief}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11278&s=238598", title: 物資銀行, seed_category: emergency_relief}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11278&s=133619", title: 弱勢民眾微型保險}
+  - {url: "https://sntroot.e-land.gov.tw/cp.aspx?n=10433", title: 國民年金保險費補助（所得未達一定標準資格認定）}
+  # 老人福利
+  - {url: "https://sntroot.e-land.gov.tw/cp.aspx?n=10895", title: 中低收入老人生活津貼, seed_category: elderly_allowance}
+  - {url: "https://sntroot.e-land.gov.tw/cp.aspx?n=10896", title: 中低收入老人特別照顧津貼, seed_category: elderly_allowance}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11278&s=244517", title: 65歲以上未滿70歲中低收入老人全民健康保險自付保險費補助, seed_category: elderly_allowance}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11277&s=133457", title: 中低收入戶老人假牙裝置補助, seed_category: elderly_allowance}
+  - {url: "https://www-ws.e-land.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDQ1L3JlbGZpbGUvMTI4MTEvMTMwNDIwL2JiMzlkMGIxLWE0YWMtNGY4ZS04NmNjLTk0ZDE0ZmI2MDNiYi5wZGY%3d&n=MTE15bm05a6c6Jit57ij6YeN6Zm956%2bA5pWs6ICB56au6YeR5a%2bm5pa96KaB6bueLnBkZg%3d%3d",
+     title: 115年宜蘭縣重陽節敬老禮金, seed_category: elderly_allowance, format: pdf,
+     source_page: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=10124&s=130420"}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11277&s=133418", title: 獨居老人關懷服務, seed_category: elderly_service}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11277&s=133475", title: 獨居老人緊急救援通報系統服務, seed_category: elderly_service}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11277&s=133425", title: 宜蘭縣社會福利智慧卡（敬老卡、愛心卡）, seed_category: elderly_service}
+  - {url: "https://sntroot.e-land.gov.tw/cp.aspx?n=10399", title: 低收入戶老人安置, seed_category: institutional_care_subsidy}
+  # 身心障礙
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11280&s=133817", title: 身心障礙者生活補助, seed_category: disability_living_allowance}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11280&s=238599", title: 身心障礙者（55至64歲）假牙裝置補助, seed_category: disability_other}
+  - {url: "https://sntroot.e-land.gov.tw/cp.aspx?n=10406", title: 身心障礙者日間照顧及住宿式照顧費用補助, seed_category: disability_care_subsidy}
+  - {url: "https://sntroot.e-land.gov.tw/cp.aspx?n=10410", title: 身心障礙者租賃房屋租金補助, seed_category: rental_subsidy}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11280&s=133774", title: 身心障礙者購屋貸款利息補貼, seed_category: disability_other}
+  - {url: "https://sntroot.e-land.gov.tw/cp.aspx?n=10411", title: 身心障礙者參加社會保險保險費補助, seed_category: disability_other}
+  - {url: "https://sntroot.e-land.gov.tw/cp.aspx?n=10407", title: 身心障礙者交通服務（復康巴士）, seed_category: transport_service}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11280&s=244529", title: 高照顧負荷家庭創新服務方案, seed_category: disability_care_subsidy}
+  - {url: "https://sntroot.e-land.gov.tw/cp.aspx?n=10418", title: 身心障礙者購買停車位貸款利息補貼或承租停車位補助, seed_category: disability_other}
+  # 目錄頁（不收，僅供對照）
+  - {url: "https://sntroot.e-land.gov.tw/News.aspx?n=11276&sms=12833", title: 嬰幼兒照顧服務總覽, skip: true, skip_reason: 分類目錄頁}
+  - {url: "https://sntroot.e-land.gov.tw/News.aspx?n=11277&sms=12834", title: 銀髮族服務總覽, skip: true, skip_reason: 分類目錄頁}
+  - {url: "https://sntroot.e-land.gov.tw/News.aspx?n=11278&sms=12835", title: 社會救助總覽, skip: true, skip_reason: 分類目錄頁}
+  - {url: "https://sntroot.e-land.gov.tw/News.aspx?n=11280&sms=12837", title: 身心障礙者服務總覽, skip: true, skip_reason: 分類目錄頁}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=10124&s=130420", title: 宜蘭縣重陽節敬老禮金實施要點, skip: true, skip_reason: 頁面只有 PDF 附件（20 字），已改登錄附件 PDF}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11278&s=133571", title: 宜蘭縣低收入戶產婦及嬰兒營養補助, skip: true, skip_reason: 頁面只有聯絡人（51 字），沒有資格與給付內容}
+  - {url: "https://sntroot.e-land.gov.tw/News_Content.aspx?n=11278&s=133534", title: 災害救助及災害收容所, skip: true, skip_reason: 頁面只有聯絡人（64 字），沒有資格與給付內容；災害救助金標準只在法規列表}
+  - {url: "https://sntroot.e-land.gov.tw/cp.aspx?n=10414", title: 身心障礙福利（個人及家庭照顧服務）總覽, skip: true, skip_reason: 一頁彙整 11 項身障服務（家庭關懷訪視、社區居住、自立生活等，7,600 字），非單一方案頁}

@@ -1,0 +1,170 @@
+{
+  "labels": [
+    {
+      "id": "f289fde7-d72e-4e3c-898d-264d6859043a",
+      "title": "中低收入老人特別照顧津貼",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文寫明補助對象（設籍本市年滿65歲中低收入老人、ADL重度以上）、照顧者資格與福利內容「每月補助特別照顧津貼5000元」，是完整方案頁。",
+      "confidence": "high"
+    },
+    {
+      "id": "bddd3bc1-1030-4a17-9711-2fcfaa75ea07",
+      "title": "115年度弱勢兒童及少年生活扶助應備文件及規定",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "special_circumstances_aid",
+      "secondary": ["low_income_allowance"],
+      "closed": false,
+      "reason": "雖標題寫應備文件，但內文有完整補助對象（未滿18歲、父母死亡／離婚／服刑／無工作能力等九款情形）與申請標準（收入1.5倍、動產15萬、不動產650萬），未寫金額；taxonomy 無「弱勢兒少生活扶助」專屬類別，其情形條件最接近特殊境遇家庭扶助。",
+      "confidence": "medium"
+    },
+    {
+      "id": "b0ccf610-459c-478e-a988-b92aac556c3e",
+      "title": "南投縣政府辦理長照輔具服務及居家無障礙環境改善服務暨代償墊付實施計畫",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "assistive_device",
+      "secondary": [],
+      "closed": false,
+      "reason": "計畫寫明補助對象（實際居住南投、長照失能第2至8級之65歲以上／身障／50歲以上失智）與補助標準（依身分別100%／90%／70%，3年上限4萬元），後半廠商請款文件不影響其為長照輔具與居家無障礙補助方案。",
+      "confidence": "high"
+    },
+    {
+      "id": "72e660c4-f600-4a19-8a76-b44959d83e25",
+      "title": "未參加相關社會保險之我國籍新生兒之生母生育補助 — 請領手續",
+      "is_benefit": "no",
+      "kind": "fragment",
+      "category": "",
+      "secondary": [],
+      "closed": false,
+      "reason": "整頁只有「請領手續」一節（戶政通報、e化系統、紙本郵寄三種申請方式），沒有申請資格也沒有給付金額，屬方案頁的段落分頁片段（方案本身為生育補助）。",
+      "confidence": "high"
+    },
+    {
+      "id": "16eead40-3504-481a-a72a-99e0953303fb",
+      "title": "身心障礙者房屋租金補貼",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "rental_subsidy",
+      "secondary": ["disability_other"],
+      "closed": false,
+      "reason": "申辦說明列出申請資格（設籍彰化領有身障證明、收入未達最低生活費2.5倍、無自有住宅、租屋在彰化等七項）與申請時間（每年10月），雖未寫補貼金額，已寫明誰可申請。",
+      "confidence": "high"
+    },
+    {
+      "id": "d93b9de8-103c-41dc-8924-d3e3263f9a67",
+      "title": "中低收入老人生活津貼",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "雖為「題號／問題／解答」表格版面，實際內容是補助對象（65歲、設籍、收入未達最低生活費2.5倍、存款250萬、不動產675萬六項資格）、應備文件與撥款時間，等同方案說明頁；未寫月領金額。",
+      "confidence": "medium"
+    },
+    {
+      "id": "27152063-40da-4c26-b7e5-8acf6b7727f4",
+      "title": "苗栗縣弱勢家庭兒童及少年緊急生活扶助補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "emergency_relief",
+      "secondary": ["special_circumstances_aid"],
+      "closed": false,
+      "reason": "原文寫出扶助對象（設籍或居住本縣未滿18歲兒少，父母失業／入獄／重病／離婚／死亡／家暴出走等六款情形），屬緊急生活扶助，但全文未寫扶助金額與期限。",
+      "confidence": "medium"
+    },
+    {
+      "id": "335456ac-8c35-4328-8385-bb7da9940cb1",
+      "title": "115年0-6歲國家跟你一起養 資訊",
+      "is_benefit": "portal",
+      "kind": "portal",
+      "category": "",
+      "secondary": ["child_allowance", "childcare_subsidy", "education_subsidy"],
+      "closed": false,
+      "reason": "原文只有兩段政策宣導文字，點名「提高育兒津貼」「增加托育補助」「就學費用再降低」三項不同方案的專區導言，沒有任何一項的資格或金額，無法當一筆方案。",
+      "confidence": "low"
+    },
+    {
+      "id": "9bc35953-30e4-4c14-ad7e-c4df2a21a959",
+      "title": "獨居老人預防走失愛心手鍊",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_service",
+      "secondary": ["disability_other"],
+      "closed": false,
+      "reason": "頁面寫明服務對象（設籍本市60歲以上、55歲以上原住民、未滿60歲第一類身障者）與服務內容（由社會局提供愛心手鍊）及應備文件，是老人福利服務；但給付僅為實物手鍊，經濟價值不大。",
+      "confidence": "medium"
+    },
+    {
+      "id": "0841f2b5-ba9e-4b1d-b51d-dde58ca4de7e",
+      "title": "兒童及少年未來教育與發展帳戶",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": ["education_subsidy"],
+      "closed": false,
+      "reason": "原文寫明適用對象（低收／中低收入戶且105年1月1日以後出生之兒少、安置2年以上兒少）與應備文件，是政府相對提撥的兒少儲蓄帳戶方案；但內文未寫提撥金額，且 taxonomy 無專屬類別，依資格以低收身分歸類。",
+      "confidence": "medium"
+    },
+    {
+      "id": "15d6348e-67ac-4427-aafb-bbf94c5e0ae8",
+      "title": "南投縣政府辦理身心障礙者參加社會保險保險費補助作業規定",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "disability_other",
+      "secondary": [],
+      "closed": false,
+      "reason": "作業規定條文寫明對象（設籍南投持身障證明且已參加社會保險者）與給付（保險費逕行扣抵減免或由社會及勞動局直接補助自付保費，每半年撥款），屬寫了資格與給付的辦法要點。",
+      "confidence": "high"
+    },
+    {
+      "id": "06b9b549-48b3-45fb-97db-05e9c662da6d",
+      "title": "失能老人接受長期照顧機構服務",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "institutional_care_subsidy",
+      "secondary": ["elderly_service", "low_income_allowance"],
+      "closed": false,
+      "reason": "原文列出服務對象（65歲以上列冊低收／中低收／中低收入老人且經照管中心評估失能）與補助標準（輕度失能低收每月1萬元、中重度每月24,000元），是機構安置費用補助方案。",
+      "confidence": "high"
+    },
+    {
+      "id": "66ff46b3-3d21-4a5d-be7e-d85116a53e21",
+      "title": "低收入戶未滿65歲生活無法自理者安置費用補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "institutional_care_subsidy",
+      "secondary": ["low_income_allowance"],
+      "closed": false,
+      "reason": "原文寫明補助對象（列冊低收、未滿65歲非身障、醫師診斷生活無法自理）與補助金額（全月機構安置費21,000元、管路護理費每月最高5,000元）及應備文件。",
+      "confidence": "high"
+    },
+    {
+      "id": "9ed1e515-c818-47bc-9b72-d055ca21af40",
+      "title": "低、中低收入老人改善住宅補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_allowance",
+      "secondary": ["assistive_device", "elderly_service"],
+      "closed": false,
+      "reason": "原文寫明服務對象（本市列冊低收／中低收老人或符合中低收入老人生活津貼資格者）、補助項目（防水、樓梯走道、浴室廚房、無障礙防跌等修繕）與補助額度（低收每戶最高10萬、中低收5萬）；屬對中低收老人的現金修繕補助，taxonomy 無住宅修繕專屬類別。",
+      "confidence": "medium"
+    },
+    {
+      "id": "2c4dd4ac-d3f8-40c6-971b-7c782296235d",
+      "title": "嘉義市政府重陽節敬老禮金發放實施要點",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "要點條文寫明發放對象（重陽節年滿65歲、設籍本市六個月以上並實際居住）與發放標準（65–79歲3千、80–89歲6千、90–99歲9千、百歲以上1萬2千元），屬寫了資格與給付的重陽敬老金要點。",
+      "confidence": "high"
+    }
+  ],
+  "count": 15
+}

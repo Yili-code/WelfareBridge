@@ -1,0 +1,128 @@
+id: pingtung_sw
+name: 屏東縣政府社會處 — 生育、育兒、社會救助、老人福利
+organization: 屏東縣政府社會處
+provider_type: local_government
+source_type: government_site
+# https://www.pthg.gov.tw/planjdp/ 會 301 到 /planjdp/Default.aspx；robots.txt 為 Allow: /。
+# 同一縣府主機上還有三個子站也收：民政處 /plancab/（生育津貼）、便民E櫃檯 /e-service/page_1_X_Y.html（靜態方案頁）、
+# 高齡友善資訊網 elder.pthg.gov.tw（老人福利方案頁）。跨機關的頁面逐頁用 organization 覆寫。
+base_url: https://www.pthg.gov.tw/planjdp/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+# 只驗 base_url 首頁的 <title>（「社會處」）；子站頁面的 <title> 不同（民政處、便民E櫃檯、高齡友善資訊網），不受影響。
+expected_title_keywords: [社會處, 屏東縣政府社會處]
+data_confidence: 100
+enabled: true
+domains: [social_welfare, long_term_care, disability]
+# 依序嘗試：
+#  1–3. 社會處 CMS（cp.aspx）：主內容在 #ContentPlaceHolder1_data_midlle_cp 內的 <table role=presentation>，第 1 列是分頁籤、第 2 列的 <div> 才是方案內文，先取第 2 列。
+#  4.   便民E櫃檯 /e-service/ 靜態頁：方案內文在 .info-content（申辦單位／資格／應備文件／金額）。
+#  5.   高齡友善資訊網 elder.pthg.gov.tw：內文在 <main id="article">。
+# 注意 planjdp 頁也有 #content_middle / main，所以子站 selector 一定要排在社會處 selector 之後。
+content_selectors: ["#ContentPlaceHolder1_data_midlle_cp > table > tr:nth-of-type(2) > td > div", "#ContentPlaceHolder1_data_midlle_cp", "#data_midlle", ".info-content", "#article"]
+follow_links:
+  depth: 1
+  # 只追「同一主題群組」底下的分頁籤（cp.aspx?n=<群組>&s=<分頁>），群組 n 值固定列出；其餘 cp.aspx?n= 都是站台導覽（關於我們、法規、統計…），不追。
+  allow: ["cp\\.aspx\\?n=(A4164DF4295ED9D4|51E132D99F254E3B|6002B120E13BE406|1D92213B0F4404A4|76661B637A6124F3|E0A09A05B11AF1A2|B808E022206BD40E|A7CCB761096F7FA3|920104B7056B7226|9463987D224BAA6B|9F8B99754361E42D)&s=[0-9A-F]{16}$"]
+  deny:
+    - "News"
+    - "Content_List"
+    - "Link\\.aspx"
+    - "SiteMap"
+    - "Default\\.aspx"
+    - "HitCount"
+    - "Download"
+    - "Photo"
+    - "Video"
+    - "Cus_"
+    - "onestop\\.pthg"
+    - "socmap"
+    - "ptlaw"
+    # 第 1 輪乾跑看到的純連結分頁籤／名冊／簡介（94–450 字、沒有資格與給付內容），不追
+    - "s=(F4DA8B469D75EDEA|AA0DCB47D56788A4|72003DBDD9F8D538|641EEC51117E0BFA|1C327FAC8456FD57)"
+    - "s=(C0242BD9356F87A5|A643492C494044C5|3CB32FB9535B6C48)"
+    - "s=(07DB346810331B5D|6031C3CBEC6D7735|BB19DDAB7ED55260|8D3E83E06BBE610D)"
+    - "s=(FA25BC109CE1BC8E|411EA199BA8D66DC|1210FC20B6630F5A)"
+    - "s=(FD30BE3DE6B01CCC|A912AF1614E482B9|C287455B73D24EC8|1ACD7AB5619C9F6C|11500B4D19C095F1|4E8C3D7CD073FECF)"
+    - "s=(C8F2A38D8E20DACF|6AA20FB5F84C14FD|BF86F5C8FDA506B8|71ACC5B0CDFFC313)"
+  max_links: 40
+pages:
+  # ── 生育（縣府生育津貼由民政處／戶政事務所受理）──
+  - {url: "https://www.pthg.gov.tw/plancab/cp.aspx?n=9F8B99754361E42D", title: 屏東縣政府生育津貼, seed_category: birth_incentive, organization: 屏東縣政府民政處}
+  # 社會處「特殊境遇家庭補助及婦女生育補助」頁只放聯絡表，內容在附件：縣府生育津貼、低收／中低收生育補助與 33 鄉鎮市生育獎勵金的資格、金額、申請方式都寫在同一份 PDF 表格裡（一頁多方案）
+  - {url: "https://www-ws.pthg.gov.tw/Upload/2015pthg/18/relfile/6341/19303/90549f2a-bda0-4fac-873f-ee41018a20ef.pdf", title: 屏東縣政府及各鄉鎮市生育津貼與生育獎勵金補助標準（115年）, seed_category: birth_incentive, format: pdf, organization: 屏東縣政府民政處, source_page: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=4E248D85646631E6"}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=4E248D85646631E6", title: 特殊境遇家庭補助及婦女生育補助（聯絡窗口）, skip: true, skip_reason: 只有承辦人聯絡表與附件連結，生育補助內容在上面登錄的 PDF}
+  # 便民E櫃檯：公保生育給付／育嬰留停津貼是全國性方案，縣府人事處受理縣府員工申請，頁面有給付標準與應備文件
+  - {url: "https://www.pthg.gov.tw/e-service/page_1_1_10.html", title: 公教人員保險生育給付（屏東縣政府便民E櫃檯）, seed_category: birth_incentive, organization: 屏東縣政府人事處}
+  - {url: "https://www.pthg.gov.tw/e-service/page_1_1_11.html", title: 公教人員保險育嬰留職停薪津貼（屏東縣政府便民E櫃檯）, seed_category: parental_leave_allowance, organization: 屏東縣政府人事處}
+  # ── 育兒、婦女、兒少、托育 ──
+  # 育兒津貼：社會處站只有承辦人表（內容在 onestop 便民平台，JavaScript 載入抓不到）；便民E櫃檯靜態頁有申請資格、應備文件與受理單位，但沒寫金額
+  - {url: "https://www.pthg.gov.tw/e-service/page_1_1_12.html", title: 育有未滿2歲兒童育兒津貼, seed_category: child_allowance}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6571C8648B118FE5", title: 未滿一歲嬰幼兒營養補助（115年起）, seed_category: child_allowance}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=EE18AA70CEE11481", title: 特殊境遇家庭扶助, seed_category: special_circumstances_aid}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=7587A0709B97B38B", title: 孕婦產檢交通補助（好孕車券）}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=ECED3926911BAFCF", title: 到宅母嬰照護月嫂服務}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=FF63BCF8776C90FD", title: 單親家園住屋服務, seed_category: rental_subsidy}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=C93C0A0A7ADE2D94", title: 未滿2歲兒童托育公共化及準公共服務費用補助, seed_category: childcare_subsidy}
+  - {url: "https://www.pthg.gov.tw/e-service/page_1_1_20.html", title: 社區公共托育家園服務（公共托育機構）, seed_category: childcare_subsidy}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=23747CC1D49A001D", title: 臨時托育服務, seed_category: childcare_subsidy}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=188084E98532E53D", title: 發展遲緩兒童早期療育}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=97E610626B9F499E", title: 托育福利經濟補助（聯絡窗口）, skip: true, skip_reason: 育兒津貼、兒童托育津貼、臨時托育費用補助只有承辦人表，內容連到 onestop.pthg.gov.tw 便民平台（申辦說明由 JavaScript 載入，抓不到）}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=2CD67C748CF32401", title: 兒童及少年經濟補助（聯絡窗口）, skip: true, skip_reason: 弱勢兒少生活扶助、緊急生活扶助、醫療補助只有承辦人表，內容連到 onestop.pthg.gov.tw（JavaScript 載入，抓不到）}
+  # ── 社會救助（低收／中低收／老人生活津貼／身障生活補助 同一主題群組的分頁籤）──
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=A4164DF4295ED9D4&s=2E1F32592C9629E5", title: 低收入戶生活補助, seed_category: low_income_allowance}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=A4164DF4295ED9D4&s=942D31B2C1CA2098", title: 中低收入戶資格及補助, seed_category: low_income_allowance}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=A4164DF4295ED9D4&s=98F272C21B1301B3", title: 中低收入老人生活津貼, seed_category: elderly_allowance}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=A4164DF4295ED9D4&s=B3FBDF70D23B706E", title: 身心障礙者生活補助, seed_category: disability_living_allowance}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=51E132D99F254E3B&s=1CF944313EC33BD3", title: 急難紓困專案, seed_category: emergency_relief}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=51E132D99F254E3B&s=C67DBB6801DAF576", title: 急難救助及川資救助, seed_category: emergency_relief}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=51E132D99F254E3B&s=B17BCD390B901343", title: 災害救助, seed_category: emergency_relief}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=7248506703B0E5E2", title: 低收入戶及中低收入戶就業交通補助, seed_category: low_income_allowance}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=8F04633F9B4DF2D6", title: 低收入戶及中低收入戶2代子女課後輔導及交通補助, seed_category: education_subsidy}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=CBBC2641DA3A9323", title: 精神病患者住院治療費用補助}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6323817CA426D8E9", title: 愛心餐券, seed_category: meal_service}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=9463987D224BAA6B", title: 聯合助學, seed_category: student_aid}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=7D62250CE8ADE7A5", title: 兒童及少年未來教育與發展帳戶}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=88960E5BC999CF73", title: 低收／中低收入戶家庭就業儲蓄帳戶方案}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=1FDFAEC7BE41551E", title: 團體微型傷害保險（弱勢民眾）}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=61057E945977E5D0", title: 微型火災不便費用保險}
+  # ── 老人福利（社會處主題群組 6002B120E13BE406 的分頁籤）──
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=6B2E0999CE162220", title: 老人公費安置, seed_category: institutional_care_subsidy}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=A07286547EE84E5B", title: 中低收入老人住宅修繕補助, seed_category: elderly_service}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=4A490AF42B3D2483", title: 中低收入老人特別照顧津貼, seed_category: elderly_allowance}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=CCF2E3BEAEC4E729", title: 中低收入老人醫療及看護補助, seed_category: elderly_allowance}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=278641B00A5FD052", title: 低收入戶老人配戴助聽器補助, seed_category: assistive_device}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=743B9B3F82B98EB7", title: 敬老卡申請, seed_category: elderly_service}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=D87B0197F7CF3642", title: 老人緊急救援通報系統, seed_category: elderly_service}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=672DC6F2F1F37AC6", title: 老人愛心手鍊, seed_category: elderly_service}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=E6FF28A7DA6B2ED8", title: 獨居老人關懷服務, seed_category: elderly_service}
+  # 中低收入老人健保補助：分頁只有附件；補助基準 PDF（文字版）寫了對象（65–70 歲領中低收入老人生活津貼者）、補助額度與申請文件，直接登錄 PDF
+  - {url: "https://www-ws.pthg.gov.tw/Upload/2015pthg/18/relfile/6341/6327/afd37d6b-9cbe-43e7-bcf5-42925f286286.pdf", title: 屏東縣中低收入老人參加全民健康保險保險費用補助基準, seed_category: elderly_allowance, format: pdf, source_page: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=962B8FCBA2F8B309"}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=962B8FCBA2F8B309", title: 中低收入老人健保補助, seed_category: elderly_allowance, skip: true, skip_reason: 分頁只有分頁籤與附件連結、沒有內文；補助基準 PDF 已另行登錄}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=E017B87C3826DCAF", title: 屏東縣重陽節敬老慰問金, seed_category: elderly_allowance, skip: true, skip_reason: 分頁只有一個連到 ptlaw.pthg.gov.tw 發放辦法（法規本文）的連結；資格與金額改收便民E櫃檯與高齡友善資訊網的頁面}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=C86B69BD22EE6298", title: 老人裝置假牙補助, seed_category: elderly_allowance, skip: true, skip_reason: 分頁只有衛生局諮詢電話與兩個 onestop 連結（JavaScript 載入），沒有資格與金額內文}
+  # 便民E櫃檯與高齡友善資訊網的老人福利方案頁（重陽慰問金兩站都有完整的對象、金額、發放方式，兩頁都收）
+  - {url: "https://www.pthg.gov.tw/e-service/page_1_6_8.html", title: 重陽節敬老慰問金（屏東縣政府便民E櫃檯）, seed_category: elderly_allowance}
+  - {url: "https://elder.pthg.gov.tw/social-consolation-money", title: 屏東縣重陽敬老慰問金（高齡友善資訊網）, seed_category: elderly_allowance}
+  - {url: "https://elder.pthg.gov.tw/social-elderly-welfare", title: 屏東縣老人福利一覽（總覽）, seed_category: elderly_allowance}
+  - {url: "https://elder.pthg.gov.tw/social-living-alone", title: 獨居老人服務（高齡友善資訊網）, seed_category: elderly_service}
+  - {url: "https://elder.pthg.gov.tw/tourism-travel-pass", title: 屏東縣敬老卡（高齡友善資訊網）, seed_category: elderly_service}
+  - {url: "https://elder.pthg.gov.tw/health-examination", title: 屏東縣老人健康檢查, seed_category: elderly_service, organization: 屏東縣政府衛生局}
+  - {url: "https://elder.pthg.gov.tw/social-elderly-dentures-202506", title: 老人假牙補助（高齡友善資訊網）, seed_category: elderly_allowance, skip: true, skip_reason: 頁面只剩「114年度中低收入老人裝置假牙計畫申請已額滿」與衛生局電話，沒有資格與金額；舊版頁 social-elderly-dentures 標示「(舊)(禁用)」}
+  # 長照
+  - {url: "https://www.pthg.gov.tw/e-service/page_1_6_72.html", title: 長期照顧服務（屏東縣政府便民E櫃檯）, organization: 屏東縣長期照護處}
+  - {url: "https://elder.pthg.gov.tw/social-assistive", title: 長照輔具服務（高齡友善資訊網）, seed_category: assistive_device}
+  - {url: "https://elder.pthg.gov.tw/elderly-family-care", title: 家庭照顧者支持服務（高齡友善資訊網）, seed_category: respite_care}
+  # ── 身心障礙 ──
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=1D92213B0F4404A4&s=4BE91EF3A46F7C01", title: 身心障礙者社會保險費補助, seed_category: disability_other}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=76661B637A6124F3&s=CB69EC157E8F2374", title: 身心障礙者生活輔具／醫療復健輔具補助（含居家無障礙環境改善）, seed_category: assistive_device}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=76661B637A6124F3&s=8D7AE75168E8C647", title: 長期照顧輔具補助（含居家無障礙環境改善）, seed_category: assistive_device}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=76661B637A6124F3&s=A83F716543E2DF62", title: 短期輔具租借服務, seed_category: assistive_device}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=E0A09A05B11AF1A2&s=F1C8047E644BDA72", title: 身心障礙者家庭托顧服務, seed_category: family_care_home}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=E0A09A05B11AF1A2&s=A683F938371B80EA", title: 身心障礙者社區式日間照顧服務, seed_category: day_care}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=E0A09A05B11AF1A2&s=05DB8FFA7274D6C8", title: 身心障礙者日間照顧機構, seed_category: day_care}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=E0A09A05B11AF1A2&s=185A13B2FB5A7E17", title: 身心障礙者多元社區居住與生活服務, seed_category: disability_other}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=B808E022206BD40E&s=5B898337DC90289B", title: 身心障礙者臨時暨短期照顧服務, seed_category: respite_care}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=A7CCB761096F7FA3&s=3097D26B19A637DF", title: 使用維生器材身心障礙者租用發電機租金補助, seed_category: disability_other}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=920104B7056B7226&s=D627FB88EBF195A5", title: 身心障礙者復康巴士（含大眾運輸優惠）, seed_category: transport_service}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=1D92213B0F4404A4&s=2D51801224EACAEC", title: 身心障礙者日間照顧及住宿式照顧費用補助, seed_category: disability_care_subsidy, skip: true, skip_reason: 分頁只有辦法／作業規定／申請書等附件連結，資格與補助標準在附件裡}
+  - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=A7CCB761096F7FA3", title: 居家身心障礙者維生器材用電優惠, seed_category: disability_other, skip: true, skip_reason: 分頁只有申請說明 PDF 與申請表附件連結，沒有內文}

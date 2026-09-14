@@ -1,0 +1,28 @@
+# 身分本體（資料，不是程式）。
+# - id：標籤 id；label：規則與 UI 顯示用的標準名稱；aliases：原文與使用者文字中的同義詞（會再由語料統計補充）
+# - attribute：對應的 profile 屬性（boolean）；implies：具備此身分即視為具備的其他身分；basis：依據
+# - virtual: true 的標籤沒有對應屬性，只能由 implies 推得（例如「弱勢學生」）
+version: 2
+tags:
+  - {id: low_income, label: 低收入戶, aliases: [低收, 低收入家庭, 列冊低收入戶, 低收入戶學生], attribute: identity.low_income, implies: [economic_hardship, disadvantaged]}
+  - {id: middle_low_income, label: 中低收入戶, aliases: [中低收, 中低收入家庭, 中低收入戶學生], attribute: identity.middle_low_income, implies: [economic_hardship, disadvantaged]}
+  - {id: economic_hardship, label: 清寒, aliases: [家境清寒, 清寒家庭, 清寒學生, 家庭經濟困難, 經濟困難], attribute: identity.economic_hardship, implies: [disadvantaged]}
+  - {id: special_circumstances, label: 特殊境遇家庭, aliases: [特殊境遇, 特境家庭, 特境], attribute: identity.special_circumstances, implies: [disadvantaged]}
+  - {id: disadvantaged, label: 弱勢學生, aliases: [弱勢, 經濟弱勢, 弱勢家庭, 弱勢族群], virtual: true, basis: 教育部大專校院弱勢學生助學計畫：低收入戶、中低收入戶、特殊境遇家庭、身心障礙、原住民等}
+  - {id: indigenous, label: 原住民, aliases: [原住民族, 原民, 原住民學生, 具原住民身分], attribute: identity.indigenous, implies: [disadvantaged]}
+  - {id: yami, label: 雅美族, aliases: [達悟族, 雅美(達悟)族], attribute: identity.indigenous_tribe, implies: [indigenous]}
+  - {id: hakka, label: 客家, aliases: [客家子弟, 客家籍, 客家人], attribute: identity.hakka}
+  - {id: disabled, label: 身心障礙, aliases: [身障, 身心障礙者, 身心障礙學生, 領有身心障礙證明, 身心障礙手冊, 身心障礙證明], attribute: disability.has_certificate, implies: [disadvantaged]}
+  - {id: disabled_family, label: 身心障礙人士子女, aliases: [身心障礙者子女, 身障子女, 家中有身心障礙者], attribute: disability.family_member_has_certificate}
+  - {id: new_immigrant, label: 新住民, aliases: [新移民, 外籍配偶, 新住民子女, 新住民及其子女], attribute: identity.new_immigrant}
+  - {id: single_parent, label: 單親家庭, aliases: [單親, 單親家庭子女], attribute: identity.single_parent}
+  - {id: grandparent_family, label: 隔代教養, aliases: [隔代教養家庭], attribute: identity.grandparent_family}
+  - {id: orphan, label: 失依兒少, aliases: [孤兒, 失依, 失親, 喪親, 父母雙亡], attribute: identity.orphan, implies: [disadvantaged]}
+  - {id: veteran_family, label: 榮民子女, aliases: [榮眷, 榮民遺眷, 榮民或榮眷子女, 榮民], attribute: identity.veteran_family}
+  - {id: military_civil_bereaved, label: 軍公教遺族, aliases: [軍公教遺眷, 遺族], attribute: identity.military_civil_bereaved}
+  - {id: unemployed_worker_child, label: 失業勞工子女, aliases: [非自願離職勞工子女, 失業勞工在學子女], attribute: identity.unemployed_worker_child}
+  - {id: overseas_chinese, label: 僑生, aliases: [海外僑生, 港澳生], attribute: identity.overseas_chinese}
+  - {id: foreign_student, label: 外籍生, aliases: [國際學生, 外國學生, 外籍學生], attribute: identity.foreign_student}
+  - {id: elderly, label: 老人, aliases: [長者, 年滿65歲, 65歲以上, 高齡者, 銀髮族], attribute: applicant.is_elderly}
+  - {id: catastrophic_illness, label: 重大傷病, aliases: [重大傷病卡, 領有重大傷病證明], attribute: health.catastrophic_illness}
+  - {id: dementia, label: 失智症, aliases: [失智, 失智者, 認知功能障礙], attribute: care.dementia_diagnosis}

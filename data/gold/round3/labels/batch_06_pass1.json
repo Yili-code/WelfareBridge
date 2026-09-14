@@ -1,0 +1,170 @@
+{
+  "labels": [
+    {
+      "id": "f4f8b8a1-5785-4783-be02-0a0eb0313bbf",
+      "title": "直轄市、縣(市)政府辦理未滿二歲兒童托育公共化及準公共服務作業要點",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "childcare_subsidy",
+      "secondary": [],
+      "closed": false,
+      "reason": "要點第二、三點寫明托育提供者（居家托育人員、托嬰中心、托育家園）簽約資格與不得申請情形，第一、九點提到費用申報支付、獎助與「政府協助支付之費用」；對象是托育機構／托育人員，屬機構導向補助，但原文在第十點截斷，未見具體補助金額。",
+      "confidence": "medium"
+    },
+    {
+      "id": "36e09693-091f-42cf-838f-20d7538c896a",
+      "title": "低收入戶資格認定",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "服務對象寫明審核標準（每人每月收入低於最低生活費15,515元、動產每人9萬6,000元以下、不動產每戶385萬元以下），服務內容說明生活扶助以現金給付為原則，並列應備文件，屬低收入戶資格說明頁。",
+      "confidence": "high"
+    },
+    {
+      "id": "1b121169-6f7e-4d85-ad25-83eb85914af1",
+      "title": "南投縣身心障礙者房屋租金補貼作業要點",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "rental_subsidy",
+      "secondary": ["disability_other"],
+      "closed": false,
+      "reason": "第二點寫明申請資格（設籍本縣低收入戶之身心障礙者、無自有住宅、租賃房屋在本縣），第四點寫明給付「每人每月新臺幣五百元，最高以五人為限」，並有申請文件與審核程序。",
+      "confidence": "high"
+    },
+    {
+      "id": "5fe1f86d-2f53-4fc4-b976-6cf8fdbcc06e",
+      "title": "身心障礙兒童日間照顧服務及時段療育",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "disability_care_subsidy",
+      "secondary": ["day_care"],
+      "closed": false,
+      "reason": "頁面標示為「補助項目」，寫明服務對象（設籍本市領有發展遲緩證明或身心障礙證明之學齡前兒童、國小身障學童）與服務項目（日間照顧、時段療育、課後照顧、延時照顧），是有經濟價值的照顧服務；但未寫補助金額或收費，類別介於身障照顧與日間照顧之間。",
+      "confidence": "medium"
+    },
+    {
+      "id": "9764f3a4-e365-4201-ac27-21a3a881e192",
+      "title": "單親及特境家庭福利業務總覽",
+      "is_benefit": "portal",
+      "kind": "portal",
+      "category": "special_circumstances_aid",
+      "secondary": ["childcare_subsidy", "rental_subsidy", "housing_loan_subsidy", "tuition_waiver", "medical_subsidy", "emergency_relief", "youth_entrepreneurship"],
+      "closed": false,
+      "reason": "整頁只是單親福利與特殊境遇家庭扶助的項目選單（子女生活補助、子女托育補助、租金補貼、緊急生活扶助、傷病醫療補助、創業貸款利息補貼等），各項條件不同且無任何資格或金額說明，屬多方案目錄。",
+      "confidence": "high"
+    },
+    {
+      "id": "e9f94f81-c98b-4589-9c15-6c90d37e6eeb",
+      "title": "南投縣低收入戶老人公費養護作業規定",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "institutional_care_subsidy",
+      "secondary": ["elderly_service", "low_income_allowance"],
+      "closed": false,
+      "reason": "第三點寫明補助對象（設籍本縣年滿65歲列冊低收入戶、經長照中心評估中重度失能），第四點寫明補助標準「養護費每人每月補助新臺幣二萬二千元」及醫療看護費，並有應備文件與申請程序，屬機構安置費用補助。",
+      "confidence": "high"
+    },
+    {
+      "id": "fd4d845c-80af-4d52-ad78-a1b4b3bf0232",
+      "title": "國保生育給付加給補助至10萬元",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "birth_incentive",
+      "secondary": [],
+      "closed": false,
+      "reason": "寫明申請資格（115年1月1日以後生產之國保被保險人或未參加社會保險之新生兒母親）與補助金額（每胎補足至10萬元，雙胞胎20萬元），並列三種申請方式，是具體的生育補助方案。",
+      "confidence": "high"
+    },
+    {
+      "id": "5bd9e912-46ba-490d-a23b-38adbb8de896",
+      "title": "新北市重陽禮金",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "致贈對象寫明設籍新北市滿1年、重陽節當月年滿65歲（原住民55歲）之長者，致贈原則依年齡分級給付1,500元至2萬元，並說明匯款申請期限，屬重陽敬老金。",
+      "confidence": "high"
+    },
+    {
+      "id": "3b97b858-4ec6-40c9-ac64-76c7a1e489fa",
+      "title": "低收入戶及中低收入戶（衛生福利e寶箱）",
+      "is_benefit": "portal",
+      "kind": "portal",
+      "category": "low_income_allowance",
+      "secondary": ["medical_subsidy", "housing_loan_subsidy", "tuition_waiver", "education_subsidy"],
+      "closed": false,
+      "reason": "衛福部主題專區頁，以一句話簡介並連結多項不同方案（低收中低收醫療補助、住宅補貼、學雜費減免、脫貧自立3+1、兒少未來教育與發展帳戶、通報流程），各項資格與給付不同，本頁本身未寫任何一項的完整條件，屬福利一覽。",
+      "confidence": "high"
+    },
+    {
+      "id": "8fcc5cfc-5a80-42f1-b896-f87e0d22a4e0",
+      "title": "高雄市發展遲緩兒童早期療育費用補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "medical_subsidy",
+      "secondary": ["disability_other"],
+      "closed": false,
+      "reason": "補助對象寫明設籍本市未達就學年齡之發展遲緩或身心障礙兒童，補助標準寫明療育訓練費及交通費一般戶每月最高4,000元、低收入戶6,000元，並有申請期限、應備文件與受理單位；補助內容為自費療育訓練費，歸醫療費用補助最接近，非托育補助。",
+      "confidence": "medium"
+    },
+    {
+      "id": "db6f72ed-ce7b-44b0-ad1c-23ee755d2a15",
+      "title": "兒童及少年醫療費用補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "medical_subsidy",
+      "secondary": [],
+      "closed": false,
+      "reason": "申請條件列十款對象（低收中低收兒少、受保護兒少、早產兒、罕病重大傷病兒少等），補助基準依家庭收入分全額至25%，補助項目寫明住院自付費用及看護費每年最高30萬元、療育訓練費每月最高4,000元等，是具體醫療費用補助方案；頁尾附件僅為表單。",
+      "confidence": "high"
+    },
+    {
+      "id": "ab47fd3d-5325-4841-b19b-0949b3009da0",
+      "title": "關懷獨居老人服務",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_service",
+      "secondary": [],
+      "closed": false,
+      "reason": "服務對象寫明年滿65歲居住本市且自我照顧能力不足之獨居老人，服務項目含關懷訪視、電話問安、緊急救援系統裝置、居家用電及照明設備檢測與修繕，後兩項為有經濟價值之服務；但原文未寫費用負擔或補助額度。",
+      "confidence": "medium"
+    },
+    {
+      "id": "e330719a-52e5-4789-96ff-62f2d711195c",
+      "title": "原住民急難救助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "emergency_relief",
+      "secondary": ["medical_subsidy"],
+      "closed": false,
+      "reason": "區公所業務頁，注意事項寫明救助對象（設籍本市具原住民身分者）與救助項目（死亡救助、醫療補助、生活扶助），並依項目列應附文件；有資格與給付項目但未寫救助金額。",
+      "confidence": "medium"
+    },
+    {
+      "id": "c1f3b1d4-d394-414b-bdbf-059cdd9a3317",
+      "title": "國民年金保險費補助（所得未達一定標準）",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "寫明補助標準申請資格（須為國保納保對象，家庭總收入平均未達最低生活費1.5倍／2倍之兩級門檻）、家庭總收入與全家人口計算方式及應備文件，是政府補助國保保險費的所得審查方案；但頁面未寫補助比率，且分類表無保險費補助類別，以所得審查扶助歸低收入戶類最接近。",
+      "confidence": "medium"
+    },
+    {
+      "id": "ba8f03ba-cd10-465d-aa97-77d5dd4ddf20",
+      "title": "南投縣政府社會及勞動局辦理發展遲緩兒童早期療育費用補助計畫",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "medical_subsidy",
+      "secondary": ["disability_other"],
+      "closed": false,
+      "reason": "計畫第五點寫明補助對象（本縣籍已通報之未達就學年齡疑似發展遲緩、發展遲緩或身心障礙兒童），第七點寫明補助標準（療育訓練費核實支付、交通費每次200元，低收入戶每月最高6,000元、非低收4,000元），第八點列申請程序；後附申請表與紀錄表僅為附件，主體仍是方案。",
+      "confidence": "medium"
+    }
+  ],
+  "count": 15
+}

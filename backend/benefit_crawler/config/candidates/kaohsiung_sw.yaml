@@ -1,0 +1,73 @@
+id: kaohsiung_sw
+name: 高雄市政府社會局 — 生育、育兒、社會救助、老人福利
+organization: 高雄市政府社會局
+provider_type: local_government
+source_type: government_site
+base_url: https://socbu.kcg.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [高雄市政府社會局]
+data_confidence: 100
+enabled: true
+domains: [social_welfare, long_term_care, disability]
+# 方案內容頁網址型態：index.php?prog=2&b_id=<分類>&m_id=<段落>&s_id=<方案>
+# 主內容在 div.diva1；方案名在 h3 > div.bar2，<title> 只有分類名（例如「社會救助 - 高雄市政府社會局」），故 pages 都寫明 title
+content_selectors: ["div.diva1", ".divbody"]
+follow_links:
+  depth: 1
+  # 只追分類目錄頁裡「經濟補助／津貼／救助」段落（m_id）的方案頁：
+  #   2 兒少經濟扶助｜33 低收入戶救助｜34 津貼／補助｜36 急難救助｜259 脫貧加倍佳｜23 老人經濟扶助｜126 托育經濟補助｜
+  #   39 單親福利措施｜135 特殊境遇家庭扶助｜205 身障經濟補助
+  # 不追 m_id=26/27/357/358（長青學苑、老人活動中心、安養機構介紹等服務介紹頁）與 208/211（輔具服務站點、線上申請、機構名單），
+  # 這些段落裡真正有補助內容的頁面已明列在 pages
+  # act=link 是外站轉址；b_id=1/23 是捐贈碼與隱私權頁；s_id=1761/1762/558/559/748/1926 只有法規或指向他局的一句話，沒有方案內文
+  allow: ['index\.php\?prog=2&b_id=\d+&m_id=(2|23|33|34|36|39|126|135|205|259)&s_id=\d+$']
+  deny: ["act=link", "news_show", "download", "prog=1&", "prog=3&", "prog=4&", "b_id=1&", "b_id=23&", "facebook", 's_id=(1761|1762|558|559|748|1926)$']
+  max_links: 40
+pages:
+  # 生育、育兒、托育（托育福利 b_id=25、少子女化對策專區 b_id=9）
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=25&m_id=126&s_id=760", title: 高雄市生育津貼, seed_category: child_allowance}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=9&m_id=45&s_id=2707", title: 高雄市第3胎以上鼓勵生育措施, seed_category: child_allowance}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=25&m_id=126&s_id=626", title: 育有未滿2歲兒童育兒津貼, seed_category: child_allowance}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=25&m_id=126&s_id=526", title: 未滿2歲暨延長2-3歲兒童公共化及準公共托育補助, seed_category: childcare_subsidy}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=25&m_id=126&s_id=2341", title: 高雄市加碼未滿3歲兒童準公共托育補助, seed_category: childcare_subsidy}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=25&m_id=126&s_id=770", title: 高雄市弱勢兒童托育補助, seed_category: childcare_subsidy}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=25&m_id=126&s_id=2819", title: 高雄市0-6歲育兒補助簡介, skip: true, skip_reason: 頁面只有 PDF 附件（簡介與宣導單張），沒有可抽取的內文；各項補助已分別列於 s_id=760/626/526/2341/770}
+  # 社會救助（b_id=6）
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=6&m_id=33&s_id=97", title: 低收入戶生活補助, seed_category: low_income_allowance}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=6&m_id=34&s_id=298", title: 申請中低收入戶, seed_category: low_income_allowance}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=6&m_id=33&s_id=287", title: 低收入戶全民健康保險補助, seed_category: low_income_allowance}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=6&m_id=33&s_id=297", title: 低收入戶孕產婦及嬰幼兒營養補助, seed_category: low_income_allowance}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=6&m_id=36&s_id=108", title: 民眾急難救助, seed_category: emergency_relief}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=6&m_id=36&s_id=111", title: 強化社會安全網-急難紓困實施方案, seed_category: emergency_relief}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=2&m_id=2&s_id=3", title: 弱勢家庭兒童及少年緊急生活扶助, seed_category: emergency_relief}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=6&m_id=34&s_id=293", title: 中低收入老人生活津貼, seed_category: elderly_allowance}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=6&m_id=34&s_id=304", title: 身心障礙者生活補助, seed_category: disability_living_allowance}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=6&m_id=34&s_id=706", title: 高雄市經濟弱勢市民醫療補助(含看護費補助)}
+  # 老人福利（b_id=4）
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=4&m_id=26&s_id=387", title: 重陽節敬老禮金, seed_category: elderly_allowance}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=4&m_id=358&s_id=310", title: 老人參加全民健康保險自付額補助, seed_category: elderly_allowance}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=4&m_id=23&s_id=322", title: 中低收入老人特別照顧津貼, seed_category: elderly_allowance}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=4&m_id=26&s_id=386", title: 敬老卡優惠, seed_category: elderly_service}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=4&m_id=357&s_id=342", title: 老人修繕住屋補助, seed_category: elderly_service}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=4&m_id=357&s_id=399", title: 中低收入失能老人養護服務補助, seed_category: institutional_care_subsidy}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=4&m_id=357&s_id=656", title: 低收入戶失能老人養護服務補助, seed_category: institutional_care_subsidy}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=4&m_id=357&s_id=2720", title: 115年度住宿式服務機構使用者補助方案, seed_category: institutional_care_subsidy}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=4&m_id=27&s_id=348", title: 關懷獨居老人服務, seed_category: elderly_service}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=4&m_id=27&s_id=344", title: 老人在宅緊急救援連線服務, seed_category: elderly_service}
+  # 單親及特殊境遇家庭（b_id=7）
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=7&m_id=135&s_id=552", title: 特殊境遇家庭子女生活津貼, seed_category: special_circumstances_aid}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=7&m_id=135&s_id=1760", title: 特殊境遇家庭兒童托育津貼, seed_category: special_circumstances_aid}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=7&m_id=39&s_id=123", title: 單親家庭子女托育補助, seed_category: childcare_subsidy}
+  # 身心障礙（b_id=5）
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=5&m_id=208&s_id=393", title: 身心障礙者輔具費用補助, seed_category: assistive_device}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=5&m_id=208&s_id=1882", title: 高雄市輔具及居家無障礙環境改善代償墊付服務, seed_category: assistive_device}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=5&m_id=205&s_id=425", title: 身心障礙照顧者津貼, seed_category: disability_care_subsidy}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=5&m_id=211&s_id=345", title: 身心障礙者日間照顧及住宿式照顧費用補助, seed_category: disability_care_subsidy}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=5&m_id=211&s_id=347", title: 無障礙之家日間照顧補助, seed_category: day_care}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=2&b_id=5&m_id=211&s_id=351", title: 無障礙之家住宿照顧補助, seed_category: institutional_care_subsidy}
+  # 分類目錄頁：本身是彙整頁（portal），配合 follow_links 追各段落的其他方案頁（順序＝追連結的優先順序）
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=1&b_id=6", title: 社會救助業務總覽}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=1&b_id=2", title: 兒童及少年福利業務總覽}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=1&b_id=7", title: 單親及特境家庭福利業務總覽}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=1&b_id=25", title: 托育福利業務總覽}
+  - {url: "https://socbu.kcg.gov.tw/index.php?prog=1&b_id=5", title: 身心障礙福利業務總覽}

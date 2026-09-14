@@ -1,0 +1,98 @@
+id: chiayi_county_sw
+name: 嘉義縣社會局 — 生育、育兒、社會救助、老人福利
+organization: 嘉義縣社會局
+provider_type: local_government
+source_type: government_site
+base_url: https://sabcc.cyhg.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [嘉義縣社會局]
+data_confidence: 100
+enabled: true
+domains: [social_welfare, long_term_care, disability]
+# 網站：嘉義縣社會局全球資訊網（CCMS 站台）。任務給的 social.cyhg.gov.tw 無法解析 DNS，正確網址是 sabcc.cyhg.gov.tw。
+# 方案內容頁網址型態有兩種：
+#   1. https://sabcc.cyhg.gov.tw/cp.aspx?n=<數字id>                       業務專區左側選單的固定頁（社會救助、兒少、婦女）
+#   2. https://sabcc.cyhg.gov.tw/News_Content.aspx?n=<分類>&s=<文章id>     老人福利／身心障礙／特殊境遇家庭的分類列表項目
+#      n=7776 特殊境遇家庭、n=7787 老人福利津貼、n=7788 老人生活照顧、n=7789 老人健康維護、n=7791 機構式照顧、
+#      n=7798 身障個人照顧、n=7799 身障家庭照顧、n=7800 身障經濟扶助、n=7805 身障證明及其他、n=10543 身障輔具專區
+# 內文在 #CCMS_Content（每頁固定有「※服務對象／※福利內容／※申請方式」段落）。附件放在 nextws.cyhg.gov.tw/Download.ashx（gov.tw 網域）。
+content_selectors: ["#CCMS_Content"]
+pages:
+  # ---------------------------------------------------------------- 生育、育兒、托育（婦女福利科／兒少福利及保護科）
+  - {url: "https://sabcc.cyhg.gov.tw/cp.aspx?n=7775", title: 嘉義縣婦女生育補助, seed_category: birth_incentive}
+  - {url: "https://sabcc.cyhg.gov.tw/cp.aspx?n=11215", title: 嘉義縣新生兒大禮包}
+  - {url: "https://sabcc.cyhg.gov.tw/cp.aspx?n=11097", title: 嘉義縣弱勢家庭坐月子到嘉（家）服務}
+  - {url: "https://sabcc.cyhg.gov.tw/cp.aspx?n=5003", title: 育有未滿二歲兒童育兒津貼, seed_category: child_allowance}
+  - {url: "https://sabcc.cyhg.gov.tw/cp.aspx?n=5004", title: 未滿二歲兒童托育公共化及準公共服務與費用, seed_category: childcare_subsidy}
+  - {url: "https://sabcc.cyhg.gov.tw/cp.aspx?n=5000", title: 弱勢兒童及少年生活扶助}
+  - {url: "https://sabcc.cyhg.gov.tw/cp.aspx?n=5001", title: 弱勢家庭兒童及少年緊急生活扶助, seed_category: emergency_relief}
+  - {url: "https://sabcc.cyhg.gov.tw/cp.aspx?n=5002", title: 弱勢兒童及少年醫療補助}
+  - {url: "https://sabcc.cyhg.gov.tw/cp.aspx?n=9281", title: 兒童及少年未來教育與發展帳戶}
+  # ---------------------------------------------------------------- 社會救助（低收／中低收、急難救助、醫療補助）
+  - {url: "https://sabcc.cyhg.gov.tw/cp.aspx?n=4930", title: 低收入戶救助, seed_category: low_income_allowance}
+  - {url: "https://sabcc.cyhg.gov.tw/cp.aspx?n=4931", title: 中低收入戶救助, seed_category: low_income_allowance}
+  - {url: "https://sabcc.cyhg.gov.tw/cp.aspx?n=11654", title: 急難救助, seed_category: emergency_relief}
+  - {url: "https://sabcc.cyhg.gov.tw/cp.aspx?n=4934", title: 強化社會安全網-急難紓困方案, seed_category: emergency_relief}
+  - {url: "https://sabcc.cyhg.gov.tw/cp.aspx?n=4932", title: 社會救助醫療補助, seed_category: low_income_allowance}
+  - {url: "https://sabcc.cyhg.gov.tw/cp.aspx?n=4933", title: 低收入戶住院看護補助, seed_category: low_income_allowance}
+  - {url: "https://sabcc.cyhg.gov.tw/cp.aspx?n=9930", title: 嘉義縣弱勢家戶微型保險實施計畫, seed_category: low_income_allowance}
+  - {url: "https://sabcc.cyhg.gov.tw/cp.aspx?n=9201", title: 設籍前新住民社會救助, seed_category: emergency_relief}
+  # ---------------------------------------------------------------- 特殊境遇家庭扶助
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7776&s=71132", title: 特殊境遇家庭緊急生活扶助, seed_category: special_circumstances_aid}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7776&s=71131", title: 特殊境遇家庭子女生活津貼, seed_category: special_circumstances_aid}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7776&s=71130", title: 特殊境遇家庭傷病醫療補助, seed_category: special_circumstances_aid}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7776&s=71129", title: 特殊境遇家庭訴訟律師諮詢補助, seed_category: special_circumstances_aid}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7776&s=71126", title: 特殊境遇家庭兒童托育津貼, seed_category: special_circumstances_aid}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7776&s=71125", title: 特殊境遇家庭之子女就讀高級中等以上學校學雜費減免, seed_category: special_circumstances_aid}
+  # ---------------------------------------------------------------- 老人福利（津貼、健保、假牙、敬老金）
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7787&s=72823", title: 中低收入老人生活津貼補助, seed_category: elderly_allowance}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7787&s=72812", title: 中低收入老人特別照顧津貼, seed_category: elderly_allowance}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7787&s=72811", title: 重陽節敬老禮金發放補助, seed_category: elderly_allowance}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7789&s=72888", title: 中低收入老人假牙補助, seed_category: elderly_allowance}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7789&s=72878", title: 中低收入老人全民健康保險費補助, seed_category: elderly_allowance}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7789&s=72879", title: 中低收入老人重病住院看護補助, seed_category: elderly_allowance}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7788&s=72866", title: 改善中低收入老人住宅設施、設備補助, seed_category: elderly_allowance}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7787&s=72824", title: 中低收入老人進住機構及聘僱長期看護工補助, seed_category: institutional_care_subsidy}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7791&s=1254988", title: 114年度住宿式服務機構使用者補助方案, seed_category: institutional_care_subsidy}
+  # ---------------------------------------------------------------- 老人福利（服務、長照）
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7788&s=72873", title: 嘉義縣敬老卡申辦及補助優待, seed_category: elderly_service}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7788&s=72860", title: 居家服務, seed_category: home_care}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7788&s=72831", title: 日間照顧服務, seed_category: day_care}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7788&s=198554", title: 家庭托顧服務, seed_category: family_care_home}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7788&s=213893", title: 長照交通接送, seed_category: transport_service}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7788&s=72836", title: 長期照顧-輔具服務及居家無障礙環境改善服務, seed_category: assistive_device}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7788&s=72859", title: 營養餐飲服務, seed_category: meal_service}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7788&s=72839", title: 緊急救援連線, seed_category: elderly_service}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7788&s=72837", title: 到宅沐浴車服務, seed_category: elderly_service}
+  - {url: "https://sabcc.cyhg.gov.tw/cp.aspx?n=11501", title: 失智守護（防走失）個人衛星定位器補助, seed_category: assistive_device}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7799&s=72954", title: 身心障礙者及老人預防走失服務, seed_category: elderly_service}
+  # ---------------------------------------------------------------- 身心障礙
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7800&s=79596", title: 身心障礙者生活補助, seed_category: disability_living_allowance}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7800&s=136888", title: 身心障礙者日間照顧及住宿式照顧費用補助, seed_category: disability_care_subsidy}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7800&s=79597", title: 身心障礙者租賃房屋租金補助, seed_category: rental_subsidy}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7800&s=88498", title: 身心障礙者購屋貸款利息補助, seed_category: disability_other}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7800&s=88499", title: 身心障礙者購買停車位貸款利息補貼或承租停車位補助, seed_category: disability_other}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7800&s=72960", title: 身心障礙者參加社會保險自付保費補助, seed_category: disability_other}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7800&s=79598", title: 補助就讀本縣私立幼托園所（機構）3-5歲身心障礙幼兒家長教育經費, seed_category: education_subsidy}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7800&s=264081", title: 身心障礙者購買或承租商店攤販低利貸款或租金補貼, seed_category: disability_other}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=10543&s=177965", title: 第一階段身障輔具補助費用申請, seed_category: assistive_device}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=10543&s=177995", title: 嘉義縣居家身心障礙者使用維生器材及必要生活輔具用電優惠申請, seed_category: disability_other}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7798&s=72949", title: 失能身心障礙者補助使用居家照顧服務, seed_category: home_care}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7798&s=89306", title: 身心障礙者社區式日間照顧服務, seed_category: day_care}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7798&s=135276", title: 嘉義縣身心障礙者家庭托顧服務, seed_category: family_care_home}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7798&s=72951", title: 身心障礙者送餐服務, seed_category: meal_service}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7798&s=1267664", title: 獨居身心障礙者緊急救援服務計畫, seed_category: disability_other}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7799&s=147632", title: 身心障礙者臨時及短期照顧服務, seed_category: respite_care}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7805&s=73262", title: 身心障礙國民乘車優惠, seed_category: disability_other}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7805&s=73264", title: 申請身心障礙者汽車牌照免稅, seed_category: disability_other}
+  # ---------------------------------------------------------------- 目錄頁／只留紀錄、不抓
+  - {url: "https://sabcc.cyhg.gov.tw/Content_List.aspx?n=0043A8CF0BB98E08", title: 業務專區總覽, skip: true, skip_reason: 業務專區目錄頁（左側選單列出所有分類），方案內容頁已逐一列入}
+  - {url: "https://sabcc.cyhg.gov.tw/News.aspx?n=7787&sms=19854", title: 老人福利津貼（目錄）, skip: true, skip_reason: 分類列表頁，方案內容頁已逐一列入}
+  - {url: "https://sabcc.cyhg.gov.tw/News.aspx?n=7788&sms=19855", title: 老人生活照顧（目錄）, skip: true, skip_reason: 分類列表頁，方案內容頁已逐一列入}
+  - {url: "https://sabcc.cyhg.gov.tw/News.aspx?n=7789&sms=19856", title: 老人健康維護（目錄）, skip: true, skip_reason: 分類列表頁，方案內容頁已逐一列入}
+  - {url: "https://sabcc.cyhg.gov.tw/News.aspx?n=7776&sms=19847", title: 特殊境遇家庭（目錄）, skip: true, skip_reason: 分類列表頁，方案內容頁已逐一列入}
+  - {url: "https://sabcc.cyhg.gov.tw/News.aspx?n=7800&sms=19863", title: 身心障礙經濟扶助（目錄）, skip: true, skip_reason: 分類列表頁，方案內容頁已逐一列入}
+  - {url: "https://sabcc.cyhg.gov.tw/News.aspx?n=7798&sms=19861", title: 身心障礙個人照顧服務（目錄）, skip: true, skip_reason: 分類列表頁，方案內容頁已逐一列入}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?n=7776&s=96769", title: 嘉義縣政府辦理特殊境遇家庭扶助標準作業流程, seed_category: special_circumstances_aid, skip: true, skip_reason: 作業流程頁（只有 SOP 連結，276 字），各項特境扶助的方案頁已逐一列入}
+  - {url: "https://sabcc.cyhg.gov.tw/News_Content.aspx?state=F5D336F102ACBC68&n=5BE589B23FF95242&s=050119D7382EB173&sms=45BDB0B458D19EBC", title: 嘉義縣設籍前新住民遭逢特殊境遇相關福利及扶助計畫（網頁）, seed_category: special_circumstances_aid, skip: true, skip_reason: 網頁只有附件清單沒有內文；計畫 PDF 在 nextws.cyhg.gov.tw/Download.ashx，該主機 TLS 的 DH 金鑰太小（OpenSSL DH_KEY_TOO_SMALL），專案 HTTP 客戶端抓不到，curl 可以；待客戶端放寬 SECLEVEL 後再登錄 PDF}
+notes: 嘉義縣社會局全球資訊網（CCMS 站台）。任務給的 social.cyhg.gov.tw 無法解析；正確網址為 sabcc.cyhg.gov.tw（cyhg.gov.tw 子網域）。內容頁有 cp.aspx?n=<id> 與 News_Content.aspx?n=<分類>&s=<id> 兩種型態，內文都在 #CCMS_Content，每頁固定有「※服務對象／※福利內容（補助標準）／※申請方式（應備文件）」段落。生育補助由戶政事務所受理但頁面在社會局站台（婦女福利科），不需覆寫 organization。不收：居家式托育服務（托育人員資格）、獨居老人通報（通報服務）、特境扶助 SOP（只有連結）。

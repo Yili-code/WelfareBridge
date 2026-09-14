@@ -1,0 +1,119 @@
+id: kinmen_sw
+name: 金門縣政府社會處 — 生育、育兒、社會救助、老人福利
+organization: 金門縣政府社會處
+provider_type: local_government
+source_type: government_site
+base_url: https://social.kinmen.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+# 各頁 <title> 都是「金門縣政府社會處-…」（方案頁一律是「金門縣政府社會處-福利服務項目」，方案名稱只在側欄與 pages.title）
+expected_title_keywords: [金門縣政府社會處]
+data_confidence: 100
+enabled: true
+domains: [social_welfare, long_term_care, disability]
+# 方案頁 cp.aspx?n=<專區>&s=<方案>：內文在 <div class="area-editor user-edit">（資格、金額、應備文件、申請方式、受理窗口）；
+# Content_List.aspx 類的單篇頁（新住民計畫）內文在 <div class="area-editor system-info">；#base-content 是含麵包屑的外層備援。
+content_selectors: [".area-editor.user-edit", ".area-editor.system-info", "#base-content"]
+follow_links:
+  depth: 1
+  # 只追五個「福利服務項目」專區（兒少 69B6…、老人 C8CD…、身障 A3F7…、社會救助 99FF…、婦女 23A3…）側欄的方案頁
+  allow: ["cp\\.aspx\\?n=(69B652E4C1464FFE|C8CDE0088D2E9571|A3F704E25195CDB4|99FF9571F64E278F|23A3A23B56E70887)&s="]
+  deny:
+    - "News"
+    - "Content_List"
+    - "Default"
+    - "sitemap"
+    - "MetaData"
+    - "Download\\.ashx"
+    - "fm=1"
+    - "296A7909D04221D3"        # 處長／副處長介紹
+    # 非補助方案的行政程序／保護服務／捐款頁：申請社會救助專戶（捐款）、身障鑑定與證明核發、證明異動／重鑑／補換發／英文證明、停車識別證、設籍前外配鑑定
+    - "s=(B5C3C25D4B934F97|FF5ABBB4E3CD5FF7|A7161D4FB7B51306|4782AA789989030A|9D41B8F668340682|C9413224249DB760|4A000EF83D724A25|9BF249501C330D42|F5BC16A2AE8C8AB9|D0109F3458906B6F)"
+    # 兒少保護、老人保護、身障保護、成年監護及輔助宣告、導盲犬管理、老人團體／身障團體設備補助（對象是團體）、社區照顧關懷據點（據點介紹，乾跑 kw_benefit=False）
+    - "s=(D6C6171BB29BFCF7|8900E10AF7E5DE1B|0AD2129391EDBEA3|9109CF2EB3CD88A0|02F0DC59F6A01254|B44A53F3DE39549F|DA656F594B6A9735|F7D8751C0109CFC3|3F7D36E804198D7F)"
+  max_links: 80
+pages:
+  # ── 婦女福利專區 › 福利服務項目（生育相關）──
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=23A3A23B56E70887&s=1D59B8E69C745002", title: 金門縣婦女生產補助, seed_category: birth_incentive}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=23A3A23B56E70887&s=1902EB3934ED528A", title: 金門縣政府生育贈禮, seed_category: birth_incentive}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=23A3A23B56E70887&s=254A635D34216A49", title: 金門縣政府支持生育加碼補助, seed_category: birth_incentive}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=23A3A23B56E70887&s=676F72AC6F22B4BA", title: 特殊境遇家庭扶助, seed_category: special_circumstances_aid}
+  # ── 兒少福利專區 › 福利服務項目 ──
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=69B652E4C1464FFE&s=75D9F7CBA80AB816", title: 育有未滿二歲兒童育兒津貼, seed_category: child_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=69B652E4C1464FFE&s=0EEE26C0CEE0BF66", title: 未滿二歲(含二至三歲)兒童托育補助, seed_category: childcare_subsidy}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=69B652E4C1464FFE&s=16F6A89A79A8DFDE", title: 金門縣政府友善托育補助, seed_category: childcare_subsidy}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=69B652E4C1464FFE&s=B55EFC468B94D84B", title: 金門縣父母照顧子女津貼, seed_category: child_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=69B652E4C1464FFE&s=8DEF1A864A97BF84", title: 兒童及少年生活扶助, seed_category: child_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=69B652E4C1464FFE&s=3E52255E5F7FBFFC", title: 弱勢家庭兒童及少年緊急生活扶助, seed_category: child_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=69B652E4C1464FFE&s=CA9B0F55CC1004A8", title: 中低收入戶18歲以下兒童及少年健保費補助, seed_category: low_income_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=69B652E4C1464FFE&s=9276BA63ED769ADE", title: 金門縣弱勢兒童及少年醫療費用補助}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=69B652E4C1464FFE&s=C47F351F9A1A8804", title: 金門縣政府辦理發展遲緩兒童早期療育費用補助}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=69B652E4C1464FFE&s=397DF9DA999D36B4", title: 金門縣政府辦理兒童及少年親屬寄養服務補助}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=69B652E4C1464FFE&s=8D7CC77DC2122374", title: 金門縣家庭安全支持補助}
+  # ── 社會救助專區 › 福利服務項目 ──
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F&s=7A1D5BD79C00DCCC", title: 低收入戶家庭生活扶助, seed_category: low_income_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F&s=0169D447032B5EF9", title: 中低收入戶扶助, seed_category: low_income_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F&s=94AEF2BB57333576", title: 低收入戶子女就學生活補助, seed_category: student_aid}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F&s=11EBD5DC691B53CF", title: 低收入戶及中低收入戶參加健康保險費用補助, seed_category: low_income_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F&s=8E95B8FB2228A84C", title: 低收入戶及中低收入戶傷病醫療看護費用補助, seed_category: low_income_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F&s=F1C1EEA78B68D40D", title: 金門縣低收入戶三節慰問金, seed_category: low_income_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F&s=BA6265800096631D", title: 金門縣低收入戶安裝有線電視補助, seed_category: low_income_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F&s=459DA821E1DAD414", title: 金門縣政府補助低收入戶網路服務費, seed_category: low_income_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F&s=8FF8CE287F348716", title: 金門縣政府補助低收入戶就學子女家戶購置電腦, seed_category: low_income_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F&s=B439430E3BE5D543", title: 金門縣政府辦理低收入戶及弱勢家庭就學子女自立脫貧補助, seed_category: student_aid}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F&s=422153B97551D8C5", title: 金門縣低收入戶及中低收入戶產婦及嬰兒營養補助, seed_category: low_income_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F&s=16F04A522F9411FA", title: 以工代賑輔導, seed_category: low_income_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F&s=FCE747C0D3337E3F", title: 急難救助, seed_category: emergency_relief}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F&s=1C119C1858FA2DAC", title: 急難紓困, seed_category: emergency_relief}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F&s=42DC1F135A3BEBD4", title: 金門縣災害救助金, seed_category: emergency_relief}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F&s=C4D781AAD8D9EA34", title: 縣民遭受意外傷害濟助, seed_category: emergency_relief}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F&s=8569DDCEBB49E502", title: 縣民非因意外致死亡身心障礙濟助, seed_category: emergency_relief}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F&s=E9E4FC26EE91FA66", title: 金門縣緊急傷病及失能之縣民照顧服務補助, seed_category: emergency_relief}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F&s=B33DCD9A3A555C4D", title: 金門縣弱勢族群交通費補貼}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F&s=D9878C0F902A1B72", title: 金門縣實（食）物銀行}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F&s=BBD0FF0D73EF54C4", title: 兒童及少年未來教育與發展帳戶}
+  # ── 老人福利專區 › 福利服務項目 ──
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=C8CDE0088D2E9571&s=535E01AC52EFB5A7", title: 中低收入老人生活津貼, seed_category: elderly_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=C8CDE0088D2E9571&s=0D52A9B1FD1D7C39", title: 中低收入老人特別照顧津貼, seed_category: elderly_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=C8CDE0088D2E9571&s=F425C46B90F40504", title: 金門縣中低收入老人傷病醫療及住院看護費, seed_category: elderly_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=C8CDE0088D2E9571&s=AE88B77D4DE585D2", title: 金門縣65歲以上老人全民健康保險補助, seed_category: elderly_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=C8CDE0088D2E9571&s=B26BC741A9EB1645", title: 金門縣老人假牙補助, seed_category: elderly_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=C8CDE0088D2E9571&s=5C964108B6F823BA", title: 金門縣歷經戰地軍管時期老人慰助金, seed_category: elderly_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=C8CDE0088D2E9571&s=C58F878EF713E49F", title: 金門縣民敬老卡, seed_category: elderly_service}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=C8CDE0088D2E9571&s=61F6EDB507A31E6D", title: 金門縣政府辦理老人收容安置補助, seed_category: institutional_care_subsidy}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=C8CDE0088D2E9571&s=FDDD385F34312990", title: 金門縣中低收入老人住宅改善補助, seed_category: elderly_service}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=C8CDE0088D2E9571&s=CF57B6CAEF85E5F8", title: 金門縣辦理老人營養餐食服務, seed_category: meal_service}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=C8CDE0088D2E9571&s=1E0C0E0A648BA46E", title: 老人在宅緊急救援連線服務, seed_category: elderly_service}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=C8CDE0088D2E9571&s=D6CE8F4A17FE345B", title: 金門縣失智老人愛心手鍊, seed_category: elderly_service}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=C8CDE0088D2E9571&s=AAA55B728159E214", title: 金門縣政府預防走失智慧防護網絡服務, seed_category: elderly_service}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=C8CDE0088D2E9571&s=D67DB37D476803CB", title: 金門縣政府補助中低收入獨居老人裝設有線電視費用, seed_category: elderly_service}
+  # ── 身心障礙者福利專區 › 福利服務項目 ──
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4&s=22D6E2432D9E211D", title: 身心障礙生活補助, seed_category: disability_living_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4&s=8775D8E8343AB4D1", title: 金門縣身心障礙者居家生活津貼, seed_category: disability_living_allowance}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4&s=7B3DCC1528F2E48A", title: 金門縣身心障礙照顧者津貼, seed_category: disability_care_subsidy}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4&s=0961791BC9811633", title: 身心障礙者日間及住宿式照顧費用補助, seed_category: disability_care_subsidy}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4&s=DFE2AD8F42F8487F", title: 金門縣身心障礙者日間及住宿式照顧費用部分負擔補助, seed_category: disability_care_subsidy}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4&s=8E76622C0BB74F1B", title: 身心障礙者醫療及生活輔助器具費用補助, seed_category: assistive_device}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4&s=A9B362B421957FCE", title: 金門縣身心障礙者輔具費用補助代償墊付服務, seed_category: assistive_device}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4&s=E03980298219274B", title: 身心障礙者參加社會保險費用補助, seed_category: disability_other}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4&s=8A3B3293C269E096", title: 居家身心障礙者使用維生器材及必要生活輔具用電優惠, seed_category: disability_other}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4&s=A53E0BA10DD4457E", title: 金門縣身心障礙者租賃房屋租金補助, seed_category: rental_subsidy}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4&s=747C7FE30FB85D12", title: 金門縣身心障礙者臨時及短期照顧服務費用補助, seed_category: respite_care}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4&s=3D7FC7A8DCAC0825", title: 金門縣身心障礙者家庭托顧服務, seed_category: family_care_home}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4&s=A8D15F7E23EA8317", title: 金門縣身心障礙者社區式日間照顧服務, seed_category: day_care}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4&s=9EE25E97EC73632C", title: 金門縣身心障礙者送餐服務, seed_category: meal_service}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4&s=02C49713EE2E5FAB", title: 金門縣身心障礙者復康巴士, seed_category: transport_service}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4&s=D5AD2C5A7A85502C", title: 金門縣精神障礙者住院期間伙食費用補助, seed_category: disability_other}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4&s=A7DEFD7838C61B55", title: 金門縣紙尿褲看護墊補助, seed_category: disability_other}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4&s=CC429743B08A82DC", title: 金門縣政府辦理極重度長期失能身心障礙者三節慰問金, seed_category: disability_other}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4&s=E20A501306E87CC8", title: 金門縣補助安置台灣教療養機構身心障礙者家屬探視交通費補助, seed_category: disability_other}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4&s=A06275FDC88942AB", title: 金門縣重度以上中低收入身心障礙者及身心障礙團體裝設有線電視補助, seed_category: disability_other}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4&s=D6534AF4B33A6D06", title: 金門縣民愛心卡, seed_category: disability_other}
+  # ── 新住民福利專區（單篇 Content_List 頁，內文在 .area-editor.system-info）──
+  - {url: "https://social.kinmen.gov.tw/Content_List.aspx?n=81A09B86DAF7E6C5", title: 金門縣設籍前新住民社會救助計畫, seed_category: emergency_relief}
+  - {url: "https://social.kinmen.gov.tw/Content_List.aspx?n=E39D6143C1233272", title: 金門縣設籍前新住民遭逢特殊境遇家庭扶助計畫, seed_category: special_circumstances_aid}
+  # ── 各專區「福利服務項目」入口頁：本身是第一個方案（但側欄列出全部方案），標題用「總覽」讓收錄政策判為彙整頁，配合 follow_links 追新方案 ──
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=23A3A23B56E70887", title: 婦女福利服務項目總覽}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=69B652E4C1464FFE", title: 兒少福利服務項目總覽}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F", title: 社會救助福利服務項目總覽}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=C8CDE0088D2E9571", title: 老人福利服務項目總覽}
+  - {url: "https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4", title: 身心障礙者福利服務項目總覽}

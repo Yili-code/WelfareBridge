@@ -1,0 +1,55 @@
+id: hsinchu_county_sw
+name: 新竹縣政府社會處 — 生育、育兒、托育、社會救助、特殊境遇家庭
+organization: 新竹縣政府社會處
+provider_type: local_government
+source_type: government_site
+base_url: https://social.hsinchu.gov.tw/
+crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+expected_title_keywords: [新竹縣政府-社會處, 新竹縣政府]
+data_confidence: 100
+enabled: true
+domains: [social_welfare]
+# 主內容區：News_Content.aspx / cp.aspx 都放在 #CCMS_Content（與臺北市、桃園市同一套 CMS）。
+# 注意：自 115 年 1 月 1 日起「老人福利科」「身心障礙福利科」移撥到新成立的「高齡長照處」
+# （https://longcare.hsinchu.gov.tw/），社會處網站原本的老人福利（n=205）、身心障礙福利（n=206）
+# 頁面已全部 302 轉到首頁，因此本來源只涵蓋社會救助、兒少、婦女、托育；老人／身障方案請另建來源。
+content_selectors: ["#CCMS_Content"]
+follow_links:
+  depth: 1
+  # 只追社會救助(207)、兒少福利(203)、婦女福利(204)、托育相關(2783) 底下的方案內容頁 News_Content.aspx?n=…&s=…
+  allow: ['News_Content\.aspx\?n=(207|203|204|2783)&s=']
+  # 第一輪乾跑從社會救助清單追到的非方案頁（社會救助通報、捐款徵信、救助金專戶、遊民收容輔導、路倒病人處理要點）直接排除
+  deny: ['News\.aspx', 'cl\.aspx', 'cp\.aspx', 'Default', 'SiteMap', 'Download\.ashx', 'News_Link', 'News_Video', 'Advanced_Search', 'OpenDataList', 'n=207&s=(160538|264850|248665|3881|3883)$']
+  max_links: 40
+pages:
+  # ── 兒童及少年福利 › 經濟補助 ──
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=203&s=251571", title: 育有未滿2歲兒童育兒津貼, seed_category: child_allowance}
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=203&s=3713", title: 新竹縣新生兒營養補助, seed_category: birth_incentive}
+  # ── 婦女福利 › 經濟補助 ──
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=204&s=3777", title: 特殊境遇家庭扶助, seed_category: special_circumstances_aid}
+  # ── 社會救助 › 低收、中低收入戶服務／急難救助服務 ──
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=207&s=3877", title: 低收入戶生活扶助, seed_category: low_income_allowance}
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=207&s=3878", title: 中低收入戶, seed_category: low_income_allowance}
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=207&s=3884", title: 急難救助, seed_category: emergency_relief}
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=207&s=3886", title: 強化社會安全網－急難紓困實施方案, seed_category: emergency_relief}
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=203&s=3714", title: 兒童及少年生活扶助, seed_category: child_allowance}
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=203&s=3710", title: 弱勢家庭兒童及少年緊急生活扶助, seed_category: child_allowance}
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=2783&s=261839", title: 未滿二歲(延長二至三歲)兒童托育費用補助, seed_category: childcare_subsidy}
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=207&s=3880", title: 中低收入戶傷病醫療看護費補助(18-65歲), seed_category: low_income_allowance}
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=207&s=3875", title: 災害救助, seed_category: emergency_relief}
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=203&s=3715", title: 新竹縣弱勢兒童及少年醫療補助, seed_category: child_allowance}
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=203&s=3726", title: 兒童早期療育費用補助}
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=207&s=263681", title: 新竹縣政府低/中低收入戶就業獎勵補助計畫, seed_category: low_income_allowance}
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=207&s=283634", title: 115年度低收入戶及中低收入戶電腦設備購置補助計畫, seed_category: low_income_allowance}
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=207&s=255063", title: 低/中低收入戶微型火災不便費用保險, seed_category: low_income_allowance}
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=207&s=230789", title: 微型團體傷害保險(微型保險), seed_category: low_income_allowance}
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=207&s=3888", title: 低收入戶及中低收入戶家庭自立脫貧-希望存摺投資方案, seed_category: low_income_allowance}
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=207&s=154274", title: 兒童與少年未來教育及發展帳戶, seed_category: low_income_allowance}
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=207&s=237206", title: 新竹縣以工代賑實施計畫, seed_category: low_income_allowance}
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=207&s=230389", title: 川資（車資返鄉）救助, seed_category: emergency_relief}
+  # ── 各方案清單頁：標題用「總覽」讓收錄政策判為彙整頁，但仍會抓取並由 follow_links 追新方案 ──
+  - {url: "https://social.hsinchu.gov.tw/News.aspx?n=207&sms=8669", title: 社會救助業務總覽, seed_category: low_income_allowance}
+  - {url: "https://social.hsinchu.gov.tw/News.aspx?n=203&sms=8665&_CSN=84", title: 兒童及少年經濟補助總覽, seed_category: child_allowance}
+  - {url: "https://social.hsinchu.gov.tw/News.aspx?n=204&sms=8666&_CSN=84", title: 婦女福利經濟補助總覽, seed_category: special_circumstances_aid}
+  - {url: "https://social.hsinchu.gov.tw/News.aspx?n=2783&sms=10087&_CSN=1030", title: 托育補助總覽, seed_category: childcare_subsidy}
+  - {url: "https://social.hsinchu.gov.tw/News_Content.aspx?n=2783&s=264093", title: 0-6歲國家一起養2.0, skip: true, skip_reason: 頁面只有一張圖片（#CCMS_Content 只有標題 12 字），沒有可抽取的文字}

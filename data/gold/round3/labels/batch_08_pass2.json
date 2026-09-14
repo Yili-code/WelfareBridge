@@ -1,0 +1,170 @@
+{
+  "labels": [
+    {
+      "id": "bc660bcb-c667-4620-904c-af5246b496bd",
+      "title": "政府鼓勵脫貧自立3+1",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文寫明對象為低收入戶、中低收入戶民眾，給付為接受就業服務、職訓找到工作或參加脫貧措施後增加之收入與存款最長3年（必要時延長1年）不計入家庭總收入及財產、不影響原低（中低）收資格，屬有經濟價值的減免措施；但無金額、無申請程序，僅附1957／1999諮詢電話，內容偏政策說明。",
+      "confidence": "medium"
+    },
+    {
+      "id": "f1cfaf0f-26d3-4548-9c51-2cdeb8f3e7dc",
+      "title": "低收入戶三節慰問金",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "服務對象寫明「當年度三節當日仍核列低收入戶者」，服務內容寫明春節每戶1,200元、端午及中秋各1,000元，由社會局逕撥入低收入戶帳戶。",
+      "confidence": "high"
+    },
+    {
+      "id": "2788156a-6c33-4716-a6bc-71eaab0585db",
+      "title": "新北市中低收入老人裝置假牙補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "補助資格寫明設籍本市55歲以上原住民或60歲以上低收入戶、65歲以上具中低收等身分之老人經醫師評估缺牙者，補助標準列出上下顎全口活動假牙最高4萬4,000元、固定式每顆4,400元、維修每年6,600元等金額與兩階段申請程序；依規則老人假牙歸 elderly_allowance。",
+      "confidence": "high"
+    },
+    {
+      "id": "18fd5ab9-f14c-4a1b-9901-0d7a3ba47844",
+      "title": "桃園市生育津貼發放作業要點申請說明（含申請表）",
+      "is_benefit": "no",
+      "kind": "form",
+      "category": "",
+      "secondary": [],
+      "closed": false,
+      "reason": "整份為桃園市生育津貼申請表（含委託書、申請人切結書、核定機關審核欄、帳戶資料與個資告知簽章欄），後半雖附作業要點申請說明（設籍滿一年資格、第一名3萬／第二名4萬／第三名以上5萬、多胞胎每名加1萬、出生次日起6個月內向戶所申請），但文件性質為申請表單且PDF文字順序錯亂，依規則表單不收；若依內容判則對應 birth_incentive。",
+      "confidence": "medium"
+    },
+    {
+      "id": "16b811d7-2d1c-42bb-964f-c175099cfea1",
+      "title": "弱勢兒童及少年生活扶助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": ["medical_subsidy", "childcare_subsidy"],
+      "closed": false,
+      "reason": "原文為「弱勢兒童及少年生活扶助與托育及醫療費用補助辦法」第一至四條，第三條寫明對象（遭遇困境之中低收入戶內兒童少年、因懷孕生育遭遇困境者、經評估無力撫育者），第四條寫明每人每月1,900元，屬條文載有資格與給付的辦法；第二條另涵蓋托育費用及醫療費用（含健保費）補助故列次類別；因無專屬兒少類別，主類別取最接近的中低收入戶生活扶助。",
+      "confidence": "medium"
+    },
+    {
+      "id": "6833cab7-6404-49f0-b033-a0b37b67703c",
+      "title": "桃園市中壢區公所急難救助申請應備文件表",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "emergency_relief",
+      "secondary": [],
+      "closed": false,
+      "reason": "原文標題為「中壢區急難救助申請規定及應備文件」，寫明申請資格（設籍本市且具社會救助法第21條各款情形）、六類急難事由（死亡無力殮葬、意外傷害重病、失業無法工作、財產遭凍結、福利補助核准前、其他重大變故）、審核14日、全家人口範圍與應備文件，已具「誰可以申請」而非僅附件清單；但未載救助金額，文件偏申請指引。",
+      "confidence": "medium"
+    },
+    {
+      "id": "65d5fc5e-5646-44a2-8657-6af4f21f3ee2",
+      "title": "馬偕計畫（長期奉獻外籍人士比照老人優待及長照服務）",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_service",
+      "secondary": ["ltc_general"],
+      "closed": false,
+      "reason": "第二點寫明適用對象（居住我國20年以上、每年逾183日、持外僑永久居留證、年滿65歲、長期奉獻服務之外籍人士），第四、八點寫明給付為比照本國老人之大眾運輸與公立育樂場所優待，以及居家服務、日照、家庭托顧、輔具、餐飲、喘息、交通接送、機構等長照服務（補助基準比照長照十年計畫一般戶），並載明向社家署與縣市長照中心申請；對象特殊且給付為優待與服務組合，故信心中等。",
+      "confidence": "medium"
+    },
+    {
+      "id": "6c445d3c-21d4-47fa-838b-b390e18d9fa2",
+      "title": "身心障礙者社會保險自付保險費補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "disability_other",
+      "secondary": [],
+      "closed": false,
+      "reason": "補助對象寫明設籍基隆市領有身心障礙證明且已參加健保、勞保、公保、軍保、國民年金者，補助標準依障礙程度極重度／重度全額、中度二分之一、輕度四分之一補助自付保費，並載明健保勞保免申請直接減免、其他保險向投保單位申請；身心障礙者保險費補助依 taxonomy 說明歸 disability_other。",
+      "confidence": "high"
+    },
+    {
+      "id": "0dc81fde-b13b-4059-a1ad-30e98e8e7e72",
+      "title": "獨居老人服務",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "elderly_service",
+      "secondary": [],
+      "closed": false,
+      "reason": "頁面寫明服務對象（本市列冊獨居老人：65歲以上實際居住本市且獨自居住、同住家屬缺乏照顧能力或同住者無照顧義務）、服務內容（電話問安、關懷訪視、發現需求轉介）、分區承辦單位與線上申辦連結，屬老人福利服務；但服務為免費關懷訪視與電話問安，經濟價值有限，是否符合「有經濟價值的服務」可再斟酌。",
+      "confidence": "medium"
+    },
+    {
+      "id": "93715e4a-d7ab-40d0-9bb9-92bfce96db33",
+      "title": "臺灣省及福建省低收入戶生活扶助金額表（113年1月1日起適用）",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "表內列出低收入戶第1款家庭生活補助每人每月11,850元、第2款每戶6,825元、第2及3款兒童生活補助3,008元、高中職以上就學生活補助6,825元（福建省另列8,791元等），並註明依社會救助法第11條調整、自113年1月1日適用，已寫出「給什麼」；惟僅為給付金額表，無資格說明與申請方式。",
+      "confidence": "medium"
+    },
+    {
+      "id": "f5e86e34-c743-41a8-a44d-3878076679e2",
+      "title": "新北市市民醫療補助",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "medical_subsidy",
+      "secondary": [],
+      "closed": false,
+      "reason": "申請對象寫明設籍新北市之列冊低收入戶傷病患者、嚴重傷病經社會救助機構收容者，以及三個月內自付醫療費逾2萬元且具中低收、弱勢兒少扶助、特殊境遇、身心障礙生活補助、中低收老人津貼或所得未逾最低生活費2.5倍等資格者可申請醫療費用補助，並載明應備文件、就醫後三個月內向區公所申請與匯款撥付；未寫補助金額。",
+      "confidence": "high"
+    },
+    {
+      "id": "8a18dabc-ca9f-48e8-aa8e-3fb12b4d3fab",
+      "title": "育有未滿二歲兒童育兒津貼",
+      "is_benefit": "no",
+      "kind": "faq",
+      "category": "",
+      "secondary": [],
+      "closed": false,
+      "reason": "整份為板橋區公所「育有未滿二歲兒童育兒津貼申請相關疑義」問答表（題號／問題／解答內容／承辦人／分機欄位，共15題，含追溯發放、申復、戶籍變更等問答），雖完整寫出發放對象（未滿2歲我國籍兒童、完成出生登記、未公費安置、未接受公共化托育）與每月5,000／6,000／7,000元金額，但文件性質為 FAQ，依規則不收；內容對應 child_allowance。",
+      "confidence": "medium"
+    },
+    {
+      "id": "381ab2d1-ba80-42a4-a6e1-766e9b7d0eb0",
+      "title": "臺中市生育津貼",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "birth_incentive",
+      "secondary": [],
+      "closed": false,
+      "reason": "請領資格寫明新生兒父母一方於出生當日設籍本市滿180天且新生兒在本市完成出生登記，發放標準為114年12月31日前出生每胎2萬元、115年起第1、2名各2萬元、第3名以後每名遞增1萬元，並載明出生次日起6個月內持身分證印章向戶政事務所申請。",
+      "confidence": "high"
+    },
+    {
+      "id": "5da11290-978f-4861-9a62-fa82003b9dcb",
+      "title": "115年度低收入戶及中低收入戶資格審核標準",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "low_income_allowance",
+      "secondary": [],
+      "closed": false,
+      "reason": "表列115年臺灣省、六都與福建省低收入戶及中低收入戶之每人每月平均所得、動產與不動產限額（如臺灣省低收1萬5,515元、中低收2萬3,273元），即低（中低）收資格的審核標準，屬「誰可以申請」；但頁面未寫任何給付項目與金額，僅為資格門檻表。",
+      "confidence": "medium"
+    },
+    {
+      "id": "825852f3-2c96-4b25-b1e6-a057a168608e",
+      "title": "臺中市平價托育及準公共服務實施計畫",
+      "is_benefit": "yes",
+      "kind": "program",
+      "category": "childcare_subsidy",
+      "secondary": [],
+      "closed": false,
+      "reason": "實施對象寫明送托未滿三歲幼兒至與社會局簽約之托育提供者、每週托育30小時以上且未領育兒津貼之委託人，計畫內容列出本局協助支付托育費用（居家托育人員／私立托嬰中心一般家庭13,000元、中低收15,000元、低收17,000元／月，公設民營及社區托育家園7,000／9,000／11,000元，第2、3名子女再加1,000／2,000元）及設籍本市半年以上送托托嬰中心另每月1,400元，並載明送托15日內申報與申復程序；另含托育提供者資格與收費上限（機構面），原文末段截斷但不影響判斷。",
+      "confidence": "high"
+    }
+  ],
+  "count": 15
+}
