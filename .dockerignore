@@ -9,3 +9,10 @@ data
 .env*
 !.env.example
 test-results
+backend
+tests
+docs
+.claude
+coverage
+*.tsbuildinfo
+*.log

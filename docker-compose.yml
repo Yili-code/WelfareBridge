@@ -13,6 +13,8 @@ services:
   redis:
     restart: unless-stopped
     image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: ["redis_data:/data"]
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -20,6 +22,7 @@ services:
       retries: 20
   backend:
     restart: unless-stopped
+    init: true
     build: ./backend
     env_file:
       - path: .env
@@ -46,6 +49,7 @@ services:
       retries: 12
   benefit_crawler:
     restart: unless-stopped
+    init: true
     build: ./backend
     command: ["python", "-m", "benefit_crawler", "--worker", "--loop", "${CRAWL_INTERVAL_SECONDS:-0}"]
     env_file:
@@ -58,6 +62,7 @@ services:
       backend: { condition: service_healthy }
   web:
     restart: unless-stopped
+    init: true
     build: .
     env_file:
       - path: .env.local
@@ -69,5 +74,12 @@ services:
     volumes: ["./data:/app/data"]
     depends_on:
       backend: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/health', {signal: AbortSignal.timeout(4000)}).then(r => {if (!r.ok) process.exit(1)}).catch(() => process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      start_period: 30s
+      retries: 5
 volumes:
   mongo_data:
+  redis_data:

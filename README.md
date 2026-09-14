@@ -76,7 +76,7 @@ Copy-Item .env.local.example .env.local
 Copy-Item .env.example .env
 
 # 3. 建置並啟動
-docker compose up -d --build
+docker compose up -d --build --wait
 ```
 
 首次建置會下載 Node 24、Python 3.13、MongoDB 7、Redis 7 的基礎映像並安裝依賴，需要網路，時間較久。
@@ -113,7 +113,7 @@ docker compose up -d benefit_crawler
 
 ```powershell
 docker compose down          # 停止，保留資料
-docker compose down -v       # 連同 MongoDB volume 一起刪除（資料不可復原）
+docker compose down -v       # 連同 MongoDB 與 Redis volumes 一起刪除（資料不可復原）
 ```
 
 需求登記的 `data/welfare.sqlite` 與官方 seed 走 `./data` bind mount，直接留在專案資料夾。
@@ -124,6 +124,8 @@ Compose 的 MongoDB 使用自己的 `welfarebridge_mongo_data` volume，與可�
 
 `OLLAMA_BASE_URL` 預設指向 `http://host.docker.internal:11434`，也就是**主機上**的 Ollama；
 容器不會自己安裝。沒有 Ollama 或缺少指定模型時，系統回到純規則模式（可在 `.env` 設 `LLM_PROVIDER=none` 明確關閉）。
+
+SQLite 與爬蟲檔案保存在本機 `data/`，Redis 佇列使用 `redis_data` volume 保存。`docker compose down` 保留這些資料；加上 `-v` 會刪除 MongoDB 與 Redis volumes，請勿用於一般停止操作。
 
 ## 驗證
 
