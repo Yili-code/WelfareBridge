@@ -9,8 +9,13 @@ function authorized(request: Request) {
   const supplied = request.headers.get("authorization")?.replace(/^Bearer /, "") || "";
   return !!secret && Buffer.byteLength(secret) === Buffer.byteLength(supplied) && timingSafeEqual(Buffer.from(secret), Buffer.from(supplied));
 }
+// 以 Host 標頭比對：standalone 伺服器（Docker）的 request.url 會是綁定位址 0.0.0.0，不是瀏覽器看到的網址
+function sameOrigin(request: Request) {
+  const origin = request.headers.get("origin");
+  if (!origin) return true;
+  try { return new URL(origin).host === request.headers.get("host"); } catch { return false; }
+}
 async function body(request: Request) {
-  if (request.headers.get("origin") && request.headers.get("origin") !== new URL(request.url).origin) throw new Error("Invalid origin");
   const reader = request.body?.getReader();
   if (!reader) throw new Error("Missing body");
   const chunks: Uint8Array[] = []; let size = 0;
@@ -27,6 +32,7 @@ export async function GET(request: Request) {
   const db = openAppeals(); try { return response(db.list()); } finally { db.close(); }
 }
 export async function POST(request: Request) {
+  if (!sameOrigin(request)) return response({ error: "不接受跨站送出。" }, 403);
   let input;
   try {
     input = await body(request);
@@ -46,6 +52,7 @@ export async function POST(request: Request) {
 }
 export async function PATCH(request: Request) {
   if (!authorized(request)) return response({ error: "後台密碼不正確。" }, 401);
+  if (!sameOrigin(request)) return response({ error: "不接受跨站送出。" }, 403);
   let input;
   try { input = await body(request); if (!input || !string(input.id, 100) || !["new", "reviewing", "resolved"].includes(input.status)) throw new Error(); }
   catch { return response({ error: "狀態格式不正確。" }, 400); }

@@ -1984,3 +1984,356 @@ sources:
       - {url: 'https://www.penghu.gov.tw/welfare/home.jsp?id=7&act=view&dataserno=202606020001', title: 澎湖縣高中職就學津貼, seed_category: education_subsidy, organization: 澎湖縣政府教育處}
       - {url: 'https://www.penghu.gov.tw/welfare/home.jsp?id=7&act=view&dataserno=202502130005', title: 澎湖縣獎助學生助學金或交通圖書券補貼, seed_category: student_aid, organization: 澎湖縣政府教育處}
       - {url: 'https://www.penghu.gov.tw/welfare/home.jsp?id=7&act=view&dataserno=202502200008', title: 補助國小學童制服及文具費, seed_category: education_subsidy, organization: 澎湖縣政府教育處}
+
+  # ======================================================================= 第四輪：合併先前未合併的候選來源（屏東、臺東、連江、雲林）
+
+  - id: pingtung_sw
+    name: 屏東縣政府社會處 — 生育、育兒、社會救助、老人福利
+    organization: 屏東縣政府社會處
+    provider_type: local_government
+    source_type: government_site
+    # https://www.pthg.gov.tw/planjdp/ 會 301 到 /planjdp/Default.aspx；robots.txt 為 Allow: /。
+    # 同一縣府主機上還有三個子站也收：民政處 /plancab/（生育津貼）、便民E櫃檯 /e-service/page_1_X_Y.html（靜態方案頁）、
+    # 高齡友善資訊網 elder.pthg.gov.tw（老人福利方案頁）。跨機關的頁面逐頁用 organization 覆寫。
+    base_url: https://www.pthg.gov.tw/planjdp/
+    crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+    # 只驗 base_url 首頁的 <title>（「社會處」）；子站頁面的 <title> 不同（民政處、便民E櫃檯、高齡友善資訊網），不受影響。
+    expected_title_keywords: [社會處, 屏東縣政府社會處]
+    data_confidence: 100
+    enabled: true
+    domains: [social_welfare, long_term_care, disability]
+    # 依序嘗試：
+    #  1–3. 社會處 CMS（cp.aspx）：主內容在 #ContentPlaceHolder1_data_midlle_cp 內的 <table role=presentation>，第 1 列是分頁籤、第 2 列的 <div> 才是方案內文，先取第 2 列。
+    #  4.   便民E櫃檯 /e-service/ 靜態頁：方案內文在 .info-content（申辦單位／資格／應備文件／金額）。
+    #  5.   高齡友善資訊網 elder.pthg.gov.tw：內文在 <main id="article">。
+    # 注意 planjdp 頁也有 #content_middle / main，所以子站 selector 一定要排在社會處 selector 之後。
+    content_selectors: ["#ContentPlaceHolder1_data_midlle_cp > table > tr:nth-of-type(2) > td > div", "#ContentPlaceHolder1_data_midlle_cp", "#data_midlle", ".info-content", "#article"]
+    follow_links:
+      depth: 1
+      # 只追「同一主題群組」底下的分頁籤（cp.aspx?n=<群組>&s=<分頁>），群組 n 值固定列出；其餘 cp.aspx?n= 都是站台導覽（關於我們、法規、統計…），不追。
+      allow: ["cp\\.aspx\\?n=(A4164DF4295ED9D4|51E132D99F254E3B|6002B120E13BE406|1D92213B0F4404A4|76661B637A6124F3|E0A09A05B11AF1A2|B808E022206BD40E|A7CCB761096F7FA3|920104B7056B7226|9463987D224BAA6B|9F8B99754361E42D)&s=[0-9A-F]{16}$"]
+      deny:
+        - "News"
+        - "Content_List"
+        - "Link\\.aspx"
+        - "SiteMap"
+        - "Default\\.aspx"
+        - "HitCount"
+        - "Download"
+        - "Photo"
+        - "Video"
+        - "Cus_"
+        - "onestop\\.pthg"
+        - "socmap"
+        - "ptlaw"
+        # 第 1 輪乾跑看到的純連結分頁籤／名冊／簡介（94–450 字、沒有資格與給付內容），不追
+        - "s=(F4DA8B469D75EDEA|AA0DCB47D56788A4|72003DBDD9F8D538|641EEC51117E0BFA|1C327FAC8456FD57)"
+        - "s=(C0242BD9356F87A5|A643492C494044C5|3CB32FB9535B6C48)"
+        - "s=(07DB346810331B5D|6031C3CBEC6D7735|BB19DDAB7ED55260|8D3E83E06BBE610D)"
+        - "s=(FA25BC109CE1BC8E|411EA199BA8D66DC|1210FC20B6630F5A)"
+        - "s=(FD30BE3DE6B01CCC|A912AF1614E482B9|C287455B73D24EC8|1ACD7AB5619C9F6C|11500B4D19C095F1|4E8C3D7CD073FECF)"
+        - "s=(C8F2A38D8E20DACF|6AA20FB5F84C14FD|BF86F5C8FDA506B8|71ACC5B0CDFFC313)"
+      max_links: 40
+    pages:
+      # ── 生育（縣府生育津貼由民政處／戶政事務所受理）──
+      - {url: "https://www.pthg.gov.tw/plancab/cp.aspx?n=9F8B99754361E42D", title: 屏東縣政府生育津貼, seed_category: birth_incentive, organization: 屏東縣政府民政處}
+      # 社會處「特殊境遇家庭補助及婦女生育補助」頁只放聯絡表，內容在附件：縣府生育津貼、低收／中低收生育補助與 33 鄉鎮市生育獎勵金的資格、金額、申請方式都寫在同一份 PDF 表格裡（一頁多方案）
+      - {url: "https://www-ws.pthg.gov.tw/Upload/2015pthg/18/relfile/6341/19303/90549f2a-bda0-4fac-873f-ee41018a20ef.pdf", title: 屏東縣政府及各鄉鎮市生育津貼與生育獎勵金補助標準（115年）, seed_category: birth_incentive, format: pdf, organization: 屏東縣政府民政處, source_page: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=4E248D85646631E6"}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=4E248D85646631E6", title: 特殊境遇家庭補助及婦女生育補助（聯絡窗口）, skip: true, skip_reason: 只有承辦人聯絡表與附件連結，生育補助內容在上面登錄的 PDF}
+      # 便民E櫃檯：公保生育給付／育嬰留停津貼是全國性方案，縣府人事處受理縣府員工申請，頁面有給付標準與應備文件
+      - {url: "https://www.pthg.gov.tw/e-service/page_1_1_10.html", title: 公教人員保險生育給付（屏東縣政府便民E櫃檯）, seed_category: birth_incentive, organization: 屏東縣政府人事處}
+      - {url: "https://www.pthg.gov.tw/e-service/page_1_1_11.html", title: 公教人員保險育嬰留職停薪津貼（屏東縣政府便民E櫃檯）, seed_category: parental_leave_allowance, organization: 屏東縣政府人事處}
+      # ── 育兒、婦女、兒少、托育 ──
+      # 育兒津貼：社會處站只有承辦人表（內容在 onestop 便民平台，JavaScript 載入抓不到）；便民E櫃檯靜態頁有申請資格、應備文件與受理單位，但沒寫金額
+      - {url: "https://www.pthg.gov.tw/e-service/page_1_1_12.html", title: 育有未滿2歲兒童育兒津貼, seed_category: child_allowance}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6571C8648B118FE5", title: 未滿一歲嬰幼兒營養補助（115年起）, seed_category: child_allowance}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=EE18AA70CEE11481", title: 特殊境遇家庭扶助, seed_category: special_circumstances_aid}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=7587A0709B97B38B", title: 孕婦產檢交通補助（好孕車券）}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=ECED3926911BAFCF", title: 到宅母嬰照護月嫂服務}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=FF63BCF8776C90FD", title: 單親家園住屋服務, seed_category: rental_subsidy}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=C93C0A0A7ADE2D94", title: 未滿2歲兒童托育公共化及準公共服務費用補助, seed_category: childcare_subsidy}
+      - {url: "https://www.pthg.gov.tw/e-service/page_1_1_20.html", title: 社區公共托育家園服務（公共托育機構）, seed_category: childcare_subsidy}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=23747CC1D49A001D", title: 臨時托育服務, seed_category: childcare_subsidy}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=188084E98532E53D", title: 發展遲緩兒童早期療育}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=97E610626B9F499E", title: 托育福利經濟補助（聯絡窗口）, skip: true, skip_reason: 育兒津貼、兒童托育津貼、臨時托育費用補助只有承辦人表，內容連到 onestop.pthg.gov.tw 便民平台（申辦說明由 JavaScript 載入，抓不到）}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=2CD67C748CF32401", title: 兒童及少年經濟補助（聯絡窗口）, skip: true, skip_reason: 弱勢兒少生活扶助、緊急生活扶助、醫療補助只有承辦人表，內容連到 onestop.pthg.gov.tw（JavaScript 載入，抓不到）}
+      # ── 社會救助（低收／中低收／老人生活津貼／身障生活補助 同一主題群組的分頁籤）──
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=A4164DF4295ED9D4&s=2E1F32592C9629E5", title: 低收入戶生活補助, seed_category: low_income_allowance}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=A4164DF4295ED9D4&s=942D31B2C1CA2098", title: 中低收入戶資格及補助, seed_category: low_income_allowance}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=A4164DF4295ED9D4&s=98F272C21B1301B3", title: 中低收入老人生活津貼, seed_category: elderly_allowance}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=A4164DF4295ED9D4&s=B3FBDF70D23B706E", title: 身心障礙者生活補助, seed_category: disability_living_allowance}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=51E132D99F254E3B&s=1CF944313EC33BD3", title: 急難紓困專案, seed_category: emergency_relief}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=51E132D99F254E3B&s=C67DBB6801DAF576", title: 急難救助及川資救助, seed_category: emergency_relief}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=51E132D99F254E3B&s=B17BCD390B901343", title: 災害救助, seed_category: emergency_relief}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=7248506703B0E5E2", title: 低收入戶及中低收入戶就業交通補助, seed_category: low_income_allowance}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=8F04633F9B4DF2D6", title: 低收入戶及中低收入戶2代子女課後輔導及交通補助, seed_category: education_subsidy}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=CBBC2641DA3A9323", title: 精神病患者住院治療費用補助}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6323817CA426D8E9", title: 愛心餐券, seed_category: meal_service}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=9463987D224BAA6B", title: 聯合助學, seed_category: student_aid}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=7D62250CE8ADE7A5", title: 兒童及少年未來教育與發展帳戶}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=88960E5BC999CF73", title: 低收／中低收入戶家庭就業儲蓄帳戶方案}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=1FDFAEC7BE41551E", title: 團體微型傷害保險（弱勢民眾）}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=61057E945977E5D0", title: 微型火災不便費用保險}
+      # ── 老人福利（社會處主題群組 6002B120E13BE406 的分頁籤）──
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=6B2E0999CE162220", title: 老人公費安置, seed_category: institutional_care_subsidy}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=A07286547EE84E5B", title: 中低收入老人住宅修繕補助, seed_category: elderly_service}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=4A490AF42B3D2483", title: 中低收入老人特別照顧津貼, seed_category: elderly_allowance}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=CCF2E3BEAEC4E729", title: 中低收入老人醫療及看護補助, seed_category: elderly_allowance}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=278641B00A5FD052", title: 低收入戶老人配戴助聽器補助, seed_category: assistive_device}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=743B9B3F82B98EB7", title: 敬老卡申請, seed_category: elderly_service}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=D87B0197F7CF3642", title: 老人緊急救援通報系統, seed_category: elderly_service}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=672DC6F2F1F37AC6", title: 老人愛心手鍊, seed_category: elderly_service}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=E6FF28A7DA6B2ED8", title: 獨居老人關懷服務, seed_category: elderly_service}
+      # 中低收入老人健保補助：分頁只有附件；補助基準 PDF（文字版）寫了對象（65–70 歲領中低收入老人生活津貼者）、補助額度與申請文件，直接登錄 PDF
+      - {url: "https://www-ws.pthg.gov.tw/Upload/2015pthg/18/relfile/6341/6327/afd37d6b-9cbe-43e7-bcf5-42925f286286.pdf", title: 屏東縣中低收入老人參加全民健康保險保險費用補助基準, seed_category: elderly_allowance, format: pdf, source_page: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=962B8FCBA2F8B309"}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=962B8FCBA2F8B309", title: 中低收入老人健保補助, seed_category: elderly_allowance, skip: true, skip_reason: 分頁只有分頁籤與附件連結、沒有內文；補助基準 PDF 已另行登錄}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=E017B87C3826DCAF", title: 屏東縣重陽節敬老慰問金, seed_category: elderly_allowance, skip: true, skip_reason: 分頁只有一個連到 ptlaw.pthg.gov.tw 發放辦法（法規本文）的連結；資格與金額改收便民E櫃檯與高齡友善資訊網的頁面}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=6002B120E13BE406&s=C86B69BD22EE6298", title: 老人裝置假牙補助, seed_category: elderly_allowance, skip: true, skip_reason: 分頁只有衛生局諮詢電話與兩個 onestop 連結（JavaScript 載入），沒有資格與金額內文}
+      # 便民E櫃檯與高齡友善資訊網的老人福利方案頁（重陽慰問金兩站都有完整的對象、金額、發放方式，兩頁都收）
+      - {url: "https://www.pthg.gov.tw/e-service/page_1_6_8.html", title: 重陽節敬老慰問金（屏東縣政府便民E櫃檯）, seed_category: elderly_allowance}
+      - {url: "https://elder.pthg.gov.tw/social-consolation-money", title: 屏東縣重陽敬老慰問金（高齡友善資訊網）, seed_category: elderly_allowance}
+      - {url: "https://elder.pthg.gov.tw/social-elderly-welfare", title: 屏東縣老人福利一覽（總覽）, seed_category: elderly_allowance}
+      - {url: "https://elder.pthg.gov.tw/social-living-alone", title: 獨居老人服務（高齡友善資訊網）, seed_category: elderly_service}
+      - {url: "https://elder.pthg.gov.tw/tourism-travel-pass", title: 屏東縣敬老卡（高齡友善資訊網）, seed_category: elderly_service}
+      - {url: "https://elder.pthg.gov.tw/health-examination", title: 屏東縣老人健康檢查, seed_category: elderly_service, organization: 屏東縣政府衛生局}
+      - {url: "https://elder.pthg.gov.tw/social-elderly-dentures-202506", title: 老人假牙補助（高齡友善資訊網）, seed_category: elderly_allowance, skip: true, skip_reason: 頁面只剩「114年度中低收入老人裝置假牙計畫申請已額滿」與衛生局電話，沒有資格與金額；舊版頁 social-elderly-dentures 標示「(舊)(禁用)」}
+      # 長照
+      - {url: "https://www.pthg.gov.tw/e-service/page_1_6_72.html", title: 長期照顧服務（屏東縣政府便民E櫃檯）, organization: 屏東縣長期照護處}
+      - {url: "https://elder.pthg.gov.tw/social-assistive", title: 長照輔具服務（高齡友善資訊網）, seed_category: assistive_device}
+      - {url: "https://elder.pthg.gov.tw/elderly-family-care", title: 家庭照顧者支持服務（高齡友善資訊網）, seed_category: respite_care}
+      # ── 身心障礙 ──
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=1D92213B0F4404A4&s=4BE91EF3A46F7C01", title: 身心障礙者社會保險費補助, seed_category: disability_other}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=76661B637A6124F3&s=CB69EC157E8F2374", title: 身心障礙者生活輔具／醫療復健輔具補助（含居家無障礙環境改善）, seed_category: assistive_device}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=76661B637A6124F3&s=8D7AE75168E8C647", title: 長期照顧輔具補助（含居家無障礙環境改善）, seed_category: assistive_device}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=76661B637A6124F3&s=A83F716543E2DF62", title: 短期輔具租借服務, seed_category: assistive_device}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=E0A09A05B11AF1A2&s=F1C8047E644BDA72", title: 身心障礙者家庭托顧服務, seed_category: family_care_home}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=E0A09A05B11AF1A2&s=A683F938371B80EA", title: 身心障礙者社區式日間照顧服務, seed_category: day_care}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=E0A09A05B11AF1A2&s=05DB8FFA7274D6C8", title: 身心障礙者日間照顧機構, seed_category: day_care}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=E0A09A05B11AF1A2&s=185A13B2FB5A7E17", title: 身心障礙者多元社區居住與生活服務, seed_category: disability_other}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=B808E022206BD40E&s=5B898337DC90289B", title: 身心障礙者臨時暨短期照顧服務, seed_category: respite_care}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=A7CCB761096F7FA3&s=3097D26B19A637DF", title: 使用維生器材身心障礙者租用發電機租金補助, seed_category: disability_other}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=920104B7056B7226&s=D627FB88EBF195A5", title: 身心障礙者復康巴士（含大眾運輸優惠）, seed_category: transport_service}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=1D92213B0F4404A4&s=2D51801224EACAEC", title: 身心障礙者日間照顧及住宿式照顧費用補助, seed_category: disability_care_subsidy, skip: true, skip_reason: 分頁只有辦法／作業規定／申請書等附件連結，資格與補助標準在附件裡}
+      - {url: "https://www.pthg.gov.tw/planjdp/cp.aspx?n=A7CCB761096F7FA3", title: 居家身心障礙者維生器材用電優惠, seed_category: disability_other, skip: true, skip_reason: 分頁只有申請說明 PDF 與申請表附件連結，沒有內文}
+
+  # 候選來源：臺東縣政府社會處（taisoc.taitung.gov.tw）＋ 生育補助（縣府民政處方案；戶政事務所網站與縣府 TTBABY 育兒入口網各有一頁）
+  # 網站結構（social.taitung.gov.tw 不存在，社會處官網是 taisoc.taitung.gov.tw，首頁轉址到 /WebSite/Page/index.aspx）：
+  #   服務項目總覽 /WebSite/Service/serviceMain.aspx?menuid=lW%2bfKiAxClc%3d（科 → 類 → 子類）
+  #   分類頁 /WebSite/Service/service.aspx?menuid=…&cate=<類>；子類清單 /WebSite/Service/servicelist.aspx?menuid=…&cate=<子類>&listall=1
+  #   方案內容頁 /WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=<base64 id>（id 內的 / 以 !0! 表示、+ 以 %2b 表示）
+  #   內容頁是靜態 HTML：div.inside_main 內一個 table，固定欄位「類別／申請項目／申請期限／申請地點／申請條件／申請須檢附文件／補助金額／作業天數／連絡窗口／備註／相關檔案」，
+  #   <title> 一律是「臺東縣政府社會處-服務項目」，方案名稱取 pages 的 title。
+  #   robots.txt：Allow /WebSite/*，Disallow /App_ → 附件 (/App_File/File.ashx) 與清單頁的跳轉連結 (/App_File/Link.ashx → 301 → serviceDetail.aspx) 都不能抓，
+  #   所以不設 follow_links（清單頁只透過 Link.ashx 連到內容頁），也不登錄 PDF 附件；只在內文寫「詳如附件」的方案不收。
+  # 生育補助：社會處網站沒有；縣府「生育補助實施計畫」（民政處戶政科主辦、戶政事務所受理）在臺東戶政事務所網站 tth.taitung.gov.tw（114.02.11 修訂版，主內容 div.blog-content）
+  #   與縣府育兒入口網 ttbaby.taitung.gov.tw（舊版文字，主內容 div.doc-content）各一頁；兩站 robots.txt 都允許。
+  # 社會處網站沒有「低收入戶／中低收入戶生活扶助」與「身心障礙者生活補助」的專頁（服務項目與全站搜尋都找不到；身障「身心津貼轉型專區」是空的）。
+  - id: taitung_sw
+    name: 臺東縣政府社會處 — 生育、育兒、社會救助、老人福利
+    organization: 臺東縣政府社會處
+    provider_type: local_government
+    source_type: government_site
+    base_url: https://taisoc.taitung.gov.tw/
+    crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+    expected_title_keywords: [臺東縣政府社會處]
+    data_confidence: 100
+    enabled: true
+    domains: [social_welfare, long_term_care, disability]
+    content_selectors: [".inside_main table", ".blog-content", ".doc-content", ".inside_main"]
+    pages:
+      # ---------------------------------------------------------------- 生育（縣府民政處方案，戶政事務所受理）
+      - {url: "https://tth.taitung.gov.tw/service/detail/GGMGLAJJAL", title: 臺東縣政府生育補助實施計畫（婦女生育補助費）, seed_category: birth_incentive, organization: 臺東縣政府民政處}
+      - {url: "https://ttbaby.taitung.gov.tw/articles/29/", title: 臺東縣政府生育補助實施計畫（TTBABY 育兒入口網）, seed_category: birth_incentive, organization: 臺東縣政府民政處, skip: true, skip_reason: 與臺東戶政事務所網站的同一方案重複，且此頁仍是 113 年版文字（戶政所頁為 114.02.11 修訂版）}
+      - {url: "https://ttbaby.taitung.gov.tw/articles/221/", title: 臺東縣TT BABY育兒生日禮2.0（新生兒育兒禮包）, seed_category: birth_incentive}
+      # ---------------------------------------------------------------- 育兒、托育（兒少及婦女福利科）
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=%2bgJT0m7Gp!0!c%3d", title: 育有未滿二歲兒童育兒津貼（臺東縣）, seed_category: child_allowance}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=v6%2bBqThbd3w%3d", title: 未滿2歲（含延長2至未滿3歲）兒童托育公共化及準公共服務費用補助（臺東縣）, seed_category: childcare_subsidy}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=jTQzpn!0!OpPU%3d", title: 臺東縣定點臨時托育服務, seed_category: ""}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=uWnUjbUPVIo%3d", title: 臺東縣政府未滿六歲幼兒全民健康保險自付保險費補助, seed_category: ""}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=sc7ZPkAD5rU%3d", title: 臺東縣政府育兒指導服務（到宅育兒指導）, seed_category: ""}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=gNiet7!0!HDx4%3d", title: 臺東縣居家式托育服務（托育人員登記）, skip: true, skip_reason: 內容是居家托育人員（保母）登記資格與程序，不是家長的補助}
+      # ---------------------------------------------------------------- 兒童及少年
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=fhjWcVFLwBQ%3d", title: 臺東縣兒童及少年生活扶助, seed_category: low_income_allowance}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=ZFokpInvAnU%3d", title: 臺東縣弱勢兒童及少年托育及醫療費用補助, seed_category: ""}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=Av!0!RQg32b5A%3d", title: 臺東縣弱勢家庭兒童及少年緊急生活扶助, seed_category: emergency_relief}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=tQYeCFx9IZQ%3d", title: 臺東縣未滿20歲懷孕者孕期及產後與月子餐食及租屋補助計畫, seed_category: ""}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=cSzHjjUosWE%3d", title: 臺東縣未婚媽媽新生兒營養補助, seed_category: ""}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=xLk3pSDOrTU%3d", title: 兒童及少年未來教育及發展帳戶（臺東縣受理）, seed_category: ""}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=4PToPWDHy04%3d", title: 臺東縣未婚媽媽新生兒營養扶助（未滿20歲懷孕專區）, skip: true, skip_reason: 欄位全是「.」的空白頁（135 字），方案內容在 cSzHjjUosWE 那頁}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=LfxkoGJijY4%3d", title: 弱勢兒童及少年緊急生活扶助（未滿20歲懷孕專區）, skip: true, skip_reason: 欄位全是「.」的空白頁（134 字），方案內容在 Av!0!RQg32b5A 那頁}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=BCRpwsyRCCI%3d", title: 臺東縣彩繪人生基金, skip: true, skip_reason: 對象是公所、社會團體與社福機構的計畫補助，不是民眾補助}
+      # ---------------------------------------------------------------- 社會救助（社會救助及社工科）
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=cwKrUeIfktA%3d", title: 臺東縣急難救助金, seed_category: emergency_relief}
+      # 站上標題是「急難紓困實施方案申請書」，但內文是對象、金額（1 萬至 3 萬）、3 天核定與受理公所，依內容命名
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=Zcm4GrctbRY%3d", title: 強化社會安全網－急難紓困實施方案（臺東縣受理）, seed_category: emergency_relief}
+      # 站上標題「臺東縣災害救助金核發辦法」，內文是死亡／失蹤／重傷／安遷／淹水救助的對象與金額，依內容命名
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=aOeD0UWR4EU%3d", title: 臺東縣災害救助金（死亡、失蹤、重傷、安遷、淹水救助）, seed_category: emergency_relief}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=9lCIZbQ!0!3FY%3d", title: 115年臺東縣低收入戶喪葬生活補助實施計畫, seed_category: low_income_allowance}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=eFndNrSd4DI%3d", title: 115年度臺東縣政府辦理（中）低收入戶及弱勢家戶住宅修繕補助計畫, seed_category: low_income_allowance}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=6D3p8Ssl4lQ%3d", title: 臺東縣低收入戶暨中低收入戶重病住院看護費用補助, seed_category: low_income_allowance}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=Iv8nUWDTvq4%3d", title: 臺東縣中低收入戶傷病醫療費用補助, seed_category: low_income_allowance}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=pKJCfMLiUNA%3d", title: 臺東縣政府115年度脫貧支持服務計畫－學習資源補助方案, seed_category: low_income_allowance}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=RHHXYUMJCc4%3d", title: 臺東縣微加保障守護幸福微型團體傷害保險計畫（低收、中低收、身障免費投保）, seed_category: ""}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=MYt5VmMLqdc%3d", title: 臺東縣政府中低收入老人生活津貼（社會救助分類）, seed_category: elderly_allowance, skip: true, skip_reason: 與老人福利分類下 PTpncovlsK0 那頁同一方案、內容相同}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=v05rKMIFYs0%3d", title: 臺東縣政府辦理以工代賑實施要點, skip: true, skip_reason: 內文只有「詳如附件」（202 字），要點只有 docx／odt 附件且附件路徑 /App_File 被 robots.txt 禁止}
+      # ---------------------------------------------------------------- 老人福利（長青及身障福利科）
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=PTpncovlsK0%3d", title: 臺東縣政府中低收入老人生活津貼, seed_category: elderly_allowance}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=iRWQf5%2bqCNU%3d", title: 臺東縣中低收入老人特別照顧津貼, seed_category: elderly_allowance}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=ZJqHdEXzlRQ%3d", title: 臺東縣百歲人瑞營養補助, seed_category: elderly_allowance}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=ezkow17c7S4%3d", title: 臺東縣低收入及中低收入老人重病住院看護費用補助實施計畫, seed_category: elderly_allowance}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=GBvBdC1azfM%3d", title: 臺東縣中低收入老人補助裝置假牙實施計畫, seed_category: elderly_allowance}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=wbR891ZKh0Y%3d", title: 臺東縣中低收入老人傷病醫療補助, seed_category: elderly_allowance}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=M156J1Qi0II%3d", title: 臺東縣政府70歲以上老人全民健康保險自付保險費補助, seed_category: elderly_allowance}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=6LJKsrufaMA%3d", title: 65歲至69歲中低收入老人、70歲以上老人及離島地區老人健保費補助（臺東縣）, seed_category: elderly_allowance}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=DMiUkxhZcSE%3d", title: 臺東縣敬老重陽節禮金, seed_category: elderly_allowance}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=M80KSGMCoKs%3d", title: 臺東縣政府辦理銀健康樂齡健康檢查補助實施計畫, seed_category: elderly_service}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=9358%2b5!0!yna4%3d", title: 臺東卡（敬老卡、博愛卡）每月1,500點乘車補助, seed_category: elderly_service}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=GQaCOiO1nvE%3d", title: 臺東縣政府115年補助辦理低收入戶老人轉介機構收容照顧實施計畫, seed_category: institutional_care_subsidy}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=T66ZgwqRlG4%3d", title: 臺東縣中低收入老人住宅改善補助, seed_category: ""}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=!0!pWpWgRZWqs%3d", title: 臺東縣獨老智能守護緊急救援服務, seed_category: elderly_service}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=fLQ!0!Cc11odA%3d", title: 臺東縣關懷獨居老人服務計畫, seed_category: elderly_service}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=Ku1z25PNtK0%3d", title: 預防老人走失－愛的手鍊服務實施計畫（臺東縣）, seed_category: elderly_service}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=KHNa!0!pg9NBQ%3d", title: 居家清潔亮晶晶服務計畫, skip: true, skip_reason: 內文只有連絡窗口與附件清單（197 字），計畫內容在 /App_File 附件（robots.txt 禁止）}
+      # ---------------------------------------------------------------- 身心障礙福利（長青及身障福利科）
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=Lyay2YDZVPU%3d", title: 身心障礙者日間照顧及住宿式照顧費用補助（臺東縣）, seed_category: disability_care_subsidy}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=aftgxwqlCJI%3d", title: 身心障礙者參加社會保險保險費補助（臺東縣）, seed_category: disability_other}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=wQoyaK%2bRVsI%3d", title: 臺東縣呼吸治療弱勢家庭補助計畫, seed_category: disability_other}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=XJET1WRAI9M%3d", title: 臺東縣身心障礙者家庭托顧服務計畫, seed_category: family_care_home}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=e%2bNsMDR29R8%3d", title: 臺東縣身心障礙者臨時暨短期照顧服務, seed_category: respite_care}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=YCNRacyGpiw%3d", title: 臺東縣身心障礙者生活輔具費用補助, seed_category: assistive_device}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=nEDkNKNoiVs%3d", title: 居家身心障礙者使用維生器材及必要生活輔具用電優惠（臺東縣）, seed_category: disability_other}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=2jzShXOeq2E%3d", title: 臺東縣小型復康巴士服務, seed_category: transport_service}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=X6oTrjHZwt4%3d", title: 臺東縣身心障礙者自立生活支持服務（個人助理）, seed_category: disability_other}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=G27AuVeQ06A%3d", title: 臺東縣家庭照顧者支持服務計畫, seed_category: ""}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=ImNPACJy9XY%3d", title: 臺東縣身心障礙者社區式日間照顧服務, seed_category: day_care}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=Tv9%2bLGXUyOo%3d", title: 臺東縣家庭暴力及性侵害被害人補助, seed_category: ""}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=3%2bvRNLACiME%3d", title: 身心障礙者房屋租金及購屋貸款利息補貼, seed_category: rental_subsidy, skip: true, skip_reason: 欄位全是「*」（258 字），作業規定只有 .doc 附件且 /App_File 被 robots.txt 禁止}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=8eCMtcFseqI%3d", title: 未成年身心障礙者緊急照顧服務計畫, skip: true, skip_reason: 只有「方案詳如附件，請身障機構來函申請」（207 字），對象是機構}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=VIbU7WTjge4%3d", title: 115年身心障礙者醫療平權跨區牙科就醫支持補助計畫, skip: true, skip_reason: 補助對象是身障福利機構與團體（申請單位），不是個人}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=zUmK80TA0Xk%3d", title: 失能長照輔具補助給付標準, skip: true, skip_reason: 只有衛生局長照科聯絡電話與附件（305 字），沒有資格與給付}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=GZcL80oUFdw%3d", title: 身心障礙者風景區康樂場所文教設施優惠措施, skip: true, skip_reason: 內文只有「詳如附件」（260 字）}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=kJfVD!0!VqH0Q%3d", title: 中型復康巴士（團體預約）, skip: true, skip_reason: 對象是身障團體、機構與學校的團體借車服務}
+      # ---------------------------------------------------------------- 特殊境遇家庭（兒少及婦女福利科）
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=Q4Cf!0!fSg5T8%3d", title: 臺東縣特殊境遇家庭各項扶助（緊急生活扶助、子女生活津貼、傷病醫療、兒童托育、法律訴訟津貼）, seed_category: special_circumstances_aid}
+      - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=7oke3LNba4s%3d", title: 特殊境遇家庭生活扶助各式表件下載, seed_category: special_circumstances_aid, skip: true, skip_reason: 只有申請表附件清單（373 字）}
+    notes: 臺東縣政府社會處官網（taisoc.taitung.gov.tw）。方案內容頁 /WebSite/Service/serviceDetail.aspx?…&id=<id> 為靜態 HTML，固定欄位表格（申請條件、應備文件、補助金額、作業天數、連絡窗口）都在頁面內文；robots.txt 禁止 /App_ 路徑，所以附件（File.ashx）與清單頁的跳轉連結（Link.ashx）都不抓，不設 follow_links、不登錄 PDF。生育補助（縣府民政處方案、戶政事務所受理）收臺東戶政事務所網站頁；縣府 TTBABY 育兒入口網另收育兒生日禮。站上沒有低收入戶生活扶助與身心障礙者生活補助專頁。
+
+  - id: lienchiang_sw
+    name: 連江縣政府民政社會處／衛生福利局 — 生育、社會救助、老人福利、身心障礙、長照
+    # 連江縣的社會福利（生育補助、社會救助、老人福利、身障福利）由「連江縣政府民政社會處 社會福利科」主辦，
+    # 頁面在縣府主站 www.matsu.gov.tw 的民政社會處子站（/chhtml/…/371030000A0001/…）與縣府主管法規系統 law.matsu.gov.tw；
+    # 衛生福利局網站 www.matsuhb.gov.tw 只有「高齡暨長照科」的長照服務頁（逐頁以 organization 覆寫）。
+    organization: 連江縣政府民政社會處
+    provider_type: local_government
+    source_type: government_site
+    base_url: https://www.matsu.gov.tw/
+    crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+    # 縣府主站 <title>「馬祖-連江縣政府」；法規系統「連江縣政府主管法規共用系統」；衛福局「連江縣衛生福利局-…」
+    expected_title_keywords: [連江縣政府, 連江縣衛生福利局]
+    data_confidence: 100
+    enabled: true
+    domains: [social_welfare, long_term_care, disability]
+    # .law-reg-content：law.matsu.gov.tw 法規本文（條文全文，含資格、金額、申請方式）
+    # #printcontent：matsuhb.gov.tw 長照服務分頁（頁名 + .content_font 內文）
+    # div.FROM：www.matsu.gov.tw 民政社會處子站的內容頁主區塊
+    content_selectors: [".law-reg-content", "#printcontent", "div.FROM"]
+    # 不用 follow_links：民政社會處子站的方案內文幾乎都只在附件（多數為 docx/odt，只能收 PDF），
+    # 法規系統目錄頁會連到大量非補助法規（設置要點、裁罰基準、已廢止條例），因此逐頁明列。
+    pages:
+      # ── 生育、兒少（縣府主管法規系統：自治條例／行政規則全文）──
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000234", title: 連江縣婦女生產補助自治條例, seed_category: birth_incentive}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000424", title: 連江縣新生兒育兒箱發送辦法, seed_category: birth_incentive, organization: 連江縣衛生福利局}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000304", title: 連江縣縣民接受人工生殖技術費用補助辦法, organization: 連江縣衛生福利局}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000403", title: 連江縣辦理弱勢家庭兒童及少年緊急生活扶助補助及核發作業規定, seed_category: child_allowance}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000399", title: 連江縣低收入戶及弱勢兒童及少年醫療補助審查及核發作業規定, seed_category: low_income_allowance}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000535", title: 連江縣辦理發展遲緩兒童早期療育費用補助實施計畫}
+      # ── 社會救助 ──
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000391", title: 連江縣低收入戶及中低收入戶調查暨生活扶助核發作業要點, seed_category: low_income_allowance}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000417", title: 連江縣政府辦理以工代賑實施要點, seed_category: low_income_allowance}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000392", title: 連江縣政府辦理發放幸福福袋作業要點, seed_category: low_income_allowance}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000064", title: 連江縣政府民眾急難救助自治條例, seed_category: emergency_relief}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000149", title: 連江縣災害救助金核發自治條例, seed_category: emergency_relief}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000671", title: 連江縣縣民遭受意外身故濟助金補助要點, seed_category: emergency_relief}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000409", title: 連江縣政府辦理發放住院醫療慰問金及死亡家屬慰問金作業要點, seed_category: emergency_relief}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000400", title: 連江縣特殊境遇家庭扶助條例補充說明注意事項, seed_category: special_circumstances_aid}
+      - {url: "https://www.matsu.gov.tw/upload/pdf-20231211101609.pdf", title: 連江縣政府特殊境遇家庭扶助申請標準作業程序, seed_category: special_circumstances_aid, format: pdf, source_page: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5978"}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000649", title: 連江縣政府家庭暴力及性侵害被害人補助要點}
+      # ── 老人福利 ──
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000440", title: 連江縣六十五歲以上老人居家生活補助費自治條例, seed_category: elderly_allowance}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000405", title: 連江縣試辦六十五歲以上老人居家生活補助費實施要點, seed_category: elderly_allowance}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000404", title: 連江縣中低收入戶老人生活津貼審核作業規定, seed_category: elderly_allowance}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000396", title: 連江縣政府辦理老人裝置假牙補助要點, seed_category: elderly_allowance}
+      - {url: "https://www.matsu.gov.tw/upload/f-20240517102037.pdf", title: 連江縣辦理老人裝置假牙補助要點（113年修正版）, seed_category: elderly_allowance, format: pdf, source_page: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5972"}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000672", title: 連江縣65歲以上長者老花眼鏡配置補助實施要點, seed_category: elderly_allowance}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000680", title: 連江縣失能老人營養保健及醫護用品補助實施要點, seed_category: elderly_allowance}
+      - {url: "https://www.matsu.gov.tw/upload/f-20240516090936.pdf", title: 連江縣發放重陽禮金實施要點, seed_category: elderly_allowance, format: pdf, source_page: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5972"}
+      - {url: "https://www.matsu.gov.tw/upload/f-20240516090750.pdf", title: 連江縣辦理老人、身心障礙者春節慰問金發放實施要點, seed_category: elderly_allowance, format: pdf, source_page: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5972"}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000365", title: 連江縣高齡老人壽誕日祝壽活動實施要點, seed_category: elderly_allowance}
+      - {url: "https://www.matsu.gov.tw/upload/f-20231231144814.pdf", title: 離島地區六十五歲以上老人全民健康保險應自付保險費補助作業要點, seed_category: elderly_allowance, format: pdf, source_page: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5972", skip: true, skip_reason: 掃描影像 PDF（1.5MB、pypdf 抽不到任何文字），資格與補助內容無法判讀}
+      - {url: "https://www.matsu.gov.tw/upload/f-20240516091347.pdf", title: 連江縣老人輔具購買、租借及居家無障礙環境改善服務計畫, seed_category: assistive_device, format: pdf, source_page: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5972"}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000658", title: 連江縣65歲以上長者赴大坵島交通船補助實施要點, seed_category: elderly_service}
+      - {url: "https://www.matsu.gov.tw/upload/f-20240517102001.pdf", title: 連江縣辦理65歲以上老人赴大陸交通船費補助實施要點, seed_category: elderly_service, format: pdf, source_page: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5972"}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000421", title: 連江縣老人、身心障礙者及六歲以下兒童乘車、船補助要點, seed_category: transport_service}
+      # ── 身心障礙 ──
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000413", title: 連江縣政府發放身心障礙者生活津貼實施要點, seed_category: disability_living_allowance}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000571", title: 連江縣身心障礙者輔具費用補助審核要點, seed_category: assistive_device}
+      - {url: "https://www.matsu.gov.tw/upload/f-20240507211607.pdf", title: 連江縣輔具資源中心輔具借用管理辦法, seed_category: assistive_device, format: pdf, source_page: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5988"}
+      - {url: "https://www.matsu.gov.tw/chhtml/content/371030000A0001/5974", title: 連江縣輔具資源中心輔具補助及服務, seed_category: assistive_device}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000652", title: 連江縣身心障礙者臨時及短期照顧服務實施計畫, seed_category: respite_care}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000570", title: 連江縣補助地區身障者轉診赴台就醫交通費、自費醫療費實施計畫, seed_category: disability_other}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000569", title: 連江縣辦理身心障礙者赴大陸交通船費補助實施要點, seed_category: disability_other}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000360", title: 連江縣精神病患赴台就醫交通費補助辦法, seed_category: disability_other, organization: 連江縣衛生福利局}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000476", title: 連江縣身心障礙者久任職場津貼補助實施要點, seed_category: disability_other}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000641", title: 連江縣身心障礙者自立生活支持服務及督考計畫, seed_category: disability_other}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000657", title: 連江縣肢體障礙者生活重建服務計畫, seed_category: disability_other}
+      # ── 衛生福利局（衛生類法規）──
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000479", title: 連江縣政府補助門診掛號費用實施要點, organization: 連江縣衛生福利局}
+      - {url: "https://law.matsu.gov.tw/LawContent.aspx?id=GL000178", title: 連江縣民眾空運安寧(息)返鄉交通費用補助自治條例, organization: 連江縣衛生福利局}
+      # ── 衛生福利局 長期照顧服務（www.matsuhb.gov.tw，Chhtml/content/2298?mcid=<分頁>；內文在 #printcontent）──
+      - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=47008&webaid=", title: 連江縣長照交通接送服務, seed_category: transport_service, organization: 連江縣衛生福利局}
+      - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=47006&webaid=", title: 連江縣長照居家服務, seed_category: home_care, organization: 連江縣衛生福利局}
+      - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=47007&webaid=", title: 連江縣長照日間照顧服務, seed_category: day_care, organization: 連江縣衛生福利局}
+      - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=47004&webaid=", title: 連江縣長照機構／居家喘息服務, seed_category: respite_care, organization: 連江縣衛生福利局}
+      - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=47012&webaid=", title: 連江縣長照輔具及居家無障礙環境改善服務, seed_category: assistive_device, organization: 連江縣衛生福利局}
+      - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=47002&webaid=", title: 連江縣長照居家復能服務, organization: 連江縣衛生福利局}
+      - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=46999&webaid=", title: 連江縣長照居家護理指導與諮詢, organization: 連江縣衛生福利局}
+      - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=47013&webaid=", title: 連江縣居家失能個案家庭醫師照護方案, organization: 連江縣衛生福利局}
+      - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=71254&webaid=", title: 連江縣住宿式服務機構使用者補助方案, seed_category: institutional_care_subsidy, organization: 連江縣衛生福利局}
+      - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=47011&webaid=", title: 連江縣長期照顧機構服務（低收入戶老人公費安置、身心障礙者日間及住宿式照顧費用補助）, seed_category: institutional_care_subsidy, organization: 連江縣衛生福利局}
+      - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2298?mcid=47009&webaid=", title: 連江縣失能老人營養餐飲服務, seed_category: meal_service, organization: 連江縣衛生福利局}
+      - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2300?mcid=47048&webaid=", title: 連江縣家庭照顧者支持服務, organization: 連江縣衛生福利局}
+      # ── 目錄／簡介頁（不抓：僅供查閱來源結構）──
+      - {url: "https://www.matsuhb.gov.tw/Chhtml/content/2296", title: 連江縣長期照顧管理中心簡介總覽, organization: 連江縣衛生福利局, skip: true, skip_reason: 長照管理中心簡介（成立宗旨、服務對象、聯絡方式），各項服務內文在 content/2298 的分頁}
+      - {url: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5972", title: 民政社會處老人福利下載專區總覽, skip: true, skip_reason: 附件下載清單（老人福利各要點多為 PDF，已逐一登錄；其餘為床位數統計與申請書）}
+      - {url: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5978", title: 民政社會處社會救助服務下載專區總覽, skip: true, skip_reason: 附件下載清單；急難救助金自治條例、中低收入老人生活津貼審核作業辦法、三節慰問金、奶粉尿布補助、傷病醫療看護費用補助等只有 docx/odt，GenericPageCrawler 不支援，改收 law.matsu.gov.tw 法規全文}
+      - {url: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/7117", title: 民政社會處身心障礙者福利服務下載專區總覽, skip: true, skip_reason: 附件下載清單，全部為 docx/odt（身心障礙者生活津貼、日間及住宿式照顧費用補助、租金及購屋貸款利息補助等），改收 law.matsu.gov.tw 法規全文}
+      - {url: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5981", title: 民政社會處婦女福利下載專區總覽, skip: true, skip_reason: 只有婦女生育補助申請表、孕婦營養補助申請表（表單）與婦女福利工作計畫，沒有方案內文}
+      - {url: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5982", title: 民政社會處托育專區下載總覽, skip: true, skip_reason: 只有托育補助申請表、評鑑計畫、候補名單與中央作業要點，沒有本縣托育補助方案內文}
+      - {url: "https://www.matsu.gov.tw/chhtml/news/371030000A0001/5975", title: 民政社會處兒童及少年福利公告總覽, skip: true, skip_reason: 只有育兒津貼申請表（ods）、奶粉尿布補助作業要點（odt）等附件公告，沒有 HTML 方案內文}
+      - {url: "https://law.matsu.gov.tw/LawCategoryContentList.aspx?CategoryID=19", title: 連江縣政府主管法規民社類目錄總覽, skip: true, skip_reason: 法規目錄頁（含設置要點、裁罰基準與已廢止條例），補助相關法規已逐一登錄}
+
+  # 候選來源：雲林縣政府社會處（social.yunlin.gov.tw）
+  # 結論：reject。整個 *.yunlin.gov.tw（含 www、social、dl、ylshb…）前面有 Cloudflare WAF，
+  # 對非瀏覽器用戶端（本專案 PoliteHttpClient/httpx、curl、WebFetch，換 Chrome UA/標頭/cipher 都一樣）一律回 403
+  # 「Sorry, you have been blocked」；只有 robots.txt 回 200。真實瀏覽器可正常開啟。
+  # 乾跑（scratchpad/yunlin_sw_dryrun2.txt）：official=True，discovered=5 fetched=0 failed=5 documents=0。
+  # 下面的網址是用瀏覽器確認過的方案頁，內文確實有資格＋金額＋申請方式，但爬蟲抓不到，所以全部 skip、enabled: false。
+  # 網址型態：方案內容頁 News_Content.aspx?n=<清單id>&s=<文章id>；分類目錄 News.aspx?n=…&sms=… 與 cl.aspx?n=…
+  - id: yunlin_sw
+    name: 雲林縣政府社會處 — 生育、育兒、社會救助、老人福利
+    organization: 雲林縣政府社會處
+    provider_type: local_government
+    source_type: government_site
+    base_url: https://social.yunlin.gov.tw/
+    crawler: benefit_crawler.generic.page_crawler.GenericPageCrawler
+    expected_title_keywords: [雲林縣政府社會處]
+    data_confidence: 100
+    enabled: false
+    domains: [social_welfare, long_term_care, disability]
+    content_selectors: ["#CCMS_Content", "#base-content"]
+    pages:
+      - {url: "https://social.yunlin.gov.tw/News_Content.aspx?n=20588&s=454991", title: 育有未滿2歲兒童育兒津貼-申請辦法, seed_category: child_allowance, skip: true, skip_reason: Cloudflare WAF 對爬蟲回 HTTP 403（瀏覽器可開，內文有金額與資格）}
+      - {url: "https://social.yunlin.gov.tw/News_Content.aspx?n=7361&s=454946", title: 113年度低收入戶及中低收入戶申請資格、方式、流程及補助額度, seed_category: low_income_allowance, skip: true, skip_reason: Cloudflare WAF 對爬蟲回 HTTP 403（瀏覽器可開，內文有資格與補助額度）}
+      - {url: "https://social.yunlin.gov.tw/cl.aspx?n=22197", title: 雲林縣補助生育津貼, seed_category: birth_incentive, skip: true, skip_reason: Cloudflare WAF 對爬蟲回 HTTP 403；且頁面本身只有「1150101生育津貼實施要點」.doc 附件，沒有內文}
+      - {url: "https://social.yunlin.gov.tw/cl.aspx?n=22756", title: 老人福利津貼及補助類, seed_category: elderly_allowance, skip: true, skip_reason: Cloudflare WAF 對爬蟲回 HTTP 403；此頁為目錄（中低收入老人生活津貼／特別照顧津貼／假牙／健保費補助等 8 項子頁）}
+      - {url: "https://social.yunlin.gov.tw/News.aspx?n=22338&sms=21788", title: 重陽敬老, seed_category: elderly_allowance, skip: true, skip_reason: Cloudflare WAF 對爬蟲回 HTTP 403；此頁為清單頁}

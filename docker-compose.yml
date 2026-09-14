@@ -1,6 +1,7 @@
 name: welfarebridge
 services:
   mongo:
+    restart: unless-stopped
     image: mongo:7
     ports: ["127.0.0.1:27017:27017"]
     volumes: ["mongo_data:/data/db"]
@@ -10,6 +11,7 @@ services:
       timeout: 5s
       retries: 30
   redis:
+    restart: unless-stopped
     image: redis:7-alpine
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
@@ -17,6 +19,7 @@ services:
       timeout: 3s
       retries: 20
   backend:
+    restart: unless-stopped
     build: ./backend
     env_file:
       - path: .env
@@ -42,6 +45,7 @@ services:
       timeout: 5s
       retries: 12
   benefit_crawler:
+    restart: unless-stopped
     build: ./backend
     command: ["python", "-m", "benefit_crawler", "--worker", "--loop", "${CRAWL_INTERVAL_SECONDS:-0}"]
     env_file:
@@ -53,6 +57,7 @@ services:
     depends_on:
       backend: { condition: service_healthy }
   web:
+    restart: unless-stopped
     build: .
     env_file:
       - path: .env.local

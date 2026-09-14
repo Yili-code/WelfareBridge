@@ -128,6 +128,19 @@ whitelist:
     organization: 國立臺灣海洋大學學生事務處
     provider_type: school
     source_type: school_site
+  # 私立大專校院：只收人工確認過的單一主機（sources - 複製.xlsx 新增），不代表整個私校網域都視為官方來源
+  ad-dorm.ocu.edu.tw:
+    organization: 僑光科技大學學生事務處（宿舍）
+    provider_type: school
+    source_type: school_site
+  sa.tku.edu.tw:
+    organization: 淡江大學學生事務處
+    provider_type: school
+    source_type: school_site
+  sls.kh.usc.edu.tw:
+    organization: 實踐大學高雄校區學生事務處
+    provider_type: school
+    source_type: school_site
 
 # 明確不是官方資料來源的網域（記錄原因，資料不進正式資料表）
 blocklist:
@@ -155,3 +168,4 @@ public_school_domains:
   - ndhu.edu.tw   # 國立東華大學
   - nuk.edu.tw    # 國立高雄大學
   - ncyu.edu.tw   # 國立嘉義大學
+  - ncue.edu.tw   # 國立彰化師範大學

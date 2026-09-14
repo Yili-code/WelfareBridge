@@ -44,6 +44,7 @@ next-env.d.ts
 !/data/demo/
 !/data/gold/
 !/.env.example
+!/.env.local.example
 !**/.env.example
 /.project-history/
 /backend/.venv/

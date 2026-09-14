@@ -116,7 +116,7 @@ def get_benefit(benefit_id: str, include_html: bool = Query(False)) -> dict:
     row = db.benefits.find_one({"_id": benefit_id})
     if row is None:
         raise HTTPException(status_code=404, detail="benefit not found")
-    doc = db.raw_documents.find_one({"_id": row.get("raw_document_id")}, {"raw_html": 1 if include_html else 0, "rows": 0} if include_html else {"rows": 0, "raw_html": 0})
+    doc = db.raw_documents.find_one({"_id": row.get("raw_document_id")}, {"rows": 0} if include_html else {"rows": 0, "raw_html": 0})
     source = db.sources.find_one({"_id": row.get("source_id")})
     related = list(db.benefits.find({"canonical_id": row.get("canonical_id"), "_id": {"$ne": benefit_id}}, {"title": 1, "source_id": 1, "source": 1, "is_canonical": 1, "provider": 1}))
     registry = get_registry()

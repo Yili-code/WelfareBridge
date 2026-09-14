@@ -58,13 +58,72 @@ Ollama 是可選服務；`.env` 設定 `LLM_PROVIDER=none` 可使用純規則模
 
 ## Docker
 
+需要 Docker Desktop（Windows/macOS）或 Docker Engine + Compose v2（Linux）。整包服務由根目錄的
+`docker-compose.yml` 定義：`web`（Next.js）、`backend`（FastAPI）、`benefit_crawler`（工作佇列 worker）、
+`mongo`、`redis`。
+
+### 啟動
+
+最簡單的方式：開啟 Docker Desktop 後，雙擊 `Start-Docker.cmd`。它會建置、等所有服務健康後開啟瀏覽器。
+之後可在 Docker Desktop 的 Containers 頁面找到 `welfarebridge`，直接啟動／停止。手動步驟如下：
+
 ```powershell
+# 1. 後台密碼（/admin 需求審閱要用；未設定時 /api/appeals 的 GET/PATCH 會回 401）
+Copy-Item .env.local.example .env.local
+#    編輯 .env.local，把 WELFARE_ADMIN_PASSWORD 改成自己的長密碼
+
+# 2. 選用：爬蟲與本地 AI 設定（不建立此檔也能啟動，會用 compose 內建預設值）
+Copy-Item .env.example .env
+
+# 3. 建置並啟動
 docker compose up -d --build
-# 需要週期爬取時，在 .env 設定 CRAWL_INTERVAL_SECONDS=21600，然後：
+```
+
+首次建置會下載 Node 24、Python 3.13、MongoDB 7、Redis 7 的基礎映像並安裝依賴，需要網路，時間較久。
+啟動後開啟 http://localhost:3000 。
+
+| 服務 | 對外位址 | 說明 |
+| --- | --- | --- |
+| `web` | http://127.0.0.1:3000 | Next.js 網站，`/api/*` 代理到 backend |
+| `backend` | http://127.0.0.1:8000 | FastAPI，健康檢查 `/api/health` |
+| `mongo` | 127.0.0.1:27017 | 官方補助資料 |
+| `redis` | 不對外 | 工作佇列 |
+| `benefit_crawler` | 不對外 | 處理資料中心送出的工作 |
+
+三個對外 port 都只綁 `127.0.0.1`，不會暴露到區域網路。
+
+### 確認狀態
+
+```powershell
+docker compose ps            # 每個服務都應為 running，web/backend 顯示 healthy
+docker compose logs -f web   # 或 backend / benefit_crawler
+```
+
+`backend` 第一次啟動會把 `data/demo/seed_v2.json` 載入空資料庫，不會自動全站爬取。
+
+### 週期爬取
+
+預設只處理資料中心送出的工作。需要週期爬取時，在 `.env` 設定 `CRAWL_INTERVAL_SECONDS=21600`，然後：
+
+```powershell
 docker compose up -d benefit_crawler
 ```
 
-同一個 Next.js 網站在 port 3000。Compose 的 MongoDB 使用自己的 `welfarebridge_mongo_data` volume，與可攜模式的 `data/mongodb/` 分開；切換模式不會自動搬移資料。Redis 與 worker 預設處理資料中心送出的工作；只有設定非零的 `CRAWL_INTERVAL_SECONDS` 才啟用週期爬取。
+### 停止與資料
+
+```powershell
+docker compose down          # 停止，保留資料
+docker compose down -v       # 連同 MongoDB volume 一起刪除（資料不可復原）
+```
+
+需求登記的 `data/welfare.sqlite` 與官方 seed 走 `./data` bind mount，直接留在專案資料夾。
+Compose 的 MongoDB 使用自己的 `welfarebridge_mongo_data` volume，與可攜模式的 `data/mongodb/` 分開；
+切換模式不會自動搬移資料，備份時 Docker MongoDB 需另外備份 volume。
+
+### 本地 AI（選用）
+
+`OLLAMA_BASE_URL` 預設指向 `http://host.docker.internal:11434`，也就是**主機上**的 Ollama；
+容器不會自己安裝。沒有 Ollama 或缺少指定模型時，系統回到純規則模式（可在 `.env` 設 `LLM_PROVIDER=none` 明確關閉）。
 
 ## 驗證
 
