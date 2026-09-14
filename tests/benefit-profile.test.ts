@@ -5,10 +5,19 @@ const base: Profile = { id: "one", nickname: "測試", relation: "self", region:
 describe("welfare questionnaire to eligibility engine", () => {
  it("does not invent exact age, personal disability, degree, or registered city from ambiguous or legacy input", () => {
   const result = toBenefitProfile({ ...base, screening: { age: ["18～未滿 25 歲"], identity: ["本人或家庭成員持有身心障礙證明"], education: ["碩士班或博士班"] } });
-  expect(result.attributes).toEqual({});
+  expect(result.attributes).toEqual({ "applicant.is_student": true });
  });
  it("keeps registered and current cities distinct and sends confirmed age and income status", () => {
   const result = toBenefitProfile({ ...base, age: 22, currentRegion: "臺南市", economy: "低收入戶", screening: { residence: ["戶籍與居住地在不同縣市"] } });
   expect(result.attributes).toMatchObject({ "applicant.age": 22, "residence.household_city": "臺北市", "residence.current_city": "臺南市", "identity.low_income": true });
+ });
+ it("sends explicit negative answers so ineligible benefits can be rejected", () => {
+  const result = toBenefitProfile({ ...base, screening: { education: ["目前未在學"], economy: ["沒有上述資格，但家庭經濟困難"] } });
+  expect(result.attributes).toMatchObject({ "applicant.is_student": false, "identity.low_income": false, "identity.middle_low_income": false });
+ });
+ it("keeps uncertain financial status unknown instead of treating it as no", () => {
+  const result = toBenefitProfile({ ...base, screening: { economy: ["不清楚家庭經濟資料或認定狀態"] } });
+  expect(result.attributes).not.toHaveProperty("identity.low_income");
+  expect(result.attributes).not.toHaveProperty("identity.middle_low_income");
  });
 });

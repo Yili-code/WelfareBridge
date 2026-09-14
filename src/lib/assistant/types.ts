@@ -16,6 +16,7 @@ export interface AppealDraft {
 }
 
 export interface AssistantState {
+  history?: { role: "user" | "assistant"; content: string }[];
   step: number;
   answers: Record<string, string>;
 }

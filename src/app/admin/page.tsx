@@ -1,5 +1,6 @@
 "use client";
 
+import MatchingDiagnostics from "@/components/MatchingDiagnostics";
 import { useState } from "react";
 import { IDENTITIES, NEEDS, REGIONS } from "@/lib/options";
 import {
@@ -18,7 +19,7 @@ const STATUS_LABEL: Record<Appeal["status"], string> = {
 };
 
 export default function AdminPage() {
-  const [tab, setTab] = useState<"appeals" | "resources">("appeals");
+  const [tab, setTab] = useState<"appeals" | "resources" | "diagnostics">("appeals");
   const [expanded, setExpanded] = useState<string | null>(null);
   const [password, setPassword] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
@@ -55,6 +56,7 @@ export default function AdminPage() {
           [
             ["appeals", "需求登記"],
             ["resources", "資源上架"],
+            ["diagnostics", "媒合診斷"],
           ] as const
         ).map(([key, label]) => (
           <button
@@ -72,7 +74,7 @@ export default function AdminPage() {
         ))}
       </nav>
 
-      {tab === "appeals" ? (
+      {tab === "diagnostics" ? <MatchingDiagnostics /> : tab === "appeals" ? (
         <section className="mt-6 space-y-3">
           {appeals.length === 0 && (
             <p className="rounded-xl border border-dashed border-slate-300 bg-white px-6 py-12 text-center text-sm text-ink-400">

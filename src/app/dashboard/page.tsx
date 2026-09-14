@@ -10,6 +10,7 @@ import OfficialBenefits from "@/components/OfficialBenefits";
 import { matchResources } from "@/lib/matching";
 import {
   addProfile,
+  updateProfile,
   markNotificationsRead,
   removeProfile,
   setActiveProfileId,
@@ -27,6 +28,7 @@ export default function DashboardPage() {
   const activeId = useActiveProfileId();
   const resources = useResources();
   const notifications = useNotifications();
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
 
   const empty = hydrated && profiles.length === 0;
@@ -38,6 +40,7 @@ export default function DashboardPage() {
   if (!hydrated || profiles.length === 0) return null;
 
   const active = profiles.find((p) => p.id === activeId) ?? profiles[0];
+  const editing = profiles.find(p => p.id === editingId);
   const matches = matchResources(resources, active);
   const myNotifications = notifications.filter((n) => n.profileId === active.id);
   const unread = myNotifications.filter((n) => !n.read).length;
@@ -76,6 +79,7 @@ export default function DashboardPage() {
                 ))}
               </div>
             </div>
+            <button type="button" onClick={() => setEditingId(active.id)} className="rounded-lg border border-slate-200 px-4 py-2 text-sm text-brand-600 hover:bg-brand-50">編輯身分</button>
             {unread > 0 && (
               <button
                 type="button"
@@ -92,7 +96,7 @@ export default function DashboardPage() {
         </header>
 
         <div className="px-8 py-8">
-          <OfficialBenefits key={active.id} profile={active} />
+          <OfficialBenefits key={JSON.stringify(active)} profile={active} />
           {myNotifications.length > 0 && (
             <section className="mb-8">
               <h2 className="mb-3 text-sm font-medium">主動通知</h2>
@@ -158,15 +162,19 @@ export default function DashboardPage() {
         </div>
       </main>
 
-      <AssistantWidget profile={active} />
+      <AssistantWidget key={JSON.stringify(active)} profile={active} />
 
-      {creating && (
+      {(creating || editing) && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
           <div className="flex h-[36rem] max-h-[calc(100dvh-2rem)] w-full max-w-xl flex-col rounded-2xl bg-white p-7 shadow-xl">
             <ProfileWizard
-              onCancel={() => setCreating(false)}
+              key={editing?.id || "new"}
+              initialProfile={editing}
+              onCancel={() => { setCreating(false); setEditingId(null); }}
               onComplete={(draft) => {
-                addProfile(draft);
+                if (editing) updateProfile(editing.id, draft);
+                else addProfile(draft);
+                setEditingId(null);
                 setCreating(false);
               }}
             />

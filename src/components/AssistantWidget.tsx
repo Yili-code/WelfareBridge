@@ -23,6 +23,9 @@ export default function AssistantWidget({
   const [submitError, setSubmitError] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [chatError, setChatError] = useState("");
+  const pending = useRef<string | null>(null);
+  const inFlight = useRef(false);
   const [text, setText] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -43,14 +46,19 @@ export default function AssistantWidget({
   };
 
   const begin = async () => {
+    if (inFlight.current) return;
+    inFlight.current = true;
+    pending.current = null;
+    setChatError("");
     setMessages([]);
     setDraft(null);
     setSubmitted(false);
     submissionKey.current = typeof crypto.randomUUID === "function" ? crypto.randomUUID() : uid("request") + uid("retry");
     setSubmitError("");
     setBusy(true);
-    applyTurn(await engine.start(profile));
-    setBusy(false);
+    try { applyTurn(await engine.start(profile)); }
+    catch (e) { setChatError(e instanceof Error ? e.message : "助理連線失敗"); }
+    finally { setBusy(false); inFlight.current = false; }
   };
 
   useEffect(() => {
@@ -62,13 +70,26 @@ export default function AssistantWidget({
 
   const send = async (value: string) => {
     const trimmed = value.trim();
-    if (!trimmed || busy) return;
+    if (!trimmed || inFlight.current) return;
+    inFlight.current = true;
+    pending.current = trimmed;
+    setChatError("");
     push("user", [trimmed]);
     setQuickReplies([]);
     setText("");
     setBusy(true);
-    applyTurn(await engine.reply(state, trimmed, profile));
-    setBusy(false);
+    try { applyTurn(await engine.reply(state, trimmed, profile)); pending.current = null; }
+    catch (e) { setChatError(e instanceof Error ? e.message : "助理連線失敗"); }
+    finally { setBusy(false); inFlight.current = false; }
+  };
+
+  const retry = async () => {
+    if (inFlight.current) return;
+    if (pending.current === null) return begin();
+    inFlight.current = true; setBusy(true); setChatError("");
+    try { applyTurn(await engine.reply(state, pending.current, profile)); pending.current = null; }
+    catch (e) { setChatError(e instanceof Error ? e.message : "助理連線失敗"); }
+    finally { setBusy(false); inFlight.current = false; }
   };
 
   const submitAppeal = async () => {
@@ -119,6 +140,7 @@ export default function AssistantWidget({
         </div>
         <button
           type="button"
+          disabled={busy}
           onClick={() => void begin()}
           className="rounded px-2 py-1 text-xs text-ink-400 hover:text-brand-600"
         >
@@ -160,6 +182,7 @@ export default function AssistantWidget({
           </div>
         )}
 
+        {chatError && <div role="alert" className="text-sm text-red-700">{chatError}<button type="button" disabled={busy} onClick={() => void retry()} className="ml-2 underline">重試</button></div>}
         {submitError && <p role="alert" className="text-sm text-red-700">{submitError}</p>}
         {draft && !busy && (
           <div className="rounded-xl border border-brand-300 bg-brand-50 p-3.5">
@@ -186,7 +209,7 @@ export default function AssistantWidget({
         )}
       </div>
 
-      {(quickReplies.length > 0 || allowFreeText) && !draft && (
+      {(quickReplies.length > 0 || allowFreeText) && !submitted && !chatError && (
         <div className="border-t border-slate-200 px-4 py-3">
           {quickReplies.length > 0 && (
             <div className="mb-2 flex flex-wrap gap-1.5">
@@ -236,6 +259,7 @@ export default function AssistantWidget({
               className="flex gap-2"
             >
               <input
+                maxLength={2000}
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 placeholder="也可以直接打字說明…"
@@ -250,6 +274,7 @@ export default function AssistantWidget({
               </button>
             </form>
           )}
+          {allowFreeText && !draft && <button type="button" disabled={busy} onClick={() => void send("請依照我們的對話整理需求登記，讓我確認後再送出。") } className="mt-2 text-xs text-brand-600 underline">整理需求登記</button>}
         </div>
       )}
     </div>
