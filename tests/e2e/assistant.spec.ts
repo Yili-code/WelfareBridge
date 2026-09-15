@@ -6,7 +6,7 @@ test('assistant sends conversation context and retries without duplicating user 
   await page.route('**/api/assistant', async route => {
     bodies.push(route.request().postDataJSON());
     if (bodies.length === 2) return route.fulfill({ status: 503, json: { detail: '模型暫時離線' } });
-    await route.fulfill({ json: { reply: bodies.length === 1 ? '目前最需要哪方面協助？' : '每月房租大約多少？', quickReplies: [], llm_used: true, turn_count: bodies.length === 1 ? 0 : 1, candidate_count: 17, guidance_profile: { attributes: { 'applicant.age': 22 } }, request_schema: { type: 'object', properties: { messages: { type: 'array' } } } } });
+    await route.fulfill({ json: { reply: bodies.length === 1 ? '目前最需要哪方面協助？' : '每月房租大約多少？', quickReplies: [], llm_used: true, turn_count: bodies.length === 1 ? 0 : 1, candidate_count: 17, guidance_profile: { attributes: { 'applicant.age': 22 } }, search: bodies.length === 1 ? null : { queries: ['租金補助'], searched_count: 1, candidate_count: 1, truncated: false, items: [{ id: 'rent-1', title: '測試租金補助', status: 'possible_match', source_name: '測試機關', source_url: 'https://example.gov.tw/rent', missing_conditions: ['家庭收入'] }] } } });
   });
   await page.goto('/');
   await page.evaluate(() => {
@@ -27,4 +27,8 @@ test('assistant sends conversation context and retries without duplicating user 
   await expect(page.getByText(/已回答 1 \/ 9 輪/)).toBeVisible();
   await expect(page.getByText('查看 Schema 與目前資料', { exact: true })).toHaveCount(0);
   await expect(page.getByText('API JSON Schema', { exact: true })).toHaveCount(0);
+  const results = page.getByRole('region', { name: '補助搜尋結果' });
+  await expect(results.getByRole('link', { name: '測試租金補助' })).toHaveAttribute('href', '/data-center/rent-1');
+  await expect(results.getByRole('link', { name: '查看來源' })).toHaveAttribute('href', 'https://example.gov.tw/rent');
+  await expect(results.getByText('待確認：家庭收入')).toBeVisible();
 });

@@ -104,4 +104,4 @@ def converse(body: Request):
         else:
             answer.reply = ("目前沒有仍可能符合的候選，請確認已填條件或到資料中心檢查資料。" if not context['candidate_count'] else "目前可追問的明確條件已確認；其餘條件需核對官方原文。請前往完整資格媒合查看結果。")
             answer.quickReplies = []
-    return {**answer.model_dump(), "model": provider.model, "llm_used": True, "guidance_profile": context['profile'], "question_attribute": question['attribute_id'] if question and not summary_requested else "", "candidate_count": context['candidate_count'], "turn_count": turn_count, "max_turns": 9, "completed": summary_requested}
+    return {**answer.model_dump(), "search": context.get('search'), "model": provider.model, "llm_used": True, "guidance_profile": context['profile'], "question_attribute": question['attribute_id'] if question and not summary_requested else "", "candidate_count": context['candidate_count'], "turn_count": turn_count, "max_turns": 9, "completed": summary_requested}

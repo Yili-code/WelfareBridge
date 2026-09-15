@@ -1,4 +1,10 @@
 from app.matching import guidance as module
+import pytest
+
+
+@pytest.fixture(autouse=True)
+def no_search_network(monkeypatch):
+    monkeypatch.setattr('app.api.assistant_search.search_for_assistant', lambda data: (None, None))
 
 def test_answers_narrow_candidates_and_unknown_does_not_reject(monkeypatch):
     monkeypatch.setattr(module, 'get_db', lambda: None)
