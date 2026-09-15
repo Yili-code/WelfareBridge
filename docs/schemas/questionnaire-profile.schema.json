@@ -1,0 +1,491 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WelfareBridge 完成十題問卷的服務對象檔案",
+  "description": "單一新建 Profile；不是歷史資料相容 schema，也不是目前已接入的 runtime validator。screening 保留原始選項文字。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "nickname",
+    "relation",
+    "region",
+    "currentRegion",
+    "age",
+    "screening",
+    "identities",
+    "economy",
+    "needs",
+    "createdAt"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nickname": {
+      "type": "string",
+      "minLength": 1
+    },
+    "relation": {
+      "enum": [
+        "self",
+        "child",
+        "parent",
+        "spouse",
+        "other"
+      ]
+    },
+    "region": {
+      "type": "string",
+      "description": "戶籍縣市；未填或無臺灣戶籍為空字串"
+    },
+    "district": {
+      "type": "string",
+      "description": "選填；舊檔案可能保留，新問卷不收集"
+    },
+    "currentRegion": {
+      "type": "string",
+      "description": "居住縣市；未填為空字串"
+    },
+    "age": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 120,
+      "description": "選填實際年齡；僅回答年齡區間時為 null"
+    },
+    "screening": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "needs",
+        "age",
+        "residence",
+        "education",
+        "economy",
+        "identity",
+        "employment",
+        "housing",
+        "support",
+        "benefits"
+      ],
+      "properties": {
+        "needs": {
+          "title": "你目前最需要哪方面的補助？",
+          "description": "先確認需求，安排推薦順序；其他可能適用的補助仍會保留。",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "就學、學費或獎助學金",
+              "求職、失業或職業訓練",
+              "租屋、住宅或居住改善",
+              "生活費、育兒或急難救助",
+              "醫療、身心障礙或長期照顧"
+            ]
+          }
+        },
+        "age": {
+          "title": "申請補助的對象目前幾歲？",
+          "description": "青年、兒少與老人方案各有年齡限制。請填實際受補助者的年齡。",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "未滿 18 歲",
+              "18～未滿 25 歲",
+              "25～未滿 30 歲",
+              "30～未滿 65 歲",
+              "65 歲以上"
+            ]
+          }
+        },
+        "residence": {
+          "title": "你的戶籍地與目前居住地是什麼情況？",
+          "description": "地方補助可能分別限制戶籍、居住地與設籍年限，不能只靠目前住處判斷。",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "戶籍與居住地在同一縣市，設籍未滿半年",
+              "戶籍與居住地在同一縣市，設籍已滿半年",
+              "戶籍與居住地在不同縣市",
+              "在臺居住，但沒有臺灣戶籍",
+              "不確定戶籍或設籍時間"
+            ]
+          }
+        },
+        "education": {
+          "title": "你目前的在學狀態是？",
+          "description": "學制會影響獎助學金資格與金額；特定方案還需要確認年級、成績及修業狀態。",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "目前未在學",
+              "國小或國中",
+              "高中職或五專前三年",
+              "大學、二專或五專後兩年",
+              "碩士班或博士班"
+            ]
+          }
+        },
+        "economy": {
+          "title": "你目前的家庭經濟狀況符合哪一項？",
+          "description": "經濟條件影響助學、生活與住宅補助。沒有低收入戶證明，也可能符合其他收入或清寒條件。",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "已取得低收入戶資格",
+              "已取得中低收入戶資格",
+              "沒有上述資格，但家庭經濟困難",
+              "沒有上述資格，目前經濟大致穩定",
+              "不清楚家庭經濟資料或認定狀態"
+            ]
+          }
+        },
+        "identity": {
+          "title": "你或家庭成員是否具有以下身分？",
+          "description": "特定身分有專屬方案；後續仍須確認是本人或家人，以及相關證明。",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "原住民",
+              "本人或家庭成員持有身心障礙證明",
+              "單親家庭，或經認定的特殊境遇家庭",
+              "其他特定身分，例如僑生、榮民子女、軍公教遺族或客家身分",
+              "以上皆無／不確定"
+            ]
+          },
+          "allOf": [
+            {
+              "if": {
+                "contains": {
+                  "const": "以上皆無／不確定"
+                }
+              },
+              "then": {
+                "maxItems": 1
+              }
+            }
+          ]
+        },
+        "employment": {
+          "title": "你目前的工作狀態是？",
+          "description": "失業、職訓與就業方案條件不同，也需考慮同時就學與工作的人。",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "受僱工作中，包含兼職",
+              "自營工作或接案",
+              "待業中，正在找工作",
+              "正在參加職業訓練",
+              "目前未工作，也未求職",
+              "學生"
+            ]
+          },
+          "allOf": [
+            {
+              "if": {
+                "contains": {
+                  "const": "目前未工作，也未求職"
+                }
+              },
+              "then": {
+                "maxItems": 1
+              }
+            }
+          ]
+        },
+        "housing": {
+          "title": "你目前的居住方式是？",
+          "description": "租屋、宿舍、自有住宅與機構住宿對應不同方案；租屋不等於符合無自有住宅條件。",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "租屋，包含整戶或分租",
+              "學校宿舍",
+              "自己或配偶持有的住宅",
+              "與親友同住或借住",
+              "機構住宿、無固定住所或其他情況"
+            ]
+          }
+        },
+        "support": {
+          "title": "你或家人目前是否有以下需要支援的情況？",
+          "description": "育兒、照顧與突發變故可能觸發額外支援，僅問收入與年齡容易漏掉。",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "懷孕、育兒，或扶養未成年子女",
+              "家人需要協助進食、洗澡、行動等日常生活",
+              "本人因照顧家人而減少工作或無法工作",
+              "最近遭遇重病、事故、災害或主要經濟來源中斷",
+              "以上皆無／不確定"
+            ]
+          },
+          "allOf": [
+            {
+              "if": {
+                "contains": {
+                  "const": "以上皆無／不確定"
+                }
+              },
+              "then": {
+                "maxItems": 1
+              }
+            }
+          ]
+        },
+        "benefits": {
+          "title": "你目前有領取或正在申請其他補助嗎？",
+          "description": "部分同類補助不能併領，需再核對名稱、期間及申請狀態，不能因領過補助就一律排除。",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "學費減免、助學金或獎學金",
+              "失業給付、職訓津貼或就業補助",
+              "租金或其他住宅補助",
+              "生活、育兒、身障或長照相關補助",
+              "沒有／不確定"
+            ]
+          },
+          "allOf": [
+            {
+              "if": {
+                "contains": {
+                  "const": "沒有／不確定"
+                }
+              },
+              "then": {
+                "maxItems": 1
+              }
+            }
+          ]
+        }
+      }
+    },
+    "identities": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "學生",
+          "待業／失業",
+          "非典型就業",
+          "租屋族",
+          "育兒家庭",
+          "高齡長者"
+        ]
+      },
+      "description": "由 profileTags 衍生，不等同第六題原始答案"
+    },
+    "economy": {
+      "enum": [
+        "低收入戶",
+        "中低收入戶",
+        "近貧／經濟不穩定",
+        "一般家庭",
+        "不確定"
+      ]
+    },
+    "needs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "就學與學費",
+          "就業與職訓",
+          "住宅與租金",
+          "經濟補助",
+          "育兒與托育",
+          "生活物資",
+          "醫療與健保",
+          "長照與照顧",
+          "身心健康支持"
+        ]
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "screening": {
+            "properties": {
+              "age": {
+                "contains": {
+                  "const": "未滿 18 歲"
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "age": {
+            "minimum": 0,
+            "maximum": 17
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "screening": {
+            "properties": {
+              "age": {
+                "contains": {
+                  "const": "18～未滿 25 歲"
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "age": {
+            "minimum": 18,
+            "maximum": 24
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "screening": {
+            "properties": {
+              "age": {
+                "contains": {
+                  "const": "25～未滿 30 歲"
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "age": {
+            "minimum": 25,
+            "maximum": 29
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "screening": {
+            "properties": {
+              "age": {
+                "contains": {
+                  "const": "30～未滿 65 歲"
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "age": {
+            "minimum": 30,
+            "maximum": 64
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "screening": {
+            "properties": {
+              "age": {
+                "contains": {
+                  "const": "65 歲以上"
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "age": {
+            "minimum": 65,
+            "maximum": 120
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "screening": {
+            "properties": {
+              "residence": {
+                "contains": {
+                  "const": "在臺居住，但沒有臺灣戶籍"
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "region": {
+            "const": ""
+          }
+        }
+      }
+    }
+  ]
+}
