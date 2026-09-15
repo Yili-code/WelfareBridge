@@ -23,6 +23,8 @@
 # misc
 .DS_Store
 *.pem
+# 爬蟲用的公開中繼憑證（不是私鑰）
+!/backend/benefit_crawler/config/ca/*.pem
 
 # debug
 npm-debug.log*

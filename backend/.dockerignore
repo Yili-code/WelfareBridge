@@ -7,6 +7,5 @@ data/*.db-*
 data/logs
 .env*
 !.env.example
-tests
 **/__pycache__
 *.log

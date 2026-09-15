@@ -140,6 +140,18 @@ npm run test:backend
 npm run test:e2e
 ```
 
+Docker 環境（映像內含 `tests/`，不需要本機 Node／Python）：
+
+```powershell
+# 後端與爬蟲（使用 compose 的 MongoDB，測試資料庫固定為 benefits_test）
+docker compose run --rm --no-deps benefit_crawler python -m pytest tests -m "not network"
+# 即時官方網站測試（會連線到官方網站）
+docker compose run --rm --no-deps benefit_crawler python -m pytest tests -m network
+# 前端單元測試
+docker build --target build -t welfarebridge-web-build .
+docker run --rm welfarebridge-web-build npm test
+```
+
 後端資料庫測試使用獨立的 `benefits_test`，不可將正式資料放入該名稱。即時官方網站測試需另執行 `backend/.venv/Scripts/python.exe -m pytest backend/tests -m network`。測試結果與未驗證項目見 [整合驗證紀錄](docs/integration-verification.md)。
 
 ## 版本紀錄與備份

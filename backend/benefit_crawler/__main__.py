@@ -109,7 +109,12 @@ def main(argv: list[str] | None = None) -> int:
             print(f"[pipeline] {stats}")
 
     if args.loop > 0 or args.worker:
+        from app.db import utcnow
         from app.services import tasks
+
+        interrupted = tasks.recover_interrupted_tasks() + crawl_service.fail_interrupted_jobs(utcnow())
+        if interrupted:
+            logging.getLogger("crawler").warning("worker 啟動：%d 筆上次中斷的工作已標記為失敗", interrupted)
 
         next_round = 0.0 if args.loop > 0 else float("inf")
         while True:

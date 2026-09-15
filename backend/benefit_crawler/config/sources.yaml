@@ -80,6 +80,8 @@ sources:
     domains: [education]
     pages:
       - {url: "https://law.cip.gov.tw/LawContent.aspx?id=FL029068", title: 原住民族委員會獎助大專校院原住民學生實施要點, seed_category: scholarship}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://law.cip.gov.tw/LawContent.aspx?id=FL039593&media=print", title: "經濟弱勢原住民建購及修繕住宅補助", seed_category: "housing_support"}
 
   - id: yda_youth
     name: 教育部青年發展署
@@ -181,6 +183,8 @@ sources:
       - {url: "https://www.gov.tw/News_Content_2_393138", title: 高級中等學校各類學雜費減免及就學費用補助, seed_category: tuition_waiver}
       - {url: "https://www.gov.tw/News_Content_26_580717", title: 就讀國民中小學，有哪些獎補助可申請？, seed_category: education_subsidy}
       - {url: "https://www.gov.tw/News_Content_26_615200", title: 中低收入戶的福利總整理：就學、就業、醫療及住宅補助！, seed_category: low_income_allowance}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://www.gov.tw/News_Content_2_863410", title: "屏東縣身心障礙者生活補助", seed_category: "disability_living_allowance", organization: "屏東縣政府"}
     notes: 我的E政府是各部會服務的彙整頁；提供機關以頁面內「發布單位」為準，資料標記 is_repost。
 
   # ======================================================================= source.xlsx：臺北市政府社會局
@@ -341,6 +345,8 @@ sources:
       - {url: "https://www.mohw.gov.tw/cp-88-224-1.html", title: 老人福利, seed_category: elderly_service}
       - {url: "https://www.mohw.gov.tw/cp-2698-39060-1.html", title: 長期照顧給付及支付基準（來源頁）, seed_category: ltc_general}
       - {url: "https://www.mohw.gov.tw/dl-42826-4ff470aa-bcce-4464-8c6e-4f6b3989e3ed.html", title: 長期照顧給付及支付基準, format: pdf, seed_category: ltc_general, source_page: "https://www.mohw.gov.tw/cp-2698-39060-1.html"}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://www.mohw.gov.tw/cp-190-226-1.html", title: "急難救助及急難紓困", seed_category: "emergency_relief"}
 
   - id: ltc_1966
     name: 衛福部長照專區（1966 專線）— 服務項目與給付
@@ -412,6 +418,8 @@ sources:
     content_selectors: [".law-reg-content", "#ctl00_cp_content_divContent", ".text-con"]
     pages:
       - {url: "https://edu.law.moe.gov.tw/LawContent.aspx?id=GL002345", title: 教育部辦理大專校院學生校內住宿補貼要點, seed_category: housing_support}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://edu.law.moe.gov.tw/LawContent.aspx?id=FL030033&kw=獎學金", title: "教育部臺灣獎學金（外國學生）", seed_category: "scholarship"}
 
   # ======================================================================= source.xlsx：開放資料（服務提供者名單）
   - id: taipei_opendata
@@ -524,6 +532,8 @@ sources:
       - {url: 'https://socbu.kcg.gov.tw/index.php?prog=1&b_id=7', title: 單親及特境家庭福利業務總覽}
       - {url: 'https://socbu.kcg.gov.tw/index.php?prog=1&b_id=25', title: 托育福利業務總覽}
       - {url: 'https://socbu.kcg.gov.tw/index.php?prog=1&b_id=5', title: 身心障礙福利業務總覽}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://fsdo.kcg.gov.tw/News_Content.aspx?n=C8B81163CD9BA0FD&s=0FCB29F20C9342DE&sms=648B04CB8A34365C", title: "身心障礙者輔具費用補助（鳳山區公所）", seed_category: "assistive_device", organization: "高雄市鳳山區公所", content_selectors: ["#data_midlle"]}
 
   - id: mohw_social_assistance
     name: 衛生福利部社會救助及社工司 — 低收入戶、中低收入戶、急難救助
@@ -630,6 +640,10 @@ sources:
       - {url: 'https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110094', title: 新北市身心障礙者輔具費用補助, seed_category: assistive_device}
       - {url: 'https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110105', title: 新北市長期照顧輔具服務及居家無障礙環境改善服務補助, seed_category: assistive_device}
       - {url: 'https://www.sw.ntpc.gov.tw/home.jsp?id=d4abdaae79035953&act=be4f48068b2b0031&dataserno=c88dc1550b5791674d27c1b26f65a24e', title: 身心障礙者日間照顧及住宿式照顧費用補助, seed_category: disability_care_subsidy, skip: true, skip_reason: 頁面只有申請規定與補助標準一覽表的附件連結，沒有方案內文}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://service.ntpc.gov.tw/eservice/CaseData.action?itemId=110062", title: "弱勢兒童少年生活扶助複查", seed_category: "child_allowance"}
+      - {url: "https://lkk.ntpc.gov.tw/home.jsp?id=72d11405ac902ac4", title: "新北市中低收入老人假牙裝設補助", seed_category: "elderly_allowance", content_selectors: ["#printdata"]}
+      - {url: "https://www.yonghe.ntpc.gov.tw/home.jsp?id=6e67ff28bf7769b7", title: "新北市身心障礙者生活補助（永和區申辦）", seed_category: "disability_living_allowance", organization: "新北市永和區公所"}
 
   - id: sfaa_childcare
     name: 衛生福利部社會及家庭署 — 育兒津貼、托育補助、兒少福利
@@ -759,6 +773,12 @@ sources:
       - {url: 'https://www.society.taichung.gov.tw/13783/Lpsimplelist', title: 老人福利（目錄）, skip: true, skip_reason: 分類目錄頁（兩頁、共 36 筆），方案內容頁已逐一列入}
       - {url: 'https://www.society.taichung.gov.tw/13798/Lpsimplelist', title: 身心障礙者福利（目錄）, skip: true, skip_reason: 分類目錄頁（兩頁、共 58 筆），方案內容頁已逐一列入}
       - {url: 'https://www.society.taichung.gov.tw/2285652/Lpsimplelist', title: 兒少－育兒資訊專區（目錄）, skip: true, skip_reason: 分類目錄頁，方案內容頁已逐一列入}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://www.society.taichung.gov.tw/680233/13783/461548/post", title: "中低收入老人生活津貼", seed_category: "elderly_allowance"}
+      - {url: "https://www.hdaya.taichung.gov.tw/1516796/1516843/1516849/1552399", title: "臺中市生育津貼（大雅戶政）", seed_category: "birth_incentive", organization: "臺中市大雅區戶政事務所"}
+      - {url: "https://eservices.taichung.gov.tw/AdvSearch/CaseInfo/160/Notices/201909160026/120005?isHandling=True&isLink=False", title: "臺中市急難救助", seed_category: "emergency_relief", content_selectors: ["#divPrint"]}
+      - {url: "https://www.daya.taichung.gov.tw/2785429/post", title: "原住民族急難救助（臺中市大雅區申辦）", seed_category: "emergency_relief", organization: "臺中市大雅區公所"}
+      - {url: "https://www.taiping.taichung.gov.tw/981751/981781/981787/981788/1061682", title: "臺中市身心障礙者生活補助（太平區申辦）", seed_category: "disability_living_allowance", organization: "臺中市太平區公所"}
 
   - id: taipei_daan_office
     name: 臺北市大安區公所 — 社會課受理的補助與救助
@@ -860,6 +880,9 @@ sources:
       - {url: 'https://sab.tycg.gov.tw/News.aspx?n=7375&sms=11908', title: 老人生活照顧總覽, seed_category: elderly_service}
       - {url: 'https://sab.tycg.gov.tw/News.aspx?n=7324&sms=11871', title: 身障福利補助總覽, seed_category: disability_other}
       - {url: 'https://sab.tycg.gov.tw/cl.aspx?n=7354', title: 社會救助業務總覽, skip: true, skip_reason: 只是分類目錄頁（子項已逐一列在 pages）}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://dowcd.tycg.gov.tw/News_Content.aspx?n=16422&s=1178231&sms=18058", title: "0–2歲育兒津貼", seed_category: "child_allowance", organization: "桃園市政府婦幼發展局"}
+      - {url: "https://care.tycg.gov.tw/cp.aspx?n=429", title: "桃園市身心障礙者醫療復健及醫療輔具補助", seed_category: "assistive_device", organization: "桃園市政府衛生局"}
 
   - id: tainan_sw
     name: 臺南市政府社會局 — 生育、育兒、社會救助、老人福利
@@ -955,6 +978,8 @@ sources:
       - {url: 'https://sab.tainan.gov.tw/News.aspx?n=21444&sms=19550', title: 托育補助總覽}
       - {url: 'https://sab.tainan.gov.tw/News.aspx?n=21448&sms=19675', title: 育有未滿2歲兒童育兒津貼總覽}
       - {url: 'https://people.tainan.gov.tw/cp.aspx?n=32018', title: 臺南市生育獎勵金, seed_category: birth_incentive, organization: 臺南市政府民政局}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://onestop.tainan.gov.tw/eservice/apply_mode_directions2?itemId=3568", title: "300億元中央擴大租金補貼（臺南市申辦）", seed_category: "rental_subsidy", organization: "臺南市政府都市發展局"}
 
   - id: keelung_sw
     name: 基隆市政府社會處 — 生育、育兒、社會救助、老人福利
@@ -1023,6 +1048,9 @@ sources:
       - {url: 'https://www.klcg.gov.tw/tw/social/2696-112613.html', title: 基隆市身心障礙者輔具費用補助相關規定, skip: true, skip_reason: 頁面只有一個外部連結，沒有資格與補助內容}
       - {url: 'https://www.klcg.gov.tw/tw/social/2810-113164.html', title: 基隆市低收入戶特殊救助項目補助辦法, skip: true, skip_reason: 頁面只有一句話，辦法內容與申請表都在附件}
       - {url: 'https://www.klcg.gov.tw/tw/social/2770-112911.html', title: 0-未滿2歲擴大育兒津貼（社會處舊頁）, skip: true, skip_reason: 頁面回傳空殼（沒有主內容區），育兒津貼已改由兒少處少子女化專區頁面提供}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://www.klcg.gov.tw/tw/klcg1/2810-292783.html", title: "基隆市低收入戶與中低收入戶申請", seed_category: "low_income_allowance"}
+      - {url: "https://exlaw.klcg.gov.tw/LawContent.aspx?id=GL000166", title: "基隆市低收入戶暨弱勢兒童少年醫療補助", seed_category: "low_income_allowance", organization: "基隆市政府"}
 
   - id: hsinchu_city_sw
     name: 新竹市政府社會處 — 生育、育兒、社會救助、老人福利
@@ -1110,6 +1138,8 @@ sources:
       - {url: 'https://society.hccg.gov.tw/ch/home.jsp?id=140&parentpath=0,3', title: 急難及災害救助總覽, seed_category: emergency_relief}
       - {url: 'https://society.hccg.gov.tw/ch/home.jsp?id=10329&parentpath=0,3&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201807060001&t=SocietyOnes&mserno=201807060001', title: 兒童及少年未來教育與發展帳戶}
       - {url: 'https://dep-civil.hccg.gov.tw/ch/home.jsp?id=272&parentpath=0,4,51', title: 新竹市生育津貼, seed_category: birth_incentive, organization: 新竹市政府民政處}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://e-household.hccg.gov.tw/ch/home.jsp?id=83&parentpath=0%2C13%2C26", title: "新竹市生育津貼", seed_category: "birth_incentive", organization: "新竹市東區戶政事務所"}
 
   - id: hsinchu_county_sw
     name: 新竹縣政府社會處 — 生育、育兒、托育、社會救助、特殊境遇家庭
@@ -1156,6 +1186,8 @@ sources:
       - {url: 'https://social.hsinchu.gov.tw/News.aspx?n=204&sms=8666&_CSN=84', title: 婦女福利經濟補助總覽, seed_category: special_circumstances_aid}
       - {url: 'https://social.hsinchu.gov.tw/News.aspx?n=2783&sms=10087&_CSN=1030', title: 托育補助總覽, seed_category: childcare_subsidy}
       - {url: 'https://social.hsinchu.gov.tw/News_Content.aspx?n=2783&s=264093', title: 0-6歲國家一起養2.0, skip: true, skip_reason: 頁面只有一張圖片（#CCMS_Content 只有標題 12 字），沒有可抽取的文字}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://www.hsinchu.gov.tw/News_Content.aspx?n=141&s=90752", title: "新竹縣學前幼兒就學補助", seed_category: "education_subsidy", organization: "新竹縣政府教育局"}
 
   - id: miaoli_sw
     name: 苗栗縣政府社會處 — 生育、育兒、社會救助、老人福利
@@ -1235,6 +1267,8 @@ sources:
       - {url: 'https://www.miaoli.gov.tw/social_affairs/News.aspx?n=682&sms=9468', title: 社會處便民服務－申辦須知一覽表（第 1 頁）}
       - {url: 'https://www.miaoli.gov.tw/social_affairs/News.aspx?n=682&sms=9468&page=2&PageSize=20', title: 社會處便民服務－申辦須知一覽表（第 2 頁）}
       - {url: 'https://www.miaoli.gov.tw/social_affairs/News.aspx?n=682&sms=9468&page=3&PageSize=20', title: 社會處便民服務－申辦須知一覽表（第 3 頁）}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://new-inhabitants.miaoli.gov.tw/web/AnnD/uptAnnD.aspx?c0=5&p0=8337", title: "新住民及子女培力與獎助學金（114學年度）", seed_category: "scholarship", organization: "苗栗縣政府原住民族及族群發展處", content_selectors: ["div.contentsA01"]}
 
   - id: changhua_sw
     name: 彰化縣政府社會處 — 生育、育兒、社會救助、老人福利
@@ -1316,6 +1350,10 @@ sources:
       - {url: 'https://www.chcg.gov.tw/DTO/social/06service/service01_list.aspx?txtQKeyword=&cate_id=2434&page=3', title: 津貼及補助專區總覽（3）}
       - {url: 'https://www.chcg.gov.tw/DTO/social/06service/service01_list.aspx?txtQKeyword=&cate_id=2434&page=4', title: 津貼及補助專區總覽（4）}
       - {url: 'https://www.chcg.gov.tw/DTO/social/07other/other01_list.aspx?topsn=714', title: 社會救助專區目錄, skip: true, skip_reason: 只是分類目錄頁（子項已逐一列在 pages）}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://www.chcg.gov.tw/TSO/yungchin/07other/main.aspx?main_id=23989", title: "彰化縣永靖鄉急難救助", seed_category: "emergency_relief", organization: "彰化縣永靖鄉公所"}
+      - {url: "https://www.puyan.gov.tw/form/Details.aspx?Parser=28%2C7%2C54%2C%2C%2C%2C172%2C6", title: "彰化縣埔鹽鄉急難救助（申請書網頁）", seed_category: "emergency_relief", organization: "彰化縣埔鹽鄉公所", skip: true, skip_reason: "表單下載頁，網頁本身沒有內文，只有申請書附件（docx／pdf／odt）；改收下一筆申請書 PDF"}
+      - {url: "https://www.puyan.gov.tw/df_ufiles/054/2.埔鹽鄉急難救助申請書.pdf", title: "彰化縣埔鹽鄉急難救助金申請表", seed_category: "emergency_relief", organization: "彰化縣埔鹽鄉公所", format: "pdf", source_page: "https://www.puyan.gov.tw/form/Details.aspx?Parser=28%2C7%2C54%2C%2C%2C%2C172%2C6"}
 
   - id: nantou_sw
     name: 南投縣政府社會及勞動局 — 生育、育兒、社會救助、老人福利
@@ -1379,6 +1417,9 @@ sources:
       - {url: 'https://welfare.nantou.gov.tw/1486/1731', title: 國民年金保費補助, skip: true, skip_reason: 同上，內文為 POST 載入的 P_Word partial（約 580 字）；沒有附件}
       - {url: 'https://welfare.nantou.gov.tw/1486/baby', title: 國民年金生育給付, seed_category: birth_incentive, skip: true, skip_reason: 同上，內文為 POST 載入的 P_Word partial（約 820 字，含申請資格與給付標準）；沒有附件。縣府「南投縣生育獎勵金」不在本站（由民政處／各戶政事務所受理，縣府官網只有失效的新聞頁與法規系統條文）}
       - {url: 'https://welfare.nantou.gov.tw/1486/18', title: 兒童及少年未來教育與發展帳戶申請, skip: true, skip_reason: 同上，內文為 POST 載入的 P_Word partial（約 1}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://www.lugu.gov.tw/service/detail/6673/特殊境遇家庭生活補助", title: "南投縣鹿谷鄉特殊境遇家庭生活補助", seed_category: "special_circumstances_aid", organization: "南投縣鹿谷鄉公所"}
+      - {url: "https://glrs.nantou.gov.tw/LawContent.aspx?id=GL000418", title: "南投縣輔具借用、維修、評估及媒合服務", seed_category: "assistive_device", organization: "南投縣政府"}
 
   - id: chiayi_city_sw
     name: 嘉義市政府社會處 — 生育、育兒、社會救助、老人福利
@@ -1461,6 +1502,8 @@ sources:
       - {url: 'https://social.chiayi.gov.tw/News.aspx?n=393&sms=9376', title: 身心障礙福利（目錄）, skip: true, skip_reason: 分類目錄頁（約 50 筆），方案內容頁已逐一列入}
       - {url: 'https://social.chiayi.gov.tw/cl.aspx?n=3833', title: 家庭福利（目錄）, skip: true, skip_reason: 分類目錄頁（含婦女福利、生育津貼），方案內容頁已逐一列入}
       - {url: 'https://social.chiayi.gov.tw/infant.htm', title: 育兒專區, skip: true, skip_reason: 育兒專區入口頁（連到生育津貼、育兒津貼、托育補助等），方案內容頁已逐一列入}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://social.chiayi.gov.tw/News_Content.aspx?n=393&s=776112", title: "嘉義市身心障礙者社區日間作業設施", seed_category: "day_care"}
 
   - id: bli_family
     name: 勞動部勞工保險局 — 生育給付（勞保、國保、農保）、勞工生育補助、育嬰留職停薪津貼
@@ -1498,6 +1541,8 @@ sources:
       - {url: 'https://www.bli.gov.tw/0109620.html', title: 勞工生育補助 — 補助方式, skip: true, skip_reason: 只有一句話（加計至10萬元、無須另行申請），內容已含在 0004845 給付標準與 0109619 要點, seed_category: birth_incentive}
       - {url: 'https://www.bli.gov.tw/0105470.html', title: 育嬰留職停薪薪資補助 — 補助依據, skip: true, skip_reason: 只有一個法規連結，沒有內文}
       - {url: 'https://www.bli.gov.tw/0100409.html', title: 國民年金生育給付金額試算, skip: true, skip_reason: 線上試算頁（收錄政策排除），相關規定內容已由 0016966 涵蓋, seed_category: birth_incentive}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://www.bli.gov.tw/0015725.html", title: "就業保險職業訓練生活津貼", seed_category: "training_allowance"}
 
   - id: taoyuan_zhongli_office
     name: 桃園市中壢區公所 — 社會課受理的補助與救助
@@ -1758,6 +1803,8 @@ sources:
       - {url: 'https://sa.hl.gov.tw/List_sp/22d432f786034a91ba984af389017f88', title: 兒少經濟補助總覽}
       - {url: 'https://sa.hl.gov.tw/List_sp/df505e0d35c548d4bc57470513f7782d', title: 社會救助經濟扶助總覽}
       - {url: 'https://sa.hl.gov.tw/List_sp/8749c6132a3d47dfadfae08657fe79c6', title: 身心障礙者經濟扶助總覽}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://www.fonglin.gov.tw/News_Content.aspx?n=1881&s=174831", title: "花蓮縣鳳林鎮社會福利申辦（生活扶助、醫療與交通）", seed_category: "low_income_allowance", organization: "花蓮縣鳳林鎮公所"}
 
   - id: kinmen_sw
     name: 金門縣政府社會處 — 生育、育兒、社會救助、老人福利
@@ -1855,6 +1902,10 @@ sources:
       - {url: 'https://social.kinmen.gov.tw/cp.aspx?n=99FF9571F64E278F', title: 社會救助福利服務項目總覽}
       - {url: 'https://social.kinmen.gov.tw/cp.aspx?n=C8CDE0088D2E9571', title: 老人福利服務項目總覽}
       - {url: 'https://social.kinmen.gov.tw/cp.aspx?n=A3F704E25195CDB4', title: 身心障礙者福利服務項目總覽}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://law.kinmen.gov.tw/LawContent.aspx?id=GL000338&kw=", title: "身心障礙學生交通服務：接送與交通費補助", seed_category: "transport_service", organization: "金門縣政府"}
+      - {url: "https://jincheng.kinmen.gov.tw/cp.aspx?n=764F50C5EF56A8E1", title: "金門縣婦女生產補助及支持生育加碼補助", seed_category: "birth_incentive", organization: "金門縣金城鎮公所"}
+      - {url: "https://social.kinmen.gov.tw/cp.aspx?Create=1&n=c8cde0088d2e9571&s=B26BC741A9EB1645", title: "金門縣65歲以上老人假牙補助", seed_category: "elderly_allowance"}
 
   - id: yilan_sw
     name: 宜蘭縣政府社會處 — 生育、育兒、社會救助、老人福利
@@ -1913,6 +1964,12 @@ sources:
       - {url: 'https://sntroot.e-land.gov.tw/News_Content.aspx?n=11278&s=133571', title: 宜蘭縣低收入戶產婦及嬰兒營養補助, skip: true, skip_reason: 頁面只有聯絡人（51 字），沒有資格與給付內容}
       - {url: 'https://sntroot.e-land.gov.tw/News_Content.aspx?n=11278&s=133534', title: 災害救助及災害收容所, skip: true, skip_reason: 頁面只有聯絡人（64 字），沒有資格與給付內容；災害救助金標準只在法規列表}
       - {url: 'https://sntroot.e-land.gov.tw/cp.aspx?n=10414', title: 身心障礙福利（個人及家庭照顧服務）總覽, skip: true, skip_reason: 一頁彙整 11 項身障服務（家庭關懷訪視、社區居住、自立生活等，7}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://www.lotong.gov.tw/News_Content.aspx?n=17723&s=339483", title: "原住民急難救助（羅東鎮申辦）", seed_category: "emergency_relief", organization: "宜蘭縣羅東鎮公所"}
+      - {url: "https://www.suao.gov.tw/News_Content.aspx?n=6552&s=396104&sms=13368", title: "宜蘭縣特殊境遇家庭扶助（蘇澳鎮申辦）", seed_category: "special_circumstances_aid", organization: "宜蘭縣蘇澳鎮公所"}
+      - {url: "https://yilan.e-land.gov.tw/News_Content.aspx?n=18705&s=372380&sms=16134", title: "宜蘭市特殊境遇家庭及兒童少年生活扶助", seed_category: "special_circumstances_aid", organization: "宜蘭縣宜蘭市公所"}
+      - {url: "https://jiaosi.e-land.gov.tw/cp.aspx?n=7772", title: "宜蘭縣礁溪鄉天然災害補助", seed_category: "emergency_relief", organization: "宜蘭縣礁溪鄉公所"}
+      - {url: "https://www.suao.gov.tw/News_Content.aspx?n=9172&s=178157", title: "宜蘭縣身心障礙福利（生活、租屋、照顧與交通補助）", seed_category: "disability_living_allowance", organization: "宜蘭縣蘇澳鎮公所"}
 
   - id: penghu_sw
     name: 澎湖縣政府社會處 — 生育、育兒、社會救助、老人福利
@@ -1984,6 +2041,8 @@ sources:
       - {url: 'https://www.penghu.gov.tw/welfare/home.jsp?id=7&act=view&dataserno=202606020001', title: 澎湖縣高中職就學津貼, seed_category: education_subsidy, organization: 澎湖縣政府教育處}
       - {url: 'https://www.penghu.gov.tw/welfare/home.jsp?id=7&act=view&dataserno=202502130005', title: 澎湖縣獎助學生助學金或交通圖書券補貼, seed_category: student_aid, organization: 澎湖縣政府教育處}
       - {url: 'https://www.penghu.gov.tw/welfare/home.jsp?id=7&act=view&dataserno=202502200008', title: 補助國小學童制服及文具費, seed_category: education_subsidy, organization: 澎湖縣政府教育處}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://eservice.penghu.gov.tw/Service_Content.aspx?n=27B2D25ACBA52DAB&p=D903C9291E0EF6B2&s=22A59DF85FC4B108", title: "澎湖縣政府生育補助", seed_category: "birth_incentive", organization: "澎湖縣政府衛生局"}
 
   # ======================================================================= 第四輪：合併先前未合併的候選來源（屏東、臺東、連江、雲林）
 
@@ -2216,6 +2275,10 @@ sources:
       # ---------------------------------------------------------------- 特殊境遇家庭（兒少及婦女福利科）
       - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=Q4Cf!0!fSg5T8%3d", title: 臺東縣特殊境遇家庭各項扶助（緊急生活扶助、子女生活津貼、傷病醫療、兒童托育、法律訴訟津貼）, seed_category: special_circumstances_aid}
       - {url: "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=7oke3LNba4s%3d", title: 特殊境遇家庭生活扶助各式表件下載, seed_category: special_circumstances_aid, skip: true, skip_reason: 只有申請表附件清單（373 字）}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://www.taitungcity.gov.tw/article/【臺東市婦女生育補助】(含申請表格)", title: "臺東市婦女生育補助", seed_category: "birth_incentive", organization: "臺東市公所", content_selectors: ["#is-content"]}
+      - {url: "https://www.ttypg.gov.tw/home/index.php/news-2/2288-2025-02-10-01-57-03", title: "臺東縣延平鄉生育補助（申請規範）", seed_category: "birth_incentive", organization: "臺東縣延平鄉公所", skip: true, skip_reason: "網頁內文只有附件連結（100 字）；附件「生育作業要點.pdf」是掃描影像，抽不出文字"}
+      - {url: "https://www.donghe.gov.tw/home/index.php/2020-05-17-03-32-13/354-2020-06-03-03-46-27", title: "臺東縣東河鄉急難救助之生活補助", seed_category: "emergency_relief", organization: "臺東縣東河鄉公所"}
     notes: 臺東縣政府社會處官網（taisoc.taitung.gov.tw）。方案內容頁 /WebSite/Service/serviceDetail.aspx?…&id=<id> 為靜態 HTML，固定欄位表格（申請條件、應備文件、補助金額、作業天數、連絡窗口）都在頁面內文；robots.txt 禁止 /App_ 路徑，所以附件（File.ashx）與清單頁的跳轉連結（Link.ashx）都不抓，不設 follow_links、不登錄 PDF。生育補助（縣府民政處方案、戶政事務所受理）收臺東戶政事務所網站頁；縣府 TTBABY 育兒入口網另收育兒生日禮。站上沒有低收入戶生活扶助與身心障礙者生活補助專頁。
 
   - id: lienchiang_sw
@@ -2311,6 +2374,8 @@ sources:
       - {url: "https://www.matsu.gov.tw/chhtml/download/371030000A0001/5982", title: 民政社會處托育專區下載總覽, skip: true, skip_reason: 只有托育補助申請表、評鑑計畫、候補名單與中央作業要點，沒有本縣托育補助方案內文}
       - {url: "https://www.matsu.gov.tw/chhtml/news/371030000A0001/5975", title: 民政社會處兒童及少年福利公告總覽, skip: true, skip_reason: 只有育兒津貼申請表（ods）、奶粉尿布補助作業要點（odt）等附件公告，沒有 HTML 方案內文}
       - {url: "https://law.matsu.gov.tw/LawCategoryContentList.aspx?CategoryID=19", title: 連江縣政府主管法規民社類目錄總覽, skip: true, skip_reason: 法規目錄頁（含設置要點、裁罰基準與已廢止條例），補助相關法規已逐一登錄}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://www.dongyin.gov.tw/chhtml/Detail/2618?mcid=107349", title: "連江縣東引鄉婦女生育補助（115年起）", seed_category: "birth_incentive", organization: "連江縣東引鄉公所"}
 
   # 候選來源：雲林縣政府社會處（social.yunlin.gov.tw）
   # 結論：reject。整個 *.yunlin.gov.tw（含 www、social、dl、ylshb…）前面有 Cloudflare WAF，
@@ -2337,3 +2402,203 @@ sources:
       - {url: "https://social.yunlin.gov.tw/cl.aspx?n=22197", title: 雲林縣補助生育津貼, seed_category: birth_incentive, skip: true, skip_reason: Cloudflare WAF 對爬蟲回 HTTP 403；且頁面本身只有「1150101生育津貼實施要點」.doc 附件，沒有內文}
       - {url: "https://social.yunlin.gov.tw/cl.aspx?n=22756", title: 老人福利津貼及補助類, seed_category: elderly_allowance, skip: true, skip_reason: Cloudflare WAF 對爬蟲回 HTTP 403；此頁為目錄（中低收入老人生活津貼／特別照顧津貼／假牙／健保費補助等 8 項子頁）}
       - {url: "https://social.yunlin.gov.tw/News.aspx?n=22338&sms=21788", title: 重陽敬老, seed_category: elderly_allowance, skip: true, skip_reason: Cloudflare WAF 對爬蟲回 HTTP 403；此頁為清單頁}
+      # 第四輪（sources - 複製.xlsx）新增
+      - {url: "https://linnei.yunlin.gov.tw/News_Content.aspx?n=6419&s=271836", title: "雲林縣低及中低收入戶老人看護醫療補助", seed_category: "low_income_allowance", organization: "雲林縣林內鄉公所", skip: true, skip_reason: "*.yunlin.gov.tw 前面的 Cloudflare WAF 對爬蟲回 HTTP 403（2026-09-14 乾跑確認）"}
+      - {url: "https://lunbei.yunlin.gov.tw/News_Content.aspx?n=5278&s=282122", title: "雲林縣身心障礙者日間及住宿式照顧費用補助", seed_category: "disability_care_subsidy", organization: "雲林縣崙背鄉公所", skip: true, skip_reason: "*.yunlin.gov.tw 前面的 Cloudflare WAF 對爬蟲回 HTTP 403（2026-09-14 乾跑確認）"}
+
+  # ======================================================================= 第四輪：sources - 複製.xlsx 新增的機關與學校
+
+  - id: mofa_scholarship
+    name: "外交部 — 外交獎學金"
+    organization: "外交部"
+    provider_type: "central_government"
+    source_type: "government_site"
+    base_url: "https://www.mofa.gov.tw/"
+    crawler: "benefit_crawler.generic.page_crawler.GenericPageCrawler"
+    expected_title_keywords: ["外交部"]
+    data_confidence: 100
+    enabled: true
+    domains: ["education"]
+    pages:
+      - {url: "https://www.mofa.gov.tw/cp.aspx?n=3CF26E682A6E4EEE", title: "外交獎學金（本國學生）", seed_category: "scholarship"}
+
+  - id: wda_branches
+    name: "勞動部勞動力發展署各分署 — 職業訓練生活津貼、青年跨域就業補助"
+    organization: "勞動部勞動力發展署"
+    provider_type: "central_government"
+    source_type: "government_site"
+    base_url: "https://tcnr.wda.gov.tw/"
+    crawler: "benefit_crawler.generic.page_crawler.GenericPageCrawler"
+    expected_title_keywords: ["勞動力發展署"]
+    data_confidence: 100
+    enabled: true
+    domains: ["labor", "youth"]
+    content_selectors: ["#CCMS_Content"]
+    pages:
+      - {url: "https://tcnr.wda.gov.tw/cp.aspx?n=18F96DDF907ECD15", title: "職業訓練生活津貼（中彰投分署）", seed_category: "training_allowance", organization: "勞動部勞動力發展署中彰投分署"}
+      - {url: "https://kpptr.wda.gov.tw/cp.aspx?n=DDA496EE3B9BA2CF", title: "職業訓練生活津貼（高屏澎東分署）", seed_category: "training_allowance", organization: "勞動部勞動力發展署高屏澎東分署"}
+      - {url: "https://kpptr.wda.gov.tw/cp.aspx?n=DDA496EE3B9BA2CF&s=AB16E464A4CA3650", title: "職業訓練生活津貼（高屏澎東分署）— 申請對象", seed_category: "training_allowance", organization: "勞動部勞動力發展署高屏澎東分署"}
+      - {url: "https://kpptr.wda.gov.tw/cp.aspx?n=DDA496EE3B9BA2CF&s=42AEB1E705C315C0", title: "職業訓練生活津貼（高屏澎東分署）— 補助額度", seed_category: "training_allowance", organization: "勞動部勞動力發展署高屏澎東分署"}
+      - {url: "https://kpptr.wda.gov.tw/cp.aspx?n=DDA496EE3B9BA2CF&s=BC76A99777DB5018", title: "職業訓練生活津貼（高屏澎東分署）— 補助限制", seed_category: "training_allowance", organization: "勞動部勞動力發展署高屏澎東分署"}
+      - {url: "https://thmr.wda.gov.tw/cp.aspx?n=5C9046412338FE93", title: "青年跨域就業促進補助津貼", seed_category: "employment_incentive", organization: "勞動部勞動力發展署桃竹苗分署"}
+    notes: "高屏澎東分署的職訓生活津貼頁把申請對象、補助額度、補助限制放在各自的分頁籤（同一 n、不同 s），逐頁登錄。"
+
+  - id: vac_welfare
+    name: "國軍退除役官兵輔導委員會 — 榮民就養"
+    organization: "國軍退除役官兵輔導委員會"
+    provider_type: "central_government"
+    source_type: "government_site"
+    base_url: "https://www.vac.gov.tw/"
+    crawler: "benefit_crawler.generic.page_crawler.GenericPageCrawler"
+    expected_title_keywords: ["國軍退除役官兵輔導委員會"]
+    data_confidence: 100
+    enabled: true
+    domains: ["social_welfare"]
+    content_selectors: ["#MainContent"]
+    pages:
+      - {url: "https://www.vac.gov.tw/cp-591-3742-208.html", title: "榮民一般就養給付", seed_category: "low_income_allowance"}
+
+  - id: moj_crime_victim
+    name: "法務部 — 犯罪被害補償"
+    organization: "法務部"
+    provider_type: "central_government"
+    source_type: "government_site"
+    base_url: "https://www.moj.gov.tw/"
+    crawler: "benefit_crawler.generic.page_crawler.GenericPageCrawler"
+    expected_title_keywords: ["法務部"]
+    data_confidence: 100
+    enabled: true
+    domains: ["social_welfare"]
+    pages:
+      - {url: "https://www.moj.gov.tw/2204/2528/2634/2639/16923/", title: "犯罪被害人及家屬犯罪被害補償金", seed_category: "emergency_relief"}
+
+  - id: hpa_health
+    name: "衛生福利部國民健康署 — 不孕症試管嬰兒補助"
+    organization: "衛生福利部國民健康署"
+    provider_type: "central_government"
+    source_type: "government_site"
+    base_url: "https://www.hpa.gov.tw/"
+    crawler: "benefit_crawler.generic.page_crawler.GenericPageCrawler"
+    expected_title_keywords: ["國民健康署"]
+    data_confidence: 100
+    enabled: true
+    domains: ["health"]
+    pages:
+      - {url: "https://www.hpa.gov.tw/Pages/Detail.aspx?nodeid=500&pid=14149&sid=433", title: "不孕症試管嬰兒補助3.0方案", seed_category: "birth_incentive", skip: true, skip_reason: "網頁只有標題，方案內容在附件 PDF（/Pages/ashx/GetFile.ashx），但 robots.txt 不允許抓取該路徑"}
+    notes: "www.hpa.gov.tw 未送出 TWCA 中繼憑證，需搭配 config/ca/twca_secure_ssl_2023g3.pem 才能通過 TLS 驗證。"
+
+  - id: ntu_student_aid
+    name: "國立臺灣大學學生事務處 — 助學措施與獎助學金"
+    organization: "國立臺灣大學學生事務處"
+    provider_type: "school"
+    source_type: "school_site"
+    base_url: "https://osa.ntu.edu.tw/"
+    crawler: "benefit_crawler.generic.page_crawler.GenericPageCrawler"
+    expected_title_keywords: ["國立臺灣大學"]
+    data_confidence: 95
+    enabled: true
+    domains: ["education"]
+    content_selectors: ["#pc-article"]
+    pages:
+      - {url: "https://osa.ntu.edu.tw/services/financialaid", title: "國立臺灣大學助學措施與獎助學金（總覽）", seed_category: "student_aid"}
+      - {url: "https://advisory.ntu.edu.tw/CMS/Page/174", title: "國立臺灣大學學雜費減免", seed_category: "tuition_waiver", organization: "國立臺灣大學學生事務處生活輔導組"}
+      - {url: "https://advisory.ntu.edu.tw/CMS/Page/176", title: "國立臺灣大學就學貸款", seed_category: "student_loan", organization: "國立臺灣大學學生事務處生活輔導組"}
+      - {url: "https://advisory.ntu.edu.tw/CMS/Page/180", title: "國立臺灣大學不利處境助學金（原弱勢助學金）", seed_category: "student_aid", organization: "國立臺灣大學學生事務處生活輔導組"}
+      - {url: "https://advisory.ntu.edu.tw/CMS/Page/182", title: "國立臺灣大學研究生獎勵金", seed_category: "scholarship", organization: "國立臺灣大學學生事務處生活輔導組"}
+      - {url: "https://advisory.ntu.edu.tw/CMS/Page/184", title: "國立臺灣大學生活學習助學金", seed_category: "student_aid", organization: "國立臺灣大學學生事務處生活輔導組"}
+      - {url: "https://advisory.ntu.edu.tw/CMS/Page/186", title: "國立臺灣大學急難慰問救助", seed_category: "emergency_aid_student", organization: "國立臺灣大學學生事務處生活輔導組", skip: true, skip_reason: "頁面沒有內文（只有頁尾聯絡資訊），2026-09-14 乾跑確認"}
+      - {url: "https://advisory.ntu.edu.tw/CMS/Page/21", title: "國立臺灣大學校設獎助學金（含希望助學金）", seed_category: "scholarship", organization: "國立臺灣大學學生事務處生活輔導組"}
+    notes: "Excel 標註「網頁中有多筆福利資料」：總覽頁是助學項目表，各項內容在生活輔導組 advisory.ntu.edu.tw 的子頁，逐頁登錄；勵學獎學金 PDF 連結已失效（404）、傑出表現與僑陸生獎學金連到其他單位首頁，未收。"
+
+  - id: nccu_dorm_subsidy
+    name: "國立政治大學學務處 — 校內住宿補貼"
+    organization: "國立政治大學學生事務處住宿輔導組"
+    provider_type: "school"
+    source_type: "school_site"
+    base_url: "https://osa.nccu.edu.tw/"
+    crawler: "benefit_crawler.generic.page_crawler.GenericPageCrawler"
+    expected_title_keywords: ["國立政治大學"]
+    data_confidence: 95
+    enabled: true
+    domains: ["education"]
+    content_selectors: ["div.item-page"]
+    pages:
+      - {url: "https://osa.nccu.edu.tw/tw/住宿輔導組/最新消息/11715-公告本校113年教育部「大專校院學生校內住宿補貼方案」執行說明", title: "國立政治大學校內住宿補貼", seed_category: "housing_support"}
+
+  - id: nuk_student_aid
+    name: "國立高雄大學 — 不利處境學生助學金"
+    organization: "國立高雄大學"
+    provider_type: "school"
+    source_type: "school_site"
+    base_url: "https://www.nuk.edu.tw/"
+    crawler: "benefit_crawler.generic.page_crawler.GenericPageCrawler"
+    expected_title_keywords: ["國立高雄大學"]
+    data_confidence: 95
+    enabled: true
+    domains: ["education"]
+    content_selectors: ["div.mpgdetail"]
+    pages:
+      - {url: "https://www.nuk.edu.tw/p/406-1000-100350,r112.php?Lang=zh-tw", title: "國立高雄大學不利處境學生助學金（115學年度）", seed_category: "student_aid"}
+    notes: "Excel 原網址把逗號編碼成 %2C（406-1000-100350%2Cr112.php），伺服器回 404；改用逗號版本。"
+
+  - id: ncue_dorm_subsidy
+    name: "國立彰化師範大學學務處 — 校內住宿補貼"
+    organization: "國立彰化師範大學學生事務處"
+    provider_type: "school"
+    source_type: "school_site"
+    base_url: "https://studentweb.ncue.edu.tw/"
+    crawler: "benefit_crawler.generic.page_crawler.GenericPageCrawler"
+    expected_title_keywords: ["學生事務處"]
+    data_confidence: 95
+    enabled: true
+    domains: ["education"]
+    content_selectors: ["div.mpgdetail"]
+    pages:
+      - {url: "https://studentweb.ncue.edu.tw/p/412-1003-3649.php?Lang=zh-tw", title: "國立彰化師範大學校內住宿補貼", seed_category: "housing_support"}
+
+  - id: ocu_dorm_subsidy
+    name: "僑光科技大學 — 校內住宿補貼"
+    organization: "僑光科技大學"
+    provider_type: "school"
+    source_type: "school_site"
+    base_url: "https://ad-dorm.ocu.edu.tw/"
+    crawler: "benefit_crawler.generic.page_crawler.GenericPageCrawler"
+    expected_title_keywords: ["學生宿舍"]
+    data_confidence: 95
+    enabled: true
+    domains: ["education"]
+    content_selectors: ["div.mpgdetail"]
+    pages:
+      - {url: "https://ad-dorm.ocu.edu.tw/p/404-1033-62152.php?Lang=zh-tw", title: "僑光科技大學校內住宿補貼", seed_category: "housing_support"}
+    notes: "私立學校：主機 ad-dorm.ocu.edu.tw 已逐一加入 official_domains.yaml 白名單。"
+
+  - id: tku_student_affairs
+    name: "淡江大學學務處 — 獎助學金公告"
+    organization: "淡江大學學生事務處"
+    provider_type: "school"
+    source_type: "school_site"
+    base_url: "https://sa.tku.edu.tw/"
+    crawler: "benefit_crawler.generic.page_crawler.GenericPageCrawler"
+    expected_title_keywords: ["學生事務處"]
+    data_confidence: 90
+    enabled: true
+    domains: ["education"]
+    pages:
+      - {url: "https://sa.tku.edu.tw/spirit/?tkuisotope=臺南市政府原住民族學生獎助學金", title: "臺南市原住民族學生獎助學金（淡江大學公告）", seed_category: "scholarship", organization: "臺南市政府"}
+    notes: "私立學校：主機 sa.tku.edu.tw 已逐一加入 official_domains.yaml 白名單。方案是臺南市政府的獎助學金，由學校轉公告。"
+
+  - id: usc_kh_student_aid
+    name: "實踐大學高雄校區生活輔導二組 — 弱勢助學金"
+    organization: "實踐大學高雄校區"
+    provider_type: "school"
+    source_type: "school_site"
+    base_url: "https://sls.kh.usc.edu.tw/"
+    crawler: "benefit_crawler.generic.page_crawler.GenericPageCrawler"
+    expected_title_keywords: ["生活輔導"]
+    data_confidence: 95
+    enabled: true
+    domains: ["education"]
+    pages:
+      - {url: "https://sls.kh.usc.edu.tw/p/404-1015-45474-1.php?Lang=zh-tw", title: "實踐大學弱勢助學金申辦資格與流程", seed_category: "student_aid", skip: true, skip_reason: "網頁本身只有附件清單（5 個 PDF），沒有內文；改收下一筆「申辦資格與流程概述」PDF"}
+      - {url: "https://sls.kh.usc.edu.tw/app/index.php?Action=downloadfile&file=WVhSMFlXTm9MemM0TDNCMFlWODFNRGs1TVY4MU9EVTRNekU0WHpZME1qYzBMbkJrWmc9PQ==&fname=WW54USOKPK40QLXX50PO30HGWWNKGDKKDGJCIC20LPIDFGA5FCROA0SWGGECB0SSSSTSJD35B0B0FCWW34TWICYSECRKZWNKJDYTNOB5YS2034POECGCYWSSLO44GG1504NODG34MKJC25MOKLICUSMK01UXML21LKB4JCSWQOA4GH50ROXW21XXTSPO3424RK30JDRL14RO35WWJDNPB0A5UWB0LLB4WSDCPKROKK04POPO", title: "實踐大學弱勢助學金申辦資格與流程概述", seed_category: "student_aid", format: "pdf", source_page: "https://sls.kh.usc.edu.tw/p/404-1015-45474-1.php?Lang=zh-tw"}
+    notes: "私立學校：主機 sls.kh.usc.edu.tw 已逐一加入 official_domains.yaml 白名單。"

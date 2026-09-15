@@ -2,6 +2,7 @@
 
 支援：
 - HTML 頁面：以 content_selectors 取主內容區（沒命中時用啟發式：文字最多、連結比例最低的區塊）
+  pages 可逐頁設定 content_selectors（排在來源設定之前），讓同一來源收錄其他主機（公所、法規系統）的頁面而不影響既有頁面
 - 一頁多方案：split_selector 命中 ≥ 2 個區塊時，每個區塊拆成一份文件（URL 加 #part-N）
 - 往下追一層同網域連結（follow_links.allow / deny 正規表達式；只追白名單官方網域）
 - PDF：pypdf 轉文字；Download.ashx 的 base64 檔名解碼成標題
@@ -166,11 +167,13 @@ class GenericPageCrawler(BaseCrawler):
         self.follow_max: int = int(follow.get("max_links", 50) or 50)
         self.is_repost: bool = bool(source_config.get("is_repost", False))
         self._fetch_cache: dict[str, FetchResult] = {}
+        self._page_selectors: dict[str, list[str]] = {page["url"]: list(page["content_selectors"]) for page in source_config.get("pages") or [] if page.get("content_selectors")}
 
     # ------------------------------------------------------------ discover
     def discover(self) -> Iterable[DiscoveredItem]:
         for page in self.config.get("pages") or []:
             meta = {
+                "content_selectors": list(page.get("content_selectors") or []),
                 "config_title": page.get("title", ""),
                 "seed_category": page.get("seed_category", ""),
                 "format": (page.get("format") or "html").lower(),
@@ -191,12 +194,13 @@ class GenericPageCrawler(BaseCrawler):
         if cached is not None:
             return cached
         result = super().fetch(url)
-        if result.is_html and self._configured_selectors and url.rstrip("/") != (self.base_url or "").rstrip("/") and looks_like_shell(result.text, self._configured_selectors):  # 首頁本來就沒有主內容區，不算空殼
+        selectors = self._page_selectors.get(url) or self._configured_selectors
+        if result.is_html and selectors and url.rstrip("/") != (self.base_url or "").rstrip("/") and looks_like_shell(result.text, selectors):  # 首頁本來就沒有主內容區，不算空殼
             # 桃園市社會局等站台偶爾回傳只有選單的空殼頁（HTTP 200、沒有 #CCMS_Content）：等 2 秒重抓一次
             self.log("WARNING", "頁面沒有設定的主內容區（疑似空殼回應），2 秒後重抓一次", url)
             time.sleep(2)
             retry = super().fetch(url)
-            if not looks_like_shell(retry.text, self._configured_selectors):
+            if not looks_like_shell(retry.text, selectors):
                 result = retry
         self._fetch_cache[url] = result
         return result
@@ -247,6 +251,10 @@ class GenericPageCrawler(BaseCrawler):
 
             items = list(self.discover())
             result.discovered = len(items)
+            # max_items（--max-items、API、MAX_ITEMS_PER_SOURCE）限制本輪最多處理幾筆：先截登錄的頁面，追連結只用剩下的額度
+            limit = int(self.max_items) if self.max_items else None
+            if limit is not None:
+                items = items[:limit]
             followed: list[DiscoveredItem] = []
             visited: set[str] = set()
 
@@ -308,7 +316,8 @@ class GenericPageCrawler(BaseCrawler):
                 self.log("INFO", f"往下追連結（深度 {self.follow_depth}，最多 {self.follow_max} 頁）：第一層 {len(followed)} 個")
                 queue: list[DiscoveredItem] = list(followed)
                 processed = 0
-                while queue and processed < self.follow_max:
+                follow_budget = self.follow_max if limit is None else min(self.follow_max, max(0, limit - len(items)))
+                while queue and processed < follow_budget:
                     link = queue.pop(0)
                     if link.url in visited:
                         continue
@@ -381,8 +390,8 @@ class GenericPageCrawler(BaseCrawler):
             meta={**item.meta, "document_kind": "skipped"},
         )
 
-    def _main_container(self, soup: BeautifulSoup) -> Tag | BeautifulSoup:
-        for selector in self.content_selectors:
+    def _main_container(self, soup: BeautifulSoup, page_selectors: list[str] | None = None) -> Tag | BeautifulSoup:
+        for selector in list(page_selectors or []) + self.content_selectors:
             try:
                 found = soup.select_one(selector)
             except Exception:
@@ -409,7 +418,7 @@ class GenericPageCrawler(BaseCrawler):
         soup = make_soup(fetch.text)
         title_tag = soup.find(["h1", "h2"])
         html_title = page_title(fetch.text)
-        container = self._main_container(soup)
+        container = self._main_container(soup, item.meta.get("content_selectors"))
         blocks: list[Tag] = []
         if self.split_selector:
             try:

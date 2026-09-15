@@ -13,6 +13,7 @@ import time
 import urllib.robotparser
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+from pathlib import Path
 from urllib.parse import urlsplit
 
 import httpx
@@ -49,11 +50,20 @@ class FetchResult:
         return "pdf" in self.content_type or self.content[:5] == b"%PDF-"
 
 
+EXTRA_CA_DIR = Path(__file__).resolve().parent.parent / "config" / "ca"
+
+
 def build_ssl_context(strict_x509: bool) -> ssl.SSLContext:
-    """Python 3.13 預設 VERIFY_X509_STRICT 會拒絕部分政府主機憑證鏈；只關閉嚴格旗標，CA 與主機名稱驗證仍在。"""
+    """Python 3.13 預設 VERIFY_X509_STRICT 會拒絕部分政府主機憑證鏈；只關閉嚴格旗標，CA 與主機名稱驗證仍在。
+
+    config/ca/*.pem 是部分政府主機漏送的中繼憑證（瀏覽器會自動補抓，Python 不會）。中繼憑證不是信任錨：
+    未開啟 partial chain，驗證仍必須接到系統信任的根憑證，所以不會擴大信任範圍。
+    """
     context = ssl.create_default_context()
     if not strict_x509 and hasattr(ssl, "VERIFY_X509_STRICT"):
         context.verify_flags &= ~ssl.VERIFY_X509_STRICT
+    for pem in sorted(EXTRA_CA_DIR.glob("*.pem")):
+        context.load_verify_locations(cafile=str(pem))
     return context
 
 

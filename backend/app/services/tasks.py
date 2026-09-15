@@ -156,6 +156,22 @@ def running_kinds() -> list[str]:
     return [t["kind"] for t in list_tasks(50) if t.get("status") in {"queued", "running"}]
 
 
+def recover_interrupted_tasks() -> int:
+    """worker 啟動時呼叫：佇列只由這一個 worker 執行，Redis 裡仍是 running 的工作必定是上次 worker 中途停止留下的。
+    標成 failed，否則資料中心會一直顯示執行中、按鈕鎖住直到紀錄過期（7 天）。"""
+    client = get_redis()
+    if client is None:
+        return 0
+    recovered = 0
+    for task_id in client.lrange(TASK_IDS_KEY, 0, -1):
+        record = _redis_load(client, task_id)
+        if record and record.get("status") == "running":
+            record.update({"status": "failed", "finished_at": _now(), "error": "worker 重新啟動，工作在執行中被中斷；請重新執行"})
+            _redis_save(client, record)
+            recovered += 1
+    return recovered
+
+
 def consume_queue(timeout: int) -> bool:
     """worker 用：BLPOP 一個工作並執行，狀態寫回 Redis；沒有 Redis 或逾時回傳 False。"""
     client = get_redis()

@@ -199,6 +199,16 @@ def run_sources(source_ids: list[str] | None = None, *, triggered_by: str = "man
     return summaries
 
 
+def fail_interrupted_jobs(before: datetime) -> int:
+    """把 before 之前開始、仍是 running 的 crawl_jobs 標成 failed（程序中途停止，永遠不會寫回結果）。
+    worker 啟動時呼叫；若同時有人在另一個程序用 CLI 爬取，該筆也會被標記，重新執行即可。"""
+    result = get_db().crawl_jobs.update_many(
+        {"status": "running", "started_at": {"$lt": before}},
+        {"$set": {"status": "failed", "finished_at": utcnow(), "error": "爬蟲程序在執行中停止，此工作未完成"}},
+    )
+    return result.modified_count
+
+
 def _run_one(config: dict, *, http: PoliteHttpClient, validator: SourceValidator, triggered_by: str, max_items: int | None) -> dict:
     db = get_db()
     source_id = config["id"]

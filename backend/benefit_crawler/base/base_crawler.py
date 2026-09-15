@@ -25,6 +25,9 @@ from .source_validator import SourceValidator, ValidationResult
 log = logging.getLogger(__name__)
 
 
+VIEW_COUNTER_RE = re.compile(r"(點閱次數|點閱人次|點閱數|瀏覽人數|瀏覽人次|瀏覽次數|瀏覽數|點擊次數|點擊數|閱讀次數|觀看次數)\s*[:：]?\s*[\d,]+\s*(?:人次|人|次)?")
+
+
 @dataclass
 class DiscoveredItem:
     url: str
@@ -46,7 +49,9 @@ class RawDocumentData:
     full_html: str = ""  # 完整頁面（寫入 data/raw 檔案，不進 DB）
 
     def content_hash(self) -> str:
+        # 點閱次數、瀏覽人數這類計數每次抓都會變：計算 hash 時忽略，避免內容沒變卻被當成更新而重跑解析與本地 AI（原文照存不動）
         payload = self.raw_text + "\n" + json.dumps(self.structured, ensure_ascii=False, sort_keys=True)
+        payload = VIEW_COUNTER_RE.sub(r"\1", payload)
         return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
