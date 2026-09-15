@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { engine } from "@/lib/assistant";
-import type { AppealDraft, AssistantState, ChatMessage } from "@/lib/assistant";
+import type { AppealDraft, AssistantState, AssistantTurn, ChatMessage } from "@/lib/assistant";
 import { addAppeal, uid } from "@/lib/store";
 import type { Profile } from "@/lib/types";
 
@@ -19,6 +19,7 @@ export default function AssistantWidget({
   const [allowFreeText, setAllowFreeText] = useState(false);
   const [picked, setPicked] = useState<string[]>([]);
   const [draft, setDraft] = useState<AppealDraft | null>(null);
+  const [search, setSearch] = useState<AssistantTurn['search']>();
   const submissionKey = useRef("");
   const [submitError, setSubmitError] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -37,6 +38,7 @@ export default function AssistantWidget({
 
   const applyTurn = (turn: Awaited<ReturnType<typeof engine.start>>) => {
     setState(turn.state);
+    setSearch(turn.search);
     push("assistant", turn.replies);
     setQuickReplies(turn.quickReplies);
     setMultiSelect(turn.multiSelect);
@@ -55,6 +57,7 @@ export default function AssistantWidget({
     setAllowFreeText(false);
     setMessages([]);
     setDraft(null);
+    setSearch(undefined);
     setSubmitted(false);
     submissionKey.current = typeof crypto.randomUUID === "function" ? crypto.randomUUID() : uid("request") + uid("retry");
     setSubmitError("");
@@ -161,13 +164,6 @@ export default function AssistantWidget({
 
       <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
         <p className="text-xs text-ink-400">已回答 {state.turnCount ?? 0} / 9 輪 · {state.completed ? '已整理摘要' : '第 9 輪後自動整理摘要'}{state.candidateCount != null ? ` · 候選 ${state.candidateCount} 筆` : ''}</p>
-        <details className="rounded-lg border border-slate-200 p-3 text-xs">
-          <summary className="cursor-pointer text-brand-600">查看 Schema 與目前資料</summary>
-          <p className="mt-2 text-ink-400">這是本次對話的資料，不會自動修改已建立的身分。未提供的條件維持未知。</p>
-          <h3 className="mt-3 font-medium">目前結構化資料</h3>
-          <pre className="mt-2 max-h-48 overflow-auto whitespace-pre-wrap break-all">{JSON.stringify({ turn_count: state.turnCount ?? 0, max_turns: 9, candidate_count: state.candidateCount ?? null, question_attribute: state.questionAttribute || null, guidance_profile: state.guidanceProfile || {} }, null, 2)}</pre>
-          <details className="mt-3"><summary className="cursor-pointer">API JSON Schema</summary><pre className="mt-2 max-h-48 overflow-auto whitespace-pre-wrap break-all">{state.requestSchema ? JSON.stringify(state.requestSchema, null, 2) : '第一輪回應後載入'}</pre></details>
-        </details>
         {messages.map((m) => (
           <div
             key={m.id}
@@ -185,6 +181,18 @@ export default function AssistantWidget({
           </div>
         ))}
 
+        {search && !busy && !chatError && <section aria-label="補助搜尋結果" className="space-y-2 border-t border-slate-200 pt-3">
+          <h3 className="text-sm font-medium">找到的補助</h3>
+          <p className="text-xs leading-relaxed text-ink-400">搜尋「{search.queries.join('、')}」；以下依目前資料初篩，實際資格與期限請核對來源。</p>
+          {search.items.length === 0 && <p className="text-sm text-ink-600">這次搜尋沒有找到仍可能符合的補助。可以換個關鍵字，例如「幫我找租金補助」。</p>}
+          {search.items.map(item => <article key={item.id} className="rounded-lg border border-slate-200 p-3 text-sm">
+            <a href={`/data-center/${encodeURIComponent(item.id)}`} target="_blank" rel="noreferrer" className="font-medium leading-relaxed text-brand-700 underline underline-offset-2">{item.title}</a>
+            <p className="mt-1 text-xs text-ink-400">{item.status === 'high_match' ? '初步符合' : item.status === 'possible_match' ? '可能符合' : '資料不足，待確認'}{item.source_name ? ` · ${item.source_name}` : ''}</p>
+            {item.missing_conditions.length > 0 && <p className="mt-2 text-xs leading-relaxed text-ink-600">待確認：{item.missing_conditions.join('；')}</p>}
+            {/^https?:\/\//i.test(item.source_url) && <a href={item.source_url} target="_blank" rel="noreferrer" className="mt-2 inline-block text-xs text-brand-600 underline">查看來源</a>}
+          </article>)}
+          {(search.truncated || search.candidate_count > search.items.length) && <p className="text-xs text-ink-400">目前只顯示部分結果，可補充條件或輸入更精確的搜尋關鍵字。</p>}
+        </section>}
         {busy && (
           <div className="flex justify-start">
             <p className="rounded-2xl rounded-bl-sm bg-slate-100 px-3.5 py-2.5 text-sm text-ink-400">

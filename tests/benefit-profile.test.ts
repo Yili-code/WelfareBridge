@@ -3,6 +3,12 @@ import { toBenefitProfile } from "../src/lib/benefit-profile";
 import type { Profile } from "../src/lib/types";
 const base: Profile = { id: "one", nickname: "測試", relation: "self", region: "臺北市", age: null, economy: "不確定", identities: [], needs: [], createdAt: "" };
 describe("welfare questionnaire to eligibility engine", () => {
+ it("carries chosen needs and grouped education without guessing a degree", () => {
+  const result = toBenefitProfile({ ...base, age: 20, screening: { needs: ['就學、學費或獎助學金', '租屋、住宅或居住改善', '求職、失業或職業訓練'], education: ['大學、二專或五專後兩年'] } });
+  expect(result._domains).toEqual(['education', 'housing', 'labor']);
+  expect(result.preferences.enum_candidates).toEqual({ 'education.level': ['university', 'junior_college'] });
+  expect(result.attributes).not.toHaveProperty('education.level');
+ });
  it("does not invent exact age, personal disability, degree, or registered city from ambiguous or legacy input", () => {
   const result = toBenefitProfile({ ...base, screening: { age: ["18～未滿 25 歲"], identity: ["本人或家庭成員持有身心障礙證明"], education: ["碩士班或博士班"] } });
   expect(result.attributes).toEqual({ "applicant.is_student": true });

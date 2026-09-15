@@ -6,7 +6,7 @@ test('assistant sends conversation context and retries without duplicating user 
   await page.route('**/api/assistant', async route => {
     bodies.push(route.request().postDataJSON());
     if (bodies.length === 2) return route.fulfill({ status: 503, json: { detail: '模型暫時離線' } });
-    await route.fulfill({ json: { reply: bodies.length === 1 ? '目前最需要哪方面協助？' : '每月房租大約多少？', quickReplies: [], llm_used: true, turn_count: bodies.length === 1 ? 0 : 1, candidate_count: 17, guidance_profile: { attributes: { 'applicant.age': 22 } }, request_schema: { type: 'object', properties: { messages: { type: 'array' } } } } });
+    await route.fulfill({ json: { reply: bodies.length === 1 ? '目前最需要哪方面協助？' : '每月房租大約多少？', quickReplies: [], llm_used: true, turn_count: bodies.length === 1 ? 0 : 1, candidate_count: 17, guidance_profile: { attributes: { 'applicant.age': 22 } }, search: bodies.length === 1 ? null : { queries: ['租金補助'], searched_count: 1, candidate_count: 1, truncated: false, items: [{ id: 'rent-1', title: '測試租金補助', status: 'possible_match', source_name: '測試機關', source_url: 'https://example.gov.tw/rent', missing_conditions: ['家庭收入'] }] } } });
   });
   await page.goto('/');
   await page.evaluate(() => {
@@ -25,8 +25,10 @@ test('assistant sends conversation context and retries without duplicating user 
   expect(bodies[2].messages).toEqual([{ role: 'assistant', content: '目前最需要哪方面協助？' }, { role: 'user', content: '我失業了，付不起房租' }]);
   await expect(page.getByText('我失業了，付不起房租', { exact: true })).toHaveCount(1);
   await expect(page.getByText(/已回答 1 \/ 9 輪/)).toBeVisible();
-  await page.getByText('查看 Schema 與目前資料', { exact: true }).click();
-  await expect(page.locator('pre').filter({ hasText: 'applicant.age' })).toBeVisible();
-  await page.getByText('API JSON Schema', { exact: true }).click();
-  await expect(page.locator('pre').filter({ hasText: 'properties' })).toBeVisible();
+  await expect(page.getByText('查看 Schema 與目前資料', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('API JSON Schema', { exact: true })).toHaveCount(0);
+  const results = page.getByRole('region', { name: '補助搜尋結果' });
+  await expect(results.getByRole('link', { name: '測試租金補助' })).toHaveAttribute('href', '/data-center/rent-1');
+  await expect(results.getByRole('link', { name: '查看來源' })).toHaveAttribute('href', 'https://example.gov.tw/rent');
+  await expect(results.getByText('待確認：家庭收入')).toBeVisible();
 });

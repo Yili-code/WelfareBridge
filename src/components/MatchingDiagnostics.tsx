@@ -42,7 +42,7 @@ export default function MatchingDiagnostics() {
   {report && <>
    <details className="rounded border p-4"><summary className="cursor-pointer font-medium">檢查問卷原始答案與引擎收到的條件</summary><div className="mt-3 grid gap-4 md:grid-cols-2"><div><h3>問卷快照</h3><pre className="overflow-auto whitespace-pre-wrap text-xs">{snapshot}</pre></div><div><h3>引擎實際條件（沒有的欄位視為未知）</h3><pre className="overflow-auto whitespace-pre-wrap text-xs">{JSON.stringify(report.profile_used, null, 2)}</pre>{report.profile_notes.map(n => <p key={n}>{n}</p>)}</div></div></details>
    <p className="text-sm">找到 {report.total} 筆，顯示 {report.returned} 筆。{report.truncated && "結果超過上限，請輸入更完整的補助名稱。"}</p>
-   {!report.total && <p>資料庫沒有找到這個名称，請縮短關鍵字，或到資料中心確認是否已爬取。</p>}
+   {!report.total && <p>資料庫沒有找到這個名稱，請縮短關鍵字，或到資料中心確認是否已爬取。</p>}
    <p className="text-xs text-ink-400">同組條件是 OR、不同組是 AND。通過資格仍可能因前台只顯示前六筆而看不到；這裡不重現前台名次或 AI 判斷。</p>
    {report.items.map(item => <details key={item.benefit_id} className="rounded-xl border bg-white p-4">
     <summary className="cursor-pointer font-medium">{item.title} · {item.retrieval_exclusions.length ? "候選檢索已排除" : labels[item.status]}</summary>

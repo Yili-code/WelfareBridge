@@ -18,7 +18,6 @@ export interface AppealDraft {
 export interface AssistantState {
   turnCount?: number;
   candidateCount?: number;
-  requestSchema?: Record<string, unknown>;
   completed?: boolean;
   guidanceProfile?: Record<string, unknown>;
   questionAttribute?: string;
@@ -28,6 +27,8 @@ export interface AssistantState {
 }
 
 export interface AssistantTurn {
+  search?: { queries: string[]; searched_count: number; candidate_count: number; truncated: boolean;
+    items: { id: string; title: string; status: string; source_url: string; source_name: string; missing_conditions: string[] }[] };
   state: AssistantState;
   /** 助理這一輪要說的話（可能多則） */
   replies: string[];

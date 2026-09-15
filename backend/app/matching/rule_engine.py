@@ -58,6 +58,18 @@ def evaluate_rule(rule: dict, profile: Profile, registry: Registry | None = None
     if operator not in attribute.allowed_operators:
         return RuleEvaluation("unknown", f"operator {operator} 與屬性型態不相容")
     user_value = profile.value(attribute_id, registry)
+    enum_candidates = profile.preferences.get('enum_candidates')
+    candidates = enum_candidates.get(attribute_id) if isinstance(enum_candidates, dict) else None
+    if user_value is None and attribute.type == 'enum' and isinstance(candidates, list) and candidates:
+        if any(value not in attribute.value_list for value in candidates):
+            return RuleEvaluation('unknown', '教育階段範圍需確認')
+        outcomes = []
+        for value in candidates:
+            possible = Profile.from_dict(profile.to_dict(), registry)
+            possible.set(attribute_id, value)
+            outcomes.append(evaluate_rule(rule, possible, registry).status)
+        status = outcomes[0] if len(set(outcomes)) == 1 else 'unknown'
+        return RuleEvaluation(status, {'match': '已填範圍全部符合此條件', 'not_match': '已填範圍均不符合此條件', 'unknown': '已知大致教育階段，仍需確認確切學制'}[status], candidates)
     if user_value is None or (isinstance(user_value, list) and not user_value and attribute_id != "identity.tags"):
         return RuleEvaluation("unknown", "你尚未提供此資料", None)
     if operator == "exists":
