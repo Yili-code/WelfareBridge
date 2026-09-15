@@ -38,6 +38,23 @@ def test_assistant_calls_shared_search_and_refines_results(db, monkeypatch):
     app = FastAPI()
     app.include_router(assistant.router)
     client = TestClient(app)
+    # A direct search from the opening scope question must return results,
+    # without asking the user to choose a need category again.
+    direct = client.post('/api/assistant', json={
+        'question_attribute': 'guidance.scope',
+        'messages': [{'role': 'user', 'content': '幫我找租金補助'}],
+    }).json()
+    assert direct['search']['queries'] == ['租金補助']
+    assert {r['id'] for r in direct['search']['items']} == {'yes', 'no'}
+    assert direct['question_attribute'] == 'identity.low_income'
+    refined = client.post('/api/assistant', json={
+        'guidance_profile': direct['guidance_profile'],
+        'question_attribute': direct['question_attribute'],
+        'messages': [{'role': 'user', 'content': '是'}],
+    }).json()
+    assert refined['search']['queries'] == ['租金補助']
+    assert [r['id'] for r in refined['search']['items']] == ['yes']
+    seen.clear()
     initial = client.post('/api/assistant', json={'guidance_profile': {'_domains': ['housing']}}).json()
     assert seen[0]['domain'] == 'housing'
     assert initial['search']['candidate_count'] == 2
