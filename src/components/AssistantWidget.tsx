@@ -161,13 +161,6 @@ export default function AssistantWidget({
 
       <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
         <p className="text-xs text-ink-400">已回答 {state.turnCount ?? 0} / 9 輪 · {state.completed ? '已整理摘要' : '第 9 輪後自動整理摘要'}{state.candidateCount != null ? ` · 候選 ${state.candidateCount} 筆` : ''}</p>
-        <details className="rounded-lg border border-slate-200 p-3 text-xs">
-          <summary className="cursor-pointer text-brand-600">查看 Schema 與目前資料</summary>
-          <p className="mt-2 text-ink-400">這是本次對話的資料，不會自動修改已建立的身分。未提供的條件維持未知。</p>
-          <h3 className="mt-3 font-medium">目前結構化資料</h3>
-          <pre className="mt-2 max-h-48 overflow-auto whitespace-pre-wrap break-all">{JSON.stringify({ turn_count: state.turnCount ?? 0, max_turns: 9, candidate_count: state.candidateCount ?? null, question_attribute: state.questionAttribute || null, guidance_profile: state.guidanceProfile || {} }, null, 2)}</pre>
-          <details className="mt-3"><summary className="cursor-pointer">API JSON Schema</summary><pre className="mt-2 max-h-48 overflow-auto whitespace-pre-wrap break-all">{state.requestSchema ? JSON.stringify(state.requestSchema, null, 2) : '第一輪回應後載入'}</pre></details>
-        </details>
         {messages.map((m) => (
           <div
             key={m.id}

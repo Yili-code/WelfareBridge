@@ -5,11 +5,16 @@ from ..registry import get_registry
 
 def guidance(data, latest, target):
     registry = get_registry()
-    scopes = data.get('_domains', [])
+    scopes = list(data.get('_domains', []))
+    scope_skipped = data.get('_scope_skipped', False)
     topics = {'education': ('就學', '學費', '獎學金'), 'housing': ('租屋', '房租', '住宅'), 'labor': ('失業', '求職', '職訓'), 'health': ('醫療', '健保'), 'disability': ('身障', '身心障礙'), 'social_welfare': ('生活費', '育兒', '急難')}
     mentioned = [domain for domain, words in topics.items() if any(word in latest for word in words)]
-    if mentioned:
+    # Eligibility answers must not silently replace the user's chosen needs.
+    if mentioned and (target == 'guidance.scope' or (not scopes and not scope_skipped)):
         scopes = mentioned
+        scope_skipped = False
+    if target == 'guidance.scope' and latest.strip() in {'不確定', '不知道', '跳過', '不想回答'}:
+        scope_skipped = True
     profile = Profile.from_dict(data, registry)
     if latest:
         profile, _, _ = parse_profile_text(latest, profile, registry)
@@ -42,9 +47,10 @@ def guidance(data, latest, target):
     remaining = [i for i in items if i.status != 'not_match']
     plan = plan_questions(profile, items, records, registry=registry, engine=engine, max_questions=1)
     question = (plan['questions'] or [None])[0]
-    if not scopes:
+    if not scopes and not scope_skipped:
         question = {'attribute_id': 'guidance.scope', 'question': '你想先解決哪方面的需要？例如房租、學費、求職、醫療或生活費。', 'reason': '先確定要找的補助類型，才不會問到無關的資格', 'options': [{'label': v, 'value': v} for v in ['房租', '學費', '求職']]}
     output_profile = profile.to_dict()
     output_profile['_domains'] = scopes
+    output_profile['_scope_skipped'] = scope_skipped
     return {"profile": output_profile, "candidate_count": len(remaining), "question": question,
             "matched_count": sum(i.status == 'high_match' for i in remaining), "total": len(records)}

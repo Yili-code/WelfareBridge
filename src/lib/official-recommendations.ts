@@ -12,7 +12,13 @@ const domains: Record<string, string[]> = {
 };
 
 export function officialRecommendations(result: MatchResponse | null, profile: Profile) {
- const relevant = (item: { category: string; domain: string }) => profile.needs.some(need => categories[need]?.includes(item.category) || domains[need]?.includes(item.domain));
+ const adult = profile.age != null && profile.age >= 18;
+ // A child's education savings account is not an adult's current tuition aid.
+ // This is a homepage relevance filter, not a legal eligibility decision.
+ const childEducation = /幼兒園.*(?:就學|學費|收費)|(?:兒童(?:及|與)少年|兒少).*教育.*(?:帳戶|賬戶)/;
+ const relevant = (item: { title?: string; category: string; domain: string }) =>
+  !(adult && childEducation.test(item.title || '')) &&
+  profile.needs.some(need => categories[need]?.includes(item.category) || domains[need]?.includes(item.domain));
  const related = (result?.matches || []).filter(relevant);
  const removed = new Set((result?.ranking?.removed || []).map(item => item.benefit_id));
  const matches = related.filter(item => !removed.has(item.benefit_id) && !item.is_overview && (item.status === 'high_match' || item.status === 'possible_match'));

@@ -52,11 +52,11 @@ cd backend
 ```
 
 來源設定在 `backend/benefit_crawler/config/sources.yaml`。初次啟動只在空資料庫載入既有官方 seed；不會自動全站爬取。可透過資料中心啟動工作。
-資格媒合可在 `.env` 設定 `LLM_PROVIDER=none` 使用純規則模式。資源引導助理則透過 `/api/assistant` 呼叫 Ollama，每輪帶入目前身分與對話紀錄，生成下一個問題與快捷選項；模型離線時顯示錯誤並提供重試，不再使用固定腳本代答。可點「整理需求登記」產生摘要，確認後才送出。切換或修改身分會重設助理對話，避免混用不同人的條件。
+資格媒合可在 `.env` 設定 `LLM_PROVIDER=none` 使用純規則模式。資源引導助理透過 `/api/assistant` 帶入目前身分、已選需求與對話紀錄，由候選補助的資格規則選出追問，快捷選項最多 4 個，其餘選項可直接輸入。Ollama 協助整理需求摘要；模型離線時顯示錯誤並提供重試。可點「整理需求登記」產生摘要，確認後才送出。切換或修改身分會重設助理對話，避免混用不同人的條件。
 
-助理使用後端的 `LLM_PROVIDER=ollama`、`LLM_MODEL` 與 `OLLAMA_BASE_URL` 設定。請啟動主機 Ollama 並安裝設定中完全相同名稱的模型，Docker 仍透過 `host.docker.internal:11434` 連線。對話每則最多 2000 字，約 20 輪後需重新開始。此助理負責釐清需求，尚未直接呼叫補助搜尋工具，完整資格比對請使用媒合頁面。
+助理使用後端的 `LLM_PROVIDER=ollama`、`LLM_MODEL` 與 `OLLAMA_BASE_URL` 設定。請啟動主機 Ollama 並安裝設定中完全相同名稱的模型，Docker 仍透過 `host.docker.internal:11434` 連線。對話每則最多 2000 字，最多回答 9 輪，第 9 輪後自動整理摘要。助理會依資料庫候選補助追問，完整資格比對請使用媒合頁面。
 
-目前本機僅安裝 `qwen2.5:0.5b`，原後端設定的 `qwen2.5:7b` 尚未安裝。系統會精確比對模型標籤，缺少指定模型時回到規則模式。若要啟用原設定的 AI 抽取，需先自行安裝該模型；未將較小模型冒充成 7b。
+預設模型為 `qwen2.5:7b`。實際安裝狀態請用 `ollama list` 確認；系統精確比對 `LLM_MODEL` 標籤，不會以較小模型替代。缺少指定模型時，資格媒合使用規則模式，資源引導助理則提示模型尚未就緒。
 
 ## Docker
 
@@ -136,7 +136,7 @@ npm run build
 npm run lint
 npm test
 npm run test:backend
-# 网站與後端啟動後：
+# 網站與後端啟動後：
 npm run test:e2e
 ```
 

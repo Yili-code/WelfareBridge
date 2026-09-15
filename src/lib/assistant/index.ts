@@ -13,7 +13,7 @@ async function turn(state: AssistantState, profile: Profile | null, userText?: s
  if (typeof data?.reply !== "string" || !data.reply.trim() || !Array.isArray(data.quickReplies) || !data.quickReplies.every((q: unknown) => typeof q === "string")) throw new Error("助理回應格式不完整，請重試。");
  const draft = typeof data.summary === "string" && data.summary.trim() && typeof data.mainRequest === "string" && data.mainRequest.trim()
   ? { summary: data.summary, mainRequest: data.mainRequest, region: profile?.region || "", identities: profile?.identities || [], age: profile?.age ?? null } : undefined;
- return { state: { step: state.step + 1, answers: {}, turnCount: data.turn_count, candidateCount: data.candidate_count, requestSchema: data.request_schema, completed: data.completed, guidanceProfile: data.guidance_profile, questionAttribute: data.question_attribute, history: [...history, { role: "assistant", content: data.reply }] }, replies: [data.reply], quickReplies: data.quickReplies, multiSelect: false, allowFreeText: !data.completed, draft };
+ return { state: { step: state.step + 1, answers: {}, turnCount: data.turn_count, candidateCount: data.candidate_count, completed: data.completed, guidanceProfile: data.guidance_profile, questionAttribute: data.question_attribute, history: [...history, { role: "assistant", content: data.reply }] }, replies: [data.reply], quickReplies: data.quickReplies, multiSelect: false, allowFreeText: !data.completed, draft };
 }
 export const engine: AssistantEngine = {
  start: profile => turn({ step: 0, answers: {} }, profile),

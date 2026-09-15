@@ -25,8 +25,6 @@ test('assistant sends conversation context and retries without duplicating user 
   expect(bodies[2].messages).toEqual([{ role: 'assistant', content: '目前最需要哪方面協助？' }, { role: 'user', content: '我失業了，付不起房租' }]);
   await expect(page.getByText('我失業了，付不起房租', { exact: true })).toHaveCount(1);
   await expect(page.getByText(/已回答 1 \/ 9 輪/)).toBeVisible();
-  await page.getByText('查看 Schema 與目前資料', { exact: true }).click();
-  await expect(page.locator('pre').filter({ hasText: 'applicant.age' })).toBeVisible();
-  await page.getByText('API JSON Schema', { exact: true }).click();
-  await expect(page.locator('pre').filter({ hasText: 'properties' })).toBeVisible();
+  await expect(page.getByText('查看 Schema 與目前資料', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('API JSON Schema', { exact: true })).toHaveCount(0);
 });
