@@ -1,0 +1,49 @@
+{
+  "nickname": "我自己",
+  "relation": "self",
+  "region": "臺北市",
+  "currentRegion": "臺北市",
+  "age": null,
+  "screening": {
+    "needs": [
+      "就學、學費或獎助學金"
+    ],
+    "age": [
+      "18～未滿 25 歲"
+    ],
+    "residence": [
+      "戶籍與居住地在同一縣市，設籍未滿半年"
+    ],
+    "education": [
+      "目前未在學"
+    ],
+    "economy": [
+      "已取得低收入戶資格"
+    ],
+    "identity": [
+      "原住民"
+    ],
+    "employment": [
+      "受僱工作中，包含兼職"
+    ],
+    "housing": [
+      "租屋，包含整戶或分租"
+    ],
+    "support": [
+      "懷孕、育兒，或扶養未成年子女"
+    ],
+    "benefits": [
+      "學費減免、助學金或獎學金"
+    ]
+  },
+  "identities": [
+    "租屋族",
+    "育兒家庭"
+  ],
+  "needs": [
+    "就學與學費"
+  ],
+  "economy": "低收入戶",
+  "id": "p_34a7ova4ufw",
+  "createdAt": "2026-09-15T09:05:12.476Z"
+}
