@@ -1,0 +1,317 @@
+/* 福利補助導覽：依 welfare-ui4 的設計（粗黑框＋硬陰影＋芥末黃／藍／薄荷）。
+   全部限定在 .wui 底下，不影響後台與資料中心頁面。長者模式靠 html 字級放大（見 WelfareApp）。 */
+.wui {
+  --bg: #F6F1E4; --paper: #FFFDF6; --surface-2: #F1EADA; --surface-3: #FBF7EC;
+  --ink: #141210; --ink-2: #3D3833; --ink-3: #6E665C;
+  --mustard: #F5B81E; --mustard-soft: #FDEBB9; --blue: #2C46D8; --blue-soft: #D9DEFA; --brand-dark: #1E32A8;
+  --mint: #8CE0BE; --mint-soft: #DDF6EC; --red: #D8452F; --red-soft: #FBDCD6;
+  --bw: 3px; --hard: 5px 5px 0 var(--ink); --hard-sm: 3px 3px 0 var(--ink); --hard-lg: 8px 8px 0 var(--ink);
+  --maxw: 1240px; --head: 150px;
+  min-height: 100dvh; background: var(--bg); color: var(--ink); position: relative; isolation: isolate;
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  line-height: 1.65; -webkit-font-smoothing: antialiased;
+}
+.wui *, .wui *::before, .wui *::after { box-sizing: border-box }
+.wui button, .wui input, .wui select, .wui textarea { font: inherit; color: inherit }
+.wui a { color: var(--ink); text-decoration-thickness: 2px; text-underline-offset: 3px }
+.wui :focus-visible { outline: 3px solid var(--blue); outline-offset: 3px }
+.wui .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap }
+.wui b, .wui strong { font-weight: 800 }
+.wui::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background-image: radial-gradient(var(--surface-2) 1.2px, transparent 1.2px); background-size: 22px 22px
+}
+.wui h2, .wui h3 { letter-spacing: .01em }
+
+/* ---------- 頁首 ---------- */
+.wui .top { background: var(--paper); border-bottom: var(--bw) solid var(--ink); position: sticky; top: 0; z-index: 30 }
+.wui .top.scrolled { box-shadow: 0 6px 0 rgba(20,18,16,.12) }
+.wui .top.scrolled .top-in { padding-top: .6rem; padding-bottom: .1rem }
+.wui .top.scrolled .top-in h1 { font-size: 1.35rem }
+.wui .top.scrolled .top-in .sub { opacity: 0; max-height: 0; margin: 0; padding-top: 0; padding-bottom: 0; border-width: 0; box-shadow: none; overflow: hidden }
+.wui .top-in, .wui .top-in h1 { transition: padding .16s ease, font-size .16s ease }
+.wui .top-in .sub { max-height: 3rem; transition: opacity .16s ease, max-height .16s ease, margin .16s ease, padding .16s ease }
+.wui .top-in { max-width: var(--maxw); margin: 0 auto; padding: 1.5rem 1rem .5rem; position: relative; text-align: center }
+.wui .top-in h1 { margin: 0; font-size: 2.15rem; font-weight: 900; letter-spacing: .02em; line-height: 1.15 }
+.wui .top-in .sub {
+  display: inline-block; margin: .5rem 0 0; font-size: .82rem; font-weight: 700; letter-spacing: .16em;
+  background: var(--mustard); border: 2px solid var(--ink); padding: .1rem .7rem; box-shadow: 3px 3px 0 var(--ink)
+}
+.wui .top-right { position: absolute; top: 1rem; right: 1rem; display: flex; gap: .7rem; align-items: center }
+@media (max-width: 860px) {
+  .wui .top-in { text-align: left; padding-top: 1rem }
+  .wui .top-in h1 { font-size: 1.7rem }
+  .wui .top-right { position: static; justify-content: flex-start; margin-top: .9rem }
+  /* 手機捲動後頁首只留標題與分頁，不佔掉半個螢幕 */
+  .wui .top.scrolled .top-right { display: none }
+}
+.wui .switch { position: relative; display: flex; background: var(--paper); border: var(--bw) solid var(--ink); box-shadow: var(--hard-sm); padding: 3px; isolation: isolate }
+.wui .switch .thumb { position: absolute; z-index: -1; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px); background: var(--blue); transition: transform .34s cubic-bezier(.3,1.5,.5,1) }
+.wui .switch[data-on="elder"] .thumb { transform: translateX(100%) }
+.wui .switch button { border: 0; background: transparent; padding: .5rem 1rem; cursor: pointer; color: var(--ink); font-size: .88rem; font-weight: 700; transition: color .25s; white-space: nowrap; flex: 1 0 auto; min-width: 6.6em }
+.wui .switch button[aria-pressed="true"] { color: #fff; font-weight: 900 }
+
+.wui .tabs { max-width: var(--maxw); margin: 0 auto; padding: 0 1rem; display: flex; gap: .5rem; overflow-x: auto; overflow-y: hidden; scrollbar-width: none }
+.wui .tabs::-webkit-scrollbar { display: none }
+.wui .tabs button {
+  border: var(--bw) solid var(--ink); border-bottom: 0; background: var(--surface-2);
+  padding: .65rem 1.05rem; margin-bottom: calc(var(--bw) * -1); cursor: pointer; font-size: .96rem; font-weight: 800;
+  color: var(--ink); white-space: nowrap; position: relative
+}
+.wui .tabs button:hover { background: var(--mint-soft) }
+.wui .tabs button[aria-selected="true"] { background: var(--mustard) }
+.wui .tabs .dot { display: inline-block; margin-left: .4rem; min-width: 1.4rem; padding: 0 .3rem; font-size: .74rem; line-height: 1.35rem; background: var(--ink); color: var(--mustard); text-align: center }
+
+.wui main { max-width: var(--maxw); margin: 0 auto; padding: 1.6rem 1rem 4rem }
+
+/* ---------- 按鈕、籤條 ---------- */
+.wui .btn { border: var(--bw) solid var(--ink); background: var(--blue); color: #fff; padding: .72rem 1.25rem; cursor: pointer; font-weight: 800; box-shadow: var(--hard-sm); letter-spacing: .02em; text-decoration: none; display: inline-block; text-align: center }
+.wui .btn:hover { background: var(--brand-dark) }
+.wui .btn:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink) }
+.wui .btn.sec { background: var(--paper); color: var(--ink) }
+.wui .btn.sec:hover { background: var(--mustard) }
+.wui .btn.sm { padding: .48rem .9rem; font-size: .87rem }
+.wui .btn.block { width: 100% }
+.wui .btn[disabled] { opacity: .5; cursor: not-allowed; box-shadow: none; transform: none }
+.wui .chip { border: 2px solid var(--ink); background: var(--paper); padding: .36rem .85rem; cursor: pointer; font-size: .86rem; font-weight: 700; box-shadow: 2px 2px 0 var(--ink) }
+.wui .chip:hover { background: var(--mustard-soft) }
+.wui .chip:active { transform: translate(2px,2px); box-shadow: none }
+.wui .chip[aria-pressed="true"] { background: var(--blue); color: #fff }
+.wui .chip[disabled] { opacity: .45; cursor: not-allowed; box-shadow: none }
+.wui .tag { font-size: .76rem; font-weight: 800; padding: .1rem .55rem; background: var(--paper); color: var(--ink); border: 2px solid var(--ink) }
+.wui .tag.svc { background: var(--blue); color: #fff }
+.wui .tag.aud { background: var(--mint) }
+.wui .badge { font-size: .78rem; font-weight: 900; padding: .15rem .6rem; white-space: nowrap; flex: none; border: 2px solid var(--ink) }
+.wui .badge.yes { background: var(--mint) }
+.wui .badge.maybe { background: var(--mustard) }
+.wui .badge.no { background: var(--red); color: #fff }
+.wui .badge.none { background: var(--surface-2) }
+.wui .badge.info { background: var(--blue); color: #fff }
+
+/* ---------- 搜尋列 ---------- */
+.wui .hero { background: var(--mint); border: var(--bw) solid var(--ink); box-shadow: var(--hard); padding: 1.1rem; margin-bottom: 1.4rem }
+.wui .searchbar { display: flex; gap: .7rem; flex-wrap: wrap }
+.wui .searchbox { flex: 1 1 320px; position: relative; display: flex; align-items: center }
+.wui .searchbox svg { position: absolute; left: .9rem; color: var(--ink) }
+.wui .searchbox input { width: 100%; padding: .85rem 2.6rem .85rem 2.9rem; border: var(--bw) solid var(--ink); background: var(--paper); font-weight: 600; box-shadow: var(--hard-sm) }
+.wui .searchbox input::placeholder { color: var(--ink-3); font-weight: 500 }
+.wui .searchbox .clear { position: absolute; right: .55rem; border: 0; background: transparent; cursor: pointer; font-size: 1.1rem; padding: .2rem .4rem }
+.wui .quick { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; margin-top: .9rem }
+.wui .quick .lab { font-size: .76rem; font-weight: 800; letter-spacing: .14em }
+.wui .profile-line { margin-top: .9rem; font-size: .88rem; font-weight: 700 }
+.wui .profile-line button { border: 0; background: none; padding: 0; font-weight: 800; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; cursor: pointer }
+
+.wui .layout { display: grid; grid-template-columns: 290px 1fr; gap: 1.5rem; align-items: start }
+@media (max-width: 900px) { .wui .layout { grid-template-columns: 1fr } .wui .layout > aside { order: 2 } }
+.wui .filters { background: var(--paper); border: var(--bw) solid var(--ink); box-shadow: var(--hard); padding: 1rem 1.1rem 1.2rem; position: sticky; top: calc(var(--head) + 1rem); max-height: calc(100vh - var(--head) - 2rem); overflow: auto }
+@media (max-width: 900px) { .wui .filters { position: static; max-height: none } }
+.wui .filters h2 { font-size: .82rem; margin: 0 0 .2rem; letter-spacing: .16em; font-weight: 900 }
+.wui .fgroup { border-top: 2px solid var(--ink); padding-top: .7rem; margin-top: .85rem }
+.wui .fgroup h3 { font-size: .88rem; margin: 0 0 .5rem; font-weight: 900 }
+.wui .fgroup label { display: flex; gap: .6rem; align-items: center; padding: .24rem 0; cursor: pointer; font-size: .93rem; font-weight: 600 }
+.wui .fgroup input { width: 1.15rem; height: 1.15rem; accent-color: var(--blue); flex: none }
+.wui .fgroup .cnt { margin-left: auto; color: var(--ink); font-size: .76rem; font-weight: 800; background: var(--surface-2); border: 2px solid var(--ink); padding: 0 .35rem }
+.wui .fgroup .more { border: 0; background: none; padding: .3rem 0 0; font-size: .85rem; font-weight: 800; cursor: pointer; text-decoration: underline; text-underline-offset: 3px }
+.wui .filters .reset { width: 100%; margin-top: 1.1rem }
+
+.wui .resbar { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; margin-bottom: 1rem }
+.wui .resbar .count { font-size: .95rem; font-weight: 700 }
+.wui .resbar .count b { font-size: 1.6rem; font-weight: 900; background: var(--mustard); border: 2px solid var(--ink); padding: 0 .4rem; box-shadow: 2px 2px 0 var(--ink) }
+.wui .resbar select { margin-left: auto; padding: .5rem .75rem; border: var(--bw) solid var(--ink); background: var(--paper); font-weight: 700; box-shadow: var(--hard-sm) }
+
+/* ---------- 結果卡片 ---------- */
+.wui .cards { display: grid; gap: 1.3rem; counter-reset: card }
+.wui .card { background: var(--paper); border: var(--bw) solid var(--ink); box-shadow: var(--hard); display: grid; grid-template-columns: 1fr 230px; cursor: pointer; transition: transform .12s ease, box-shadow .12s ease; counter-increment: card; text-align: left; padding: 0; width: 100% }
+.wui .card:hover { transform: translate(-3px,-3px); box-shadow: var(--hard-lg) }
+.wui .card:active { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--ink) }
+.wui .card-main { padding: 1.1rem 1.2rem }
+.wui .card-head { display: flex; gap: .7rem; align-items: flex-start }
+.wui .card-head::before { content: counter(card, decimal-leading-zero); font-size: .9rem; font-weight: 900; letter-spacing: .04em; background: var(--ink); color: var(--mustard); padding: .05rem .45rem; flex: none; margin-top: .28rem }
+.wui .card-head h3 { margin: 0; font-size: 1.28rem; font-weight: 900; line-height: 1.35; flex: 1 }
+.wui .meta { display: flex; gap: .4rem; flex-wrap: wrap; margin: .6rem 0 .7rem }
+.wui .points { list-style: none; margin: 0; padding: 0; display: grid; gap: .35rem }
+.wui .points li { font-size: .95rem; color: var(--ink-2); padding-left: 1.5rem; position: relative; line-height: 1.55; font-weight: 600 }
+.wui .points li::before { content: "▍"; position: absolute; left: .1rem; top: 0; color: var(--blue) }
+.wui .card-agency { margin-top: .85rem; font-size: .78rem; font-weight: 700; letter-spacing: .1em; color: var(--ink-3) }
+.wui .card-side { border-left: var(--bw) solid var(--ink); background: var(--surface-2); padding: 1.1rem .9rem; display: flex; flex-direction: column; justify-content: center; gap: .7rem; text-align: center }
+.wui .card-side.has-price { background: var(--mustard) }
+.wui .card-side.has-soft { background: var(--mint-soft) }
+.wui .price .unit { display: block; font-size: .72rem; font-weight: 800; letter-spacing: .12em }
+.wui .price b { display: block; font-size: 1.55rem; font-weight: 900; line-height: 1.2; letter-spacing: -.01em }
+.wui .price.soft b { font-size: 1.15rem }
+.wui .price small { display: block; font-size: .76rem; font-weight: 700; margin-top: .25rem }
+.wui .card .needs { margin-top: .6rem; font-size: .84rem; font-weight: 700; color: var(--ink-2); background: var(--mustard-soft); border: 2px solid var(--ink); padding: .25rem .55rem; display: inline-block }
+@media (max-width: 640px) {
+  .wui .card { grid-template-columns: 1fr }
+  .wui .card-side { border-left: 0; border-top: var(--bw) solid var(--ink); flex-direction: row; justify-content: space-between; align-items: center; text-align: left }
+}
+.wui .empty { background: var(--paper); border: var(--bw) dashed var(--ink); padding: 2.4rem 1.2rem; text-align: center; font-weight: 600 }
+.wui .empty h3 { margin: .2rem 0 .5rem; font-size: 1.3rem; font-weight: 900 }
+.wui .loadmore { display: flex; justify-content: center; margin-top: 1.4rem }
+
+/* ---------- 詳情抽屜 ---------- */
+.wui .scrim { position: fixed; inset: 0; background: rgba(20,18,16,.45); z-index: 40; opacity: 0; pointer-events: none; transition: opacity .18s }
+.wui .scrim.on { opacity: 1; pointer-events: auto }
+.wui .drawer { position: fixed; top: 0; right: 0; height: 100%; width: min(720px,100%); background: var(--paper); z-index: 50; border-left: var(--bw) solid var(--ink); transform: translateX(100%); transition: transform .26s cubic-bezier(.3,1,.4,1); display: flex; flex-direction: column; visibility: hidden }
+.wui .drawer.on { transform: none; visibility: visible }
+.wui .drawer-head { padding: 1rem 1.2rem; border-bottom: var(--bw) solid var(--ink); display: flex; gap: .8rem; align-items: flex-start; background: var(--mustard) }
+.wui .drawer-head h2 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; flex: 1 }
+.wui .x { border: var(--bw) solid var(--ink); background: var(--paper); width: 2.4rem; height: 2.4rem; cursor: pointer; font-size: 1.1rem; font-weight: 900; flex: none; box-shadow: 2px 2px 0 var(--ink) }
+.wui .x:active { transform: translate(2px,2px); box-shadow: none }
+.wui .drawer-body { overflow: auto; padding: 1.2rem 1.2rem 3rem; flex: 1 }
+.wui .sec { margin-bottom: 1.5rem }
+.wui .sec > h3 { font-size: .84rem; margin: 0 0 .6rem; font-weight: 900; letter-spacing: .16em; display: inline-block; background: var(--ink); color: var(--paper); padding: .12rem .6rem }
+.wui .sec p { margin: 0; white-space: pre-wrap; color: var(--ink-2); font-weight: 500 }
+.wui .sec .none { color: var(--ink-3); font-style: italic }
+.wui .lead { font-size: .82rem; font-weight: 900; letter-spacing: .08em; margin: .8rem 0 .35rem; color: var(--ink) }
+.wui .tick { list-style: none; margin: 0; padding: 0; display: grid; gap: .4rem }
+.wui .tick li { padding-left: 1.6rem; position: relative; color: var(--ink-2); font-weight: 600 }
+.wui .tick li::before { content: "✓"; position: absolute; left: .1rem; font-weight: 900; color: var(--ink); background: var(--mint); padding: 0 .2rem; line-height: 1.35 }
+.wui .tick.warn li::before { content: "!"; background: var(--mustard) }
+.wui .tick.plain li::before { content: "•"; background: none }
+.wui .pricebox { display: flex; align-items: center; gap: 1rem; background: var(--mustard); border: var(--bw) solid var(--ink); box-shadow: var(--hard-sm); padding: .9rem 1rem; flex-wrap: wrap }
+.wui .pricebox .unit { font-size: .74rem; font-weight: 800; letter-spacing: .12em; display: block }
+.wui .pricebox b { font-size: 1.8rem; font-weight: 900; display: block; line-height: 1.25 }
+.wui .pricebox small { font-weight: 700 }
+.wui .kv { display: grid; grid-template-columns: auto 1fr; gap: .4rem 1rem; font-size: .93rem; margin: 0; font-weight: 600 }
+.wui .kv dt { color: var(--ink-3); font-weight: 800; font-size: .82rem; letter-spacing: .06em }
+.wui .kv dd { margin: 0 }
+.wui .matchbox { border: var(--bw) solid var(--ink); padding: .9rem 1rem; background: var(--blue-soft); box-shadow: var(--hard-sm) }
+.wui .matchbox p { margin: .2rem 0 0 }
+.wui .reasons { list-style: none; margin: .7rem 0 0; padding: 0; display: grid; gap: .35rem }
+.wui .reasons li { display: flex; gap: .5rem; align-items: flex-start; color: var(--ink-2); font-size: .93rem; font-weight: 600 }
+.wui .reasons .ic { flex: none; width: 1.35rem; height: 1.35rem; border: 2px solid var(--ink); display: inline-flex; align-items: center; justify-content: center; font-size: .78rem; font-weight: 900; margin-top: .12rem }
+.wui .reasons .satisfied .ic { background: var(--mint) }
+.wui .reasons .unknown .ic, .wui .reasons .unsure .ic { background: var(--mustard) }
+.wui .reasons .violated .ic { background: var(--red); color: #fff }
+.wui .raw { margin-top: .8rem; border: 2px solid var(--ink); background: var(--surface-2) }
+.wui .raw summary { cursor: pointer; padding: .5rem .8rem; font-size: .85rem; font-weight: 800 }
+.wui .raw ul { margin: 0; padding: 0 .8rem .8rem 2rem; font-size: .88rem; color: var(--ink-2) }
+.wui .att { display: flex; gap: .6rem; align-items: center; border: 2px solid var(--ink); margin-bottom: .5rem; background: var(--paper); box-shadow: 2px 2px 0 var(--ink); padding: .55rem .8rem; font-weight: 700; text-decoration: none }
+.wui .att:hover { background: var(--mustard-soft) }
+.wui .att .file { font-size: .72rem; font-weight: 800; margin-left: auto; background: var(--surface-2); border: 2px solid var(--ink); padding: 0 .35rem }
+.wui .drawer-foot { border-top: var(--bw) solid var(--ink); padding: .9rem 1.2rem; display: flex; gap: .7rem; flex-wrap: wrap; background: var(--surface-2) }
+
+/* ---------- 資料卡 ---------- */
+.wui .grid2 { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 1.3rem; align-items: start }
+.wui .grid2.even { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) }
+@media (max-width: 900px) { .wui .grid2 { grid-template-columns: 1fr } }
+.wui .box { background: var(--paper); border: var(--bw) solid var(--ink); box-shadow: var(--hard); padding: 1.2rem }
+.wui .box > h2 { margin: 0 0 .3rem; font-size: 1.3rem; font-weight: 900 }
+.wui .box h3 { margin: 1rem 0 .5rem; font-size: 1rem; font-weight: 900 }
+.wui .hint { margin: 0 0 1.1rem; color: var(--ink-3); font-size: .87rem; font-weight: 600 }
+.wui .field { margin-bottom: 1rem }
+.wui .field > label, .wui .field > .flabel { display: block; font-size: .8rem; margin-bottom: .35rem; font-weight: 900; letter-spacing: .1em }
+.wui .field input, .wui .field select, .wui .field textarea { width: 100%; padding: .65rem .8rem; border: var(--bw) solid var(--ink); background: var(--paper); font-weight: 600 }
+.wui .field input:focus, .wui .field select:focus, .wui .field textarea:focus { box-shadow: var(--hard-sm) }
+.wui .field textarea { min-height: 6rem; resize: vertical }
+.wui .field .why { margin: -.15rem 0 .45rem; font-size: .8rem; color: var(--ink-3); font-weight: 600 }
+.wui .field .err { margin-top: .35rem; font-size: .85rem; font-weight: 800; color: #9C2B18 }
+.wui .row2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: .8rem }
+.wui .checks { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: .45rem }
+.wui .checks label { display: flex; gap: .55rem; align-items: center; padding: .5rem .65rem; border: 2px solid var(--ink); cursor: pointer; font-size: .92rem; font-weight: 700; background: var(--paper); line-height: 1.4 }
+.wui .checks label:has(input:checked) { background: var(--mint); box-shadow: 2px 2px 0 var(--ink) }
+.wui .checks input { width: 1.1rem; height: 1.1rem; accent-color: var(--blue); flex: none; margin: 0 }
+.wui .actions { display: flex; gap: .7rem; flex-wrap: wrap; margin-top: .5rem; align-items: center }
+.wui .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: .7rem; margin-bottom: 1.2rem }
+.wui .stat { border: var(--bw) solid var(--ink); padding: .7rem; text-align: center; background: var(--paper); box-shadow: var(--hard-sm) }
+.wui .stat b { display: block; font-size: 1.8rem; font-weight: 900; line-height: 1.15 }
+.wui .stat span { font-size: .74rem; font-weight: 800; letter-spacing: .06em }
+.wui .stat.yes { background: var(--mint) }
+.wui .stat.maybe { background: var(--mustard) }
+.wui .stat.no { background: var(--red-soft) }
+.wui .reclist { display: grid; gap: .6rem }
+.wui .rec { border: 2px solid var(--ink); padding: .7rem .85rem; background: var(--paper); cursor: pointer; text-align: left; width: 100%; font-weight: 700; display: flex; gap: .6rem; align-items: center; box-shadow: 2px 2px 0 var(--ink) }
+.wui .rec:hover { background: var(--mustard-soft) }
+.wui .rec:active { transform: translate(2px,2px); box-shadow: none }
+.wui .rec > .rec-main { flex: 1; min-width: 0 }
+.wui .rec small { display: block; font-size: .8rem; font-weight: 600; color: var(--ink-3) }
+.wui .rec > .tag { flex: none }
+.wui .saved { font-size: .86rem; font-weight: 700; background: var(--mint); border: 2px solid var(--ink); padding: .55rem .75rem; margin-top: .9rem; box-shadow: 2px 2px 0 var(--ink) }
+.wui .people { display: flex; gap: .6rem; flex-wrap: wrap; align-items: center; margin-bottom: 1.3rem }
+.wui .people .lab { font-size: .8rem; font-weight: 900; letter-spacing: .12em }
+.wui .person { display: inline-flex; align-items: stretch; border: var(--bw) solid var(--ink); background: var(--paper); box-shadow: var(--hard-sm) }
+.wui .person > button { border: 0; background: none; padding: .45rem .85rem; font-weight: 800; cursor: pointer }
+.wui .person[aria-current="true"] { background: var(--mustard) }
+.wui .person .del { border-left: 2px solid var(--ink); padding: .45rem .55rem; font-weight: 900 }
+.wui .learned { display: grid; gap: .5rem; margin: 0; padding: 0; list-style: none }
+.wui .learned li { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr) auto; gap: .5rem; align-items: center; border: 2px solid var(--ink); background: var(--blue-soft); padding: .45rem .6rem }
+.wui .learned .name { font-weight: 800; font-size: .9rem }
+.wui .learned .name small { display: block; font-size: .76rem; font-weight: 600; color: var(--ink-3) }
+.wui .learned select, .wui .learned input { width: 100%; border: 2px solid var(--ink); background: var(--paper); padding: .35rem .5rem; font-weight: 700 }
+.wui .learned .rm { border: 2px solid var(--ink); background: var(--paper); font-weight: 900; padding: .3rem .55rem; cursor: pointer }
+@media (max-width: 560px) { .wui .learned li { grid-template-columns: 1fr auto } .wui .learned li > :nth-child(2) { grid-column: 1 / -1; grid-row: 2 } }
+
+/* ---------- 訴求專區 ---------- */
+.wui .flow { display: grid; grid-template-columns: repeat(3,1fr); gap: .8rem; margin-bottom: 1.3rem }
+@media (max-width: 700px) { .wui .flow { grid-template-columns: 1fr } .wui .stats { grid-template-columns: 1fr } }
+.wui .flowbox { border: var(--bw) solid var(--ink); padding: .85rem; background: var(--paper); box-shadow: var(--hard-sm) }
+.wui .flowbox:nth-child(1) { background: var(--mustard-soft) }
+.wui .flowbox:nth-child(2) { background: var(--blue-soft) }
+.wui .flowbox:nth-child(3) { background: var(--mint-soft) }
+.wui .flowbox .h { display: flex; align-items: center; gap: .5rem; font-weight: 900; font-size: 1rem }
+.wui .flowbox .n { background: var(--ink); color: var(--paper); padding: 0 .45rem; font-size: .82rem; font-weight: 800 }
+.wui .flowbox p { margin: .4rem 0 0; font-size: .82rem; font-weight: 600; color: var(--ink-2) }
+.wui .dcard { border: var(--bw) solid var(--ink); padding: 1rem 1.1rem; background: var(--paper); box-shadow: var(--hard); margin-bottom: 1rem }
+.wui .dcard .dtop { display: flex; gap: .6rem; align-items: flex-start }
+.wui .dcard h3 { margin: 0 0 .3rem; font-size: 1.1rem; font-weight: 900; flex: 1 }
+.wui .dcard p { margin: .35rem 0; color: var(--ink-2); font-size: .93rem; font-weight: 600 }
+.wui .dfoot { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; margin-top: .8rem }
+.wui .bar { height: .75rem; background: var(--paper); overflow: hidden; margin-top: .6rem; border: 2px solid var(--ink) }
+.wui .bar i { display: block; height: 100% ; background: var(--blue) }
+.wui .support { border: 2px solid var(--ink); background: var(--mustard); color: var(--ink); padding: .42rem .9rem; cursor: pointer; font-weight: 800; font-size: .87rem; box-shadow: 2px 2px 0 var(--ink) }
+.wui .support:active { transform: translate(2px,2px); box-shadow: none }
+.wui .support[disabled] { opacity: .5; cursor: default; box-shadow: none }
+.wui .notice { background: var(--blue-soft); border: var(--bw) solid var(--ink); box-shadow: var(--hard-sm); padding: .85rem 1rem; font-size: .9rem; font-weight: 600; margin-bottom: 1.3rem }
+.wui .notice.warn { background: var(--mustard-soft) }
+.wui .alert { background: var(--red-soft); border: var(--bw) solid var(--ink); padding: .85rem 1rem; font-weight: 700; margin-bottom: 1rem }
+
+.wui .foot { max-width: var(--maxw); margin: 0 auto; padding: 1.6rem 1rem 3rem; color: var(--ink-2); font-size: .83rem; font-weight: 600; border-top: var(--bw) solid var(--ink) }
+.wui .foot p { margin: .2rem 0 }
+.wui .toast { position: fixed; left: 50%; bottom: 1.6rem; transform: translate(-50%,1.5rem); background: var(--ink); color: var(--mustard); padding: .7rem 1.2rem; border: 2px solid var(--ink); z-index: 70; opacity: 0; transition: .2s; pointer-events: none; font-size: .93rem; font-weight: 800; max-width: calc(100vw - 2rem) }
+.wui .toast.on { opacity: 1; transform: translate(-50%,0) }
+.wui .loading { font-weight: 800; padding: 1rem 0 }
+
+/* ---------- 聊天小幫手 ---------- */
+.wui .chat-open { position: fixed; right: 1.4rem; bottom: 1.4rem; z-index: 45; border: var(--bw) solid var(--ink); background: var(--blue); color: #fff; font-weight: 900; padding: .8rem 1.1rem; box-shadow: var(--hard); cursor: pointer }
+.wui .chat-open:hover { background: var(--brand-dark) }
+.wui .chat { position: fixed; right: 1.4rem; bottom: 1.4rem; z-index: 45; width: min(26rem, calc(100vw - 2rem)); height: min(40rem, calc(100dvh - 2rem)); display: flex; flex-direction: column; background: var(--paper); border: var(--bw) solid var(--ink); box-shadow: var(--hard-lg) }
+.wui .chat-head { display: flex; gap: .6rem; align-items: center; padding: .7rem .8rem; background: var(--mint); border-bottom: var(--bw) solid var(--ink) }
+.wui .chat-head .t { flex: 1; min-width: 0 }
+.wui .chat-head b { display: block; font-size: 1.02rem; font-weight: 900 }
+.wui .chat-head small { display: block; font-size: .78rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.wui .chat-head .restart { border: 2px solid var(--ink); background: var(--paper); font-weight: 800; font-size: .78rem; padding: .25rem .5rem; cursor: pointer }
+.wui .chat-body { flex: 1; overflow: auto; padding: .9rem .8rem; display: flex; flex-direction: column; gap: .6rem; background: var(--surface-3) }
+.wui .msg { max-width: 88%; padding: .55rem .75rem; border: 2px solid var(--ink); font-size: .93rem; font-weight: 600; white-space: pre-wrap; line-height: 1.55 }
+.wui .msg.assistant { align-self: flex-start; background: var(--paper) }
+.wui .msg.user { align-self: flex-end; background: var(--blue); color: #fff }
+.wui .msg.update { align-self: stretch; max-width: none; background: var(--mint-soft); box-shadow: 2px 2px 0 var(--ink) }
+.wui .msg.update .go { margin-top: .45rem; display: flex; gap: .45rem; flex-wrap: wrap }
+.wui .chat-foot { border-top: var(--bw) solid var(--ink); padding: .6rem .7rem; display: grid; gap: .5rem; background: var(--paper) }
+.wui .chat-foot .qr { display: flex; gap: .4rem; flex-wrap: wrap }
+.wui .chat-foot form { display: flex; gap: .45rem }
+.wui .chat-foot input { flex: 1; min-width: 0; border: var(--bw) solid var(--ink); padding: .5rem .6rem; font-weight: 600; background: var(--paper) }
+.wui .chat .draft { border: 2px solid var(--ink); background: var(--mustard-soft); padding: .6rem .7rem; font-size: .88rem; font-weight: 600 }
+
+/* ---------- 長者模式 ---------- */
+.wui[data-mode="elder"] { --maxw: 980px; --bw: 4px; --hard: 6px 6px 0 var(--ink); --hard-sm: 4px 4px 0 var(--ink); line-height: 1.85 }
+.wui[data-mode="elder"] .layout { grid-template-columns: 1fr }
+.wui[data-mode="elder"] .layout > aside { order: 2 }
+.wui[data-mode="elder"] .filters { position: static; max-height: none }
+.wui[data-mode="elder"] .card { grid-template-columns: 1fr }
+.wui[data-mode="elder"] .card-side { border-left: 0; border-top: var(--bw) solid var(--ink); flex-direction: row; justify-content: space-between; align-items: center; text-align: left }
+.wui[data-mode="elder"] .card-head h3 { font-size: 1.45rem }
+.wui[data-mode="elder"] .points li { font-size: 1.02rem }
+.wui[data-mode="elder"] .btn, .wui[data-mode="elder"] .chip { padding: .75rem 1.2rem }
+.wui[data-mode="elder"] .elder-hide, .wui[data-mode="elder"] .card-agency, .wui[data-mode="elder"] .card-head::before { display: none }
+.wui[data-mode="elder"] .top-in { text-align: left; display: flex; flex-wrap: wrap; align-items: center; gap: .9rem 1.6rem; padding: 1.2rem 1.4rem .9rem }
+.wui[data-mode="elder"] .top-in h1 { flex: 1 1 12rem; font-size: 2rem; line-height: 1.3 }
+.wui[data-mode="elder"] .top-in .sub { order: 3; flex: 1 1 100%; max-width: max-content; margin: 0; padding: .35rem 1.1rem; font-size: .85rem; max-height: 5rem }
+.wui[data-mode="elder"] .top-right { position: static; margin: 0; gap: 1rem }
+.wui[data-mode="elder"] .switch button { padding: .7rem 1.3rem; font-size: 1rem }
+.wui[data-mode="elder"] .tabs { gap: 1rem; padding: 0 1.4rem; margin-top: 1.1rem }
+.wui[data-mode="elder"] .tabs button { padding: .9rem 1.5rem; font-size: 1.05rem }
+.wui[data-mode="elder"] main { padding-top: 2rem }
+.wui[data-mode="elder"] .chat { width: min(32rem, calc(100vw - 2rem)) }
+@media (max-width: 430px) { .wui .tabs button { padding: .6rem .6rem; font-size: .92rem } .wui .top-in { padding-left: .8rem; padding-right: .8rem } }
+@media (prefers-reduced-motion: reduce) { .wui *, .wui *::before, .wui *::after { transition: none !important; animation: none !important } }

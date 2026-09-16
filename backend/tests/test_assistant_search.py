@@ -55,15 +55,16 @@ def test_assistant_calls_shared_search_and_refines_results(db, monkeypatch):
     assert refined['search']['queries'] == ['租金補助']
     assert [r['id'] for r in refined['search']['items']] == ['yes']
     seen.clear()
+    # 只有需求領域、沒有明確要求搜尋：依該領域全部補助挑追問，不回傳搜尋結果（前台不會被切到查詢頁）
     initial = client.post('/api/assistant', json={'guidance_profile': {'_domains': ['housing']}}).json()
-    assert seen[0]['domain'] == 'housing'
-    assert initial['search']['candidate_count'] == 2
-    assert {r['id'] for r in initial['search']['items']} == {'yes', 'no'}
+    assert seen == [] and initial['search'] is None
+    assert initial['candidate_count'] == 2
     assert '虛構' not in initial['reply']
     assert initial['question_attribute'] == 'identity.low_income'
     answered = client.post('/api/assistant', json={'guidance_profile': initial['guidance_profile'],
         'question_attribute': initial['question_attribute'], 'messages': [{'role': 'user', 'content': '是'}]}).json()
-    assert [r['id'] for r in answered['search']['items']] == ['yes']
+    assert answered['candidate_count'] == 1
+    assert [item['attribute_id'] for item in answered['learned']] == ['identity.low_income'] and answered['learned'][0]['value_label'] == '是'
     explicit = client.post('/api/assistant', json={'guidance_profile': initial['guidance_profile'],
         'question_attribute': initial['question_attribute'], 'messages': [{'role': 'user', 'content': '幫我找不存在的方案'}]}).json()
     assert explicit['search']['items'] == []

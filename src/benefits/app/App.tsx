@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { NavLink, Outlet } from 'react-router-dom';
 import { DISCLAIMER } from '../utils/labels';
 
@@ -16,15 +17,12 @@ export default function App() {
               <span className="block text-[11px] text-slate-500">資料皆來自政府與學校官方網站公告，每筆保留原文與來源</span>
             </span>
           </NavLink>
-          <nav className="flex flex-wrap items-center gap-1" aria-label="主選單"><a href="/dashboard" className="rounded-md px-3 py-1.5 text-sm text-brand-600">福利導引</a><a href="/admin" className="rounded-md px-3 py-1.5 text-sm text-brand-600">需求管理</a>
+          <nav className="flex flex-wrap items-center gap-1" aria-label="主選單"><Link href="/" className="rounded-md px-3 py-1.5 text-sm text-brand-600">使用者介面</Link><a href="/admin" className="rounded-md px-3 py-1.5 text-sm text-brand-600">需求管理</a>
             <NavLink to="/data-center" className={navClass}>
               資料中心
             </NavLink>
             <NavLink to="/registry" className={navClass}>
               屬性登錄表與類別
-            </NavLink>
-            <NavLink to="/my-benefits" className={navClass}>
-              我的補助
             </NavLink>
           </nav>
         </div>

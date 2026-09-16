@@ -2,7 +2,7 @@
 
 動態模式（dynamic）：
     1. 對目前 profile 跑一次 matching（由呼叫端提供 items）。
-    2. 只看還有機會的補助（possible_match / insufficient_data）：收集每筆缺的屬性（missing_attributes）。
+    2. 只看還有機會的補助（possible_match / insufficient_data）：收集每筆缺的屬性（資格骨幹的 needs 優先，再加 missing_attributes）。
     3. 對每個缺的屬性 a，模擬每種可能回答 v（布林：是/否；enum：各值；城市：規則裡出現的縣市 + 其他；數值：規則門檻上下）：
        重新評估相關候選 → 狀態翻轉（possible→high 或 →not_match）的候選以其分數加權 → gain(a) = 平均翻轉量
     4. hard_filter 屬性 ×2；sensitivity=high ×0.7；已回答／已跳過排除；同增益依 ask_priority。
@@ -89,7 +89,8 @@ def plan_questions(profile: Profile, items: list[MatchItem] | None, records: lis
     candidates = [i for i in items if i.status in {"possible_match", "insufficient_data"} and not i.is_overview]
     needed: dict[str, list[MatchItem]] = {}
     for item in candidates:
-        for attribute_id in item.missing_attributes:
+        # 有資格骨幹的補助以骨幹缺的欄位（needs）為準：逐條規則缺的欄位常是骨幹已判斷過、或抽錯的條件
+        for attribute_id in dict.fromkeys([*item.needs, *item.missing_attributes]):
             if attribute_id in askable and item not in needed.setdefault(attribute_id, []):
                 needed[attribute_id].append(item)
     gains: list[tuple[str, float, int]] = []

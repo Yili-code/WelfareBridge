@@ -29,6 +29,8 @@ export interface AssistantState {
 export interface AssistantTurn {
   search?: { queries: string[]; searched_count: number; candidate_count: number; truncated: boolean;
     items: { id: string; title: string; status: string; source_url: string; source_name: string; missing_conditions: string[] }[] };
+  /** 對話中確認的使用者資料（寫回資料卡用） */
+  learned?: import("@/welfare/assistant-memory").LearnedAttribute[];
   state: AssistantState;
   /** 助理這一輪要說的話（可能多則） */
   replies: string[];

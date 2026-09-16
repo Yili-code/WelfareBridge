@@ -1,32 +1,8 @@
-import { timingSafeEqual } from "node:crypto";
 import { openAppeals } from "@/lib/server/appeals.mjs";
+import { authorized, isString as string, readJson as body, response, sameOrigin } from "@/lib/server/http";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-const response = (body: unknown, status = 200) => Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
-function authorized(request: Request) {
-  const secret = process.env.WELFARE_ADMIN_PASSWORD;
-  const supplied = request.headers.get("authorization")?.replace(/^Bearer /, "") || "";
-  return !!secret && Buffer.byteLength(secret) === Buffer.byteLength(supplied) && timingSafeEqual(Buffer.from(secret), Buffer.from(supplied));
-}
-// 以 Host 標頭比對：standalone 伺服器（Docker）的 request.url 會是綁定位址 0.0.0.0，不是瀏覽器看到的網址
-function sameOrigin(request: Request) {
-  const origin = request.headers.get("origin");
-  if (!origin) return true;
-  try { return new URL(origin).host === request.headers.get("host"); } catch { return false; }
-}
-async function body(request: Request) {
-  const reader = request.body?.getReader();
-  if (!reader) throw new Error("Missing body");
-  const chunks: Uint8Array[] = []; let size = 0;
-  while (true) {
-    const { done, value } = await reader.read(); if (done) break;
-    size += value.length; if (size > 100_000) { await reader.cancel(); throw new Error("Too large"); }
-    chunks.push(value);
-  }
-  return JSON.parse(Buffer.concat(chunks).toString());
-}
-const string = (v: unknown, max = 1000): v is string => typeof v === "string" && v.length <= max;
 export async function GET(request: Request) {
   if (!authorized(request)) return response({ error: "請輸入正確的後台密碼；伺服器需設定 WELFARE_ADMIN_PASSWORD。" }, 401);
   const db = openAppeals(); try { return response(db.list()); } finally { db.close(); }

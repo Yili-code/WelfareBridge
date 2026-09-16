@@ -13,9 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "福利資源導引平台",
-  description:
-    "依地區、身分與年齡建立服務對象檔案，找到可申請的福利資源；不知道怎麼找時，由 AI 助理引導並彙整需求。",
+  title: "福利補助導覽｜查詢補助與服務",
+  description: "查詢政府補助與服務、用資料卡初步比對資格，並在訴求專區提出找不到的服務。",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

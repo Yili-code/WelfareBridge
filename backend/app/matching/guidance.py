@@ -45,7 +45,9 @@ def guidance(data, latest, target):
                 city = normalize_city(text)
                 if city:
                     profile.set(target, city, evidence=text)
-    records, search = search_for_assistant({'_domains': scopes, '_search_keyword': search_keyword})
+    # 只有使用者明確說「幫我找…」才用關鍵字縮小範圍並回傳搜尋結果（前台會把關鍵字帶到查詢頁）；
+    # 需求領域只用來篩選候選，讓追問依全部相關補助挑「最能確認資格」的題目，而不是只看關鍵字搜到的前 50 筆
+    records, search = search_for_assistant({'_search_keyword': search_keyword}) if search_keyword else (None, None)
     if records is None:
         records = load_records(get_db())
         if scopes:

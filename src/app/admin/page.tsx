@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import DemandsAdmin from "@/components/DemandsAdmin";
 import MatchingDiagnostics from "@/components/MatchingDiagnostics";
 import { useState } from "react";
 import { IDENTITIES, NEEDS, REGIONS } from "@/lib/options";
@@ -19,7 +21,7 @@ const STATUS_LABEL: Record<Appeal["status"], string> = {
 };
 
 export default function AdminPage() {
-  const [tab, setTab] = useState<"appeals" | "resources" | "diagnostics">("appeals");
+  const [tab, setTab] = useState<"appeals" | "demands" | "resources" | "diagnostics">("appeals");
   const [expanded, setExpanded] = useState<string | null>(null);
   const [password, setPassword] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
@@ -38,9 +40,9 @@ export default function AdminPage() {
             {resources.length} 項已上架資源
           </p>
         </div>
-        <a href="/dashboard" className="text-sm text-brand-600 hover:underline">
+        <Link href="/" className="text-sm text-brand-600 hover:underline">
           ← 回到使用者介面
-        </a>
+        </Link>
       </header>
 
       <form className="mt-6 flex gap-2" onSubmit={e => { e.preventDefault(); setPassword(passwordInput); refresh(); }}>
@@ -55,6 +57,7 @@ export default function AdminPage() {
         {(
           [
             ["appeals", "需求登記"],
+            ["demands", "訴求專區"],
             ["resources", "資源上架"],
             ["diagnostics", "媒合診斷"],
           ] as const
@@ -74,7 +77,7 @@ export default function AdminPage() {
         ))}
       </nav>
 
-      {tab === "diagnostics" ? <MatchingDiagnostics /> : tab === "appeals" ? (
+      {tab === "diagnostics" ? <MatchingDiagnostics /> : tab === "demands" ? <DemandsAdmin password={password} /> : tab === "appeals" ? (
         <section className="mt-6 space-y-3">
           {appeals.length === 0 && (
             <p className="rounded-xl border border-dashed border-slate-300 bg-white px-6 py-12 text-center text-sm text-ink-400">

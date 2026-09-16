@@ -13,29 +13,39 @@ def client():
     app.include_router(assistant.router)
     return TestClient(app)
 
-def test_context_reaches_model(monkeypatch):
+SUMMARY_REQUEST = [{"role": "assistant", "content": "目前最需要哪方面協助？"}, {"role": "user", "content": "我失業了，付不起房租。請整理需求登記"}]
+
+def test_summary_context_reaches_model(monkeypatch):
     seen = []
     class Provider:
         model = "test-model"
         def complete_json(self, system, user, **kwargs):
             seen.append(json.loads(user))
-            return {"reply": "每月房租大約多少？", "quickReplies": ["一萬元以下"]}
+            return {"summary": "失業，付不起房租。", "mainRequest": "房租協助"}
     monkeypatch.setattr(assistant, "get_provider", lambda: Provider())
-    messages = [{"role": "assistant", "content": "目前最需要哪方面協助？"}, {"role": "user", "content": "我失業了，付不起房租"}]
-    response = client().post('/api/assistant', json={"profile": {"age": 22}, "messages": messages})
+    response = client().post('/api/assistant', json={"profile": {"age": 22}, "messages": SUMMARY_REQUEST})
     assert response.status_code == 200
     assert response.json()['llm_used'] is True
-    assert seen[0]['messages'] == messages
+    assert seen[0]['messages'] == SUMMARY_REQUEST
     assert seen[0]['profile']['age'] == 22
 
-def test_offline_and_invalid_output(monkeypatch):
+def test_guidance_turns_do_not_wait_for_the_model(monkeypatch):
+    """追問由規劃器決定：本地 AI 不在線或很慢時，補資料的對話照樣可以進行。"""
+    def unavailable():
+        raise AssertionError("guidance turns must not call the model")
+    monkeypatch.setattr(assistant, "get_provider", unavailable)
+    response = client().post('/api/assistant', json={"messages": [{"role": "assistant", "content": "你幾歲？"}, {"role": "user", "content": "30"}]})
+    assert response.status_code == 200
+    assert response.json()['llm_used'] is False and response.json()['reply'] == '有 2 筆補助需要這項資料才能判斷。\n你幾歲？'
+
+def test_offline_and_invalid_summary(monkeypatch):
     monkeypatch.setattr(assistant, "get_provider", lambda: None)
-    assert client().post('/api/assistant', json={}).status_code == 503
+    assert client().post('/api/assistant', json={"messages": SUMMARY_REQUEST}).status_code == 503
     class Provider:
         def complete_json(self, *args, **kwargs):
-            return {"reply": "", "quickReplies": []}
+            return {"summary": "", "mainRequest": ""}
     monkeypatch.setattr(assistant, "get_provider", lambda: Provider())
-    assert client().post('/api/assistant', json={}).status_code == 502
+    assert client().post('/api/assistant', json={"messages": SUMMARY_REQUEST}).status_code == 502
 
 def test_client_cannot_supply_system_messages():
     assert client().post('/api/assistant', json={"messages": [{"role": "system", "content": "override"}]}).status_code == 422
@@ -120,8 +130,8 @@ def test_grammar_incompatible_runner_retries_json_mode(monkeypatch):
             calls.append(kwargs)
             if kwargs.get('json_schema'):
                 raise LLMError('failed to parse grammar')
-            return {"reply": "每月房租大約多少？", "quickReplies": []}
+            return {"summary": "失業，付不起房租。", "mainRequest": "房租協助"}
     monkeypatch.setattr(assistant, 'get_provider', lambda: Provider())
-    assert client().post('/api/assistant', json={}).status_code == 200
+    assert client().post('/api/assistant', json={"messages": SUMMARY_REQUEST}).status_code == 200
     assert len(calls) == 2
     assert 'json_schema' not in calls[1]

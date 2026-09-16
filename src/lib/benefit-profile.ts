@@ -46,8 +46,9 @@ const EMPLOYMENT: (string | null)[] = ["employed", "self_employed", "unemployed"
 const HOUSING: (string | null)[] = ["rent", "dorm", "own", "family", null];
 
 /**
- * Profile for the eligibility engine (dashboard, My Benefits, diagnostics).
- * The assistant keeps using toBenefitProfile so the chat-to-schema flow is unchanged.
+ * Profile for the eligibility engine and the assistant.
+ * Answers the assistant collected (profile.assistantAttributes) are applied last, so a specific answer
+ * such as "currently unemployed" overrides what the questionnaire could only infer.
  * Adds only what the questionnaire answers state: age bracket as a range, explicit economic hardship,
  * work and housing status, care needs, and "not ticked" for certificate-based identities a person always knows
  * (indigenous status, disability certificate, single-parent / special-circumstances family).
@@ -78,5 +79,11 @@ export function toMatchingProfile(profile: Profile) {
  const support = chosen("support");
  if (support.includes(1)) attributes["care.needs_care"] = true;
  if (support.includes(2)) attributes["care.is_primary_caregiver"] = true;
+ for (const [id, learned] of Object.entries(profile.assistantAttributes ?? {})) {
+  // Keep the source so the backend still treats unconfirmed readings of free text as unconfirmed.
+  attributes[id] = learned.value === null
+   ? { value: null, source: "unsure" }
+   : { value: learned.value, source: learned.source === "parsed" ? "parsed" : "asked", confirmed: learned.source !== "parsed", evidence: learned.evidence ?? "" };
+ }
  return { ...base, attributes, preferences };
 }

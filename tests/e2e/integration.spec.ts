@@ -13,69 +13,69 @@ test("one origin serves database APIs and keeps appeal authorization separate", 
   expect((await request.get("/api/appeals")).status()).toBe(401);
 });
 
-test("ten-question onboarding reaches live matching, shared profile and source detail", async ({ page }) => {
+test("data card reaches live matching, labels search results and opens user-facing detail", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.goto("/");
-  await page.getByRole("button", { name: "開始建立我的檔案" }).click();
-  const answers = ["就學、學費或獎助學金", "18～未滿 25 歲", "戶籍與居住地在同一縣市，設籍已滿半年", "大學、二專或五專後兩年", "已取得低收入戶資格", "以上皆無／不確定", "受僱工作中，包含兼職", "租屋，包含整戶或分租", "以上皆無／不確定", "沒有／不確定"];
-  for (let i = 0; i < answers.length; i++) {
-    await page.getByRole("button", { name: answers[i], exact: true }).click();
-    if (i === 1) await page.getByRole("spinbutton").fill("22");
-    if (i === 2) await page.getByLabel("戶籍及居住縣市").selectOption("臺北市");
-    await page.getByRole("button", { name: i === 9 ? "完成建檔" : "下一步", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "福利補助導覽", level: 1 })).toBeVisible();
+  await page.getByRole("tab", { name: /我的資料卡/ }).click();
+  for (const option of ["就學、學費或獎助學金", "18～未滿 25 歲", "戶籍與居住地在同一縣市，設籍已滿半年", "大學、二專或五專後兩年", "已取得低收入戶資格"]) {
+    await page.getByLabel(option, { exact: true }).check();
   }
-  await expect(page).toHaveURL(/dashboard/);
-  const official = page.getByRole("region", { name: "官方補助媒合" });
-  await expect(official.getByRole("link", { name: "查看條件與官方來源" }).first()).toBeVisible({ timeout: 30000 });
-  await page.screenshot({ path: "test-results/dashboard.png", fullPage: true });
-  await page.getByRole("link", { name: "補充條件與完整媒合" }).click();
-  await expect(page).toHaveURL(/my-benefits/);
-  await expect(page.getByRole("spinbutton").first()).toBeVisible();
-  await expect(page.locator('input[type="number"][value="22"]')).toHaveCount(1);
-  await page.getByRole("button", { name: "開始比對", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "為你推薦", exact: true })).toBeVisible({ timeout: 30000 });
-  await page.getByRole("link", { name: "資料中心", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "資料中心", exact: true })).toBeVisible();
-  await page.getByPlaceholder("名稱、機關、關鍵字或原文").fill("補助");
-  await page.getByRole("button", { name: "搜尋", exact: true }).click();
-  const table = page.getByRole("table").filter({ has: page.getByRole("columnheader", { name: "提供機關", exact: true }) });
-  const row = table.locator("tbody tr").first();
-  await expect(row).not.toContainText("沒有符合條件的資料");
-  await row.getByRole("cell").first().click();
-  await expect(page).toHaveURL(/data-center\/.+/);
-  await page.reload();
-  await expect(page.getByRole("link", { name: /返回.*資料|回到.*資料|資料中心/ }).first()).toBeVisible();
-  await page.screenshot({ path: "test-results/benefit-detail.png", fullPage: true });
+  await page.getByLabel("實際年齡（選填，填了比對會更準）").fill("22");
+  await page.getByLabel("戶籍及居住縣市").selectOption("臺北市");
+  await page.getByRole("button", { name: "儲存並比對", exact: true }).click();
+  const results = page.getByRole("region", { name: "我的資料卡" });
+  await expect(results.getByText("主動提醒：您可能符合")).toBeVisible({ timeout: 30000 });
+  await page.getByRole("tab", { name: "查詢補助與服務" }).click();
+  await expect(page.locator(".card .badge").first()).toBeVisible({ timeout: 30000 });
+  await page.locator(".card").first().click();
+  const drawer = page.getByRole("dialog");
+  await expect(drawer.getByText("資格初步比對")).toBeVisible();
+  await expect(drawer.getByRole("link", { name: "前往官方頁面 ↗" })).toBeVisible();
+  // 使用者介面不顯示作業資訊
+  await expect(page.getByText(/信心|規則式|本地 AI|資料中心|Schema/)).toHaveCount(0);
+  await page.screenshot({ path: "test-results/welfare-ui.png", fullPage: true });
   expect(errors).toEqual([]);
 });
 
-test("unknown service failure is visible, not an empty success", async ({ page }) => {
+test("assistant answers are written into the data card and the main screen re-matches", async ({ page }) => {
   await page.addInitScript(() => {
-    localStorage.setItem("wf.profiles", JSON.stringify([{ id: "test", nickname: "測試對象", relation: "self", region: "", age: null, economy: "不確定", identities: [], needs: [], createdAt: "" }]));
+    localStorage.setItem("wf.profiles", JSON.stringify([{ id: "test", nickname: "測試對象", relation: "self", region: "臺北市", currentRegion: "臺北市", age: 30, economy: "不確定", identities: [], needs: [], createdAt: "",
+      screening: { needs: ["求職、失業或職業訓練"], age: ["30～未滿 65 歲"], residence: ["戶籍與居住地在同一縣市，設籍已滿半年"] } }]));
     localStorage.setItem("wf.activeProfile", JSON.stringify("test"));
   });
-  await page.route("**/api/matching", route => route.fulfill({ status: 503, body: "unavailable" }));
-  await page.goto("/dashboard");
-  await expect(page.getByRole("region", { name: "官方補助媒合" }).getByRole("alert")).toContainText("暫時無法連線");
-  await expect(page.getByRole("button", { name: "重試", exact: true })).toBeVisible();
+  const learned = [{ attribute_id: "employment.status", label: "就業狀態", type: "enum", value: "unemployed", value_label: "失業中", options: [{ value: "unemployed", label: "失業中" }], source: "asked", evidence: "失業中" }];
+  let matchBodies: { profile: { attributes: Record<string, unknown> } }[] = [];
+  await page.route("**/api/public/match", async route => { matchBodies.push(route.request().postDataJSON()); await route.continue(); });
+  await page.route("**/api/assistant", route => {
+    const answered = route.request().postDataJSON().messages.length > 0;
+    return route.fulfill({ json: { reply: answered ? "目前能問的條件都確認了" : "你目前的就業狀態是？", quickReplies: answered ? [] : ["失業中", "不確定"], summary: "", mainRequest: "", search: null, guidance_profile: {}, learned: answered ? learned : [], question_attribute: answered ? "" : "employment.status", candidate_count: 3, turn_count: answered ? 1 : 0, completed: false } });
+  });
+  await page.goto("/");
+  await expect(page.locator(".card .badge").first()).toBeVisible({ timeout: 30000 });
+  matchBodies = [];
+  await page.getByRole("button", { name: /問問小幫手/ }).click();
+  await page.getByRole("button", { name: "失業中", exact: true }).click();
+  await expect(page.getByText("已寫進資料卡：")).toBeVisible();
+  await expect.poll(() => matchBodies.some(body => JSON.stringify(body.profile.attributes["employment.status"]).includes("unemployed"))).toBeTruthy();
+  // 補助清單在主畫面更新；聊天視窗不列補助
+  await expect(page.getByRole("dialog", { name: "福利小幫手" }).locator(".card")).toHaveCount(0);
+  await page.getByRole("tab", { name: /我的資料卡/ }).click();
+  await expect(page.getByRole("combobox", { name: "就業狀態" })).toHaveValue("unemployed");
 });
 
-test("profile parsing, follow-up questions and queued pipeline execution", async ({ request }) => {
-  const parsed = await request.post("/api/profile/parse", { data: { text: "我是22歲的大學生，戶籍在臺北市", use_llm: false } });
-  expect(parsed.ok()).toBeTruthy();
-  const { profile } = await parsed.json();
-  expect(profile.attributes["applicant.age"].value).toBe(22);
-  const questions = await request.post("/api/profile/questions", { data: { profile, mode: "step", max_questions: 1 } });
-  expect(questions.ok()).toBeTruthy();
-  expect(Array.isArray((await questions.json()).questions)).toBeTruthy();
-  const job = await request.post("/api/pipeline/run", { data: { source_ids: ["__integration_no_documents__"], use_llm: false, limit: 1 } });
-  expect(job.ok()).toBeTruthy();
-  const id = (await job.json()).task.task_id;
-  await expect.poll(async () => {
-    const tasks = await (await request.get("/api/crawler/tasks")).json();
-    return tasks.find((item: { task_id: string }) => item.task_id === id)?.status;
-  }, { timeout: 30000 }).toBe("finished");
+test("unknown service failure is visible, not an empty success", async ({ page }) => {
+  await page.route("**/api/public/benefits", route => route.fulfill({ status: 503, body: "unavailable" }));
+  await page.goto("/");
+  await expect(page.getByRole("alert")).toContainText("補助資料服務暫時無法使用");
+});
+
+test("old user pages redirect to the new home page", async ({ page }) => {
+  await page.goto("/dashboard");
+  await expect(page).toHaveURL(/\/$/);
+  await page.goto("/my-benefits");
+  await expect(page.getByRole("tab", { name: /我的資料卡/ })).toHaveAttribute("aria-selected", "true");
 });
 
 test("appeal submission retry, admin read and status update", async ({ page, request }) => {

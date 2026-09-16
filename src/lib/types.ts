@@ -20,7 +20,23 @@ export interface Profile {
   economy: string;
   /** 主要需求類別，可複選 */
   needs: string[];
+  /** 聊天助理問到或從回答判讀出的資料（依屬性 id）；比對時優先於問卷推得的值，使用者可在資料卡修改或刪除 */
+  assistantAttributes?: Record<string, AssistantAttribute>;
   createdAt: string;
+}
+
+export interface AssistantAttribute {
+  label: string;
+  type: string;
+  unit?: string;
+  /** null 表示使用者回答「不確定」 */
+  value: string | number | boolean | string[] | null;
+  valueLabel: string;
+  options?: { value: string; label: string }[];
+  /** asked＝回答助理的提問；parsed＝從對話內容判讀，需要使用者確認；edited＝使用者在資料卡改過 */
+  source: "asked" | "parsed" | "unsure" | "edited";
+  evidence?: string;
+  updatedAt: string;
 }
 
 /** 平台上架的福利／資源 */
