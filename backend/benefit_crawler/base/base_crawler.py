@@ -19,11 +19,17 @@ from datetime import datetime, timezone
 from typing import Callable, Iterable
 
 from .http_client import FetchError, FetchResult, PoliteHttpClient
-from .parser import find_attachments, html_to_text, make_soup, page_title, select_html
+from .parser import attachment_is_detail, find_attachments, html_to_text, make_soup, page_title, pdf_to_text, select_html
 from .source_validator import SourceValidator, ValidationResult
 
 log = logging.getLogger(__name__)
 
+
+# 附件併入原文的上限：一頁最多抓幾份、單檔大小、每份取多少字、合計多少字
+MAX_ATTACHMENTS = 3
+MAX_ATTACHMENT_BYTES = 5 * 1024 * 1024
+MAX_ATTACHMENT_CHARS = 8000
+MAX_ATTACHMENT_TOTAL_CHARS = 20000
 
 VIEW_COUNTER_RE = re.compile(r"(點閱次數|點閱人次|點閱數|瀏覽人數|瀏覽人次|瀏覽次數|瀏覽數|點擊次數|點擊數|閱讀次數|觀看次數)\s*[:：]?\s*[\d,]+\s*(?:人次|人|次)?")
 
@@ -119,6 +125,47 @@ class BaseCrawler(ABC):
     def fetch(self, url: str) -> FetchResult:
         return self.http.get(url, delay=self.request_delay)
 
+    def read_attachments(self, document: RawDocumentData | None) -> None:
+        """把「詳細說明類」的 PDF 附件下載下來，文字併進原文。
+
+        很多方案頁只放兩三行摘要，資格、金額、申請方式全寫在附件的要點／計畫／辦法裡。
+        取捨規則見 parser.attachment_is_detail：名稱像規範文件就抓；名稱只寫「pdf」時，本文不足才抓；
+        申請書、切結書、預算書這類表單與帳務文件一律不抓。附件失敗不影響頁面本身。
+        """
+        if document is None or document.content_type != "html" or not document.attachments:
+            return
+        body_chars = len(document.raw_text or "")
+        picked = [
+            a for a in document.attachments
+            if a.get("type") == "pdf" and not a.get("text_extracted") and attachment_is_detail(a.get("name", ""), body_chars=body_chars)
+        ][:MAX_ATTACHMENTS]
+        texts: list[str] = []
+        budget = MAX_ATTACHMENT_TOTAL_CHARS
+        for attachment in picked:
+            if budget <= 0:
+                break
+            try:
+                fetched = self.fetch(attachment["url"])
+                if not fetched.is_pdf or len(fetched.content) > MAX_ATTACHMENT_BYTES:
+                    continue
+                text = pdf_to_text(fetched.content)
+            except Exception as exc:  # 附件抓不到不影響頁面本身
+                self.log("WARNING", f"附件下載／解析失敗：{exc}", attachment.get("url", ""))
+                continue
+            if len(text) < 50:
+                continue
+            text = text[: min(MAX_ATTACHMENT_CHARS, budget)]
+            budget -= len(text)
+            attachment["text_extracted"] = True
+            attachment["text_chars"] = len(text)
+            texts.append(f"【附件：{attachment.get('name') or attachment['url'].rsplit('/', 1)[-1]}】\n{text}")
+        if not texts:
+            return
+        merged = "\n\n".join(texts)
+        document.structured["附件文字"] = "\n\n".join(filter(None, [document.structured.get("附件文字", ""), merged]))
+        document.raw_text = (document.raw_text or "") + "\n\n" + merged
+        self.log("INFO", f"併入 {len(texts)} 份附件文字（{len(merged)} 字）", document.source_url)
+
     def build_document(self, fetch: FetchResult, item: DiscoveredItem, *, title: str = "", structured: dict | None = None,
                        published_date: str = "", meta: dict | None = None, selectors: list[str] | None = None) -> RawDocumentData:
         """以 content_selectors 取主內容區，產生原文照抄的 RawDocumentData。"""
@@ -202,6 +249,7 @@ class BaseCrawler(ABC):
                     if document is None:
                         self.log("INFO", "略過（非有效資料頁）", item.url)
                         continue
+                    self.read_attachments(document)
                     result.fetched += 1
                     result.documents.append(document)
                     if on_document is not None:

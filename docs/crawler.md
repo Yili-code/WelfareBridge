@@ -56,6 +56,31 @@ python -m benefit_crawler --loop 21600
 
 也可由 API 觸發：`POST /api/crawler/run`、`POST /api/pipeline/run`、`POST /api/pipeline/llm-fill`、`POST /api/pipeline/mine-keywords`（有 Redis 時交給 crawler-worker）。
 
+## 附件 PDF 併入原文
+
+很多方案頁只放兩三行摘要，資格、金額、申請方式全寫在附件的要點／計畫／辦法裡。
+`BaseCrawler.read_attachments()` 會把「詳細說明類」的 PDF 附件下載下來，文字以 `【附件：檔名】` 為標頭接在 `raw_text` 後面，
+同時寫進 `structured["附件文字"]`，並在該筆附件記 `text_extracted=true`、`text_chars`。之後的抽取、資格骨幹與本地 AI 都讀得到。
+
+取捨規則（`base/parser.py` 的 `attachment_is_detail`）：
+
+| 附件名稱 | 抓不抓 |
+| --- | --- |
+| 要點、計畫、辦法、條例、簡章、須知、基準、注意事項、核定本、補助／津貼／獎助… | 抓 |
+| 申請書、申請表、切結書、同意書、領據、名冊、預算書、決算書、平衡表、統計表… | 不抓（表單與帳務文件沒有資格條件） |
+| 看不出內容（連結文字只寫「pdf」「檔案下載」「請點此下載參閱」） | 本文 < 1500 字才抓 |
+
+上限：一頁最多 3 份、單檔 5 MB、每份取 8000 字、一頁合計 20000 字；附件抓不到或解析失敗只記 WARNING，不影響頁面本身。
+附件文字會算進 `content_hash`，所以附件內容變了也會重新抽取。
+
+2026-09-16 整站重爬的結果：281 筆有 PDF 附件的文件中，**133 筆併入了附件文字**（之前只有臺北市的 9 筆）。
+例：社家署「弱勢兒童及少年生活扶助」原文 482 → 4,284 字，補上《補助辦法》的補助對象三款與「每人每月 1,900 元」。
+副作用：辦法全文裡有大量資力審查數字（動產 14 萬、不動產 578 萬），會被誤當補助金額——見 [pipeline-spec.md](pipeline-spec.md) 的金額門檻規則。
+
+網址本身就是 PDF 時（衛福部 `dl-*.html` 這類下載連結），連結文字常常只寫「pdf」：
+`_parse_pdf` 會改用 PDF 內文第一行當標題（`parser.headline_title`），推不出來就用檔名；
+標題仍然只有檔案字眼、或內容是空白表單、機構名單時，由收錄政策擋下（見 [inclusion-policy.md](inclusion-policy.md)）。
+
 ## 禮貌性爬取
 
 `PoliteHttpClient`：timeout、retry + exponential backoff、每個 host 的 request_delay（預設 1 秒）、robots.txt、Python 3.13 對部分政府憑證鏈的 VERIFY_X509_STRICT 關閉（CA 驗證仍在）。

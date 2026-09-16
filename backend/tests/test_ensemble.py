@@ -66,3 +66,19 @@ def test_category_disagreement_prefers_embedding_and_keeps_secondary(monkeypatch
     assert r.is_benefit
     assert r.category in {"student_aid", "scholarship"}
     assert set(r.categories_secondary) & {"student_aid", "scholarship"} or r.category_confidence == "high"
+
+
+def test_transient_llm_outage_does_not_demote_a_confirmed_benefit():
+    """本地 AI 忙碌／逾時的那一輪不能把先前已確認的補助降級成「待確認」——那會讓它整筆從媒合消失。"""
+    from types import SimpleNamespace
+
+    from app.services.pipeline import keep_prior_classification
+
+    offline = SimpleNamespace(uncertain=True, llm_used=False, is_benefit=True)
+    confirmed_before = {"classification": {"llm": {"is_benefit": True}}}
+    assert keep_prior_classification(offline, confirmed_before)
+    assert not keep_prior_classification(offline, None)  # 沒有先前紀錄：照常待確認
+    assert not keep_prior_classification(offline, {"classification": {"llm": {"is_benefit": False}}})
+    # AI 有跑而且說不確定：維持待確認，不能沿用
+    judged = SimpleNamespace(uncertain=True, llm_used=True, is_benefit=True)
+    assert not keep_prior_classification(judged, confirmed_before)

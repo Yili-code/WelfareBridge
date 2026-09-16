@@ -28,7 +28,7 @@ from bs4 import BeautifulSoup, Tag
 
 from ..base.base_crawler import BaseCrawler, DiscoveredItem, RawDocumentData
 from ..base.http_client import FetchError, FetchResult
-from ..base.parser import DROP_TAGS, clean_text, find_attachments, make_soup, node_to_text, page_title, pdf_to_text
+from ..base.parser import DROP_TAGS, clean_text, find_attachments, headline_title, make_soup, meaningless_name, node_to_text, page_title, pdf_to_text
 
 DEFAULT_SELECTORS = ["#CCMS_Content", "section.cp", "article.cpArticle", ".law-reg-content", "#site_content", "main#main", "main", "article", "#content", ".content"]
 NOISE_TAGS = set(DROP_TAGS) | {"aside", "header", "footer", "nav", "button", "select", "input"}
@@ -265,7 +265,8 @@ class GenericPageCrawler(BaseCrawler):
                     self.log("INFO", "略過（非有效資料頁）", url)
                     return
                 if document.content_type != "skipped":
-                    # 同一輪內容完全相同但網址不同（例如 ?fm=1 / ?fm=2 的分頁參數）→ 只保留第一個，其餘記為略過
+                    self.read_attachments(document)  # 詳細說明類的 PDF 附件併進原文（要在算 hash 之前）
+                    # 同一頁內容完全相同但網址不同（例如 ?fm=1 / ?fm=2 的分頁參數）→ 只保留第一個，其餘記為略過
                     digest = document.content_hash()
                     first_url = seen_hashes.get(digest)
                     if first_url and first_url != document.source_url:
@@ -491,8 +492,12 @@ class GenericPageCrawler(BaseCrawler):
         if len(text) < 50:
             self.log("WARNING", "PDF 沒有可抽取文字（可能是掃描影像）", fetch.final_url)
             return RawDocumentData(source_url=fetch.final_url or fetch.url, title=item.meta.get("config_title") or item.title, content_type="pdf", raw_text="", structured={"備註": "PDF 無可抽取文字（可能為掃描影像）"}, meta={**item.meta, "document_kind": "pdf", "size_bytes": len(fetch.content)})
-        title = item.meta.get("config_title") or item.title or decode_download_name(fetch.url)
         decoded = decode_download_name(fetch.url)
+        # 連結文字常常只寫「pdf」「檔案下載」：這種標題無法對應到任何方案，改用 PDF 內文第一行
+        title = item.meta.get("config_title") or item.title
+        if meaningless_name(title):
+            named = "" if meaningless_name(decoded) else decoded.rsplit(".", 1)[0]
+            title = headline_title(text) or named or title
         published, structured = self._page_meta(text)
         structured["檔案大小"] = f"{len(fetch.content) / 1024:.1f} KB"
         if decoded:

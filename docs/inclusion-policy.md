@@ -11,14 +11,14 @@
 
 | `page_kind` | 例子 | 判斷依據 |
 | --- | --- | --- |
-| form | 申請書、申請表、切結書、同意書、範本 | 標題以表單字眼結尾，或含表單字眼且沒有方案名詞（計畫／辦法／補助／津貼…） |
-| attachment | 「(PDF檔案下載)」、只有附件清單沒有內文的頁 | 去掉「檔案下載」「.pdf」後沒有名稱；或內文 < 400 字且 ≥ 3 個附件檔名 |
+| form | 申請書、申請表、切結書、同意書、範本；整份都是空白表單的 PDF | 標題以表單字眼結尾，或含表單字眼且沒有方案名詞（計畫／辦法／補助／津貼…）；或開頭 120 字寫明是申請書／訪查表且滿是 □ 待填欄位（標題有方案名詞時不適用，方案頁常把申請表附在要點後面） |
+| attachment | 「(PDF檔案下載)」、標題就叫「pdf」的下載連結、只有附件清單沒有內文的頁 | 去掉「檔案下載」「.pdf」後沒有名稱，或整個標題只有檔案格式字眼（pdf／檔案／附件／下載）；或內文 < 400 字且 ≥ 3 個附件檔名 |
 | progress_query | 申辦進度查詢、核發進度查詢、稅金試算 | 標題含進度查詢／案件查詢／試算（線上服務入口，不是方案） |
 | flowchart | 服務流程圖 | 標題含流程圖 |
 | logo | 識別標誌、標章 | 標題含 LOGO／標章／標誌 |
 | statistics | 統計表、統計年刊、預算書、決算書 | 標題含統計／預算書／決算書 |
 | faq | 問答集、常見問題 | 標題含問答集／Q&A |
-| directory | 名單、名冊、一覽表、聯繫窗口 | 標題含名單／名冊／一覽表／窗口 |
+| directory | 名單、名冊、一覽表、聯繫窗口；據點表 PDF | 標題含名單／名冊／一覽表／窗口；或標題其實是表格欄位名（「縣市別 共照名稱 共照地址 共照電話」）且內文一行一筆機構、地址、電話 |
 | notice | 修正條文、修正發布、修正案、條文對照表、草案、廢止、公聽會、說明會、徵求、招標、得獎名單、遴選、查核督導、稽核 | 標題含這些行政公告字眼；爬蟲標題是「…（來源頁）」或 PDF 檔名時也看內文首行（≤ 80 字） |
 | fragment | 「應備文件」「相關檔案」「洽辦資訊」「申請說明」等只有段落名的分頁 | 整個標題就是一個段落名（臺北市社會局 cp.aspx 的分頁各成一份文件），沒有方案名稱 |
 | garbled | PDF 文字擷取失敗的亂碼 | 去掉空白後中文字 < 5% 且三成以上不是中英數與標點；純英文頁不算 |
@@ -49,6 +49,12 @@
 
 三方投票（關鍵字、embedding、本地 LLM）不一致時，依「不漏抓」原則保留紀錄，但標 `uncertain=true`、`review.needs_review=true`，資料中心顯示「疑似／類別待確認」，媒合排除，直到人工在審核佇列確認。
 
+## 4c. 資格寫在附件 PDF 裡的方案
+
+爬蟲會把「詳細說明類」的 PDF 附件（要點、計畫、辦法、簡章…）下載下來，文字以 `【附件：檔名】` 併進原文，
+所以這類頁面的資格與金額不再只靠頁面上的兩三行摘要。規則與上限見 [crawler.md](crawler.md#附件-pdf-併入原文)。
+申請書、切結書、預算書這類表單與帳務文件不抓——抓進來只會讓抽取誤把「應備文件」當成資格。
+
 ## 5. 程式位置
 
 - `backend/app/services/admission.py`：`page_kind()`、`completeness()`、`quality_tier()`、`admit()`
@@ -56,4 +62,5 @@
 - `backend/app/llm/prompts/classify_benefit.md`：AI 分類回 `page_kind`
 - `GET /api/benefits?kind=program|portal|all`（預設 program）、`GET /api/stats` 的 `benefits_programs / benefits_portals / quality_verified`
 - 媒合 `load_records` 排除 portal
-- 測試：`backend/tests/test_admission.py`
+- `backend/benefit_crawler/base/base_crawler.py`：`read_attachments()`；`base/parser.py`：`attachment_is_detail()`、`meaningless_name()`、`headline_title()`
+- 測試：`backend/tests/test_admission.py`、`backend/tests/test_attachments.py`

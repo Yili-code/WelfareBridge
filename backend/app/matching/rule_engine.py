@@ -75,20 +75,29 @@ def evaluate_rule(rule: dict, profile: Profile, registry: Registry | None = None
     if operator == "exists":
         return RuleEvaluation("match", "已提供此資料", user_value)
 
-    # ---- 身分標籤（含本體展開）
+    # ---- 身分標籤（含本體展開；逐項判斷，沒回答過的身分是未知）
     if attribute_id == "identity.tags":
-        tags = set(user_value)
+        tags, not_tags = registry.tag_states(profile.all_values(registry, include_tags=False))
         wanted = set(expected if isinstance(expected, list) else [expected])
         if operator == "contains":
-            ok = expected in tags
             label = registry.tags[expected].label if expected in registry.tags else str(expected)
-            return RuleEvaluation("match" if ok else "not_match", "具備此身分" if ok else f"未具備「{label}」身分", sorted(tags))
+            if expected in tags:
+                return RuleEvaluation("match", "具備此身分", sorted(tags))
+            if expected in not_tags:
+                return RuleEvaluation("not_match", f"未具備「{label}」身分", sorted(tags))
+            return RuleEvaluation("unknown", f"尚未確認是否具備「{label}」身分", sorted(tags))
         if operator == "in":
-            ok = bool(tags & wanted)
-            return RuleEvaluation("match" if ok else "not_match", "具備其中一種身分" if ok else "未具備所列身分", sorted(tags))
+            if tags & wanted:
+                return RuleEvaluation("match", "具備其中一種身分", sorted(tags))
+            if wanted <= not_tags:
+                return RuleEvaluation("not_match", "未具備所列身分", sorted(tags))
+            return RuleEvaluation("unknown", "尚未確認是否具備所列身分", sorted(tags))
         if operator == "not_in":
-            ok = not (tags & wanted)
-            return RuleEvaluation("match" if ok else "not_match", "不在排除身分內" if ok else "屬於排除身分", sorted(tags))
+            if tags & wanted:
+                return RuleEvaluation("not_match", "屬於排除身分", sorted(tags))
+            if wanted <= not_tags:
+                return RuleEvaluation("match", "不在排除身分內", sorted(tags))
+            return RuleEvaluation("unknown", "尚未確認是否屬於排除身分", sorted(tags))
         return RuleEvaluation("unknown", f"身分欄位不支援 operator {operator}")
 
     # ---- 數值

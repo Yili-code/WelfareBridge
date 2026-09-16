@@ -806,6 +806,24 @@ export interface MatchItem {
   benefit_status: string;
   is_overview: boolean;
   matched_weight: number;
+  /** 分層：tier1 ✅ 符合｜tier2 🟡 可能符合・需補充資料｜hidden 不顯示（舊資料沒有資格骨幹時由 status 推得） */
+  tier?: 'tier1' | 'tier2' | 'hidden';
+  /** 資格骨幹逐項判斷 */
+  core?: CoreFacetResult[];
+  /** 補哪些欄位可以確認 */
+  needs?: string[];
+  needs_labels?: string[];
+  core_built?: boolean;
+}
+
+export interface CoreFacetResult {
+  kind: string;
+  status: 'confirmed' | 'uncertain';
+  state: 'satisfied' | 'violated' | 'unknown';
+  reason: string;
+  needs: string[];
+  label: string;
+  signals: string[];
 }
 
 export interface Suitability {

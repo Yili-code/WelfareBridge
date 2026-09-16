@@ -51,9 +51,16 @@ def test_ordered_enum_and_boolean():
 def test_identity_tags_with_ontology_expansion():
     p = profile(**{"identity.low_income": True})
     assert evaluate_rule(rule("identity.tags", "contains", "economic_hardship"), p).status == "match"
-    assert evaluate_rule(rule("identity.tags", "contains", "indigenous"), p).status == "not_match"
-    assert evaluate_rule(rule("identity.tags", "not_in", ["disabled"]), p).status == "match"
+    # 只回答過經濟狀況：沒問過的身分是未知，不能判定「不是原住民」「不是身障」
+    assert evaluate_rule(rule("identity.tags", "contains", "indigenous"), p).status == "unknown"
+    assert evaluate_rule(rule("identity.tags", "not_in", ["disabled"]), p).status == "unknown"
+    answered = profile(**{"identity.low_income": True, "identity.indigenous": False, "disability.has_certificate": False})
+    assert evaluate_rule(rule("identity.tags", "contains", "indigenous"), answered).status == "not_match"
+    assert evaluate_rule(rule("identity.tags", "not_in", ["disabled"]), answered).status == "match"
+    assert evaluate_rule(rule("identity.tags", "in", ["indigenous", "low_income"]), profile(**{"identity.indigenous": False})).status == "unknown"
     assert evaluate_rule(rule("identity.tags", "contains", "low_income"), profile()).status == "unknown"
+    # 低收入與中低收入都確定不是 → 虛擬的「弱勢學生」仍未知（還可能是原住民、身障…）
+    assert evaluate_rule(rule("identity.tags", "contains", "disadvantaged"), profile(**{"identity.low_income": False, "identity.middle_low_income": False})).status == "unknown"
 
 
 def test_derived_elderly_tag_from_age():

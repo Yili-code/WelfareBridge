@@ -6,6 +6,7 @@
         → 分類器（語料統計關鍵字）→ 不是補助 → filtered_out；不確定 → 本地 AI 二次判斷
         → Extractor（core + benefit meta + 條件句 → 登錄表規則）
         → 本地 AI 補齊（給付特徵空缺、對不到屬性的條件句）→ 驗證器（摘錄必在原文、屬性必在登錄表）
+        → 資格骨幹（規則式訊號 + 本地 AI 投票，媒合分層用；見 core_builder.py）
         → 去重（canonical_id）→ benefits 集合 → 過期標記
 """
 
@@ -18,11 +19,13 @@ import uuid
 
 from ..config import get_settings
 from ..db import get_db, utcnow
+from ..llm import core_extract
 from ..llm import fill as llm_fill
 from ..registry import get_registry
 from . import admission
 from .classifier import get_classifier
 from .classifier_ensemble import classify_ensemble
+from .core_builder import build_core
 from .dedup import canonical_rank, is_duplicate
 from .extractor import Extractor, closed_marker, is_real_condition, placeholder_attribute
 from .normalization import find_cities, taiwan_today
@@ -35,6 +38,19 @@ PROVIDER_ADDR_COLS = re.compile(r"地址|住址|所在地")
 PROVIDER_PHONE_COLS = re.compile(r"電話|聯絡")
 PROVIDER_CITY_COLS = re.compile(r"縣市|所在縣市|行政區|區域")
 TAB_FRAGMENT_TITLES = {"申請說明", "應備文件", "洽辦資訊", "相關檔案", "申請方式", "服務內容", "常見問答", "注意事項", "相關連結", "聯絡資訊", "簡介", "說明", "補助標準", "申請流程", "下載專區", "表單下載"}
+
+
+def eligibility_core_for(benefit: dict, previous: dict | None, *, use_llm: bool) -> dict:
+    """重建資格骨幹：原文沒變就沿用上次的 AI 投票（不重跑模型）；有 AI 時補上 AI 這一票。"""
+    previous = previous or {}
+    old = previous.get("eligibility_core") or {}
+    llm_output = old.get("llm") if old.get("llm") and previous.get("content_hash") == benefit.get("content_hash") else None
+    if llm_output is None and use_llm:
+        try:
+            llm_output = core_extract.extract_raw(benefit)
+        except Exception as exc:  # AI 失敗仍用規則式訊號建立骨幹
+            log.warning("eligibility core llm failed for %s: %s", benefit.get("title", "")[:40], exc)
+    return build_core(benefit, llm_output=llm_output)
 
 
 def _drop_benefit(db, doc_id: str) -> None:
@@ -112,6 +128,17 @@ def _needs_llm_classification(result, settings) -> bool:
     return True
 
 
+def keep_prior_classification(ens, prior: dict | None) -> bool:
+    """本地 AI 這次不在線（忙碌／逾時）時，是否沿用先前 AI 已確認「是補助」的判斷。
+
+    不沿用的話，這一輪會把紀錄標成「疑似補助・待確認」，而 load_records 會把 uncertain 整筆排除在媒合之外——
+    等於一次模型逾時就讓真的補助從媒合裡消失（2026-09-16 的整站重爬就發生過，62 筆）。
+    """
+    if not (ens.uncertain and not ens.llm_used and ens.is_benefit) or not prior:
+        return False
+    return bool((((prior.get("classification") or {}).get("llm")) or {}).get("is_benefit"))
+
+
 def process_document(doc_id: str, *, use_llm: bool = False, keep_llm: bool = True, fill: bool = True) -> str:
     db = get_db()
     settings = get_settings()
@@ -168,6 +195,11 @@ def process_document(doc_id: str, *, use_llm: bool = False, keep_llm: bool = Tru
     result = ens.keyword or get_classifier().classify(doc.get("title", ""), doc.get("raw_text", ""))
     result.is_benefit, result.category, result.domain = ens.is_benefit, ens.category, ens.domain
     result.method = "ensemble"
+    if ens.uncertain and not ens.llm_used and ens.is_benefit:
+        prior = db.benefits.find_one({"raw_document_id": doc_id}, {"classification.llm.is_benefit": 1})
+        if keep_prior_classification(ens, prior):
+            ens.uncertain = False
+            ens.decision_basis += "；本次本地 AI 不在線，沿用先前 AI 已確認是補助的判斷"
     classification = {**result.to_dict(), **ens.to_dict()}
     if ens.page_kind in admission.EXCLUDED_KINDS:
         db.raw_documents.update_one({"_id": doc_id}, {"$set": {"processing_status": "filtered_out", "processing_error": "", "processed_at": now, "benefit_id": None, "classification": {**classification, "is_benefit": False, "category": "", "page_kind": ens.page_kind, "reason": ens.decision_basis}}})
@@ -245,7 +277,10 @@ def process_document(doc_id: str, *, use_llm: bool = False, keep_llm: bool = Tru
         _drop_benefit(db, doc_id)
         return "needs_review"
     benefit = outcome.benefit
+    _refresh_status(benefit)  # 本地 AI 可能補上／改寫申請期間，狀態要依最後的截止日重算
     benefit["index"] = Extractor.build_index(benefit)
+    previous = db.benefits.find_one({"raw_document_id": doc_id}, {"eligibility_core": 1, "content_hash": 1})
+    benefit["eligibility_core"] = eligibility_core_for(benefit, previous, use_llm=use_llm and fill)
     row = _upsert_benefit(db, doc, source, benefit)
     status = "needs_review" if row["review"]["needs_review"] else "extracted"
     db.raw_documents.update_one({"_id": doc_id}, {"$set": {"processing_status": status, "processing_error": "", "processed_at": now, "classification": classification, "benefit_id": row["_id"]}})
@@ -324,7 +359,7 @@ def _upsert_benefit(db, doc: dict, source: dict, benefit: dict) -> dict:
 
 
 def _candidate(row: dict) -> dict:
-    return {"title": row.get("title", ""), "provider": row.get("provider", ""), "application_end": (row.get("benefit") or {}).get("application_period", {}).get("end_date", ""), "source_url": (row.get("source") or {}).get("source_url", "")}
+    return {"title": row.get("title", ""), "provider": row.get("provider", ""), "region": row.get("provider_region") or "", "application_end": (row.get("benefit") or {}).get("application_period", {}).get("end_date", ""), "source_url": (row.get("source") or {}).get("source_url", "")}
 
 
 def _rank_info(row: dict) -> dict:
@@ -334,7 +369,7 @@ def _rank_info(row: dict) -> dict:
 
 def _assign_canonical(db, benefit: dict) -> None:
     candidate = _candidate(benefit)
-    others = list(db.benefits.find({"_id": {"$ne": benefit["_id"]}}, {"title": 1, "provider": 1, "benefit.application_period.end_date": 1, "source": 1, "canonical_id": 1, "first_seen_at": 1}))
+    others = list(db.benefits.find({"_id": {"$ne": benefit["_id"]}}, {"title": 1, "provider": 1, "provider_region": 1, "benefit.application_period.end_date": 1, "source": 1, "canonical_id": 1, "first_seen_at": 1}))
     for other in others:
         duplicate, _sim, _reason = is_duplicate(candidate, _candidate(other))
         if not duplicate:
@@ -349,7 +384,7 @@ def _assign_canonical(db, benefit: dict) -> None:
 
 def dedup_pass() -> int:
     db = get_db()
-    rows = list(db.benefits.find({}, {"title": 1, "provider": 1, "benefit.application_period.end_date": 1, "source": 1, "canonical_id": 1, "is_canonical": 1, "first_seen_at": 1}))
+    rows = list(db.benefits.find({}, {"title": 1, "provider": 1, "provider_region": 1, "benefit.application_period.end_date": 1, "source": 1, "canonical_id": 1, "is_canonical": 1, "first_seen_at": 1}))
     rows.sort(key=lambda r: (canonical_rank(_rank_info(r)), (r.get("first_seen_at") or utcnow()).isoformat()), reverse=True)
     groups: list[list[dict]] = []
     for row in rows:
@@ -513,6 +548,7 @@ def llm_fill_pending(limit: int | None = None, *, canonical_only: bool = True) -
             if benefit.get("record_kind") == "portal":
                 benefit["is_overview"] = True
             benefit["index"] = Extractor.build_index(benefit)
+            benefit["eligibility_core"] = eligibility_core_for(benefit, benefit, use_llm=True)
             benefit["updated_at"] = utcnow()
             db.benefits.replace_one({"_id": benefit["_id"]}, benefit)
         stats["processed"] += 1

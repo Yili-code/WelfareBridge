@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { getActiveProfileId, getProfiles } from '@/lib/store';
-import { toBenefitProfile } from '@/lib/benefit-profile';
+import { toMatchingProfile } from '@/lib/benefit-profile';
 import { ErrorBox, Notice } from '../components/Feedback';
 import { EMPTY_NEEDS, NeedsHeader, type Needs } from '../components/NeedsHeader';
 import { ProfileForm } from '../components/ProfileForm';
@@ -24,7 +24,7 @@ export default function MyBenefitsPage() {
   const [mode, setMode] = useState<InputMode>('form');
   const [needs, setNeeds] = useState<Needs>(EMPTY_NEEDS);
   const [domains, setDomains] = useState<string[]>([]);
-  const [profile, setProfile] = useState<Profile>(() => { const profiles = getProfiles(); const selected = profiles.find(item => item.id === getActiveProfileId()) ?? profiles[0]; let initial = emptyProfile(); if (selected) for (const [id, value] of Object.entries(toBenefitProfile(selected).attributes)) initial = applyAnswer(initial, id, value); return initial; });
+  const [profile, setProfile] = useState<Profile>(() => { const profiles = getProfiles(); const selected = profiles.find(item => item.id === getActiveProfileId()) ?? profiles[0]; let initial = emptyProfile(); if (selected) for (const [id, value] of Object.entries(toMatchingProfile(selected).attributes)) initial = applyAnswer(initial, id, value); return initial; });
   const [rawInput, setRawInput] = useState('');
   const [lastMode, setLastMode] = useState<InputMode>('form');
   const [result, setResult] = useState<MatchResponse | null>(null);

@@ -1,0 +1,135 @@
+# 媒合黃金集：每筆補助的「資格骨幹」標準答案。由 Claude 逐筆閱讀官方原文標註（抽樣原文：scripts/eval_matching.py --dump 可重現），可抽查。
+# residence：national＝無縣市限制；[縣市]＝須設籍／居住於這些縣市（basis: household 戶籍 | current 居住 | either | school 就讀學校所在地）
+# age：受補助者本人年齡 [min, max]（含端點，null＝無上限／下限）；via_child：家長代未成年子女申請也適用（子女年齡落在 age 內）
+# education：限定學制（registry education.level 值）；student：必須在學（true）／不得在學（false）
+# identity_all：全部都要具備的身分；identity_any：每一組至少具備一個；identity_exclude：具備即不符
+# nationality：roc 本國籍 | foreign 外籍；attrs：其他可結構化的必要條件（registry 屬性 → 值）
+# other：無法結構化的關鍵條件（使用者沒提供時應歸「需補充」）；note：標註說明
+version: 1
+labeled_by: Claude Opus 5（逐筆讀原文），2026-09-15
+labels:
+  - {id: 34687bf9-09db-43a0-9de3-1ac3238f7d76, title: 衛生福利部辦理兒童及少年未來教育與發展帳戶, residence: national, age: [0, 17], via_child: true, identity_any: [[low_income, middle_low_income]], other: 105年1月1日以後出生, note: 衛福部全國方案，高雄市社會局轉載}
+  - {id: f8839461-e2ed-48ab-86d0-858f50b1e56d, title: 國民中小學清寒原住民學生助學金, residence: national, education: [elementary, junior_high], student: true, via_child: true, identity_all: [indigenous], identity_exclude: [low_income], other: 家戶年所得40萬元以下, note: 原住民且非低收入戶（且＝AND）}
+  - {id: 3760dfd5-e483-4d6b-b40b-db7c4564c56a, title: 臺東縣政府大專以上學校清寒優秀學生愛心安心就學獎學金, residence: [臺東縣], education: [junior_college, university, master, doctoral], student: true, identity_any: [[economic_hardship]], other: 成績優秀；詳細條件在附件, note: 臺東縣政府獎學金由臺北市教育局轉知；縣府清寒獎學金以設籍該縣為要件}
+  - {id: 49ab5908-dccf-4827-9011-533c378a817d, title: 公立及非營利幼兒園幼兒就學補助, residence: national, age: [2, 6], via_child: true, note: 2歲至入國小前；低收中低收免費是加碼不是資格}
+  - {id: 3f1c28a8-102c-4c66-a241-e6004940dba1, title: 補助國小學童制服及文具費, residence: [澎湖縣], residence_basis: school, education: [elementary], student: true, via_child: true, note: 就讀澎湖縣國小}
+  - {id: 322373b2-098c-4922-91d7-3e52c203bbda, title: 澎湖縣中低收入老人住宅修繕補助, residence: [澎湖縣], age: [65, null], identity_any: [[low_income, middle_low_income]], other: 三年內未受本項補助；修繕自有或直系親屬房屋}
+  - {id: 976c6e5b-1bae-4489-a954-821857609340, title: 臺中市中低收入老人健保保費自付額補助, residence: [臺中市], age: [65, null], identity_any: [[middle_low_income]], note: 領中低收入老人生活津貼或列冊中低收入戶}
+  - {id: fe677b9b-1af9-49ef-a4b0-03f5f20f6174, title: 外籍人士（持永久居留證）敬老卡, residence: [桃園市], residence_basis: current, age: [65, null], nationality: foreign, other: 持永久居留證}
+  - {id: be972731-27c6-482c-94f9-af227d8bf761, title: 南投縣中低收入老人醫療補助, residence: [南投縣], age: [65, null], identity_all: [middle_low_income], identity_exclude: [low_income], other: 罹患嚴重傷病且三個月醫療費累計5萬元以上}
+  - {id: 335eb51b-0ba7-4912-a51b-4a873af47509, title: 就業保險職業訓練生活津貼, residence: national, attrs: {employment.involuntary_separation: true, employment.status: unemployed}, other: 就保非自願離職、離職退保2年內、經安排參加全日制職訓, note: 身障是扶養眷屬加給的文件，不是資格；2026-09-16 覆核補上須為失業者}
+  - {id: e7ec0570-39ae-46bb-94e8-5fd33c04f248, title: 300億元中央擴大租金補貼（臺南市申辦）, residence: [臺南市], attrs: {housing.tenure: rent}, other: 無自有住宅、所得與財產標準, note: 中央方案的臺南市申辦入口頁}
+  - {id: 83b39ab1-3614-4ec9-baf5-6a3af034c030, title: 屏東縣老人健康檢查, residence: [屏東縣], age: [55, null], identity_any: [[low_income, middle_low_income]], other: 65歲以上，或原住民55歲以上, note: 年齡下限依身分不同}
+  - {id: 5837163a-e489-4417-9cca-3498cb03f225, title: 失業給付, residence: national, attrs: {employment.involuntary_separation: true, employment.status: unemployed}, other: 就保被保險人、退保前3年年資滿1年、具工作能力與意願、辦理求職登記, note: 2026-09-16 覆核補上須為失業者}
+  - {id: a774ab36-4b12-41fc-b481-c5b8a50c5a28, title: 臺中市政府社會局遊民租屋補助實施計畫, residence: [臺中市], other: 本市列冊遊民或住遊民收容處所、經評估有租屋自立需求, note: 一般租屋者不符}
+  - {id: 009c7268-0657-4b7b-acd1-934b0ea81812, title: 115年度資訊人社會關懷獎學金, residence: national, education: [junior_college, university, master, doctoral], student: true, other: 資訊、統計、公共行政、法律相關科系並提出提案}
+  - {id: 2ba28fb5-3fea-4075-8321-5bec8df01d63, title: 桃園市少年自立生活經濟扶助計畫, residence: [桃園市], age: [15, 19], other: 結束安置或原生家庭嚴重失功能，經社工評估有自立需求}
+  - {id: 0d94df2e-414f-4bd6-952b-6cd8cb513607, title: 實踐大學弱勢助學金申辦資格與流程概述, residence: national, nationality: roc, education: [university, master, doctoral], student: true, other: 就讀實踐大學；家庭年所得低於90萬（碩博士70萬）、利息低於2萬、不動產低於650萬；前學期成績60分以上}
+  - {id: 7886dcb3-0edd-42bd-bb47-5a6202f3657b, title: 新北市高級中等以上學校原住民學生獎學金, residence: [新北市], education: [senior_high, vocational_high, junior_college, university, master, doctoral], student: true, identity_all: [indigenous], other: 設籍滿6個月；成績75分以上（低收入戶60分）；未領其他政府獎助學金}
+  - {id: 54c2ad32-d4dc-451a-b624-ca3821f66d31, title: 新竹縣學前幼兒就學補助, residence: [新竹縣], age: [2, 6], via_child: true, note: 全國幼兒園收費政策的新竹縣說明頁}
+  - {id: 0183ff05-b448-4de9-847d-d5f8ed7cdca0, title: 心臟病童獎勵學金, residence: national, education: [elementary, junior_high, senior_high, vocational_high, junior_college, university, master], student: true, other: 曾在基金會合約醫院接受心臟導管或手術治療的心臟病童}
+  - {id: 83cd582c-9331-4f71-b5bb-3b65db809d4e, title: 衛生福利部社會及家庭署單親培力計畫, residence: national, education: [senior_high, vocational_high, junior_college, university], student: true, identity_all: [single_parent], other: 獨自扶養未滿18歲子女；家庭總收入低於最低生活費2.5倍；未領其他學費補助, note: 在學的是單親家長本人}
+  - {id: 1a36f1b8-7e98-40f1-8b3b-e53d528d4678, title: 彰化縣115學年度第1學期自強優秀學生獎學金, residence: [彰化縣], student: true, identity_any: [[low_income, middle_low_income, special_circumstances, economic_hardship]], other: 設籍滿6個月；學業與操行成績80分以上, note: 自強＝低收／中低收／役男家屬／特境子女／家庭變故之一；國小到研究所都可}
+  - {id: 480c34fe-3f76-414a-888b-4dce09cc29d9, title: 澎湖縣高中職就學津貼, residence: [澎湖縣], residence_basis: school, education: [senior_high, vocational_high], student: true, via_child: true, note: 就讀澎湖縣所轄高級中等學校}
+  - {id: b2dcdb3e-3321-4130-ac06-9ff91a184490, title: 台新青少年志工菁英獎獎助學金, residence: national, nationality: roc, education: [university], student: true, identity_any: [[low_income, middle_low_income, special_circumstances]], other: 曾獲台新青少年志工菁英獎；成績80分以上}
+  - {id: 26e47940-b251-495d-962b-bc7b6a4e8e92, title: 原住民學生獎助學金（臺南市東區區公所）, residence: [臺南市], education: [elementary, junior_high, senior_high, vocational_high, junior_college, university], student: true, via_child: true, identity_all: [indigenous], other: 不含研究所與夜間部進修部；平埔族群另依戶籍註記, note: 臺南市原住民學生獎助學金的區公所申辦頁}
+  - {id: 9a2694c6-54a2-4bf1-a3dc-16594cf203ce, title: 賑災基金會助學金, residence: national, education: [elementary, junior_high, senior_high, vocational_high, junior_college, university, master], student: true, via_child: true, identity_any: [[low_income, middle_low_income]], other: 重大天然災害災區受災家庭}
+  - {id: 831b758f-a2d6-4db0-a883-74d890a06347, title: 臺南市115學年度第1學期清寒優秀學生獎學金, residence: [臺南市], student: true, identity_any: [[low_income, middle_low_income, special_circumstances, economic_hardship]], other: 設籍滿6個月；家庭年所得50萬以下亦可；成績門檻, note: 高中職以上與本市國中小都可申請}
+  - {id: 0fcf4dec-e4ea-48d0-bdf0-c46d3e8dddb0, title: 勞動部失業勞工子女就學補助, residence: national, education: [senior_high, vocational_high, junior_college, university], student: true, via_child: true, identity_all: [unemployed_worker_child], other: 父或母非自願離職失業}
+  - {id: a1368320-ee58-4d5d-9670-37235ba62220, title: 弱勢助學（大專校院弱勢學生助學計畫）, residence: national, education: [junior_college, university, master, doctoral], student: true, other: 家庭年所得70萬以下（學士班90萬）、利息所得2萬以下、不動產650萬以內}
+  - {id: 65eb8f89-9e50-480b-ac80-c6064112faa5, title: 高雄市特殊境遇家庭高中職以上子女學雜費減免認證, residence: [高雄市], education: [senior_high, vocational_high, junior_college, university, master, doctoral], student: true, via_child: true, other: 符合特殊境遇情形（離婚喪偶獨自扶養、家暴等）；家庭總收入低於最低生活費2.5倍、動產不動產限制, note: 2026-09-16 覆核：此頁是申請特境身分認證，已具特境身分不是前提，移除身分條件}
+  - {id: 4866c4ac-2452-43f8-8b01-2aba459a6c51, title: 麗寶福容獎助學金, residence: [新北市], residence_basis: school, education: [elementary, junior_high, senior_high, vocational_high, junior_college, university], student: true, via_child: true, other: 就讀新北市淡水分區學校；分弱勢（低收／中低收／身障）、才藝、實習等組, note: 有不限身分的組別，所以身分不是必要條件}
+  - {id: 70d62a7d-6626-4d8e-9120-a1506237e175, title: 屏東縣推動高科技產業人才培育計畫優秀學生獎學金, residence: [屏東縣], education: [senior_high, vocational_high, university, master, doctoral], student: true, other: 修習高科技產業學程或相關系所；成績80分以上}
+  - {id: 4f4146ba-568b-411f-80ff-56bc68ee018d, title: 嘉義縣清寒優秀學生獎學金, residence: [嘉義縣], education: [junior_high, senior_high, vocational_high, junior_college, university], student: true, identity_any: [[low_income, middle_low_income, economic_hardship]], other: 設籍滿6個月；成績80分以上；不含研究所}
+  - {id: 83dcd116-e090-4b6a-9ea9-5c2f41b56c5b, title: 基隆市高級中等以上學校清寒優秀學生獎學金, residence: [基隆市], education: [senior_high, vocational_high, junior_college, university, master, doctoral], student: true, identity_any: [[low_income, middle_low_income, economic_hardship]], other: 設籍滿6個月；成績80分以上}
+  - {id: bcbc970a-9186-4f6d-8e53-54c21ecf748e, title: 中華開發文教基金會技藝職能獎學金, residence: national, nationality: roc, identity_any: [[low_income, middle_low_income, economic_hardship]], age: [null, 30], other: 藝術、體育、技職專長；在學生或30歲以下社會青年, note: 「在學生或30歲以下社會青年」無法用單一欄位表達，以30歲以下近似（超過30歲的研究所在學生是例外）；2026-09-15 回測時修正原標註漏了年齡}
+  - {id: 4c23585b-b8ce-4ee5-b6a9-26cb72669dee, title: 誌善清寒學生進步獎學金, residence: national, nationality: roc, age: [null, 25], education: [senior_high, vocational_high, junior_college, university, master], student: true, identity_any: [[economic_hardship]], other: 成績進步、孝行品德、作文；各組年齡上限19／22／25歲}
+  - {id: 4ec23c6c-1813-48fd-af51-42b790142041, title: 115年王惕吾先生新聞獎學金, residence: national, education: [university, master, doctoral], student: true, other: 大學三年級以上或研究所二年級以上；成績78分以上；指定短文}
+  - {id: 31572785-aea2-42dc-8c9b-6ba0f558d90f, title: 裕民航運培育金, residence: national, education: [university], student: true, other: 特定學校商船系或輪機系三年級；畢業後服務年限}
+  - {id: 13360376-b822-4d66-a712-fcae7b832721, title: 高雄市第3胎以上鼓勵生育措施, residence: [高雄市], age: [0, 6], via_child: true, other: 第3名以上子女；父或母設籍實際居住本市滿1年（或10個月）}
+  - {id: 5efa8799-8e90-438c-b881-35180629f09b, title: 嘉義市低收及中低收入戶傷病醫療費用補助, residence: [嘉義市], identity_any: [[low_income, middle_low_income, economic_hardship]], other: 罹患傷病住院無力負擔；醫療行為後三個月內申請, note: 收入低於最低生活費1.5倍者也可}
+  - {id: c46de810-caac-4135-9dde-5f654b011de4, title: 臺東縣政府育兒指導服務, residence: [臺東縣], age: [0, 6], via_child: true, other: 有育兒指導需求（脆弱家庭等優先）}
+  - {id: bb10d959-5ced-4f71-b330-4ff502750615, title: 宜蘭縣礁溪鄉天然災害補助, residence: [宜蘭縣], other: 設籍礁溪鄉；遭受天然災害致生命住屋財物受損, note: 鄉公所頁面，另列健保第六類、低收入戶生活補助等項目}
+  - {id: 5dbec2bd-333a-4028-a80c-a9be1de1f6cd, title: 新竹市兒童臨時托育費用補助, residence: [新竹市], age: [0, 5], via_child: true, other: 低收／中低收／特境家庭因參訓求職變故，或發展遲緩／身障兒童，或社工評估, note: 有不限經濟身分的組別}
+  - {id: 0d130553-8616-4816-ac77-0480c06be3ab, title: 臺東縣TT BABY育兒生日禮2.0, residence: [臺東縣], age: [0, 0], via_child: true, other: 新生兒在臺東縣辦理出生登記設籍}
+  - {id: 2d2c616d-40ba-449b-a67d-ded417914524, title: 臺南市危機家庭兒童托育費用補助, residence: [臺南市], residence_basis: either, age: [0, 12], via_child: true, other: 危機家庭情形並經社工評估；就托合法托育單位}
+  - {id: 10bb3b68-a3f7-406b-9b7c-4e307afb38dd, title: 澎湖縣政府辦理重大傷病婦女生活補助費實施要點, residence: [澎湖縣], age: [15, 65], identity_all: [catastrophic_illness], identity_exclude: [low_income], attrs: {applicant.gender: female}, other: 設籍實居滿6個月；致不能工作；家庭收入低於最低生活費2.5倍}
+  - {id: 0de9fdc4-437c-47f4-a016-7ea1f8c690e2, title: 臺南市二歲以上未滿五歲幼兒育兒津貼（東區區公所）, residence: [臺南市], age: [2, 4], via_child: true, other: 我國籍幼兒；未就讀公立／非營利／準公共幼兒園, note: 中央育兒津貼的區公所申辦頁}
+  - {id: 347d3c03-a42a-48bc-ad66-7a88f9ffa245, title: 苗栗縣政府老人聲請監護輔助宣告補助實施計畫, residence: [苗栗縣], age: [65, null], identity_any: [[low_income, middle_low_income]], other: 因精神障礙或心智缺陷需聲請監護或輔助宣告}
+  - {id: 0fb15af2-9199-4f02-90cc-6d4c738a57b3, title: 嘉義縣低收入戶救助, residence: [嘉義縣], other: 家庭總收入平均每人每月未超過最低生活費且動產不動產未超過標準（申請列冊）, note: 申請取得低收入戶資格的頁面，未列冊者也可申請，所以低收入戶不是必要身分}
+  - {id: 9ade0fd5-c7c8-4eb6-af2d-b7c9556ec1e8, title: 0至未滿2歲育兒津貼要點（南投縣）, residence: [南投縣], age: [0, 1], via_child: true, other: 我國籍兒童；未經公費安置；未接受公共化或準公共托育, note: 衛福部要點由南投縣轉載；向兒童戶籍地公所申請}
+  - {id: abe4afa1-3835-4e2e-816b-07736c5a8279, title: 臺南市特殊境遇家庭法律訴訟補助, residence: [臺南市], other: 家庭暴力受害；訴訟事實發生三個月內；家庭收入低於最低生活費2.5倍, note: 2026-09-16 覆核：特境扶助是符合條件者申請時一併認定，移除「已具特境身分」}
+  - {id: 1e706378-056a-4748-89c9-b263c616201d, title: 桃園市115年度特殊境遇家庭扶助（中壢區公所）, residence: [桃園市], other: 配偶死亡失蹤、離婚、家暴、未婚懷孕、獨自扶養子女致不能工作等情形之一；收入財產標準, note: 特境家庭認定與扶助的申請頁；2026-09-16 覆核移除「已具特境身分」（此頁就是申請認定）}
+  - {id: e9a5bc19-009f-4ad6-8c5c-9fead718faaf, title: 桃園市中低收入老人住屋修繕補助, residence: [桃園市], age: [65, null], identity_any: [[low_income, middle_low_income]], other: 未進住老人福利機構；住屋坐落本市}
+  - {id: 7619f22a-50f6-4e9e-8b2f-2f322e6480c9, title: 嘉義縣婦女生育補助, residence: [嘉義縣], age: [0, 0], via_child: true, other: 產婦或配偶設籍滿6個月且新生兒在本縣辦理出生登記}
+  - {id: aab567fd-13fb-4140-ad12-c564192d9cd5, title: 屏東縣社區公共托育家園服務, residence: [屏東縣], age: [0, 1], via_child: true, other: 出生滿2個月未滿2歲；父母一方設籍本縣}
+  - {id: f209f557-2ada-49d5-b1a6-1223427a9ef1, title: 基隆市民眾急難救助, residence: [基隆市], other: 二個月內遭遇死亡、重病、失業等急難致生活困境}
+  - {id: 435f24bb-6230-43c6-ab4f-2ef5709ccfc0, title: 臺南市育有未滿二歲兒童育兒津貼（東區區公所）, residence: [臺南市], age: [0, 1], via_child: true, other: 未經公費安置；未接受公共化或準公共托育, note: 中央育兒津貼的區公所申辦頁}
+  - {id: 2dea4edf-094f-45d9-97e0-4e27dad3645b, title: 臺南市兒童及少年療育訓練費用補助, residence: [臺南市], age: [6, 17], via_child: true, other: 醫師診斷有持續療育需求}
+  - {id: 48980f9d-3751-4e1e-a033-1ba5b6929ca0, title: 未滿二歲兒童托育準公共化服務與費用申報及支付作業要點（基隆市轉載）, residence: national, age: [0, 1], via_child: true, other: 送托準公共托育人員或托嬰中心, note: 2026-09-16 覆核：衛福部全國要點的轉載頁，與其他轉載頁一致標為全國, kind_issue: 給縣市政府的行政作業要點附件頁，不是民眾申請頁，分類應為公告}
+  - {id: fdcfdaab-37d4-44e8-a2b0-800efd8262f0, title: 外國專業人才及眷屬長照新制, residence: national, nationality: foreign, other: 外國專業人才或眷屬；永久居留且居留滿10年；65歲以上或符合身障鑑定且經失能評估, kind_issue: 新聞稿}
+  - {id: f61c881f-d64e-46d6-a5e1-a226d502a0b4, title: 嘉義縣緊急救援連線, residence: [嘉義縣], age: [65, null], other: 獨居或同住者無照顧能力；領社福補助者全額補助、一般戶補助70%}
+  - {id: a8d31c5b-77b9-4e40-b08b-75aca34ae0d6, title: 臺南市低收入戶高中職以上就學生活補助, residence: [臺南市], age: [null, 25], education: [senior_high, vocational_high, junior_college, university, master, doctoral], student: true, via_child: true, identity_all: [low_income], other: 第二、三款低收入戶}
+  - {id: 2d6f041d-1f01-43ad-a586-b1e390c160cb, title: 彰化縣身心障礙者小型復康巴士, residence: [彰化縣], residence_basis: either, other: 持身障證明，或需乘坐輪椅就醫，或長照評估4級以上失能且乘坐輪椅, note: 身障證明不是唯一資格}
+  - {id: cceb91b3-38a1-4935-ba43-ecab760d8cfc, title: 澎湖縣身心障礙者育兒輔具服務, residence: [澎湖縣], identity_all: [disabled], other: 育有6歲以下幼童且有育兒輔具需求的身障父母或主要照顧者}
+  - {id: c28fb38f-8d3d-4e8a-8892-67a1001394ba, title: 臺南市身心障礙者輔具補助申請（東區區公所）, residence: [臺南市], identity_all: [disabled]}
+  - {id: 43894cec-106e-47da-a4a5-5b138a263571, title: 新北市身心障礙者輔具費用補助, residence: [新北市], identity_all: [disabled]}
+  - {id: f78d514e-c1d1-4734-8959-d77ad5df5a02, title: 連江縣家庭照顧者支持服務, residence: [連江縣], attrs: {care.is_primary_caregiver: true}, other: 被照顧者聘有外籍看護或長照需要等級第2至8級}
+  - {id: 216e384e-3f7b-47e0-986c-62f3cb229140, title: 嘉義縣第一階段身障輔具補助費用申請, residence: [嘉義縣], identity_all: [disabled]}
+  - {id: 357ef3ff-bb46-4600-bdfb-5f591b7c32f7, title: 南投縣營養餐飲服務補助計畫, residence: [南投縣], attrs: {care.needs_care: true}, other: 65歲以上失能老人、55歲以上失能原住民、失能身障者或獨居的輕度失能老人, kind_issue: 補助對象是服務提供單位；民眾端是營養餐飲服務}
+  - {id: e085ede0-fd02-4c99-8607-f53192d5447d, title: 連江縣長照輔具及居家無障礙環境改善服務, residence: [連江縣], attrs: {care.needs_care: true}, other: 經長照評估失能；低收全額、中低收90%、一般戶70%}
+  - {id: 7a6505fa-1de2-4b79-91fa-03b98747e36f, title: 嘉義市輔助器具免費借用回收及維修, residence: [嘉義市], other: 身障者及其家屬，或有短期輔具需求的市民}
+  - {id: dc411b50-e5bc-451d-ab7a-606af809ae57, title: 金門縣縣民經收出養機構媒合收養交通費補助, residence: [金門縣], age: [20, null], other: 經核准的收出養媒合機構申請收養}
+  - {id: febe5e1f-c422-4714-b1d2-2f5049b19624, title: 連江縣民眾空運安寧返鄉交通費用補助自治條例, residence: [連江縣], other: 病危或身故以駐地航空器返鄉；設籍（含出生地或曾設籍）本縣或事件發生於本縣}
+  - {id: 2ad40a44-385e-4e25-a2e4-36e1a44493ee, title: 屏東縣老人公費安置, residence: [屏東縣], age: [55, null], identity_any: [[low_income, middle_low_income]], attrs: {care.needs_care: true}, other: 65歲以上（原住民55歲以上）；經評估重度或中度失能需專人長期照顧}
+  - {id: 71c968e8-ad0e-4a3b-a80c-3d7d2286a4c4, title: 屏東縣身心障礙者日間照顧機構, residence: [屏東縣], identity_all: [disabled], other: 依機構限定障別與年齡（例如15至50歲中度以上智能障礙、18至64歲腦麻）}
+  - {id: 4e39aef6-b9b7-4b7d-8f12-d22a87e32038, title: 金門縣辦理老人營養餐食服務, residence: [金門縣], age: [65, null], other: 獨居或確有送餐需求；補助比例依家庭收入}
+  - {id: b20a271d-a241-4c70-ab84-f183f7baf6da, title: 臺東縣身心障礙者自立生活支持服務（個人助理）, residence: [臺東縣], residence_basis: either, age: [18, null], identity_all: [disabled], other: 有自立生活意願；未機構安置、未聘看護、未領其他照顧補助}
+  - {id: 1dc24cb5-9113-4bf1-acb7-ede8d8efbae9, title: 高雄市身心障礙者全民健康保險保費自付額補助, residence: [高雄市], identity_all: [disabled], other: 參加全民健保；輕中度另有稅率與設籍年限條件}
+  - {id: bbf1153e-bdd2-4ac5-8a05-1114849eff1c, title: 屏東縣身心障礙者生活補助, residence: [屏東縣], identity_all: [disabled], other: 家庭收入與財產標準, note: 我的E政府線上申辦頁}
+  - {id: 419e1051-8e7f-4d18-beb3-385f50d3eba1, title: 宜蘭縣身心障礙福利（蘇澳鎮公所）, residence: [宜蘭縣], identity_all: [disabled], other: 生活補助、租金、停車證等各項另有收入或低收入戶條件, note: 一頁列出多項身障福利}
+  - {id: bf656055-ce23-495e-813f-39ac499ba5f1, title: 新竹市身心障礙者嚴重情緒行為正向支持整合模式服務, residence: [新竹市], age: [15, null], student: false, identity_all: [disabled], other: 第一類智能障礙或自閉症並有嚴重情緒行為問題}
+  - {id: 9a017523-2999-4629-96b2-cf53b96fe245, title: 南投縣身心障礙者生活補助審核作業規定, residence: [南投縣], identity_all: [disabled], other: 實際居住本縣；家庭收入低於最低生活費2.5倍或低收中低收；未受收容安置}
+  - {id: ad131389-fbae-421f-a853-6f8e91305a0c, title: 金門縣身心障礙者家庭支持服務, residence: [金門縣], residence_basis: current, identity_any: [[disabled, disabled_family]], other: 身障者本人未安置機構，或其家庭照顧者}
+  - {id: 80f39ea1-bd92-4e8e-b0f7-1bfec1d9a7f8, title: 新北市身心障礙者參加全民健康保險及社會保險自付保費補助, residence: [新北市], identity_all: [disabled], other: 參加健保或社會保險}
+  - {id: 93d13d14-6f00-4f34-b936-4c1ba13af75f, title: 臺中市補助身心障礙者住屋愛心修繕計畫, residence: [臺中市], residence_basis: current, identity_all: [disabled], identity_any: [[low_income, middle_low_income, economic_hardship]], other: 領身障生活補助或經評估經濟弱勢且涉及居住安全}
+  - {id: 8c206bdf-01da-4927-b1e8-56c65534e34f, title: 金門縣精神障礙者住院期間伙食費用補助, residence: [金門縣], other: 精神疾病需住院治療；持身障證明（初次發病者免）；出院後一個月內申請}
+  - {id: b4362f8d-f545-43de-a127-8770b7a8f888, title: 屏東縣身心障礙者社會保險費補助, residence: [屏東縣], identity_all: [disabled], other: 已參加健保勞保等社會保險}
+  - {id: a2600ea7-1238-4b7d-8f4a-02f17871f507, title: 基隆市身心障礙家庭照顧者支持服務, residence: [基隆市], residence_basis: either, identity_all: [disabled_family], attrs: {care.is_primary_caregiver: true}, other: 家中有身障者並提供照顧, note: 機關欄抽成「林社工為您服務。」且縣市欄空白（抽取錯誤）}
+  - {id: cd90b0a2-09b9-4e13-a5f5-8afb0af47748, title: 臺中市身心障礙者裝置假牙補助計畫, residence: [臺中市], age: [null, 64], identity_all: [disabled], identity_any: [[low_income, middle_low_income]], other: 醫師評估需裝置活動假牙；領身障生活補助者也可}
+  - {id: 5946606f-b74b-4c56-90d6-cc7b1f009893, title: 基隆市身心障礙者三節慰問金, residence: [基隆市], identity_all: [disabled]}
+  - {id: 44f855e9-749f-4172-bfda-7238d630d892, title: 減班休息補貼, residence: national, attrs: {employment.status: employed}, other: 參加就保之勞工；經協商減班休息30日以上並列冊通報；公告期間與行業}
+  - {id: 8913df54-b6f9-40b3-b167-1332ccbf7de2, title: 勞動部失業勞工子女就學補助（在學子女生活扶助金）, residence: national, education: [senior_high, vocational_high, junior_college, university], student: true, via_child: true, identity_all: [unemployed_worker_child], other: 申請人是非自願離職並領失業給付或職訓生活津貼的父母；不含研究生}
+  - {id: 58591588-4489-44b4-951b-c301c45a526f, title: 臨時工作津貼, residence: national, attrs: {employment.status: unemployed}, other: 辦理求職登記後14日內未能推介就業，或有正當理由無法接受推介}
+  - {id: 275d8b7f-d26d-403a-805a-953f69c8b9e1, title: 職業訓練生活津貼（高屏澎東分署）, residence: national, attrs: {employment.status: unemployed}, other: 符合申請對象（非自願離職或特定對象）並參加全日制職業訓練, note: 分署說明頁，資格在其他分頁}
+  - {id: af289eba-5c49-4e8f-ac15-db63728033c8, title: 照顧服務就業獎勵, residence: national, attrs: {employment.status: unemployed}, other: 失業30日以上或非自願離職；受僱長照單位從事照顧服務並具照服員資格}
+  - {id: 9ac943aa-9599-4213-a604-7b63411e8caa, title: 跨域就業津貼, residence: national, attrs: {employment.status: unemployed}, other: 高齡、中高齡或就保被保險人；就業地點距原住處30公里以上；失業3個月以上或非自願離職}
+  - {id: 009e8833-b5cb-4f68-a747-1cbccd2d4aae, title: 缺工就業獎勵, residence: national, attrs: {employment.status: unemployed}, other: 失業30日以上或非自願離職；經推介受僱特定行業（3K產業）連續30日以上}
+  - {id: b67fbd85-7f66-4a48-9fd5-68b5c31d472a, title: 天災臨時工作津貼, residence: national, attrs: {employment.status: unemployed}, other: 公告災區設籍、居住或工作而失業}
+  - {id: 2c2cf7a2-f13f-4072-af25-87cefd27d8e6, title: 婦女再就業計畫, residence: national, attrs: {applicant.gender: female}, other: 自主訓練或再就業獎勵的條件在附件實施要點, note: 頁面只有計畫目標與附件}
+  - {id: 9a6e8085-7717-454a-9003-2d16a74b4355, title: 求職交通補助金, residence: national, attrs: {employment.status: unemployed}, other: 推介地點距住處30公里以上，或為低收中低收、家暴被害人}
+  - {id: 2641cb0d-9622-4102-94dc-fdd16fe68407, title: 新竹市中低收入老人租賃房屋租金補助, residence: [新竹市], age: [65, null], identity_any: [[low_income, middle_low_income]], attrs: {housing.tenure: rent}, other: 符合中低收入老人生活津貼或身障生活補助資格者也可；全戶無自有住宅}
+  - {id: dead647e-c8f2-493b-bb88-3e8044dd428a, title: 彰化縣身心障礙者房屋租金補貼, residence: [彰化縣], identity_all: [disabled], attrs: {housing.tenure: rent}, other: 家庭收入低於最低生活費2.5倍；全戶無自有住宅；每年10月申請}
+  - {id: 49090a16-86bc-42bb-b431-32f9334a446b, title: 臺中市單親及弱勢家庭短期租屋津貼計畫, residence: [臺中市], attrs: {housing.tenure: rent}, other: 一年內成為單親並獨自監護子女、持保護令或曾領特境緊急生活扶助；收入低於最低生活費2.5倍, note: 持保護令者不一定有單親或特境身分，所以身分不列必要}
+  - {id: 6dc33b4e-25b0-49b3-9af8-69d006314f2b, title: 臺南市身心障礙者房屋租金補貼及購屋貸款利息補貼, residence: [臺南市], identity_all: [disabled], other: 租屋或購屋貸款；收入低於最低生活費2.5倍；全戶無自有住宅（租金補貼）}
+  - {id: a177ca4a-4d4d-4f0b-a729-224a819c45f9, title: 臺中市低收入戶房屋租金補助, residence: [臺中市], identity_all: [low_income], attrs: {housing.tenure: rent}, other: 列冊低收入戶全體無自有住宅；租賃住宅在本市}
+  - {id: 9c09f8ae-c131-404b-848a-911ca73f9b51, title: 整合住宅補貼資源實施方案（115年度住宅補貼專區）, residence: national, other: 自購住宅貸款利息補貼、修繕住宅貸款利息補貼等各項條件, kind_issue: 年度專區入口頁，應為彙整頁（portal）}
+  - {id: c8c72532-ada9-430d-9afa-6d0c16c830d6, title: 苗栗縣政府辦理身心障礙者房屋租金補貼作業要點, residence: [苗栗縣], identity_all: [disabled], attrs: {housing.tenure: rent}, other: 全戶無自有住宅；收入標準}
+  - {id: 7a16c915-0168-42cd-892e-c1ee08b10ce7, title: 新北市弱勢兒童及少年醫療補助, residence: [新北市], age: [0, 17], via_child: true, other: 低收／中低收、弱勢兒少扶助、特境、早產兒、罕病或重大傷病之一, note: 有不限經濟身分的組別（早產兒、罕病）}
+  - {id: 6d02acb5-558b-4f71-8c22-7dff21e0f4fc, title: 臺中市遊民醫療及看護補助計畫, residence: [臺中市], other: 本局列冊遊民、經評估露宿之遊民或機構安置遊民}
+  - {id: e1eb331a-9290-49b8-96be-4b9680d8c973, title: 高雄市經濟弱勢市民醫療補助（含看護費補助）, residence: [高雄市], identity_any: [[low_income, middle_low_income]], other: 看護費另含領中低收入老人津貼或身障生活補助者；出院或醫療行為後3個月內申請}
+  - {id: 0b23c02f-bfdf-42c2-a4d6-bf3abd013a87, title: 金門縣弱勢兒童及少年醫療費用補助, residence: [金門縣], age: [0, 17], via_child: true, other: 低收／中低收、緊急生活扶助、發展遲緩、早產兒、罕病重大傷病、受保護或安置等之一, note: 有不限經濟身分的組別}
+  - {id: fed0c690-a46a-4c00-8d28-f529b3b2d926, title: 花蓮縣弱勢兒童及少年醫療費用補助, residence: [花蓮縣], residence_basis: either, age: [0, 17], via_child: true, other: 低收／中低收、緊急生活扶助、特境未滿6歲、發展遲緩、早產兒、罕病重大傷病等之一}
+  - {id: 448d48e7-41fb-478f-a830-e65f32121ef0, title: 高雄市輔導弱勢家庭青少年就業, residence: [高雄市], age: [16, 25], other: 列冊低收或中低收且在學，或經社會局評估需扶助}
+  - {id: a9dab191-384b-4cb1-a8c2-4d47385aa522, title: 青年職得好評計畫, residence: national, nationality: roc, age: [15, 29], student: false, attrs: {employment.status: unemployed}, other: 未就學未就業連續180日以上}
+  - {id: 8694f208-120e-45f6-bad4-432afcb51b5a, title: 支援青年就業計畫, residence: national, nationality: roc, age: [15, 29], student: false, attrs: {employment.status: unemployed}, other: 初次尋職（未曾參加勞保就保）且未在學未就業連續60日以上}
+  - {id: 31618e40-5f64-41bf-b804-16274958979a, title: 新竹縣社勞政聯合促進低收入戶及中低收入戶就業服務指引, residence: [新竹縣], identity_any: [[low_income, middle_low_income]], other: 有工作能力並經社政或勞政評估轉介}
+  - {id: 6115b439-31db-4263-8aea-70035d3e9a94, title: 基隆市弱勢族群促進就業方案, residence: [基隆市], attrs: {employment.status: unemployed}, other: 15至65歲（中）低收入戶失業者、服務中遊民、戒癮者或特境家庭之一, note: 有不限經濟身分的組別}
+  - {id: 7d5be71c-509c-4e7b-a34c-4282a2db2dbe, title: 嘉義縣弱勢家庭兒童及少年緊急生活扶助, residence: [嘉義縣], residence_basis: either, age: [0, 17], via_child: true, other: 家庭遭遇失業、入獄、重病、離婚、死亡等變故；收入低於最低生活費1.5倍, note: 被去重隱藏的縣市版本}
+  - {id: 70594c51-5ca6-4d02-90ed-4ed82feb5beb, title: 臺中市特殊境遇家庭扶助實施計畫, residence: [臺中市], other: 配偶死亡失蹤、離婚、家暴、未婚懷孕、獨自扶養子女不能工作等；收入低於最低生活費2.5倍, note: 被去重隱藏的縣市版本；2026-09-16 覆核移除「已具特境身分」（此頁就是申請認定）}
+  - {id: eef9a40d-13b6-4815-9263-16ea5c7089ab, title: 新北市板橋區育有未滿二歲兒童育兒津貼, residence: [新北市], age: [0, 1], via_child: true, other: 未經公費安置；未接受公共化或準公共托育, note: 被去重隱藏的縣市版本}
+  - {id: 8ed07e23-af27-4565-853a-66305298062b, title: 臺中市身心障礙者生活補助費, residence: [臺中市], identity_all: [disabled], other: 實際居住本市；低收／中低收或家庭收入財產符合標準；未受安置, note: 被去重隱藏的縣市版本}
+  - {id: 83c491b7-ab06-4fa8-a8cb-e2fe3fc95b21, title: 桃園市身心障礙者購屋貸款利息補貼, residence: [桃園市], identity_all: [disabled], other: 家庭收入低於最低生活費4倍；五年內首購且有貸款；住宅在本市, note: 被去重隱藏的縣市版本}
+  - {id: 0c47629f-f270-4b1b-a83f-9ea5a49bd7e1, title: 桃園市身心障礙者購買停車位貸款利息補貼或承租停車位補助, residence: [桃園市], identity_all: [disabled], identity_any: [[low_income, middle_low_income]], other: 領身障生活補助者也可；本人為車主並有駕照；停車位在本市, note: 被去重隱藏的縣市版本}
+  - {id: 8bde01dd-bf82-4a4d-bda7-367a25624eca, title: 新竹市低收入戶產婦及嬰兒營養費補助, residence: [新竹市], identity_all: [low_income], attrs: {applicant.gender: female}, other: 生育或妊娠滿20週死產流產, note: 被去重隱藏的縣市版本}
+  - {id: 48981d23-6a8f-4b02-9495-25b66465ec65, title: 屏東縣未滿2歲兒童托育公共化及準公共服務費用補助, residence: [屏東縣], residence_basis: either, age: [0, 2], via_child: true, other: 送托公共化或準公共托育每週30小時以上；未領育兒津貼, note: 中央托育補助的屏東縣說明頁；向托育所在地申請；被去重隱藏}

@@ -213,8 +213,8 @@ export const PROCESSING_STATUS_LABELS: Record<string, string> = {
 };
 
 export const MATCH_STATUS_META: Record<string, { label: string; emoji: string }> = {
-  high_match: { label: '高度符合', emoji: '🟢' },
-  possible_match: { label: '可能符合', emoji: '🟡' },
+  high_match: { label: '符合', emoji: '✅' },
+  possible_match: { label: '可能符合・需補充資料', emoji: '🟡' },
   not_match: { label: '目前不符合', emoji: '🔴' },
   insufficient_data: { label: '資料不足', emoji: '⚪' },
 };

@@ -59,7 +59,8 @@ AMOUNT_WINDOW_CUE_RE = re.compile(
 )
 # 「低收入戶：50萬元」的「收入」是身分不是門檻 → 用負向後顧排除低／中低收入戶
 AMOUNT_WINDOW_VETO_RE = re.compile(r"(工本費|製作費|規費|繳納|自付|自行負擔|收費|罰款|保證金|押金|所得總額|(?<!低)收入(?!戶)|財產|不予核給|不予補助)")
-AMOUNT_CLAUSE_SPLIT_RE = re.compile(r"[，。；：、\n]")
+# 金額子句不從冒號切開：「不動產：115年度每戶不超過578萬元」切開後，數字那半看不出是資力門檻
+AMOUNT_CLAUSE_SPLIT_RE = re.compile(r"[，。；、\n]")
 
 
 # 互斥的身分標籤：同時要求就不可能成立（低收與中低收是法定互斥）
@@ -138,6 +139,8 @@ def relax_contradictory_rules(rules: list[dict]) -> int:
             target = f"any_{attribute_id.replace(chr(46), chr(95))}_{index}"
             for group in group_names:
                 for rule in rules_by_group[group]:
+                    if attribute_id == "identity.tags" and not any(_tag_of(rule.get("value")) in exclusive for exclusive in EXCLUSIVE_TAG_SETS):
+                        continue  # 只有互斥的經濟身分（低收／中低收／清寒）併成擇一；老人、原住民等維持必要條件（「中低收入老人」＝老人 且 中低收）
                     rule["group_id"] = target
                     if "（擇一）" not in rule.get("human_readable", ""):
                         rule["human_readable"] = rule.get("human_readable", "") + "（擇一）"
@@ -275,11 +278,19 @@ BENEFIT_AMOUNT_CUE_RE = re.compile(r"(核給|發給|補助|給付|津貼|獎學�
 
 
 SELF_PAY_THRESHOLD_RE = re.compile(r"(自行負擔|自付|自費)[^。；]{0,20}(累計|合計)?[^。；]{0,12}(超過|以上|達|逾)")
+# 資力審查用語：這些句子講的是「家裡能有多少財產」，不是「補助多少錢」
+MEANS_TEST_RE = re.compile(r"(家庭總收入|全家人口|應計算人口|平均分配|最低生活費|動產|不動產|存款本金|有價證券|投資|綜合所得總額|全戶年所得|土地及房屋)")
 
 
 def _is_threshold_clause(clause: str) -> bool:
     """「所得總額達新臺幣一百萬元以上」「自行負擔看護費用累計超過三萬元」：資格門檻，不是給付金額。"""
     if SELF_PAY_THRESHOLD_RE.search(clause):
+        return True
+    # 資力審查（家庭總收入按全家人口平均分配、動產不動產上限）：句子裡本來就有「每人每月」，
+    # 不能因為這個字眼就當成給付金額，否則 650 萬的不動產上限會變成補助金額的上限
+    # 括號裡的「（動產 14 萬 4,000元，不動產577萬元）」被逗號切開後只剩「不動產577萬元」：
+    # 沒有門檻語氣也沒有給付語氣，但講的是財產不是補助
+    if MEANS_TEST_RE.search(clause) and (THRESHOLD_QUAL_RE.search(clause) or not BENEFIT_AMOUNT_CUE_RE.search(clause)):
         return True
     return bool(INCOME_SENTENCE_RE.search(clause)) and bool(THRESHOLD_QUAL_RE.search(clause)) and not BENEFIT_AMOUNT_CUE_RE.search(clause)
 NUMBER_UNITS: dict[str, set[str]] = {
@@ -440,6 +451,10 @@ class Extractor:
 
         provider, provider_type, is_repost = self._provider(doc, source, structured, meta, title, evidence)
         jurisdiction = self._jurisdiction(provider, title, structured)
+        if jurisdiction is None and source.get("provider_type") in {"local_government", "township"}:
+            # 機關欄抽成「林社工為您服務」「受理申請單位」這類字樣時，縣市政府來源本身就是轄區
+            cities = find_cities(source.get("organization") or source.get("name") or "")
+            jurisdiction = cities[0] if cities else None
         category = classification.category or (meta.get("seed_category") or "")
         node = registry.category(category)
         domain = node.domain if node else registry.domain_of(category)
@@ -705,7 +720,9 @@ class Extractor:
             if "元" not in sentence or len(sentence) > 240:
                 continue
             if re.search(r"(獎學金|助學金|補助|津貼|給付|每名|每人|每月|每學期|每學年|每戶|金額|核發|發給|新臺幣|新台幣|上限|最高)", sentence):
-                kept = [c for c in (clauses_of(sentence) or [sentence]) if "元" in c and not _is_threshold_clause(c)]
+                # 用不切冒號的切法：「不動產：每戶不超過578萬元」要整段一起看才認得出是資力門檻
+                pieces = [c.strip("。 ") for c in AMOUNT_CLAUSE_SPLIT_RE.split(sentence) if len(c.strip("。 ")) >= 2]
+                kept = [c for c in (pieces or [sentence]) if "元" in c and not _is_threshold_clause(c)]
                 if kept:
                     candidates.append((sentence, "，".join(kept), "rule_based"))
         for candidate, parse_text, extractor in candidates:
@@ -807,7 +824,11 @@ class Extractor:
             if end:
                 evidence.append({"field": "benefit.application_period", "value": {"start_date": start, "end_date": end}, "excerpt": source_text[:200], "extractor": "structured_field", "confidence": 0.98, "inferred": False, "inference_basis": ""})
                 return {**empty, "start_date": start, "end_date": end, "description": source_text[:200]}
-            md = re.search(r"(\d{1,2})\s*月\s*(\d{1,2})\s*日", source_text)
+            # 「9月15日起至10月15日止」：截止日是最後一個月日，取第一個會把方案標成已過期
+            months = list(re.finditer(r"(\d{1,2})\s*月\s*(\d{1,2})\s*日", source_text))
+            md = months[-1] if months else None
+            if md is not None and len(months) == 1 and re.match(r"\s*起", source_text[md.end():]):
+                md = None  # 只有起始日，沒有截止日
             year_source = to_iso_date(doc.get("published_date") or "") or (doc.get("crawl_time").strftime("%Y-%m-%d") if hasattr(doc.get("crawl_time"), "strftime") else "")
             if md and year_source:
                 end = f"{year_source[:4]}-{int(md.group(1)):02d}-{int(md.group(2)):02d}"

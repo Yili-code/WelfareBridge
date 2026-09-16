@@ -22,6 +22,9 @@ def test_date_range():
     assert parse_date_range("115/10/01～115/10/31") == ("2026-10-01", "2026-10-31")
     assert parse_date_range("自115年10月1日起至115年10月30日止受理申請") == ("2026-10-01", "2026-10-30")
     assert parse_date_range("即日起至10月23日止") == ("", "")
+    # 「自…起…迄今」是起始日，不是截止日（當成截止日會讓還在辦的方案被標成已過期）
+    assert parse_date_range("自108年8月起實施，並從108年8月1日起受理申請迄今") == ("2019-08-01", "")
+    assert parse_date_range("受理期間至115年10月15日") == ("", "2026-10-15")
 
 
 def test_chinese_numbers():

@@ -42,9 +42,13 @@ def provider_compatible(a: str, b: str) -> bool:
 
 
 def is_duplicate(candidate: dict, existing: dict) -> tuple[bool, float, str]:
-    """candidate / existing 都是 {title, provider, application_end, source_url}。回傳 (是否重複, 相似度, 原因)。"""
+    """candidate / existing 都是 {title, provider, region, application_end, source_url}。回傳 (是否重複, 相似度, 原因)。"""
     if candidate.get("source_url") and candidate.get("source_url") == existing.get("source_url"):
         return True, 1.0, "同一個官方 URL"
+    # 各縣市都有同名方案（低收入戶生活補助、育兒津貼…）：轄區不同就是不同紀錄，不能只留一個縣市的版本
+    region_a, region_b = candidate.get("region") or "", existing.get("region") or ""
+    if region_a and region_b and region_a != region_b:
+        return False, 0.0, f"不同轄區的方案（{region_a}／{region_b}）"
     similarity = title_similarity(candidate.get("title", ""), existing.get("title", ""))
     # 「【轉知】基隆市政府「基隆市高級中等以上學校清寒優秀學生獎學金給與辦法」…」包含原標題：只要機關相容即視為同一份
     short, long = sorted((normalize_title(candidate.get("title", "")), normalize_title(existing.get("title", ""))), key=len)

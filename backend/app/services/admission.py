@@ -5,8 +5,8 @@
 
 收：對申請人有具體經濟價值的項目——補助、補貼、津貼、獎助／獎學金、減免、貸款（利息補貼）、有經濟價值的服務（長照、托育、交通接送…）。
 不收（filtered_out，附原因）：
-  form            申請書／申請表／切結書／同意書／委託書／範本／範例（表單本身不是方案）
-  attachment      只有「檔案下載」沒有方案名稱的附件頁、只有附件清單沒有內文的頁面
+  form            申請書／申請表／切結書／同意書／委託書／範本／範例（表單本身不是方案）；或內容就是空白表單的 PDF（開頭寫明是申請書／訪查表，滿是 □ 待填欄位）
+  attachment      只有「檔案下載」沒有方案名稱的附件頁、只有附件清單沒有內文的頁面；標題只有「pdf」「檔案下載」這類檔案字眼的下載連結也算
   progress_query  申辦進度查詢、案件查詢（線上服務入口，不是方案）
   flowchart       流程圖
   logo            標章／LOGO／識別標誌
@@ -31,6 +31,10 @@ WINDOW_RE = re.compile(r"^\s*[\[（(]\s*另開新視窗\s*[\]）)]\s*")
 ATTACHMENT_PREFIX_RE = re.compile(r"^\s*[\(（\[]\s*(?:PDF|DOC|ODT|檔案)?\s*檔案?下載\s*[\)）\]]\s*", re.I)
 FILE_SUFFIX_RE = re.compile(r"\s*[\(（]?\s*(?:pdf|docx?|odt|ods|xlsx?|csv)\s*檔?案?下載?\s*[\)）]?\s*$|\.(?:pdf|docx?|odt|ods|xlsx?|csv)\s*$", re.I)
 FILE_TOKEN_RE = re.compile(r"\b(?:pdf|odt|docx?|ods|xlsx?)\b", re.I)
+# 整個標題只有檔案格式字眼（衛福部 dl-*.html 這種下載連結的連結文字就叫「pdf」）：不是方案名稱
+FILE_ONLY_TITLE_RE = re.compile(r"^[\s\[\(【（]*(?:pdf|odt|docx?|ods|xlsx?|csv|檔案?|附件|下載|點此|標題)[\s\]\)】）檔案下載參閱]*$", re.I)
+# 空白表單的內文特徵：一整頁都是待填欄位（□ 勾選格、「姓名／身分證統一編號」欄位），沒有資格與給付內容
+FORM_BODY_RE = re.compile(r"(申請書|申請表|切結書|同意書|委託書|訪查表|訪視表|報名表|領據|申報表)")
 # 分頁片段：整個標題只是一個段落名（臺北市社會局 cp.aspx 的「申請說明／應備文件／洽辦資訊／相關檔案」分頁各成一份文件）
 # 方案被站方拆成多頁時（勞保局：請領資格／給付標準／請領手續），只寫申辦流程的那頁不是方案本身
 PROCEDURE_TAIL_RE = re.compile(r"(?:請領|申請|申辦)(?:手續|程序)\s*$")
@@ -76,7 +80,31 @@ def clean_title(title: str) -> str:
     text = WINDOW_RE.sub("", title or "")
     text = ATTACHMENT_PREFIX_RE.sub("", text)
     text = FILE_SUFFIX_RE.sub("", text)
-    return text.strip()
+    text = text.strip()
+    return "" if FILE_ONLY_TITLE_RE.match(text) else text
+
+
+def looks_like_form(name: str, text: str) -> bool:
+    """空白表單（申請書、訪查表）的 PDF：開頭就寫明是表單，而且滿是待填的 □ 勾選格。
+
+    方案頁常把申請表附在要點後面（「…補助計畫（含申請表）」），所以標題只要有方案名詞就不適用這條。
+    """
+    if PROGRAM_NOUN_RE.search(name or ""):
+        return False
+    body = text or ""
+    if not FORM_BODY_RE.search(body[:120]):
+        return False
+    boxes = body.count("□") + body.count("☐")
+    return boxes >= 5 or (boxes >= 2 and len(body) < 2000)
+
+
+def looks_like_table(name: str, text: str = "") -> bool:
+    """名單／據點表的 PDF：標題其實是表格的欄位名（「縣市別 共照名稱 共照地址 共照電話」），內文一行一筆機構與電話。"""
+    tokens = [t for t in re.split(r"[\s|｜]+", (name or "").strip()) if t]
+    if len(tokens) < 3 or any(len(t) > 8 for t in tokens) or re.search(r"[，。、；：？！（）()]", name or ""):
+        return False
+    body = text or ""
+    return len(re.findall(r"\d{2,4}-\d{6,8}|\(\d{2,4}\)\s*\d{6,8}", body)) >= 3 or len(re.findall(r"[路街]\d*段?\d+號", body)) >= 3
 
 
 def looks_garbled(text: str) -> bool:
@@ -94,6 +122,10 @@ def page_kind(title: str, text: str = "", url: str = "") -> tuple[str, str]:
     name = clean_title(title)
     if not name:
         return "attachment", "附件下載頁沒有方案名稱，無法對應到任何補助方案"
+    if looks_like_form(name, text):
+        return "form", "內容是空白表單（申請書／訪查表等待填欄位），不是補助方案內容"
+    if looks_like_table(name, text):
+        return "directory", f"標題「{name}」是表格欄位名，內容是機構、地址、電話的名單，不是補助方案內容"
     if looks_garbled(text):
         return "garbled", "文字擷取為亂碼（PDF 編碼失敗），資格與給付內容無法判讀"
     if FRAGMENT_TITLE_RE.match(name):

@@ -37,6 +37,8 @@ Input:   title + raw_text
 Process: services/classifier_ensemble.py 三方投票：services/classifier.py 關鍵字（投是／否／棄權）× services/embeddings.py bge-m3（p_benefit：補助／非補助平均向量、最像的類別原型、kNN）× llm/fill.classify_document（完整類別清單＋page_kind）。
          先做結構性排除（services/admission.py page_kind：表單／附件／流程圖／進度查詢／標章／統計／問答／名單／行政公告／分頁片段／亂碼 → filtered_out 附原因；標題像方案但只有附件清單 → 保留為 uncertain）。
          兩方同意才放行；不一致交 LLM；LLM 說不是但有一方說是 → 保留為 uncertain（疑似補助，不進媒合）；LLM 不可用時同樣保留。
+         例外（pipeline.keep_prior_classification）：本地 AI 這次不在線而先前 AI 已確認是補助 → 沿用先前判斷，不降級。
+         2026-09-16 整站重爬時模型忙不過來，62 筆已確認的補助被降級成 uncertain 而整批從媒合消失（黃金集漏掉率一度從 0% 變 17.2%）。
          類別：兩方一致 high、LLM 與一方一致 medium、其餘 low + category_uncertain（主類別待確認，仍可媒合），候選存 categories_secondary。
          黃金集 150 筆留一法回測（docs/generated/classifier-eval.md、classifier-eval-llm.md）：不含 LLM 閘門 P .95 / R .98（漏抓 2 筆、誤放行 5 筆全標 uncertain），含 LLM P .93 / R 1.0（誤放行 7 筆中 6 筆已標 uncertain）；主類別正確率含 LLM .84（寬鬆 .91）
          seed_category 指定的頁面即使關鍵字沒過也保留（標記 method=seed_category）
@@ -76,7 +78,14 @@ Process: services/schema_validator.py（title/source_url 必填；provider_type/
          規則：attribute_id 在登錄表、operator 與型態相容、value 型態與 enum 值、數字在摘錄、摘錄在原文）
 Output:  ValidationOutcome{ok, benefit, dropped, review_reasons}
 保存:    被移除的規則記在 benefit.review.reasons；needs_review = 有東西被移除 或 沒有任何 simple 規則
+狀態:    驗證後依最後的申請期間重算 status（本地 AI 可能補上或改寫截止日）；截止日已過或原文寫明停辦 → expired
 ```
+
+### 日期與金額的兩個陷阱（2026-09-16 修正）
+
+- **起始日不是截止日**：「自108年8月1日起受理申請迄今」的日期後面接「起」→ 視為起始日。當成截止日會讓還在辦的方案被標成已過期（育兒津貼、就學補助各一筆就是這樣消失的）。
+- **月日範圍取最後一個**：「9月15日起至10月15日止」的截止日是 10/15。取第一個會讓還能申請的獎學金當天就過期。
+- **資力門檻不是給付金額**：「不動產：115年度每戶不超過578萬元」是資格門檻。金額子句不從冒號切開（切開後數字那半看不出是門檻），並在門檻判斷加入資力審查用語（家庭總收入、全家人口、平均分配、最低生活費、動產、不動產、存款本金、有價證券…）。附件併入原文後這類句子變多，不處理會出現「補助 100 元～300,000 元」。
 
 ```text
 Stage 8  去重 + 寫入

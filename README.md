@@ -39,7 +39,9 @@ scripts/                  統一啟動與測試入口
 | `/registry` | 屬性登錄表與類別 |
 | `/my-benefits` | 完整表單、逐步追問、快速輸入與媒合結果 |
 
-完整媒合頁會帶入目前服務對象的明確條件。年齡區間、合併學制、本人或家人的身分等模糊回答不會轉成確切條件。缺資料保留「需補充資料」；初步符合不等於機關核准。
+完整媒合頁會帶入目前服務對象的明確條件。年齡區間以範圍比對、合併學制保留可能值，本人或家人的身障證明等模糊回答不會轉成確切條件；問卷中未勾選的原住民、身障證明、單親／特境家庭視為「不具備」（媒合診斷會列出，可再修改）。
+
+媒合結果分層顯示：**✅ 符合**＝戶籍、年齡、學制、身分等主要資格（資格骨幹）都已比對相符；**🟡 可能符合・需補充資料**＝沒有明確不符但還缺資料，會列出要補的欄位；確定不符的不顯示，可在「媒合診斷」查看原因。初步符合不等於機關核准。設計與回測數字見 [資格骨幹與分層媒合](docs/eligibility-core.md)。
 
 `/api/appeals` 由 Next.js 處理，其餘 `/api/*` 代理到 FastAPI，前端不需要切換網址。需求登記存在 `data/welfare.sqlite`；官方補助存在 MongoDB。個人檔案、手動上架資源與通知維持原有 localStorage 行為，尚非跨裝置同步。請沿用原本的網站 hostname/port，才能讀到原瀏覽器資料。
 
@@ -129,6 +131,18 @@ Compose 的 MongoDB 使用自己的 `welfarebridge_mongo_data` volume，與可�
 `OLLAMA_BASE_URL` 預設指向 `http://host.docker.internal:11434`，也就是**主機上**的 Ollama；
 容器不會自己安裝。沒有 Ollama 或缺少指定模型時，系統回到純規則模式（可在 `.env` 設 `LLM_PROVIDER=none` 明確關閉）。
 
+資格骨幹由 `CORE_LLM_MODEL`（預設 `qwen3:8b`）離線抽取，模型只是投票者之一。新爬到的補助在處理時自動建立；既有資料或換模型後手動重建：
+
+```powershell
+# 全部補助（已跑過 AI 的沿用結果，RTX 3070 約 5 秒／筆）
+docker compose run --rm --no-deps benefit_crawler python scripts/build_eligibility_core.py
+# 換模型後重跑 AI；或 AI 不在線時只用規則式訊號
+docker compose run --rm --no-deps benefit_crawler python scripts/build_eligibility_core.py --refresh-llm
+docker compose run --rm --no-deps benefit_crawler python scripts/build_eligibility_core.py --no-llm
+# 分類資料修復：補縣市政府來源轄區、重跑去重（不同縣市不合併）、待確認分類交給 AI 重判
+docker compose run --rm --no-deps benefit_crawler python scripts/repair_classification.py --dry
+```
+
 SQLite 與爬蟲檔案保存在本機 `data/`，Redis 佇列使用 `redis_data` volume 保存。`docker compose down` 保留這些資料；加上 `-v` 會刪除 MongoDB 與 Redis volumes，請勿用於一般停止操作。
 
 ## 驗證
@@ -152,6 +166,15 @@ docker compose run --rm --no-deps benefit_crawler python -m pytest tests -m netw
 # 前端單元測試
 docker build --target build -t welfarebridge-web-build .
 docker run --rm welfarebridge-web-build npm test
+```
+
+媒合回測（黃金集 `data/gold/matching/`：125 筆補助的資格標註 × 30 位使用者）：
+
+```powershell
+docker compose run --rm --no-deps benefit_crawler python scripts/eval_matching.py --details 10
+# 以黃金標註當骨幹（分層設計的上限）／舊引擎對照
+docker compose run --rm --no-deps benefit_crawler python scripts/eval_matching.py --core oracle
+docker compose run --rm --no-deps benefit_crawler python scripts/eval_matching.py --core none
 ```
 
 後端資料庫測試使用獨立的 `benefits_test`，不可將正式資料放入該名稱。即時官方網站測試需另執行 `backend/.venv/Scripts/python.exe -m pytest backend/tests -m network`。測試結果與未驗證項目見 [整合驗證紀錄](docs/integration-verification.md)。

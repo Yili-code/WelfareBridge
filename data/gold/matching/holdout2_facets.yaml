@@ -1,0 +1,25 @@
+# 媒合保留集第二批：第一批保留集看過失敗案例後才抽樣（seed 20260916），標註時未參考系統輸出，只評估一次、不據以調整規則。
+# 抽樣範圍：已跑過本地 AI 的可媒合主要紀錄，排除前兩份標註檔已有的，依 領域 × 地方／非地方 分層取 20 筆。
+version: 1
+labeled_by: Claude Opus 5（逐筆讀原文，未參考系統輸出），2026-09-16
+labels:
+  - {id: 962a26ef-d840-4f7b-9638-8a69e830b242, title: 嘉義市中等以上學校清寒優秀學生獎學金, residence: [嘉義市], education: [junior_high, senior_high, vocational_high, junior_college, university], student: true, identity_any: [[economic_hardship]], other: 設籍6個月以上；國中限就讀嘉義市；不含研究所、夜間部；成績80分}
+  - {id: 64f87a9d-b0df-4189-ae12-30d01de13972, title: 新竹縣兒童早期療育費用補助, residence: [新竹縣], age: [0, 7], via_child: true, other: 未達就學年齡（或核定暫緩入學）之疑似發展遲緩、發展遲緩或身障兒童，已通報個管中心}
+  - {id: 14bc82c7-4ae0-4c40-9f06-901fccf1b4f9, title: 臺南市身心障礙者輔具費用補助（含居家無障礙設施）, residence: [臺南市], identity_all: [disabled]}
+  - {id: 5ab313e4-01d9-423d-866a-e9b66065846d, title: 急難救助作業流程（社會救助法第21條）, residence: national, other: 戶內人口死亡無力殮葬、重傷病、主要生計者失業失蹤等致生活陷於困境之一, kind_issue: 中央的法規與作業流程說明，實際向戶籍地縣市申請}
+  - {id: 527b83d1-b8d3-45ee-af8e-9821d0b6c277, title: 基隆市中低收入老人補助裝置假牙實施計畫, residence: [基隆市], age: [55, null], other: 65歲以上或55歲以上原住民；經醫師評估需裝假牙；列冊低收中低收、中低收入老人津貼、身障生活補助、機構安置補助等之一, note: 身分條件含領身障補助、機構安置等非身分組別，不列為必要身分}
+  - {id: 026bdb76-43f9-4c13-ab02-7c104eb4a717, title: 我想要參加職業訓練, residence: national, skip: true, kind_issue: 入口頁（失業者、在職勞工、青年多種訓練與補助）}
+  - {id: 237d0f5e-a291-4946-a4fe-76403713c28f, title: 宜蘭縣國民教育階段身心障礙學生獎助學金, residence: [宜蘭縣], residence_basis: school, education: [elementary, junior_high], student: true, via_child: true, identity_all: [disabled], other: 三年內未領過；學校初選}
+  - {id: 3514a40c-3ff8-436f-83ac-ad22188b9733, title: 臺北市急難救助, residence: [臺北市], residence_basis: either, other: 設籍市民遭遇死亡、傷病、失業等急難之一；非設籍者流落本市缺車資或在本市遇災也可, note: 非設籍者另有車資與災害救助，以設籍或居住擇一近似}
+  - {id: 3d6987c4-6312-4564-918a-7a95b2efa324, title: 印順文教基金會115年度論文獎學金, residence: national, education: [junior_college, university, master, doctoral], student: true, other: 提出八千至三萬字中文佛學論文}
+  - {id: 6d598eb5-7d1d-4b36-9f35-776fcabed3c6, title: 臺北市老人機構收容安置補助, residence: [臺北市], age: [65, null], identity_any: [[low_income, middle_low_income]], attrs: {care.needs_care: true}, other: 設籍居住滿一年；中重度失能；入住評鑑合格機構}
+  - {id: f8ce93d8-af74-48fc-a7b5-005b0a0c7629, title: 南投縣身心障礙者臨時及短期照顧服務補助計畫, residence: [南投縣], residence_basis: current, identity_any: [[disabled, disabled_family]], attrs: {care.is_primary_caregiver: true}, other: 經需求評估建議使用；未聘看護等, note: 實際居住本縣即可（戶籍在他縣市也行）；申請的是身障者的家庭照顧者}
+  - {id: 18b9e498-c448-4db0-abdd-a799b0fd9a46, title: 昌益慈善基金會助學金, residence: national, nationality: roc, education: [university], student: true, identity_all: [low_income], other: 日間部；成績與操行80分}
+  - {id: ef5e8710-8451-4cdb-92d3-d2718253579f, title: 高雄市低收入戶就讀高中職以上在學子女之學習設備補助, residence: [高雄市], education: [senior_high, vocational_high, junior_college, university, master, doctoral], student: true, via_child: true, identity_all: [low_income], other: 五年內未受相同補助}
+  - {id: 2f9869ee-7cd1-4b7d-8d2f-883670bc7dc4, title: 桃園市身心障礙者購買租賃發電機或供電設備補助, residence: [桃園市], identity_all: [disabled], other: 使用維生器材或必要生活輔具}
+  - {id: 4efd1583-ad80-4818-9891-cdaa77435f2a, title: 桃園市身心障礙者參加社會保險保險費補助, residence: [桃園市], identity_all: [disabled], note: 原文未寫設籍，依發布機關}
+  - {id: 14142460-2b95-4237-a496-4ca8040a7286, title: 高雄市身心障礙者日間照顧及住宿式照顧費用補助, residence: [高雄市], identity_all: [disabled], other: 未領身障生活補助等津貼；家庭收入標準；安置於評鑑合格機構}
+  - {id: ca29b326-9480-4961-9889-87c5b0aa718d, title: 臺中市低收入戶及弱勢兒童少年醫療補助, residence: [臺中市], age: [0, 17], via_child: true, other: 低收中低收兒少，或經濟弱勢、特境、保護個案、罕病重大傷病、早產等九款之一，或社工評估, note: 身分是擇一，不是必要條件}
+  - {id: f0440f4b-5b1b-4f0d-8d7a-6cdd05016c3e, title: 老人福利（衛生福利部）, residence: national, skip: true, kind_issue: 入口頁（多項老人福利與資源查詢）}
+  - {id: baa9abec-dbd7-4be9-ac71-7f42cc70bcb2, title: 低收入戶及中低收入戶住宅補貼（辦理情形概況）, residence: national, skip: true, kind_issue: 各縣市年度辦理情形統計新聞，不是申請頁}
+  - {id: 1611c8e2-8dd8-4d0e-9356-92bc21f8f67b, title: 邱創煥文教基金會績優清寒孝親獎助學金, residence: national, education: [elementary, junior_high, senior_high, vocational_high], student: true, identity_any: [[economic_hardship]], other: 中低收入戶或其他清寒證明；成績國小90國中高中85；具體孝行；由學校申請}

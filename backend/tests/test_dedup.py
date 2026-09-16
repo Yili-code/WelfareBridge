@@ -13,6 +13,16 @@ def test_same_benefit_across_sources_is_duplicate():
     assert canonical_rank({"data_confidence": 95, "source_type": "government_site", "is_repost": False}) > canonical_rank({"data_confidence": 95, "source_type": "school_site", "is_repost": True})
 
 
+def test_same_title_in_different_counties_is_not_duplicate():
+    pingtung = {"title": "低收入戶生活補助", "provider": "屏東縣政府社會處", "region": "屏東縣", "application_end": None, "source_url": "https://a"}
+    kaohsiung = {"title": "低收入戶生活補助", "provider": "高雄市政府社會局", "region": "高雄市", "application_end": None, "source_url": "https://b"}
+    assert not is_duplicate(kaohsiung, pingtung)[0]
+    national = {"title": "育有未滿2歲兒童育兒津貼", "provider": "衛生福利部", "region": "national", "application_end": None, "source_url": "https://c"}
+    assert not is_duplicate({**national, "provider": "臺南市政府社會局", "region": "臺南市", "source_url": "https://d"}, national)[0]
+    # 同縣市的轉載仍要合併
+    assert is_duplicate({**pingtung, "provider": "屏東縣政府", "source_url": "https://e"}, pingtung)[0]
+
+
 def test_pipeline_links_ntou_repost_to_helpdreams_canonical(seeded_db):
     rows = list(seeded_db.benefits.find({"title": {"$regex": "高雄市115"}}, {"source_id": 1, "canonical_id": 1, "is_canonical": 1}))
     assert len(rows) >= 2, rows

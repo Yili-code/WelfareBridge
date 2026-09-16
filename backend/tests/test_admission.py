@@ -89,3 +89,23 @@ def test_gov_tw_theme_pages_are_portals():
     assert page_kind("家中遭逢變故，政府提供哪些急難紓困方案？", "", "https://www.gov.tw/News_Content_26_574274")[0] == "portal"
     assert page_kind("樂當銀髮族，讓政府助您享受樂齡生活！")[0] == "portal"
     assert page_kind("育嬰留職停薪津貼及薪資補助", "", "https://www.gov.tw/News_Content_2_559418")[0] == "program"
+
+
+def test_download_links_titled_pdf_and_blank_form_pdfs_are_not_benefits():
+    # 衛福部 dl-*.html：連結文字就叫「pdf」，內容是急難救助申請書
+    form = "發布單位：核稿 批示\npdf\n□申請書 訪查人員：\n衛生福利 部急難救助 會 同 訪查 日期： 年 月 日\n□訪查表 訪查人員：\n申 請 人 姓 名 先生 □女士\n□自有 □住所不定 □租賃"
+    assert clean_title("pdf") == "" and clean_title("【PDF】") == "" and clean_title("檔案下載") == ""
+    assert page_kind("pdf", form)[0] == "attachment"
+    # 標題改用 PDF 第一行後仍看得出是表單
+    assert page_kind("□申請書 訪查人員", form)[0] == "form"
+    # 方案頁把申請表附在要點後面：標題有方案名詞就不當表單
+    assert page_kind("桃園市生育津貼發放作業要點申請說明（含申請表）", form)[0] == "program"
+    # 正常方案不受影響（提到「申請書」但不是空白表單）
+    assert page_kind("急難救助", "一、申請資格：設籍本市之家庭。二、應備文件：申請書1份、身分證影本。三、補助金額：最高3萬元。")[0] == "program"
+
+
+def test_pdf_tables_of_service_locations_are_not_benefits():
+    body = "縣市別 共照名稱 共照地址 共照電話 基隆市 基隆市立醫院 基隆市信義區東信路282號 02-24652141 基隆市 長庚醫院 基隆市安樂區麥金路222號 02-24313131 臺北市 市立聯合醫院 臺北市大同區鄭州路145號 02-25552000"
+    assert page_kind("縣市別 共照名稱 共照地址 共照電話", body)[0] == "directory"
+    # 有空格的正常方案標題不受影響
+    assert page_kind("長期照顧 交通接送服務", "一、補助對象：設籍本市之失能者。二、補助金額：每月最高8趟。")[0] == "program"

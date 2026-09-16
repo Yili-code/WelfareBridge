@@ -10,6 +10,12 @@
     - 沒有任何 match → insufficient_data（⚪ 資料不足）
     eligibility_score = Σ(match 權重 × confidence) + 0.5 × Σ unknown 權重，除以 Σ 權重；權重依鑑別力（戶籍／身分 2.0 … 教育階段 0.5）。
 complex 條件在本地 AI 可用時交給 AI 判斷（只能升級為 match 或維持 unknown；AI 的 not_match 只降為 possible_match）。
+
+已建立資格骨幹（record["eligibility_core"]，見 eligibility_core.py）的補助改用分層：
+    - 確認過的骨幹條件不符 → not_match（tier hidden）
+    - 骨幹涵蓋的屬性（戶籍、年齡、學制、身分…）的逐條規則不再單獨排除，只提示「需確認」；其他屬性的可拒絕規則照舊
+    - 骨幹全部符合且至少一項有鑑別力、其他規則沒有不符 → high_match（tier1 ✅ 符合）
+    - 其他 → possible_match（tier2 🟡 可能符合・需補充資料），needs 列出要補的欄位
 """
 
 from __future__ import annotations
@@ -20,12 +26,56 @@ from typing import Any, Callable
 
 from ..config import Settings, get_settings
 from ..registry import Registry, get_registry
+from .eligibility_core import CoreOutcome, evaluate_core
 from .profile import Profile
 from .rule_engine import evaluate_rule
 
 log = logging.getLogger(__name__)
 
 STATUS_ORDER = {"high_match": 0, "possible_match": 1, "insufficient_data": 2, "not_match": 3}
+TIER_ORDER = {"tier1": 0, "tier2": 1, "hidden": 2}
+# 骨幹已涵蓋的屬性：這些屬性的逐條規則常抽錯（本縣／外縣市、推定身分…），有骨幹時不再單獨排除
+CORE_ATTRIBUTES = {
+    "residence.household_city", "residence.current_city", "education.school_city", "applicant.age", "applicant.is_elderly", "family.youngest_child_age",
+    "education.level", "applicant.is_student", "identity.tags", "applicant.nationality", "applicant.gender", "employment.status", "employment.involuntary_separation",
+    "housing.tenure", "care.needs_care", "care.is_primary_caregiver",
+}
+
+
+def has_core(record: dict) -> bool:
+    return isinstance(record.get("eligibility_core"), dict) and isinstance(record["eligibility_core"].get("facets"), list)
+
+
+FACET_ATTRIBUTES = {
+    "residence": {"residence.household_city", "residence.current_city", "education.school_city"},
+    "age": {"applicant.age", "applicant.is_elderly", "family.youngest_child_age"},
+    "education": {"education.level", "applicant.is_student"},
+    "student": {"applicant.is_student", "education.level"},
+    "nationality": {"applicant.nationality"},
+}
+
+
+def _violated_attributes(outcome: CoreOutcome, registry: Registry) -> set[str]:
+    """已確認不符的骨幹條件涵蓋哪些屬性：這些屬性上不符的逐條規則照實列為「不符合」，讓使用者看得到原因。"""
+    out: set[str] = set()
+    for result in outcome.violated_confirmed:
+        kind = result.facet.get("kind")
+        if kind in {"identity_any", "identity_exclude"}:
+            out.add("identity.tags")
+            out.update(a for a in (registry.tag_attribute(t) for t in result.facet.get("tags") or []) if a)
+        elif kind == "attr":
+            out.add(result.facet.get("attribute_id", ""))
+        else:
+            out.update(FACET_ATTRIBUTES.get(kind, set()))
+    return out
+
+
+def _core_attribute(attribute_id: str, registry: Registry) -> bool:
+    if attribute_id in CORE_ATTRIBUTES:
+        return True
+    return any(tag.attribute == attribute_id for tag in registry.tags.values())
+
+
 GROUP_WEIGHTS: list[tuple[str, float]] = [
     ("residence", 2.0), ("identity", 2.0), ("exclusion_identity", 2.0), ("disability", 2.0), ("care_cms", 2.0), ("care_needs", 2.0), ("household_income", 1.5), ("household", 1.5), ("employment", 1.5), ("housing", 1.5), ("family", 1.5),
     ("academic", 1.0), ("applicant_age", 1.0), ("family_youngest", 1.0), ("residence_duration", 1.0), ("program_type", 1.0), ("exclusion", 1.0), ("financial", 1.0), ("care", 1.0),
@@ -107,6 +157,11 @@ class MatchItem:
     benefit_status: str = "active"
     is_overview: bool = False
     matched_weight: float = 0.0
+    tier: str = "hidden"  # tier1 ✅ 符合 | tier2 🟡 可能符合・需補充資料 | hidden
+    core: list[dict] = field(default_factory=list)  # 資格骨幹逐項判斷
+    needs: list[str] = field(default_factory=list)  # 補哪些欄位可以確認（依重要性）
+    needs_labels: list[str] = field(default_factory=list)
+    core_built: bool = False
 
     def to_dict(self) -> dict:
         data = {k: v for k, v in self.__dict__.items() if k not in {"matched", "missing", "failed", "complex", "bonus"}}
@@ -114,7 +169,7 @@ class MatchItem:
         return data
 
 
-BENEFIT_PROJECTION = {"title": 1, "domain": 1, "category": 1, "category_label": 1, "provider": 1, "provider_type": 1, "provider_region": 1, "benefit": 1, "source": 1, "rules": 1, "status": 1, "review": 1, "is_overview": 1, "canonical_id": 1, "is_canonical": 1, "index": 1, "original_text": 1}
+BENEFIT_PROJECTION = {"title": 1, "domain": 1, "category": 1, "category_label": 1, "provider": 1, "provider_type": 1, "provider_region": 1, "benefit": 1, "source": 1, "rules": 1, "status": 1, "review": 1, "is_overview": 1, "canonical_id": 1, "is_canonical": 1, "index": 1, "eligibility_core": 1, "original_text": 1}
 
 
 def load_records(db, *, include_expired: bool = False, canonical_only: bool = True, domains: list[str] | None = None, categories: list[str] | None = None, with_text: bool = False) -> list[dict]:
@@ -137,13 +192,20 @@ def hard_filter_candidates(records: list[dict], profile: Profile, registry: Regi
     """候選檢索：只用使用者已確認的 hard_filter 屬性排除「確定不符」的補助；缺資料者保留。回傳 (候選, 被排除)。"""
     known = {aid for aid, item in profile.attributes.items() if item.value is not None and (item.confirmed or item.source in {"asked", "form"})}
     hard_ids = {a.id for a in registry.attributes.values() if a.hard_filter} & known
-    if not hard_ids:
-        return records, []
     kept, excluded = [], []
     for record in records:
         rejected = False
+        core = has_core(record)
+        if core and evaluate_core(record["eligibility_core"], profile, registry).violated_confirmed:
+            excluded.append(record)  # 確認過的資格骨幹不符
+            continue
+        if not hard_ids:
+            kept.append(record)
+            continue
         for rule in record.get("rules") or []:
             if rule.get("attribute_id") not in hard_ids or rule.get("complexity") != "simple" or rule.get("role") == "bonus":
+                continue
+            if core and _core_attribute(rule.get("attribute_id", ""), registry):
                 continue
             if float(rule.get("confidence", 0)) < settings.reject_min_confidence or rule.get("inferred"):
                 continue
@@ -189,19 +251,23 @@ class MatchingEngine:
 
     @staticmethod
     def _sort_key(item: MatchItem):
-        return (STATUS_ORDER.get(item.status, 9), -item.eligibility_score, (item.benefit.get("application_period") or {}).get("end_date") or "9999")
+        return (TIER_ORDER.get(item.tier, 9), STATUS_ORDER.get(item.status, 9), -item.eligibility_score, (item.benefit.get("application_period") or {}).get("end_date") or "9999")
 
     def match_one(self, record: dict, profile: Profile, *, use_llm: bool = False, max_llm_rules: int = 3) -> MatchItem:
         registry = self.registry
         groups: dict[str, list[ConditionResult]] = {}
         llm_used = False
         llm_calls = 0
+        core_built = has_core(record)
+        outcome: CoreOutcome | None = evaluate_core(record["eligibility_core"], profile, registry) if core_built else None
+        confirmed_violations = _violated_attributes(outcome, registry) if outcome else set()
         for rule in record.get("rules") or []:
             evaluation = evaluate_rule(rule, profile, registry)
-            rejectable = rule.get("complexity") == "simple" and float(rule.get("confidence", 0)) >= self.settings.reject_min_confidence and not rule.get("inferred")
+            covered = core_built and _core_attribute(rule.get("attribute_id", ""), registry) and rule.get("attribute_id") not in confirmed_violations
+            rejectable = rule.get("complexity") == "simple" and float(rule.get("confidence", 0)) >= self.settings.reject_min_confidence and not rule.get("inferred") and not covered
             status, reason = evaluation.status, evaluation.reason
             if status == "not_match" and not rejectable:
-                status, reason = "unknown", reason + "（此條件為推定或低信心抽取，請至官方公告確認）"
+                status, reason = "unknown", reason + ("（此項以資格骨幹判斷為準，細節請至官方公告確認）" if covered else "（此條件為推定或低信心抽取，請至官方公告確認）")
             result = ConditionResult(
                 rule_id=rule.get("id", ""), attribute_id=rule.get("attribute_id", ""), operator=rule.get("operator", ""), value=rule.get("value"), unit=rule.get("unit", ""), group_id=rule.get("group_id") or rule.get("attribute_id", ""),
                 role=rule.get("role", "required"), human_readable=rule.get("human_readable", ""), excerpt=(rule.get("evidence") or {}).get("excerpt", ""), status=status, reason=reason, user_value=evaluation.user_value,
@@ -282,6 +348,18 @@ class MatchingEngine:
             status = "possible_match"
         else:
             status = "insufficient_data"
+        tier = "tier1" if status == "high_match" else "tier2" if status == "possible_match" else "hidden"
+
+        if outcome is not None:
+            if outcome.violated_confirmed or simple_failed:  # simple_failed 此時只剩骨幹以外屬性的可拒絕規則
+                status, tier = "not_match", "hidden"
+            elif not outcome.violated_uncertain and not outcome.unknown_confirmed and outcome.discriminating_confirmed:
+                status, tier = "high_match", "tier1"
+            else:
+                status, tier = "possible_match", "tier2"
+            if outcome.results:
+                core_score = (len(outcome.satisfied) + 0.5 * len(outcome.unknown) + 0.3 * len(outcome.violated_uncertain)) / len(outcome.results)
+                score = 0.7 * core_score + 0.3 * score
 
         satisfied = {gid for gid, entries in groups.items() if any(r.status == "match" for r in entries)}
         failed = [r for r in failed if r.group_id not in satisfied]
@@ -293,20 +371,47 @@ class MatchingEngine:
             for attribute_id in concrete_attributes(result, registry):
                 if attribute_id not in missing_attributes:
                     missing_attributes.append(attribute_id)
-        explanation = self._explain(status, matched, missing, failed, complex_conditions, bonus, record, matched_weight)
+        needs = list(dict.fromkeys([*(outcome.needs() if outcome else []), *([] if core_built else missing_attributes)]))
+        explanation = self._explain(status, matched, missing, failed, complex_conditions, bonus, record, matched_weight, outcome)
         source = record.get("source") or {}
         return MatchItem(
             benefit_id=record["_id"], canonical_id=record.get("canonical_id", record["_id"]), title=record.get("title", ""), domain=record.get("domain", ""), category=record.get("category", ""), category_label=record.get("category_label", ""),
             provider=record.get("provider", ""), provider_type=record.get("provider_type", ""), benefit=record.get("benefit") or {}, source_url=source.get("source_url", ""), source_name=source.get("source_name", ""),
             status=status, eligibility_score=round(score, 3), matched=matched, missing=missing, failed=failed, complex=complex_conditions, bonus=bonus, missing_attributes=missing_attributes, explanation=explanation,
-            needs_review=bool((record.get("review") or {}).get("needs_review")), llm_used=llm_used, benefit_status=record.get("status", "active"), is_overview=bool(record.get("is_overview")), matched_weight=round(matched_weight, 2),
+            needs_review=bool((record.get("review") or {}).get("needs_review")), llm_used=llm_used, benefit_status=record.get("status", "active"),
+            # 「彙整頁」偵測常把單一方案誤判（同頁列出多項補助名稱）；有骨幹時依骨幹分層，不再整筆藏起來（真正的入口頁 record_kind=portal 不會載入）
+            is_overview=bool(record.get("is_overview")) and not core_built, matched_weight=round(matched_weight, 2),
+            tier=tier, core=[r.to_dict() for r in outcome.results] if outcome else [], needs=needs, needs_labels=[registry.get(a).label if registry.get(a) else a for a in needs], core_built=core_built,
         )
 
-    def _explain(self, status: str, matched, missing, failed, complex_conditions, bonus, record: dict, matched_weight: float) -> list[str]:
+    def _explain(self, status: str, matched, missing, failed, complex_conditions, bonus, record: dict, matched_weight: float, outcome: CoreOutcome | None = None) -> list[str]:
         registry = self.registry
         lines: list[str] = []
-        if record.get("is_overview"):
+        if record.get("is_overview") and outcome is None:
             lines.append("此頁為彙整頁（同一頁列出多項補助），請由官方連結前往各項補助查看條件。")
+            return lines
+        if outcome is not None:
+            # 資格骨幹在前（決定分層的依據），逐條規則只補充骨幹沒涵蓋的屬性
+            icon = {"satisfied": "✓", "violated": "✗", "unknown": "？"}
+            for result in sorted(outcome.results, key=lambda r: ({"violated": 0, "unknown": 1, "satisfied": 2}[r.state], not r.confirmed)):
+                if result.facet.get("kind") == "residence" and not result.facet.get("cities"):
+                    continue
+                if result.state == "unknown" and result not in outcome.unknown_confirmed:
+                    continue  # 單一來源的條件在資料不足時不提示，避免雜訊
+                note = "（公告條件未完全確認，請看原文）" if result.state == "violated" and not result.confirmed else ""
+                lines.append(f"{icon[result.state]} {result.reason}{note}")
+            for result in failed:
+                if not _core_attribute(result.attribute_id, registry):
+                    lines.append(f"✗ {result.human_readable or result.attribute_id}：{result.reason}")
+            for attribute_id in dict.fromkeys(r.attribute_id for r in missing if r.complexity != "complex" and not _core_attribute(r.attribute_id, registry)):
+                attribute = registry.get(attribute_id)
+                lines.append(f"？ 申請前請確認：{attribute.label if attribute else attribute_id}")
+            for result in complex_conditions[:3]:
+                lines.append(f"△ 需進一步確認：{result.human_readable}")
+            for result in bonus[:2]:
+                lines.append(f"★ 優先／加分條件：{result.human_readable}")
+            if not outcome.results:
+                lines.append("此公告沒有明確的申請資格限制，詳細條件請看官方公告。")
             return lines
         if not [r for r in record.get("rules") or [] if r.get("role") != "bonus"]:
             lines.append("此公告尚未抽取到可判斷的資格條件，請直接查看官方公告。")

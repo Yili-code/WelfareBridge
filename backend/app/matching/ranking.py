@@ -178,7 +178,8 @@ def rank(items: list[MatchItem], profile: Profile, *, registry: Registry | None 
         if minimum and annual and annual < float(minimum):
             preference *= 0.5
         ranked.suitability = {"annual_value": annual, "win_probability": probability, "win_reason": prob_reason, "urgency": urgency, "urgency_reason": urgency_reason, "cost": round(cost, 2), "cost_notes": cost_notes, "preference": preference, "penalty": penalty, "days_left": days}
-        ranked.reasons = [f"資格：{ '高度符合' if item.status == 'high_match' else '可能符合'}（{int(item.eligibility_score * 100)}%）", prob_reason, urgency_reason]
+        eligibility = ("符合" if item.status == "high_match" else "可能符合・需補充資料") if item.core_built else ("高度符合" if item.status == "high_match" else "可能符合")
+        ranked.reasons = [f"資格：{eligibility}（{int(item.eligibility_score * 100)}%）", prob_reason, urgency_reason]
         if meta.get("benefit_form") == "service":
             ranked.reasons.append("給付形式：服務")
         ranked.cautions.extend(cost_notes)

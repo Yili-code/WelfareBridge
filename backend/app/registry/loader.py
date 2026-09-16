@@ -284,6 +284,31 @@ class Registry:
         tag = self.tags.get(tag_id)
         return tag.attribute if tag else ""
 
+    def tag_states(self, values: dict[str, Any]) -> tuple[set[str], set[str]]:
+        """逐項判斷身分：(確定具備, 確定不具備)。沒回答過的身分兩邊都不列，媒合時是未知。
+        回答過經濟狀況不代表回答過「是不是原住民／身障」，不能因此判定不具備。"""
+        true_tags, _answered = self.tags_from_attribute_values(values)
+        false_tags: set[str] = set()
+        for tag in self.tags.values():
+            if tag.id in true_tags or not tag.attribute:
+                continue
+            value = values.get(tag.attribute)
+            attribute = self.get(tag.attribute)
+            if value is None or attribute is None:
+                continue
+            if attribute.type == "boolean" and value is False:
+                false_tags.add(tag.id)
+            elif attribute.type == "enum" and str(value) not in {tag.label, "雅美族" if tag.id == "yami" else tag.label}:
+                false_tags.add(tag.id)
+        # 虛擬身分（弱勢學生）只能由其他身分推得：所有能推出它的身分都確定不具備，才算不具備
+        for tag in self.tags.values():
+            if tag.id in true_tags or tag.attribute:
+                continue
+            implying = [other.id for other in self.tags.values() if tag.id in other.implies]
+            if implying and all(other in false_tags for other in implying):
+                false_tags.add(tag.id)
+        return true_tags, false_tags
+
     def tags_from_attribute_values(self, values: dict[str, Any]) -> tuple[set[str], bool]:
         """由 profile 屬性值推出使用者具備的身分標籤；回傳 (標籤集合, 是否回答過任何身分題)。"""
         answered = False

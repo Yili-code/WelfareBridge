@@ -3,7 +3,7 @@
 版型（與教育部同一套 CMS）：清單 News.aspx?n=…&sms=…&page=N&PageSize=20 → News_Content.aspx?…&s=…
 詳細頁：#CCMS_Content 內 h3.h3（標題）、.area-essay .essay（內文，常常只有「詳如附件」）、
         .page-footer .file-download-multiple（PDF 附件）、.bottom-detail（資料更新／資料維護單位）。
-內文太短且有 PDF 附件時，會下載附件（最多 2 個）用 pypdf 抽出文字，附在 raw_text 後面並記錄在 structured["附件文字"]。
+內文常常只寫「詳如附件」：PDF 附件的文字由 BaseCrawler.read_attachments 併進 raw_text（見 base/parser.py 的取捨規則）。
 """
 
 from __future__ import annotations
@@ -13,10 +13,8 @@ from typing import Iterable
 
 from ..base.base_crawler import BaseCrawler, DiscoveredItem, RawDocumentData
 from ..base.http_client import FetchResult
-from ..base.parser import absolutize, clean_text, find_attachments, make_soup, node_to_text, pdf_to_text
+from ..base.parser import absolutize, clean_text, find_attachments, make_soup, node_to_text
 
-MAX_PDF_ATTACHMENTS = 2
-MAX_PDF_BYTES = 5 * 1024 * 1024
 
 
 class TaipeiEducationCrawler(BaseCrawler):
@@ -96,25 +94,8 @@ class TaipeiEducationCrawler(BaseCrawler):
                 unit = clean_text(m.group(1))
                 structured["發布單位"] = unit
 
-        attachment_texts: list[str] = []
-        if len(body) < 120:
-            for attachment in [a for a in attachments if a.get("type") == "pdf"][:MAX_PDF_ATTACHMENTS]:
-                try:
-                    pdf = self.fetch(attachment["url"])
-                    if len(pdf.content) > MAX_PDF_BYTES or not pdf.is_pdf:
-                        continue
-                    text = pdf_to_text(pdf.content)
-                    if text:
-                        attachment_texts.append(f"【附件：{attachment['name']}】\n{text[:6000]}")
-                        attachment["text_extracted"] = True
-                except Exception as exc:  # 附件失敗不影響公告本身
-                    self.log("WARNING", f"附件下載／解析失敗：{exc}", attachment["url"])
-        if attachment_texts:
-            structured["附件文字"] = "\n\n".join(attachment_texts)
-
+        # 附件文字由 BaseCrawler.read_attachments 統一併入（取捨規則見 parser.attachment_is_detail）
         raw_text = f"公告標題：{title}\n" + (f"發布單位：{unit}\n" if unit else "") + body
-        if attachment_texts:
-            raw_text += "\n\n" + "\n\n".join(attachment_texts)
         return RawDocumentData(
             source_url=fetch.final_url or fetch.url,
             title=title,

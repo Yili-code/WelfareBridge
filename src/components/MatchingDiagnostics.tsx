@@ -1,11 +1,14 @@
 "use client";
 import { useState } from "react";
 import { useProfiles } from "@/lib/store";
-import { toBenefitProfile } from "@/lib/benefit-profile";
+import { toMatchingProfile } from "@/lib/benefit-profile";
 
 type Condition = { rule_id: string; group_id: string; attribute_id: string; human_readable: string; operator: string; value: unknown; user_value: unknown; reason: string; excerpt: string; confidence: number; inferred: boolean; status: string };
-type Item = { benefit_id: string; title: string; status: string; source_url: string; explanation: string[]; retrieval_exclusions: string[]; ranking_stage: string; ranking_reasons: string[]; rule_count: number; matched_conditions: Condition[]; missing_conditions: Condition[]; failed_conditions: Condition[]; complex_conditions: Condition[]; bonus_conditions: Condition[] };
+type CoreFacet = { kind: string; status: string; state: string; reason: string; label: string; signals: string[] };
+type Item = { benefit_id: string; title: string; status: string; tier?: string; core?: CoreFacet[]; core_built?: boolean; needs_labels?: string[]; source_url: string; explanation: string[]; retrieval_exclusions: string[]; ranking_stage: string; ranking_reasons: string[]; rule_count: number; matched_conditions: Condition[]; missing_conditions: Condition[]; failed_conditions: Condition[]; complex_conditions: Condition[]; bonus_conditions: Condition[] };
 type Report = { items: Item[]; total: number; returned: number; truncated: boolean; profile_used: unknown; profile_notes: string[] };
+const tiers: Record<string, string> = { tier1: "✅ 符合", tier2: "🟡 可能符合・需補充資料", hidden: "不顯示" };
+const signalNames: Record<string, string> = { structure: "發布機關", title: "標題", text: "原文句型", rules: "抽取規則", llm: "本地 AI" };
 const labels: Record<string, string> = { high_match: "初步符合", possible_match: "可能符合", insufficient_data: "資料不足", not_match: "條件不符", match: "符合", unknown: "未知", eligible: "可列入推薦", removed_deadline: "截止時間篩除", removed_exclusive: "兼領限制篩除", removed_need: "需求不符", removed_dislike: "偏好篩除", other_need: "其他需求", not_ranked: "未進入推薦排序" };
 const value = (v: unknown) => v == null ? "未提供" : typeof v === "boolean" ? v ? "是" : "否" : JSON.stringify(v);
 
@@ -23,7 +26,7 @@ export default function MatchingDiagnostics() {
   setBusy(true); setError(""); setReport(null);
   setSnapshot(JSON.stringify(profile, null, 2));
   try {
-   const response = await fetch('/api/matching/diagnose', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ profile: toBenefitProfile(profile), search }), signal: AbortSignal.timeout(60000) });
+   const response = await fetch('/api/matching/diagnose', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ profile: toMatchingProfile(profile), search }), signal: AbortSignal.timeout(60000) });
    if (!response.ok) throw new Error("無法取得診斷，請確認後端已更新並啟動。");
    setReport(await response.json());
   } catch (e) { setError(e instanceof Error ? e.message : "診斷失敗"); }
@@ -45,9 +48,15 @@ export default function MatchingDiagnostics() {
    {!report.total && <p>資料庫沒有找到這個名稱，請縮短關鍵字，或到資料中心確認是否已爬取。</p>}
    <p className="text-xs text-ink-400">同組條件是 OR、不同組是 AND。通過資格仍可能因前台只顯示前六筆而看不到；這裡不重現前台名次或 AI 判斷。</p>
    {report.items.map(item => <details key={item.benefit_id} className="rounded-xl border bg-white p-4">
-    <summary className="cursor-pointer font-medium">{item.title} · {item.retrieval_exclusions.length ? "候選檢索已排除" : labels[item.status]}</summary>
+    <summary className="cursor-pointer font-medium">{item.title} · {item.retrieval_exclusions.length ? "候選檢索已排除" : item.tier ? tiers[item.tier] : labels[item.status]}</summary>
     <div className="mt-3 space-y-3 text-sm">
      {[...item.retrieval_exclusions, ...item.explanation].map((reason, i) => <p key={i}>{reason}</p>)}
+     {item.core_built ? <div className="rounded border border-slate-200 p-3">
+      <h3 className="font-medium">資格骨幹（決定分層；只有「已確認」的不符會隱藏補助）</h3>
+      {!item.core?.length && <p className="text-ink-400">此公告沒有抽出明確的申請資格限制。</p>}
+      <ul className="mt-2 space-y-1">{(item.core || []).map((facet, i) => <li key={i}>{facet.state === "satisfied" ? "✓" : facet.state === "violated" ? "✗" : "？"} {facet.label}：{facet.reason}<span className="ml-2 text-xs text-ink-400">{facet.status === "confirmed" ? "已確認" : "未確認"}（{facet.signals.map(s => signalNames[s] || s).join("＋")}）</span></li>)}</ul>
+      {!!item.needs_labels?.length && <p className="mt-2 text-amber-700">補充這些資料可以確認：{item.needs_labels.join("、")}</p>}
+     </div> : <p className="text-ink-400">此補助尚未建立資格骨幹，沿用逐條規則判斷。</p>}
      {!item.rule_count && <p className="text-amber-700">沒有抽取到資格規則，無法確認是否符合。請檢查官方原文與資料處理結果。</p>}
      <p>推薦階段：{labels[item.ranking_stage] || item.ranking_stage}（獨立評估；被候選檢索排除者不會實際進入推薦）</p>
      {item.ranking_reasons.map((r, i) => <p key={i}>{r}</p>)}

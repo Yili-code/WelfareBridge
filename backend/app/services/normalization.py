@@ -153,14 +153,17 @@ def to_iso_date(text: str) -> str:
 
 
 def parse_date_range(text: str) -> tuple[str, str]:
-    """回傳 (start_iso, end_iso)。只有一個日期時視為截止日。找不到年份的日期不猜。"""
-    dates = [to_iso_date(m.group(0)) for m in ROC_DATE_RE.finditer(fullwidth_to_halfwidth(text or ""))]
-    dates = [d for d in dates if d]
-    if not dates:
+    """回傳 (start_iso, end_iso)。只有一個日期時視為截止日；但日期後面緊接著「起」的是起始日
+    （「自108年8月1日起受理申請迄今」不是截止日，當成截止日會讓還在辦的方案被標成已過期）。找不到年份的日期不猜。"""
+    cleaned = fullwidth_to_halfwidth(text or "")
+    found = [(match, to_iso_date(match.group(0))) for match in ROC_DATE_RE.finditer(cleaned)]
+    found = [(match, date) for match, date in found if date]
+    if not found:
         return "", ""
-    if len(dates) == 1:
-        return "", dates[0]
-    return dates[0], dates[-1]
+    if len(found) == 1:
+        match, date = found[0]
+        return (date, "") if re.match(r"\s*起", cleaned[match.end():]) else ("", date)
+    return found[0][1], found[-1][1]
 
 
 AMOUNT_RE = re.compile(

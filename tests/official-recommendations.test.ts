@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { officialRecommendations } from '../src/lib/official-recommendations';
+import { officialRecommendations, residenceMismatch } from '../src/lib/official-recommendations';
 import type { MatchItem, MatchResponse } from '../src/benefits/types';
 import type { Profile } from '../src/lib/types';
 
@@ -18,4 +18,23 @@ it('does not recommend child education programs as current tuition aid for adult
  expect(officialRecommendations(result, { age: 20, needs: ['就學與學費'] } as Profile).matches.map(item => item.title)).toEqual(['大專學生助學金']);
  expect(officialRecommendations(result, { age: 5, relation: 'child', needs: ['就學與學費'] } as Profile).matches).toHaveLength(3);
  expect(officialRecommendations(result, { age: null, needs: ['就學與學費'] } as Profile).matches).toHaveLength(3);
+});
+
+it('uses the engine tier when present and lists fully matched benefits before those needing more information', () => {
+ const item = (id: string, tier: 'tier1' | 'tier2' | 'hidden', status: string, needs: string[] = []) => ({ benefit_id: id, category: 'scholarship', domain: 'education', status, tier, needs, eligibility_score: .5, is_overview: false }) as MatchItem;
+ const result = { matches: [item('needs-two', 'tier2', 'possible_match', ['a', 'b']), item('hidden', 'hidden', 'not_match'), item('ok', 'tier1', 'high_match'), item('needs-one', 'tier2', 'possible_match', ['a'])] } as MatchResponse;
+ const selected = officialRecommendations(result, { needs: ['就學與學費'] } as Profile);
+ expect(selected.confirmed.map(i => i.benefit_id)).toEqual(['ok']);
+ expect(selected.needsInfo.map(i => i.benefit_id)).toEqual(['needs-one', 'needs-two']);
+ expect(selected.matches.map(i => i.benefit_id)).not.toContain('hidden');
+});
+
+it('puts benefits whose household-registration city does not match the user last, and names the city', () => {
+ const item = (id: string, core: MatchItem['core'] = []) => ({ benefit_id: id, category: 'scholarship', domain: 'education', status: 'possible_match', tier: 'tier2', needs: [], core, eligibility_score: .9, is_overview: false }) as unknown as MatchItem;
+ const elsewhere = item('other-city', [{ kind: 'residence', status: 'uncertain', state: 'violated', reason: '', needs: [], label: '設籍彰化縣', signals: ['structure'] }]);
+ const result = { matches: [elsewhere, item('same-city', [{ kind: 'residence', status: 'confirmed', state: 'satisfied', reason: '', needs: [], label: '設籍基隆市', signals: ['structure', 'title'] }])] } as MatchResponse;
+ const selected = officialRecommendations(result, { needs: ['就學與學費'] } as Profile);
+ expect(selected.needsInfo.map(i => i.benefit_id)).toEqual(['same-city', 'other-city']);
+ expect(residenceMismatch(elsewhere)).toBe('設籍彰化縣');
+ expect(residenceMismatch(item('same-city'))).toBe('');
 });

@@ -77,7 +77,8 @@ export function ResultCard({ item, catalog, cities, labels, profileId, onSupplem
 
   const meta = item.benefit ?? {};
   const application = meta.application ?? {};
-  const missingAttributes = item.missing_attributes.length ? item.missing_attributes : Array.from(new Set(item.missing_conditions.map((condition) => condition.attribute_id)));
+  // 有資格骨幹時只請使用者補「能改變分層」的欄位；舊資料沿用逐條規則缺的欄位
+  const missingAttributes = item.core_built ? item.needs ?? [] : item.missing_attributes.length ? item.missing_attributes : Array.from(new Set(item.missing_conditions.map((condition) => condition.attribute_id)));
   const expired = item.benefit_status === 'expired' || isExpired(meta.application_period);
   const suitability = item.suitability;
 

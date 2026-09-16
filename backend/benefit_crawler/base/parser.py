@@ -94,6 +94,47 @@ def extract_labeled_blocks(container: Tag, *, block_selector: str, label_selecto
     return result
 
 
+# ---- 附件取捨：哪些 PDF 值得下載下來併進原文（規範文件要，表單、預算書不要）
+# 名稱像規範／說明文件：內容是資格、金額、申請方式的正式依據
+DETAIL_ATTACHMENT_RE = re.compile(r"(要點|計畫|辦法|條例|規定|規範|簡章|須知|基準|標準|原則|注意事項|作業流程|申請說明|實施|核定本|公告|補助|補貼|津貼|給付|獎助|獎學金|助學|減免|救助|扶助|問答|Q&A|QA)", re.I)
+# 名稱像表單／帳務文件：填寫用的空白表格或會計報表，沒有資格條件
+FORM_ATTACHMENT_RE = re.compile(r"(申請書|申請表|申復表|報名表|切結書|同意書|委託書|承諾書|聲明書|申報表|領據|印領清冊|存摺|範本|範例|問卷|名冊|名單|一覽表|預算書|決算書|預算表|決算表|平衡表|現金流量|收支餘絀|餘絀撥補|統計表|對照表)")
+# 名稱看不出內容（超連結文字只寫「pdf」「檔案下載」「請點此下載」）
+MEANINGLESS_NAME_RE = re.compile(r"^[\s\[\(【（]*(?:pdf|odt|docx?|ods|xlsx?|csv|檔案?|附件|下載|點此|請點此下載參閱|標題|檔案下載|附件下載|pdf檔?下載?|\.\w+)[\s\]\)】）檔案下載參閱]*$", re.I)
+# 本文短於這個長度時，連看不出名稱的附件也值得抓（資格與給付內容多半只寫在附件裡）
+THIN_BODY_CHARS = 1500
+
+
+def attachment_is_detail(name: str, *, body_chars: int = 0) -> bool:
+    """這個附件值不值得下載：名稱像規範文件就抓；名稱看不出來時，只有在本文不足時才抓。表單與帳務文件一律不抓。"""
+    name = (name or "").strip()
+    if FORM_ATTACHMENT_RE.search(name):
+        return False
+    if DETAIL_ATTACHMENT_RE.search(name):
+        return True
+    return body_chars < THIN_BODY_CHARS
+
+
+def meaningless_name(name: str) -> bool:
+    """連結文字只有「pdf」「檔案下載」這類字眼或流水號檔名，不能當標題（中文檔名去掉副檔名後仍可用）。"""
+    text = (name or "").strip()
+    return not text or bool(MEANINGLESS_NAME_RE.match(text)) or bool(re.match(r"^[A-Za-z0-9_\-. ]+\.(?:pdf|docx?|odt|ods|xlsx?|csv)$", text, re.I))
+
+
+def headline_title(text: str, *, max_length: int = 60) -> str:
+    """PDF／附件的第一行有意義的文字當標題（連結文字是「pdf」時的替代來源）。"""
+    for line in (text or "").splitlines():
+        line = clean_text(line).strip(" :：-—　")
+        if not line or meaningless_name(line):
+            continue
+        if re.match(r"^(發布單位|資料提供單位|承辦單位|聯絡電話|電話|傳真|附件|檔案大小)[：:]", line):
+            continue
+        if len(re.findall(r"[一-鿿]", line)) < 4:
+            continue
+        return line[:max_length]
+    return ""
+
+
 def find_attachments(container: Tag, base_url: str) -> list[dict]:
     attachments: list[dict] = []
     seen: set[str] = set()

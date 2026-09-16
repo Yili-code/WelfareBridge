@@ -68,6 +68,8 @@ class Settings(BaseSettings):
     # ---- LLM（只支援本地 Ollama）----
     llm_provider: str = "ollama"  # ollama | none
     llm_model: str = "qwen2.5:7b"
+    # 資格骨幹抽取用的模型（離線批次，準確度優先；空字串＝沿用 llm_model）。有 5090 可改 qwen3:32b 等較大模型
+    core_llm_model: str = "qwen3:8b"
     embedding_model: str = "bge-m3"  # 本地 Ollama embedding 模型（分類的第二個獨立訊號）
     ollama_base_url: str = "http://localhost:11434"
     llm_timeout_seconds: float = 300.0

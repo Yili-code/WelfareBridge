@@ -1,0 +1,189 @@
+# 媒合黃金集：代表性使用者。每人兩層資料：
+# q：儀表板十題問卷的答案（選項索引，對應 src/lib/questionnaire.ts 的 QUESTIONS），exact_age／region／current_region 同建檔精靈；
+#    評估時用 backend/scripts/eval_matching.py 內的 toBenefitProfile 移植版轉成「系統實際收到的欄位」。
+# truth：真實情況（身分都明確），用來判斷真正符不符合 benefit_facets.yaml 的資格骨幹。
+#   tags 未列出的身分一律為 false；children：子女年齡清單（[] 無子女）；child_levels：在學子女學制
+version: 1
+personas:
+  - id: A_taipei_univ_mli
+    desc: 20歲大學生，臺北市，中低收入戶
+    q: {needs: [0], age: 1, residence: 1, education: 3, economy: 1, identity: [4], employment: [5], housing: 3, support: [4], benefits: [4]}
+    exact_age: 20
+    region: 臺北市
+    truth: {age: 20, household_city: 臺北市, current_city: 臺北市, student: true, education_level: university, tags: [middle_low_income], nationality: roc, gender: female, employment: student, housing: family, children: []}
+  - id: B_kaohsiung_70_stable
+    desc: 70歲，高雄市，經濟穩定，自有住宅
+    q: {needs: [3, 4], age: 4, residence: 1, education: 0, economy: 3, identity: [4], employment: [4], housing: 2, support: [4], benefits: [4]}
+    exact_age: 70
+    region: 高雄市
+    truth: {age: 70, household_city: 高雄市, current_city: 高雄市, student: false, tags: [], nationality: roc, gender: male, employment: retired, housing: own, children: []}
+  - id: C_ntpc_35_unemployed_rent
+    desc: 35歲，新北市，非自願離職找工作，租屋，經濟困難
+    q: {needs: [1, 2], age: 3, residence: 1, education: 0, economy: 2, identity: [4], employment: [2], housing: 0, support: [3], benefits: [4]}
+    exact_age: 35
+    region: 新北市
+    truth: {age: 35, household_city: 新北市, current_city: 新北市, student: false, tags: [economic_hardship], nationality: roc, gender: male, employment: unemployed, involuntary_separation: true, housing: rent, children: []}
+  - id: D_taitung_19_univ_hardship
+    desc: 19歲大學生，臺東縣設籍、在臺北念書，家境清寒但非低收
+    q: {needs: [0], age: 1, residence: 2, education: 3, economy: 2, identity: [4], employment: [5], housing: 1, support: [4], benefits: [4]}
+    exact_age: null
+    region: 臺東縣
+    current_region: 臺北市
+    truth: {age: 19, household_city: 臺東縣, current_city: 臺北市, student: true, education_level: university, tags: [economic_hardship], nationality: roc, gender: male, employment: student, housing: dorm, children: []}
+  - id: E_tainan_parent_two_kids
+    desc: 32歲家長，臺南市，受僱，租屋，子女1歲與4歲，一般家庭
+    q: {needs: [3], age: 3, residence: 1, education: 0, economy: 3, identity: [4], employment: [0], housing: 0, support: [0], benefits: [3]}
+    exact_age: 32
+    region: 臺南市
+    truth: {age: 32, household_city: 臺南市, current_city: 臺南市, student: false, tags: [], nationality: roc, gender: female, employment: employed, housing: rent, children: [1, 4]}
+  - id: F_ntpc_17_indigenous_high_li
+    desc: 17歲原住民高中生，新北市，低收入戶
+    q: {needs: [0], age: 0, residence: 1, education: 2, economy: 0, identity: [0], employment: [5], housing: 3, support: [4], benefits: [3]}
+    exact_age: 17
+    region: 新北市
+    truth: {age: 17, household_city: 新北市, current_city: 新北市, student: true, education_level: senior_high, tags: [indigenous, low_income], nationality: roc, gender: female, employment: student, housing: family, children: []}
+  - id: G_taichung_68_mli_needs_care
+    desc: 68歲，臺中市，中低收入戶，獨居且需要照顧
+    q: {needs: [4, 3], age: 4, residence: 1, education: 0, economy: 1, identity: [4], employment: [4], housing: 0, support: [1], benefits: [3]}
+    exact_age: null
+    region: 臺中市
+    truth: {age: 68, household_city: 臺中市, current_city: 臺中市, student: false, tags: [middle_low_income], nationality: roc, gender: female, employment: retired, housing: rent, needs_care: true, children: []}
+  - id: H_taoyuan_45_disabled_rent
+    desc: 45歲身障者本人，桃園市，受僱，租屋，一般家庭
+    q: {needs: [4, 2], age: 3, residence: 1, education: 0, economy: 3, identity: [1], employment: [0], housing: 0, support: [4], benefits: [4]}
+    exact_age: 45
+    region: 桃園市
+    truth: {age: 45, household_city: 桃園市, current_city: 桃園市, student: false, tags: [disabled], nationality: roc, gender: male, employment: employed, housing: rent, children: []}
+  - id: I_penghu_10_elementary
+    desc: 10歲國小學生（家長代填），澎湖縣，一般家庭
+    q: {needs: [0], age: 0, residence: 1, education: 1, economy: 3, identity: [4], employment: [5], housing: 3, support: [4], benefits: [4]}
+    exact_age: 10
+    region: 澎湖縣
+    truth: {age: 10, household_city: 澎湖縣, current_city: 澎湖縣, school_city: 澎湖縣, student: true, education_level: elementary, tags: [], nationality: roc, gender: male, employment: student, housing: family, children: []}
+  - id: J_kaohsiung_single_mom
+    desc: 38歲單親媽媽，高雄市，特殊境遇家庭，待業，租屋，子女6歲與9歲
+    q: {needs: [3, 1], age: 3, residence: 1, education: 0, economy: 2, identity: [2], employment: [2], housing: 0, support: [0], benefits: [4]}
+    exact_age: 38
+    region: 高雄市
+    truth: {age: 38, household_city: 高雄市, current_city: 高雄市, student: false, tags: [single_parent, special_circumstances, economic_hardship], nationality: roc, gender: female, employment: unemployed, involuntary_separation: false, housing: rent, children: [6, 9], child_levels: [elementary]}
+  - id: K_pingtung_60_indigenous_li
+    desc: 60歲原住民，屏東縣，低收入戶，需要照顧
+    q: {needs: [4, 3], age: 3, residence: 1, education: 0, economy: 0, identity: [0], employment: [4], housing: 2, support: [1], benefits: [3]}
+    exact_age: 60
+    region: 屏東縣
+    truth: {age: 60, household_city: 屏東縣, current_city: 屏東縣, student: false, tags: [indigenous, low_income], nationality: roc, gender: male, employment: retired, housing: own, needs_care: true, children: []}
+  - id: L_changhua_16_vocational_li
+    desc: 16歲高職生，彰化縣，低收入戶
+    q: {needs: [0], age: 0, residence: 1, education: 2, economy: 0, identity: [4], employment: [5], housing: 3, support: [4], benefits: [4]}
+    exact_age: null
+    region: 彰化縣
+    truth: {age: 16, household_city: 彰化縣, current_city: 彰化縣, student: true, education_level: vocational_high, tags: [low_income], nationality: roc, gender: male, employment: student, housing: family, children: []}
+  - id: M_chiayi_county_newborn
+    desc: 30歲新手媽媽，嘉義縣，新生兒0歲，自有住宅，一般家庭
+    q: {needs: [3], age: 3, residence: 1, education: 0, economy: 3, identity: [4], employment: [0], housing: 2, support: [0], benefits: [4]}
+    exact_age: 30
+    region: 嘉義縣
+    truth: {age: 30, household_city: 嘉義縣, current_city: 嘉義縣, student: false, tags: [], nationality: roc, gender: female, employment: employed, housing: own, children: [0]}
+  - id: N_taichung_40_li_rent
+    desc: 40歲，臺中市，低收入戶，受僱，租屋
+    q: {needs: [2, 3], age: 3, residence: 1, education: 0, economy: 0, identity: [4], employment: [0], housing: 0, support: [4], benefits: [3]}
+    exact_age: null
+    region: 臺中市
+    truth: {age: 40, household_city: 臺中市, current_city: 臺中市, student: false, tags: [low_income], nationality: roc, gender: male, employment: employed, housing: rent, children: []}
+  - id: O_keelung_22_univ_disabled_li
+    desc: 22歲身障大學生，基隆市，低收入戶
+    q: {needs: [0, 4], age: 1, residence: 1, education: 3, economy: 0, identity: [1], employment: [5], housing: 3, support: [4], benefits: [4]}
+    exact_age: 22
+    region: 基隆市
+    truth: {age: 22, household_city: 基隆市, current_city: 基隆市, student: true, education_level: university, tags: [disabled, low_income], nationality: roc, gender: female, employment: student, housing: family, children: []}
+  - id: P_taoyuan_70_foreign_resident
+    desc: 70歲外籍永久居留者，住桃園市，無臺灣戶籍
+    q: {needs: [4], age: 4, residence: 3, education: 0, economy: 3, identity: [4], employment: [4], housing: 2, support: [4], benefits: [4]}
+    exact_age: 70
+    region: ""
+    current_region: 桃園市
+    truth: {age: 70, household_city: null, current_city: 桃園市, student: false, tags: [], nationality: foreign, gender: male, employment: retired, housing: own, children: []}
+  - id: Q_hsinchu_city_66_mli_rent
+    desc: 66歲，新竹市，中低收入戶，租屋
+    q: {needs: [2, 3], age: 4, residence: 1, education: 0, economy: 1, identity: [4], employment: [4], housing: 0, support: [4], benefits: [3]}
+    exact_age: 66
+    region: 新竹市
+    truth: {age: 66, household_city: 新竹市, current_city: 新竹市, student: false, tags: [middle_low_income], nationality: roc, gender: female, employment: retired, housing: rent, children: []}
+  - id: R_miaoli_72_li
+    desc: 72歲，苗栗縣，低收入戶，自有住宅
+    q: {needs: [3, 4], age: 4, residence: 1, education: 0, economy: 0, identity: [4], employment: [4], housing: 2, support: [4], benefits: [3]}
+    exact_age: null
+    region: 苗栗縣
+    truth: {age: 72, household_city: 苗栗縣, current_city: 苗栗縣, student: false, tags: [low_income], nationality: roc, gender: male, employment: retired, housing: own, children: []}
+  - id: S_tainan_parent_child_7
+    desc: 36歲家長，臺南市，子女7歲需療育，一般家庭，受僱
+    q: {needs: [4, 3], age: 3, residence: 1, education: 0, economy: 3, identity: [4], employment: [0], housing: 2, support: [0], benefits: [4]}
+    exact_age: 36
+    region: 臺南市
+    truth: {age: 36, household_city: 臺南市, current_city: 臺南市, student: false, tags: [], nationality: roc, gender: male, employment: employed, housing: own, children: [7], child_levels: [elementary]}
+  - id: T_kinmen_30_jobseeker
+    desc: 30歲，金門縣，待業找工作（自願離職），一般家庭
+    q: {needs: [1], age: 3, residence: 1, education: 0, economy: 3, identity: [4], employment: [2], housing: 3, support: [4], benefits: [4]}
+    exact_age: 30
+    region: 金門縣
+    truth: {age: 30, household_city: 金門縣, current_city: 金門縣, student: false, tags: [], nationality: roc, gender: female, employment: unemployed, involuntary_separation: false, housing: family, children: []}
+  - id: U_lienchiang_45_caregiver
+    desc: 45歲，連江縣，照顧失能家人的主要照顧者，一般家庭
+    q: {needs: [4], age: 3, residence: 1, education: 0, economy: 3, identity: [4], employment: [4], housing: 2, support: [1, 2], benefits: [4]}
+    exact_age: 45
+    region: 連江縣
+    truth: {age: 45, household_city: 連江縣, current_city: 連江縣, student: false, tags: [], nationality: roc, gender: female, employment: unemployed, housing: own, caregiver: true, children: []}
+  - id: V_taitung_24_neet_first_job
+    desc: 24歲，臺東縣，畢業後未就業也未在學已半年，初次找工作
+    q: {needs: [1], age: 1, residence: 1, education: 0, economy: 3, identity: [4], employment: [2], housing: 3, support: [4], benefits: [4]}
+    exact_age: null
+    region: 臺東縣
+    truth: {age: 24, household_city: 臺東縣, current_city: 臺東縣, student: false, tags: [], nationality: roc, gender: male, employment: unemployed, involuntary_separation: false, housing: family, children: []}
+  - id: W_nantou_67_mli_illness
+    desc: 67歲，南投縣，中低收入戶（非低收），罹患嚴重傷病
+    q: {needs: [4], age: 4, residence: 1, education: 0, economy: 1, identity: [4], employment: [4], housing: 2, support: [3], benefits: [3]}
+    exact_age: 67
+    region: 南投縣
+    truth: {age: 67, household_city: 南投縣, current_city: 南投縣, student: false, tags: [middle_low_income, catastrophic_illness], nationality: roc, gender: male, employment: retired, housing: own, children: []}
+  - id: X_chiayi_city_55_li_hospital
+    desc: 55歲，嘉義市，低收入戶，近期住院
+    q: {needs: [4, 3], age: 3, residence: 1, education: 0, economy: 0, identity: [4], employment: [4], housing: 0, support: [3], benefits: [3]}
+    exact_age: 55
+    region: 嘉義市
+    truth: {age: 55, household_city: 嘉義市, current_city: 嘉義市, student: false, tags: [low_income], nationality: roc, gender: female, employment: unemployed, housing: rent, children: []}
+  - id: Y_hsinchu_county_child_4
+    desc: 4歲幼兒（家長代填），新竹縣，一般家庭，就讀私立幼兒園
+    q: {needs: [3, 0], age: 0, residence: 1, education: 0, economy: 3, identity: [4], employment: [4], housing: 2, support: [4], benefits: [4]}
+    exact_age: 4
+    region: 新竹縣
+    truth: {age: 4, household_city: 新竹縣, current_city: 新竹縣, student: false, tags: [], nationality: roc, gender: female, employment: student, housing: own, children: []}
+  - id: Z_yilan_45_disabled
+    desc: 45歲身障者本人，宜蘭縣，一般家庭，自有住宅
+    q: {needs: [4], age: 3, residence: 1, education: 0, economy: 3, identity: [1], employment: [4], housing: 2, support: [4], benefits: [4]}
+    exact_age: null
+    region: 宜蘭縣
+    truth: {age: 45, household_city: 宜蘭縣, current_city: 宜蘭縣, student: false, tags: [disabled], nationality: roc, gender: male, employment: unemployed, housing: own, children: []}
+  - id: AA_taipei_28_master
+    desc: 28歲碩士生，臺北市，一般家庭
+    q: {needs: [0], age: 2, residence: 1, education: 4, economy: 3, identity: [4], employment: [5], housing: 0, support: [4], benefits: [4]}
+    exact_age: 28
+    region: 臺北市
+    truth: {age: 28, household_city: 臺北市, current_city: 臺北市, student: true, education_level: master, tags: [], nationality: roc, gender: female, employment: student, housing: rent, children: []}
+  - id: AB_hualien_8_li_child
+    desc: 8歲兒童（家長代填），花蓮縣，低收入戶，國小
+    q: {needs: [4, 0], age: 0, residence: 1, education: 1, economy: 0, identity: [4], employment: [5], housing: 3, support: [4], benefits: [3]}
+    exact_age: 8
+    region: 花蓮縣
+    truth: {age: 8, household_city: 花蓮縣, current_city: 花蓮縣, student: true, education_level: elementary, tags: [low_income], nationality: roc, gender: male, employment: student, housing: family, children: []}
+  - id: AC_pingtung_20_univ_stem
+    desc: 20歲理工科大學生，屏東縣設籍，一般家庭
+    q: {needs: [0], age: 1, residence: 1, education: 3, economy: 3, identity: [4], employment: [5], housing: 1, support: [4], benefits: [4]}
+    exact_age: 20
+    region: 屏東縣
+    truth: {age: 20, household_city: 屏東縣, current_city: 屏東縣, student: true, education_level: university, tags: [], nationality: roc, gender: male, employment: student, housing: dorm, children: []}
+  - id: AD_ntpc_16_single_parent_mli
+    desc: 16歲高中生，新北市，單親中低收入戶
+    q: {needs: [0, 3], age: 0, residence: 1, education: 2, economy: 1, identity: [2], employment: [5], housing: 0, support: [4], benefits: [4]}
+    exact_age: null
+    region: 新北市
+    truth: {age: 16, household_city: 新北市, current_city: 新北市, student: true, education_level: senior_high, tags: [single_parent, middle_low_income], nationality: roc, gender: female, employment: student, housing: rent, children: []}
