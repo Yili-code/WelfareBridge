@@ -3,22 +3,32 @@
 import "./welfare.css";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toMatchingProfile } from "@/lib/benefit-profile";
-import { useActiveProfileId, useHydrated, useProfiles } from "@/lib/store";
+import { toggleSaved, useActiveProfileId, useHydrated, useProfiles, useSaved } from "@/lib/store";
+import type { Profile } from "@/lib/types";
 import { fetchBenefits, matchProfile, type BenefitCard, type MatchResponse } from "./api";
 import ChatWidget, { type ChatHandle } from "./ChatWidget";
+import { deadlineInfo, localToday } from "./deadline";
 import DetailDrawer from "./DetailDrawer";
 import GapPanel from "./GapPanel";
+import PrintSheet, { type PrintJob } from "./PrintSheet";
+import ProfileDialog from "./ProfileDialog";
 import ProfilePanel from "./ProfilePanel";
+import SavedPanel from "./SavedPanel";
 import SearchPanel from "./SearchPanel";
 
-type Tab = "search" | "profile" | "gap";
-const TABS: { id: Tab; label: string }[] = [{ id: "search", label: "查詢補助與服務" }, { id: "profile", label: "我的資料卡" }, { id: "gap", label: "訴求專區" }];
+type Tab = "search" | "profile" | "saved" | "gap";
+const TABS: { id: Tab; label: string }[] = [{ id: "search", label: "查詢補助與服務" }, { id: "profile", label: "我的資料卡" }, { id: "saved", label: "收藏清單" }, { id: "gap", label: "訴求專區" }];
 const DEFAULT_DISCLAIMER = "本結果僅供福利導覽與初步篩選，實際資格及補助額度以主管機關評估、核定為準。";
 
 // 伺服器端 render 時沒有 window；hydrate 完成前畫面只顯示「載入中」，所以兩邊初始值不同不會造成畫面不一致
 function readMode(): "normal" | "elder" {
   if (typeof window === "undefined") return "normal";
   try { return window.localStorage.getItem("wf.mode") === "elder" ? "elder" : "normal"; } catch { return "normal"; }
+}
+
+function reminderDismissedToday() {
+  if (typeof window === "undefined") return false;
+  try { return window.localStorage.getItem("wf.reminder") === localToday(); } catch { return false; }
 }
 
 function readTab(): Tab {
@@ -45,6 +55,12 @@ export default function WelfareApp() {
   const [gapPrefill, setGapPrefill] = useState({ title: "", key: 0 });
   const [toast, setToast] = useState("");
   const [scrolled, setScrolled] = useState(false);
+  /** 資料卡小視窗：undefined＝關閉；null＝建立新的；Profile＝修改 */
+  const [editing, setEditing] = useState<Profile | null | undefined>(undefined);
+  const [printJob, setPrintJob] = useState<PrintJob | null>(null);
+  const [reminderHidden, setReminderHidden] = useState(reminderDismissedToday);
+  const saved = useSaved();
+  const savedIds = useMemo(() => new Set(saved.map(s => s.id)), [saved]);
   const rootRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLElement>(null);
   const chatRef = useRef<ChatHandle>(null);
@@ -120,6 +136,29 @@ export default function WelfareApp() {
     goto("gap");
   }, [goto]);
   const closeDetail = useCallback(() => setDetailId(null), []);
+  const openEditor = useCallback((profile: Profile | null) => { setDetailId(null); setEditing(profile); }, []);
+  const toggleSave = useCallback((card: BenefitCard) => {
+    showToast(toggleSaved(card) ? `已收藏「${card.title}」` : `已從收藏移除「${card.title}」`);
+  }, [showToast]);
+
+  // 列印：先把清單畫到列印區，再叫出瀏覽器的列印視窗（可選「另存為 PDF」）；印完清掉
+  useEffect(() => {
+    if (!printJob) return;
+    const done = () => setPrintJob(null);
+    window.addEventListener("afterprint", done, { once: true });
+    const timer = window.setTimeout(() => window.print(), 50);
+    return () => { window.clearTimeout(timer); window.removeEventListener("afterprint", done); };
+  }, [printJob]);
+
+  // 收藏的補助 7 天內截止：頁面上方提醒（今天關掉就不再出現）
+  const dueSoon = useMemo(() => {
+    const byId = new Map((cards ?? []).map(card => [card.id, card]));
+    return saved.map(item => byId.get(item.id)).filter((card): card is BenefitCard => !!card && deadlineInfo(card)?.tone === "urgent");
+  }, [saved, cards]);
+  const hideReminder = () => {
+    setReminderHidden(true);
+    try { window.localStorage.setItem("wf.reminder", localToday()); } catch { /* 存不了就只關這一次 */ }
+  };
 
   if (!hydrated) return <div className="wui" data-mode="normal"><main><p className="loading" role="status">載入中…</p></main></div>;
 
@@ -139,18 +178,30 @@ export default function WelfareApp() {
       <nav className="tabs" role="tablist" aria-label="主要功能">
         {TABS.map(t => <button key={t.id} type="button" role="tab" id={`wui-tab-${t.id}`} aria-controls={`wui-panel-${t.id}`} aria-selected={tab === t.id} onClick={() => goto(t.id)}>
           {t.label}{t.id === "profile" && counts && <span className="dot" aria-label={`${counts.yes} 項可能符合`}>{counts.yes}</span>}
+          {t.id === "saved" && saved.length > 0 && <span className="dot" aria-label={`${saved.length} 項收藏`}>{saved.length}</span>}
         </button>)}
       </nav>
     </header>
 
     <main>
+      {dueSoon.length > 0 && !reminderHidden && tab !== "saved" && <div className="reminder" role="status">
+        <span><b>⏰ 截止提醒：</b>您收藏的 {dueSoon.map(card => `「${card.title}」${deadlineInfo(card)!.label}`).join("、")}。</span>
+        <span className="actions">
+          <button type="button" className="btn sm" onClick={() => goto("saved")}>查看收藏清單</button>
+          <button type="button" className="btn sm sec" onClick={hideReminder}>今天不再提醒</button>
+        </span>
+      </div>}
       <div role="tabpanel" id="wui-panel-search" aria-labelledby="wui-tab-search" hidden={tab !== "search"}>
         <SearchPanel cards={cards} loadError={loadError} results={results} matching={matching} profileName={active?.nickname ?? null} query={query} setQuery={setQuery} onlyMatch={onlyMatch} setOnlyMatch={setOnlyMatch}
-          onOpen={setDetailId} onGoProfile={() => goto("profile")} onGap={openGap} />
+          savedIds={savedIds} onToggleSave={toggleSave} onOpen={setDetailId} onGoProfile={() => goto("profile")} onCreateProfile={() => openEditor(null)} onGap={openGap} />
       </div>
       <div role="tabpanel" id="wui-panel-profile" aria-labelledby="wui-tab-profile" hidden={tab !== "profile"}>
-        <ProfilePanel profiles={profiles} active={active} cards={cards} match={current?.data ?? null} matching={matching} matchError={matchError}
-          onSaved={showToast} onOpen={setDetailId} onAskAssistant={() => chatRef.current?.open()} onOnlyMatch={() => { setOnlyMatch(true); goto("search"); }} />
+        <ProfilePanel profiles={profiles} active={active} cards={cards} match={current?.data ?? null} matching={matching} matchError={matchError} savedIds={savedIds}
+          onSaved={showToast} onOpen={setDetailId} onAskAssistant={() => chatRef.current?.open()} onBrowseAll={() => { setOnlyMatch(false); goto("search"); }}
+          onEdit={openEditor} onPrint={setPrintJob} onToggleSave={toggleSave} />
+      </div>
+      <div role="tabpanel" id="wui-panel-saved" aria-labelledby="wui-tab-saved" hidden={tab !== "saved"}>
+        <SavedPanel saved={saved} cards={cards} results={results} onOpen={setDetailId} onToggleSave={toggleSave} onPrint={setPrintJob} onBrowse={() => goto("search")} />
       </div>
       <div role="tabpanel" id="wui-panel-gap" aria-labelledby="wui-tab-gap" hidden={tab !== "gap"}>
         <GapPanel key={gapPrefill.key} prefill={gapPrefill.title} defaultRegion={active?.region ?? ""} onToast={showToast} />
@@ -162,11 +213,15 @@ export default function WelfareApp() {
       <p>補助資料來自各級政府與學校的官方公告，每項補助都附官方頁面連結；申請前請以官方公告為準。</p>
     </footer>
 
-    <DetailDrawer id={detailId} result={detailId ? results?.[detailId] : undefined} hasProfile={!!active} onClose={closeDetail}
-      onGoProfile={() => { setDetailId(null); goto("profile"); }} onGap={openGap} onAskAssistant={() => { setDetailId(null); chatRef.current?.open(); }} />
+    <DetailDrawer id={detailId} result={detailId ? results?.[detailId] : undefined} hasProfile={!!active} onClose={closeDetail} saved={!!detailId && savedIds.has(detailId)} onToggleSave={toggleSave}
+      onGoProfile={() => { if (active) { setDetailId(null); goto("profile"); } else openEditor(null); }} onGap={openGap} onAskAssistant={() => { setDetailId(null); chatRef.current?.open(); }} />
 
     <ChatWidget ref={chatRef} profile={active} counts={counts} matching={matching}
-      onSearch={keyword => { setQuery(keyword); goto("search"); }} onGoProfile={() => goto("profile")} onGoSearch={() => goto("search")} />
+      onSearch={keyword => { setQuery(keyword); goto("search"); }} onGoProfile={() => { if (active) goto("profile"); else openEditor(null); }} onGoSearch={() => goto("search")} />
+
+    {editing !== undefined && <ProfileDialog key={editing?.id ?? "new"} profile={editing} onClose={() => setEditing(undefined)} onSaved={message => { showToast(message); goto("profile"); }} />}
+
+    <PrintSheet job={printJob} results={results} disclaimer={disclaimer} />
 
     <div className={`toast${toast ? " on" : ""}`} role="status" aria-live="polite">{toast}</div>
   </div>;

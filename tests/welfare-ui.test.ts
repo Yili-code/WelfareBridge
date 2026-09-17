@@ -2,11 +2,12 @@ import { describe, expect, it } from "vitest";
 import { toMatchingProfile } from "../src/lib/benefit-profile";
 import type { Profile } from "../src/lib/types";
 import type { BenefitCard, MatchResult } from "../src/welfare/api";
-import { editLearned, mergeLearned, type LearnedAttribute } from "../src/welfare/assistant-memory";
+import { answerQuestion, editLearned, mergeLearned, type LearnedAttribute } from "../src/welfare/assistant-memory";
+import { compareDeadline, daysLeft, deadlineInfo } from "../src/welfare/deadline";
 import { emptyFilters, facetCounts, searchCards } from "../src/welfare/search";
 
 const card = (id: string, extra: Partial<BenefitCard> = {}): BenefitCard => ({
-  id, title: `補助${id}`, domain_id: "housing", domain: "住宅", service_type: "租金補貼", audiences: ["一般民眾"], region: "全國", agency: "內政部", points: [], price: null, updated: "", ...extra,
+  id, title: `補助${id}`, domain_id: "housing", domain: "住宅", service_type: "租金補貼", audiences: ["一般民眾"], region: "全國", agency: "內政部", points: [], price: null, updated: "", deadline: "", rolling: false, source_url: "", ...extra,
 });
 const result = (status: MatchResult["status"], needs: string[] = []): MatchResult => ({ status, reasons: [], needs });
 
@@ -60,5 +61,58 @@ describe("小幫手補充的資料寫回資料卡", () => {
     const edited = editLearned(next["employment.status"], "employed");
     expect(edited).toMatchObject({ value: "employed", valueLabel: "受僱", source: "edited" });
     expect(editLearned(next["employment.status"], "")).toMatchObject({ value: null, valueLabel: "不確定", source: "unsure" });
+  });
+});
+
+describe("申請期限：標示與排序", () => {
+  const today = "2026-09-17";
+
+  it("counts days in local calendar days", () => {
+    expect(daysLeft("2026-09-17", today)).toBe(0);
+    expect(daysLeft("2026-10-01T00:00:00", today)).toBe(14);
+    expect(daysLeft("2026-09-16", today)).toBe(-1);
+    expect(daysLeft("不是日期", today)).toBeNull();
+  });
+
+  it("labels urgency so people notice what is about to close", () => {
+    const at = (deadline: string, rolling = false) => deadlineInfo({ deadline, rolling }, today);
+    expect(at("2026-09-17")).toMatchObject({ label: "今天截止", tone: "urgent" });
+    expect(at("2026-09-24")).toMatchObject({ label: "還有 7 天截止", tone: "urgent" });
+    expect(at("2026-10-17")).toMatchObject({ label: "還有 30 天截止", tone: "soon" });
+    expect(at("2026-12-05")).toMatchObject({ label: "12 月 5 日截止", tone: "normal" });
+    expect(at("2026-09-01")).toMatchObject({ label: "已截止", tone: "past" });
+    expect(at("", true)).toMatchObject({ label: "隨時可申請", tone: "open" });
+    expect(at("")).toBeNull();
+  });
+
+  it("sorts upcoming deadlines first, then open-ended ones, then unknown or expired", () => {
+    const items = [
+      { id: "none", deadline: "", rolling: false },
+      { id: "late", deadline: "2026-12-01", rolling: false },
+      { id: "past", deadline: "2026-01-01", rolling: false },
+      { id: "open", deadline: "", rolling: true },
+      { id: "soon", deadline: "2026-09-20", rolling: false },
+    ];
+    expect([...items].sort((a, b) => compareDeadline(a, b, today)).map(i => i.id)).toEqual(["soon", "late", "open", "none", "past"]);
+  });
+
+  it("offers the deadline sort in search", () => {
+    const cards = [card("x", { rolling: true }), card("y", { deadline: "2099-01-01" }), card("z")];
+    expect(searchCards(cards, { query: "", filters: emptyFilters(), onlyMatch: false, sort: "deadline" }).map(c => c.id)).toEqual(["y", "x", "z"]);
+  });
+});
+
+describe("結果頁「補這幾題」的回答寫進資料卡", () => {
+  it("stores yes/no, choices and numbers as values the user confirmed", () => {
+    const yesNo = { label: "身心障礙證明", type: "boolean", unit: "", options: [{ value: "true", label: "是" }, { value: "false", label: "否" }] };
+    expect(answerQuestion(yesNo, "false", "t")).toMatchObject({ value: false, valueLabel: "否", source: "edited" });
+    const stage = { label: "教育階段", type: "enum", unit: "", options: [{ value: "college", label: "大專院校" }] };
+    expect(answerQuestion(stage, "college", "t")).toMatchObject({ value: "college", valueLabel: "大專院校", source: "edited" });
+    const age = { label: "最小子女年齡", type: "number", unit: "歲", options: [] };
+    expect(answerQuestion(age, "3", "t")).toMatchObject({ value: 3, valueLabel: "3歲", source: "edited", options: undefined });
+  });
+
+  it("records 不確定 without guessing a value", () => {
+    expect(answerQuestion({ label: "教育階段", type: "enum", unit: "", options: [] }, "", "t")).toMatchObject({ value: null, valueLabel: "不確定", source: "unsure" });
   });
 });

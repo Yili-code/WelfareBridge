@@ -1,21 +1,14 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { STATUS_LABEL, type BenefitCard, type MatchResult } from "./api";
+import type { BenefitCard, MatchResult } from "./api";
+import BenefitCardView from "./BenefitCardView";
+import { ProfileInvite } from "./ProfilePanel";
 import { FACETS, emptyFilters, facetCounts, searchCards, type FacetKey, type Filters, type SortKey } from "./search";
 
 const PAGE = 20;
 
-export function PriceBlock({ card }: { card: BenefitCard }) {
-  if (!card.price) return null;
-  return <div className={`price${card.price.type === "soft" ? " soft" : ""}`}>
-    <span className="unit">{card.price.unit}</span>
-    <b>{card.price.amount}</b>
-    {card.price.note && <small>{card.price.note}</small>}
-  </div>;
-}
-
-export default function SearchPanel({ cards, loadError, results, matching, profileName, query, setQuery, onlyMatch, setOnlyMatch, onOpen, onGoProfile, onGap }: {
+export default function SearchPanel({ cards, loadError, results, matching, profileName, query, setQuery, onlyMatch, setOnlyMatch, savedIds, onToggleSave, onOpen, onGoProfile, onCreateProfile, onGap }: {
   cards: BenefitCard[] | null;
   loadError: string;
   results: Record<string, MatchResult> | null;
@@ -25,8 +18,11 @@ export default function SearchPanel({ cards, loadError, results, matching, profi
   setQuery: (value: string) => void;
   onlyMatch: boolean;
   setOnlyMatch: (value: boolean) => void;
+  savedIds: Set<string>;
+  onToggleSave: (card: BenefitCard) => void;
   onOpen: (id: string) => void;
   onGoProfile: () => void;
+  onCreateProfile: () => void;
   onGap: (title: string) => void;
 }) {
   const [filters, setFilters] = useState<Filters>(emptyFilters);
@@ -50,6 +46,7 @@ export default function SearchPanel({ cards, loadError, results, matching, profi
   const clearAll = () => { setFilters(emptyFilters()); setQuery(""); setOnlyMatch(false); setShown(PAGE); };
 
   return <section aria-label="查詢補助與服務">
+    {!profileName && <ProfileInvite onCreate={onCreateProfile} />}
     <div className="hero">
       <div className="searchbar">
         <div className="searchbox">
@@ -63,11 +60,7 @@ export default function SearchPanel({ cards, loadError, results, matching, profi
         <span className="lab">快速篩選</span>
         {quick.map(([key, value]) => <button key={`${key}:${value}`} className="chip" type="button" aria-pressed={filters[key].has(value)} onClick={() => toggle(key, value)}>{value}</button>)}
       </div>
-      <p className="profile-line">
-        {profileName
-          ? <>目前依「{profileName}」的資料卡標示比對結果{matching ? "（比對中…）" : ""}。<button type="button" onClick={onGoProfile}>修改資料卡</button></>
-          : <>還沒有資料卡：建立後，每項補助都會標示您是否可能符合。<button type="button" onClick={onGoProfile}>建立我的資料卡</button></>}
-      </p>
+      {profileName && <p className="profile-line">目前依「{profileName}」的資料卡標示比對結果{matching ? "（比對中…）" : ""}。<button type="button" onClick={onGoProfile}>查看比對結果</button></p>}
     </div>
 
     <div className="layout">
@@ -96,6 +89,7 @@ export default function SearchPanel({ cards, loadError, results, matching, profi
           <label className="sr" htmlFor="wui-sort">排序方式</label>
           <select id="wui-sort" value={sort} onChange={e => setSort(e.target.value as SortKey)}>
             <option value="match">依比對結果排序</option>
+            <option value="deadline">依截止日排序（快截止的在前）</option>
             <option value="title">依名稱排序</option>
             <option value="updated">依官方公告時間</option>
           </select>
@@ -112,29 +106,7 @@ export default function SearchPanel({ cards, loadError, results, matching, profi
         </div>}
 
         <div className="cards">
-          {list.slice(0, shown).map(card => {
-            const result = results?.[card.id];
-            return <article key={card.id} className="card" tabIndex={0} role="button" aria-label={`${card.title}，查看詳情`} onClick={() => onOpen(card.id)} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onOpen(card.id); } }}>
-              <div className="card-main">
-                <div className="card-head">
-                  <h3>{card.title}</h3>
-                  {result && <span className={`badge ${result.status}`}>{STATUS_LABEL[result.status]}</span>}
-                </div>
-                <div className="meta">
-                  <span className="tag svc">{card.service_type}</span>
-                  {card.audiences.slice(0, 3).map(a => <span key={a} className="tag aud">{a}</span>)}
-                  <span className="tag">{card.region}</span>
-                </div>
-                <ul className="points">{card.points.map(point => <li key={point}>{point}</li>)}</ul>
-                {result?.status === "maybe" && result.needs.length > 0 && <div className="needs">補充「{result.needs.slice(0, 3).join("、")}」就能確認</div>}
-                <div className="card-agency">{card.agency}{card.updated ? `　官方公告 ${card.updated}` : ""}</div>
-              </div>
-              <div className={`card-side${card.price ? (card.price.type === "soft" ? " has-soft" : " has-price") : ""}`}>
-                <PriceBlock card={card} />
-                <span className="btn sm">查看詳情 →</span>
-              </div>
-            </article>;
-          })}
+          {list.slice(0, shown).map(card => <BenefitCardView key={card.id} card={card} result={results?.[card.id]} saved={savedIds.has(card.id)} onOpen={onOpen} onToggleSave={onToggleSave} />)}
         </div>
         {list.length > shown && <div className="loadmore"><button type="button" className="btn sec" onClick={() => setShown(n => n + PAGE)}>顯示更多（還有 {list.length - shown} 項）</button></div>}
       </div>

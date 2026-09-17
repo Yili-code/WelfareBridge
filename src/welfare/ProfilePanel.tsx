@@ -1,131 +1,38 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { REGIONS, RELATIONS } from "@/lib/options";
-import { AGE_RANGES, QUESTIONS, profileTags, selectAnswer } from "@/lib/questionnaire";
-import { addProfile, removeProfile, setActiveProfileId, updateProfile } from "@/lib/store";
-import type { AssistantAttribute, Profile, Relation } from "@/lib/types";
+import { REGIONS } from "@/lib/options";
+import { QUESTIONS, ageLabel } from "@/lib/questionnaire";
+import { removeProfile, setActiveProfileId, updateProfile } from "@/lib/store";
+import type { AssistantAttribute, Profile } from "@/lib/types";
 import { STATUS_LABEL, type BenefitCard, type MatchResponse } from "./api";
 import { editLearned, needDomains, rankForProfile } from "./assistant-memory";
+import BenefitCardView from "./BenefitCardView";
+import type { PrintJob } from "./PrintSheet";
+import QuickQuestions from "./QuickQuestions";
 
-type Answers = Record<string, string[]>;
-const REQUIRED = ["needs", "age", "residence"];
+const PAGE = 10;
+// 不用網址 #錨點：網址 hash 用來記住目前分頁
+const scrollToGroup = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+const FACT_LABELS: Record<string, string> = { needs: "想找的補助", education: "在學狀態", economy: "家庭經濟", identity: "特定身分", employment: "工作狀態", housing: "居住方式", support: "需要的支援", benefits: "已領或申請中" };
 
-function initialAnswers(profile: Profile | null): Answers {
-  const saved: Answers = { ...(profile?.screening ?? {}) };
-  if (profile && !saved.age && profile.age != null) {
-    const index = AGE_RANGES.findIndex(([min, max]) => profile.age! >= min && profile.age! <= max);
-    if (index >= 0) saved.age = [QUESTIONS[1].options[index]];
-  }
-  return saved;
-}
-
-function ProfileForm({ profile, onSaved, onCancel }: { profile: Profile | null; onSaved: (message: string) => void; onCancel?: () => void }) {
-  const [answers, setAnswers] = useState<Answers>(() => initialAnswers(profile));
-  const [relation, setRelation] = useState<Relation>(profile?.relation ?? "self");
-  const [nickname, setNickname] = useState(profile?.nickname ?? "");
-  const [exactAge, setExactAge] = useState(profile?.age == null ? "" : String(profile.age));
-  const [region, setRegion] = useState(profile?.region ?? "");
-  const [currentRegion, setCurrentRegion] = useState(profile?.currentRegion ?? "");
-  const [tried, setTried] = useState(false);
-
-  const residence = answers.residence?.[0];
-  const sameCity = QUESTIONS[2].options.slice(0, 2).includes(residence);
-  const noHousehold = residence === QUESTIONS[2].options[3];
-  const ageRange = AGE_RANGES[QUESTIONS[1].options.indexOf(answers.age?.[0])];
-  const ageValid = exactAge === "" || (Number.isInteger(Number(exactAge)) && ageRange && Number(exactAge) >= ageRange[0] && Number(exactAge) <= ageRange[1]);
-  const missing = REQUIRED.filter(key => !answers[key]?.length);
-  const cityMissing = sameCity && !region;
-  const valid = !missing.length && ageValid && !cityMissing;
-
-  const choose = (key: string, value: string) => {
-    const question = QUESTIONS.find(q => q.key === key)!;
-    setAnswers(previous => ({ ...previous, [key]: selectAnswer(previous[key] ?? [], question, value) }));
-    if (key === "age") setExactAge("");
-    if (key === "residence") { setRegion(""); setCurrentRegion(""); }
-  };
-
-  const save = () => {
-    setTried(true);
-    if (!valid) return;
-    const draft = {
-      nickname: nickname.trim() || RELATIONS.find(r => r.value === relation)!.label,
-      relation,
-      region: noHousehold ? "" : region,
-      district: profile?.region === region && !noHousehold ? profile.district : undefined,
-      currentRegion: sameCity ? region : currentRegion,
-      age: exactAge === "" ? null : Number(exactAge),
-      screening: answers,
-      assistantAttributes: profile?.assistantAttributes,
-      ...profileTags(answers),
-    };
-    if (profile) { updateProfile(profile.id, draft); onSaved("資料卡已更新，正在重新比對補助"); }
-    else { const created = addProfile(draft); setActiveProfileId(created.id); onSaved("資料卡已儲存，正在為您比對補助"); }
-  };
-
-  const citySelect = (id: string, label: string, value: string, change: (value: string) => void) => <div className="field">
-    <label htmlFor={id}>{label}</label>
-    <select id={id} value={value} onChange={e => change(e.target.value)} aria-invalid={tried && id.endsWith("home") && cityMissing}>
-      <option value="">不確定／尚未填寫</option>
-      {REGIONS.map(city => <option key={city}>{city}</option>)}
-    </select>
-    {tried && id.endsWith("home") && cityMissing && <p className="err">請選擇戶籍與居住的縣市。</p>}
-  </div>;
-
-  return <form onSubmit={e => { e.preventDefault(); save(); }} noValidate>
-    <div className="row2">
-      <div className="field">
-        <label htmlFor="wui-relation">這張資料卡是為誰建立</label>
-        <select id="wui-relation" value={relation} onChange={e => setRelation(e.target.value as Relation)}>
-          {RELATIONS.map(r => <option key={r.value} value={r.value}>{r.label}</option>)}
-        </select>
-      </div>
-      <div className="field">
-        <label htmlFor="wui-nickname">稱呼（選填）</label>
-        <input id="wui-nickname" value={nickname} maxLength={20} onChange={e => setNickname(e.target.value)} placeholder="例如：媽媽" />
-      </div>
+export function ProfileInvite({ onCreate }: { onCreate: () => void }) {
+  return <section className="invite" aria-labelledby="wui-invite-title">
+    <div>
+      <h2 id="wui-invite-title">花 2 分鐘建立資料卡，看看您可能符合哪些補助</h2>
+      <p>回答 10 個簡單問題（只有 3 題必填），每項補助都會標示您是否可能符合，也會提醒還缺哪些資料。可以替家人分別建立。</p>
     </div>
-
-    {QUESTIONS.map((question, index) => {
-      const selected = answers[question.key] ?? [];
-      const required = REQUIRED.includes(question.key);
-      return <fieldset key={question.key} className="field" style={{ border: 0, padding: 0, margin: "0 0 1.1rem" }}>
-        <legend className="flabel">{index + 1}. {question.title}{required ? "（必填）" : "（選填）"}{question.multi ? "・可複選" : ""}</legend>
-        <p className="why">{question.why}</p>
-        <div className="checks">
-          {question.options.map(option => <label key={option}>
-            <input type={question.multi ? "checkbox" : "radio"} name={`wui-${question.key}`} checked={selected.includes(option)} onChange={() => choose(question.key, option)} />
-            {option}
-          </label>)}
-        </div>
-        {tried && required && !selected.length && <p className="err">請選擇一項。</p>}
-        {question.key === "age" && selected.length > 0 && <div className="field" style={{ marginTop: ".7rem" }}>
-          <label htmlFor="wui-age">實際年齡（選填，填了比對會更準）</label>
-          <input id="wui-age" type="number" inputMode="numeric" min={0} max={120} value={exactAge} onChange={e => setExactAge(e.target.value)} aria-invalid={!ageValid} placeholder="例如：72" />
-          {!ageValid && <p className="err">請填入所選年齡區間內的整數。</p>}
-        </div>}
-        {question.key === "residence" && selected.length > 0 && <div className="row2" style={{ marginTop: ".7rem" }}>
-          {!noHousehold && citySelect("wui-city-home", sameCity ? "戶籍及居住縣市" : "戶籍縣市", region, setRegion)}
-          {!sameCity && citySelect("wui-city-now", "目前居住縣市", currentRegion, setCurrentRegion)}
-        </div>}
-      </fieldset>;
-    })}
-
-    <div className="actions">
-      <button className="btn" type="submit">{profile ? "儲存並重新比對" : "儲存並比對"}</button>
-      {onCancel && <button className="btn sec" type="button" onClick={onCancel}>取消</button>}
-      {tried && !valid && <span className="err" role="alert">還有必填項目沒有完成。</span>}
-    </div>
-  </form>;
+    <button type="button" className="btn" onClick={onCreate}>開始建立資料卡</button>
+  </section>;
 }
 
 function LearnedList({ profile, onSaved }: { profile: Profile; onSaved: (message: string) => void }) {
   const entries = Object.entries(profile.assistantAttributes ?? {});
   if (!entries.length) return null;
   const save = (next: Record<string, AssistantAttribute>, message: string) => { updateProfile(profile.id, { assistantAttributes: next }); onSaved(message); };
-  return <div style={{ marginTop: "1.4rem" }}>
-    <h3>小幫手幫您補充的資料</h3>
-    <p className="hint">這些是您在聊天中回答的內容，比對時會優先採用。說錯了可以直接修改或刪除。</p>
+  return <details className="learned-box">
+    <summary>補充的資料（{entries.length} 項，來自小幫手或快速回答）</summary>
+    <p className="hint">比對時會優先採用這些回答。說錯了可以直接修改或刪除。</p>
     <ul className="learned">
       {entries.map(([id, entry]) => {
         const current = entry.value === null ? "" : Array.isArray(entry.value) ? entry.value[0] ?? "" : String(entry.value);
@@ -141,23 +48,50 @@ function LearnedList({ profile, onSaved }: { profile: Profile; onSaved: (message
         </li>;
       })}
     </ul>
-  </div>;
+  </details>;
 }
 
-export default function ProfilePanel({ profiles, active, cards, match, matching, matchError, onSaved, onOpen, onAskAssistant, onOnlyMatch }: {
+function Facts({ profile }: { profile: Profile }) {
+  const answers = profile.screening ?? {};
+  const residence = answers.residence?.[0];
+  const place = [profile.region && `戶籍 ${profile.region}`, profile.currentRegion && profile.currentRegion !== profile.region && `居住 ${profile.currentRegion}`].filter(Boolean).join("、");
+  const rows: [string, string][] = [
+    ["想找的補助", (answers.needs ?? []).join("、")],
+    ["年齡", ageLabel(profile)],
+    ["戶籍與居住", [place, residence].filter(Boolean).join("；")],
+    ...QUESTIONS.slice(3).map(q => [FACT_LABELS[q.key] ?? q.title, (answers[q.key] ?? []).join("、")] as [string, string]),
+  ];
+  return <dl className="facts">{rows.filter(([, value]) => value).map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>;
+}
+
+function Group({ id, title, hint, cards, match, savedIds, onOpen, onToggleSave }: { id: string; title: string; hint?: string; cards: BenefitCard[]; match: MatchResponse; savedIds: Set<string>; onOpen: (id: string) => void; onToggleSave: (card: BenefitCard) => void }) {
+  const [shown, setShown] = useState(PAGE);
+  if (!cards.length) return null;
+  return <section className="group" aria-labelledby={id}>
+    <h2 id={id} className="group-title">{title}<span className="n">{cards.length}</span></h2>
+    {hint && <p className="hint">{hint}</p>}
+    <div className="cards">{cards.slice(0, shown).map(card => <BenefitCardView key={card.id} card={card} result={match.results[card.id]} saved={savedIds.has(card.id)} onOpen={onOpen} onToggleSave={onToggleSave} />)}</div>
+    {cards.length > shown && <div className="loadmore"><button type="button" className="btn sec" onClick={() => setShown(n => n + PAGE)}>顯示更多（還有 {cards.length - shown} 項）</button></div>}
+  </section>;
+}
+
+export default function ProfilePanel({ profiles, active, cards, match, matching, matchError, savedIds, onSaved, onOpen, onAskAssistant, onBrowseAll, onEdit, onPrint, onToggleSave }: {
   profiles: Profile[];
   active: Profile | null;
   cards: BenefitCard[] | null;
   match: MatchResponse | null;
   matching: boolean;
   matchError: string;
+  savedIds: Set<string>;
   onSaved: (message: string) => void;
   onOpen: (id: string) => void;
   onAskAssistant: () => void;
-  onOnlyMatch: () => void;
+  onBrowseAll: () => void;
+  /** 開啟資料卡小視窗；null＝新增 */
+  onEdit: (profile: Profile | null) => void;
+  onPrint: (job: PrintJob) => void;
+  onToggleSave: (card: BenefitCard) => void;
 }) {
-  const [creating, setCreating] = useState(false);
-  const editing = creating ? null : active;
   const domains = useMemo(() => needDomains(active), [active]);
   const grouped = useMemo(() => {
     if (!cards || !match) return null;
@@ -166,55 +100,69 @@ export default function ProfilePanel({ profiles, active, cards, match, matching,
     return { yes, maybe };
   }, [cards, match, domains]);
 
+  const print = () => {
+    if (!active || !grouped) return;
+    const maybe = grouped.maybe.slice(0, 20);
+    onPrint({
+      title: `${active.nickname}可能符合的補助`,
+      subtitle: "依資料卡初步比對，實際資格以主辦機關審核為準",
+      sections: [
+        { heading: STATUS_LABEL.yes, cards: grouped.yes },
+        { heading: "需要進一步確認", cards: maybe, note: grouped.maybe.length > maybe.length ? `另有 ${grouped.maybe.length - maybe.length} 項需要進一步確認，請上網查看。` : undefined },
+      ],
+    });
+  };
+
   return <section aria-label="我的資料卡">
     <div className="people" role="group" aria-label="切換家人的資料卡">
       <span className="lab">資料卡</span>
-      {profiles.map(person => <span key={person.id} className="person" aria-current={!creating && person.id === active?.id}>
-        <button type="button" onClick={() => { setCreating(false); setActiveProfileId(person.id); }}>{person.nickname}</button>
-        <button type="button" className="del" aria-label={`刪除「${person.nickname}」的資料卡`} onClick={() => { if (window.confirm(`確定要刪除「${person.nickname}」的資料卡嗎？`)) { removeProfile(person.id); onSaved("已刪除資料卡"); } }}>✕</button>
+      {profiles.map(person => <span key={person.id} className="person" aria-current={person.id === active?.id}>
+        <button type="button" onClick={() => setActiveProfileId(person.id)}>{person.nickname}</button>
       </span>)}
-      <button type="button" className="chip" aria-pressed={creating} onClick={() => setCreating(true)}>＋ 新增家人</button>
+      <button type="button" className="chip" onClick={() => onEdit(null)}>{profiles.length ? "＋ 新增家人" : "＋ 建立資料卡"}</button>
     </div>
 
-    <div className="grid2">
-      <div className="box">
-        <h2>{editing ? `${editing.nickname}的資料卡` : "建立我的資料卡"}</h2>
-        <p className="hint">資料卡存在這台裝置的瀏覽器裡；比對補助時，填寫的條件會送到平台伺服器計算。填寫越完整，比對結果越準確。</p>
-        <ProfileForm key={editing?.id ?? "new"} profile={editing} onCancel={creating && profiles.length ? () => setCreating(false) : undefined} onSaved={message => { setCreating(false); onSaved(message); }} />
-        {editing && <LearnedList profile={editing} onSaved={onSaved} />}
+    {!active ? <ProfileInvite onCreate={() => onEdit(null)} /> : <>
+      <div className="box summary">
+        <div className="summary-head">
+          <h2>{active.nickname}的資料卡</h2>
+          <div className="actions">
+            <button type="button" className="btn" onClick={() => onEdit(active)}>編輯資料卡</button>
+            <button type="button" className="btn sec" onClick={() => { if (window.confirm(`確定要刪除「${active.nickname}」的資料卡嗎？`)) { removeProfile(active.id); onSaved("已刪除資料卡"); } }}>刪除</button>
+          </div>
+        </div>
+        <Facts profile={active} />
+        <LearnedList profile={active} onSaved={onSaved} />
       </div>
 
-      <div className="box" aria-live="polite">
-        <h2>比對結果</h2>
-        <p className="hint">依官方公告的資格條件初步比對，不是正式審核結果。</p>
-        {!active || creating ? <p className="hint">填寫左側資料卡並按「儲存並比對」，這裡會列出您可能符合的補助。</p>
-          : matchError ? <div className="alert" role="alert">{matchError}</div>
-          : !grouped ? <p className="loading" role="status">正在比對 {cards?.length ?? ""} 項補助…</p>
-          : <>
+      {matchError ? <div className="alert" role="alert">{matchError}</div>
+        : !grouped || !match ? <p className="loading" role="status">正在比對 {cards?.length ?? ""} 項補助…</p>
+        : <>
+          <div className="result-bar" aria-live="polite">
             <div className="stats">
-              <div className="stat yes"><b>{match!.counts.yes}</b><span>{STATUS_LABEL.yes}</span></div>
-              <div className="stat maybe"><b>{match!.counts.maybe}</b><span>需進一步確認</span></div>
-              <div className="stat no"><b>{match!.counts.no}</b><span>{STATUS_LABEL.no}</span></div>
+              <button type="button" className="stat yes" onClick={() => scrollToGroup("wui-group-yes")}><b>{match.counts.yes}</b><span>{STATUS_LABEL.yes}</span></button>
+              <button type="button" className="stat maybe" onClick={() => scrollToGroup("wui-group-maybe")}><b>{match.counts.maybe}</b><span>需進一步確認</span></button>
+              <div className="stat no"><b>{match.counts.no}</b><span>{STATUS_LABEL.no}</span></div>
+            </div>
+            <div className="actions">
+              <button type="button" className="btn sec" onClick={print}>🖨 列印／存成 PDF</button>
+              {match.counts.maybe > 0 && <button type="button" className="btn sec" onClick={onAskAssistant}>💬 請小幫手幫我補資料</button>}
             </div>
             {matching && <p className="hint" role="status">資料已更新，正在重新比對…</p>}
-            {grouped.yes.length > 0 && <>
-              <h3>主動提醒：您可能符合</h3>
-              <div className="reclist">{grouped.yes.slice(0, 8).map(card => <button key={card.id} type="button" className="rec" onClick={() => onOpen(card.id)}>
-                <span className="rec-main">{card.title}<small>{card.agency}・{card.region}</small></span><span className="tag svc">{card.service_type}</span>→
-              </button>)}</div>
-            </>}
-            {grouped.maybe.length > 0 && <>
-              <h3>需要進一步確認</h3>
-              <div className="reclist">{grouped.maybe.slice(0, 6).map(card => <button key={card.id} type="button" className="rec" onClick={() => onOpen(card.id)}>
-                <span className="rec-main">{card.title}<small>{match!.results[card.id]?.needs.length ? `補充：${match!.results[card.id].needs.slice(0, 3).join("、")}` : `${card.agency}・${card.region}`}</small></span><span className="tag svc">{card.service_type}</span>→
-              </button>)}</div>
-            </>}
-            <div className="actions" style={{ marginTop: "1rem" }}>
-              <button type="button" className="btn" onClick={onOnlyMatch}>查看全部 {match!.counts.yes + match!.counts.maybe} 項</button>
-              {match!.counts.maybe > 0 && <button type="button" className="btn sec" onClick={onAskAssistant}>請小幫手幫我補充資料</button>}
-            </div>
-          </>}
-      </div>
-    </div>
+          </div>
+
+          <QuickQuestions profile={active} questions={match.questions ?? []} onSaved={onSaved} />
+
+          <Group id="wui-group-yes" title="可能符合" cards={grouped.yes} match={match} savedIds={savedIds} onOpen={onOpen} onToggleSave={onToggleSave}
+            hint="主要資格（戶籍、年齡、身分、學制等）都已比對相符。申請前仍請以官方公告為準。" />
+          <Group id="wui-group-maybe" title="需要進一步確認" cards={grouped.maybe} match={match} savedIds={savedIds} onOpen={onOpen} onToggleSave={onToggleSave}
+            hint="沒有明確不符，但還缺一些資料。卡片上會寫要補充什麼，補完就能確認。" />
+          {!grouped.yes.length && !grouped.maybe.length && <div className="empty">
+            <h3>目前沒有可能符合的補助</h3>
+            <p>可以編輯資料卡確認填寫的條件，或到「訴求專區」說出您需要的服務。</p>
+          </div>}
+          <p className="hint">另有 {match.counts.no} 項目前較不符合。<button type="button" className="linklike" onClick={onBrowseAll}>到「查詢補助與服務」查看全部補助</button></p>
+        </>}
+    </>}
   </section>;
 }

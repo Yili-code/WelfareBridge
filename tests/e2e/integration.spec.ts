@@ -13,23 +13,63 @@ test("one origin serves database APIs and keeps appeal authorization separate", 
   expect((await request.get("/api/appeals")).status()).toBe(401);
 });
 
-test("data card reaches live matching, labels search results and opens user-facing detail", async ({ page }) => {
+test("first visit invites a data card; the step-by-step dialog leads to grouped results, quick answers and saving", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
+  let matchCalls = 0;
+  await page.route("**/api/public/match", async route => { matchCalls++; await route.continue(); });
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "福利補助導覽", level: 1 })).toBeVisible();
-  await page.getByRole("tab", { name: /我的資料卡/ }).click();
-  for (const option of ["就學、學費或獎助學金", "18～未滿 25 歲", "戶籍與居住地在同一縣市，設籍已滿半年", "大學、二專或五專後兩年", "已取得低收入戶資格"]) {
-    await page.getByLabel(option, { exact: true }).check();
-  }
-  await page.getByLabel("實際年齡（選填，填了比對會更準）").fill("22");
-  await page.getByLabel("戶籍及居住縣市").selectOption("臺北市");
-  await page.getByRole("button", { name: "儲存並比對", exact: true }).click();
+  await page.getByRole("region", { name: /花 2 分鐘建立資料卡/ }).getByRole("button", { name: "開始建立資料卡" }).click();
+
+  // 小視窗一次一題
+  const dialog = page.locator(".modal");
+  await expect(dialog.getByRole("heading", { name: "這張資料卡是為誰建立的？" })).toBeVisible();
+  const next = dialog.getByRole("button", { name: "下一題 →" });
+  await next.click();
+  await dialog.getByRole("button", { name: "就學、學費或獎助學金", exact: true }).click();
+  await next.click();
+  await dialog.getByRole("button", { name: "18～未滿 25 歲", exact: true }).click();
+  await dialog.getByLabel("實際年齡（選填，填了比對會更準）").fill("22");
+  await next.click();
+  await dialog.getByRole("button", { name: "戶籍與居住地在同一縣市，設籍已滿半年", exact: true }).click();
+  await dialog.getByLabel("戶籍及居住縣市").selectOption("臺北市");
+  await next.click();
+  await dialog.getByRole("button", { name: "大學、二專或五專後兩年", exact: true }).click();
+  await expect(dialog.getByText(/第 5 題／共 10 題/)).toBeVisible(); // 單選題選完自動到下一題
+  const skip = dialog.getByRole("button", { name: "跳過", exact: true });
+  while (await skip.isVisible()) await skip.click();
+  await dialog.getByRole("button", { name: "完成並比對", exact: true }).click();
+  await expect(dialog).toHaveCount(0);
+
+  // 結果頁：摘要＋依比對狀態分區
   const results = page.getByRole("region", { name: "我的資料卡" });
-  await expect(results.getByText("主動提醒：您可能符合")).toBeVisible({ timeout: 30000 });
+  await expect(results.getByRole("heading", { name: "我自己的資料卡" })).toBeVisible();
+  await expect(results.locator(".group-title").first()).toBeVisible({ timeout: 30000 });
+
+  // 補這幾題：直接回答就重新比對
+  const quick = page.getByRole("region", { name: "補這幾題，就能確認更多補助" });
+  if (await quick.isVisible()) {
+    const before = matchCalls;
+    await quick.locator(".qq").first().getByRole("button").first().click();
+    await expect.poll(() => matchCalls).toBeGreaterThan(before);
+  }
+
+  // 收藏 → 收藏清單 → 列印
+  await results.locator(".group .card").first().getByRole("button", { name: "☆ 收藏" }).click();
+  await page.getByRole("tab", { name: /收藏清單/ }).click();
+  const saved = page.getByRole("region", { name: "收藏清單" });
+  await expect(saved.locator(".card")).toHaveCount(1);
+  await page.evaluate(() => { (window as unknown as { printed: number }).printed = 0; window.print = () => { (window as unknown as { printed: number }).printed++; }; });
+  await saved.getByRole("button", { name: /列印／存成 PDF/ }).click();
+  await expect.poll(() => page.evaluate(() => (window as unknown as { printed: number }).printed)).toBe(1);
+  await expect(page.locator(".print-sheet li")).toHaveCount(1);
+
+  // 查詢：依截止日排序、打開詳情
   await page.getByRole("tab", { name: "查詢補助與服務" }).click();
-  await expect(page.locator(".card .badge").first()).toBeVisible({ timeout: 30000 });
-  await page.locator(".card").first().click();
+  await page.getByLabel("排序方式").selectOption("deadline");
+  await expect(page.locator("#wui-panel-search .card .tag.due").first()).toBeVisible();
+  await page.locator("#wui-panel-search .card").first().getByRole("button", { name: "查看詳情 →" }).click();
   const drawer = page.getByRole("dialog");
   await expect(drawer.getByText("資格初步比對")).toBeVisible();
   await expect(drawer.getByRole("link", { name: "前往官方頁面 ↗" })).toBeVisible();
@@ -62,13 +102,14 @@ test("assistant answers are written into the data card and the main screen re-ma
   // 補助清單在主畫面更新；聊天視窗不列補助
   await expect(page.getByRole("dialog", { name: "福利小幫手" }).locator(".card")).toHaveCount(0);
   await page.getByRole("tab", { name: /我的資料卡/ }).click();
+  await page.getByText(/補充的資料（/).click();
   await expect(page.getByRole("combobox", { name: "就業狀態" })).toHaveValue("unemployed");
 });
 
 test("unknown service failure is visible, not an empty success", async ({ page }) => {
   await page.route("**/api/public/benefits", route => route.fulfill({ status: 503, body: "unavailable" }));
   await page.goto("/");
-  await expect(page.getByRole("alert")).toContainText("補助資料服務暫時無法使用");
+  await expect(page.getByRole("alert").filter({ hasText: "補助資料服務暫時無法使用" })).toBeVisible();
 });
 
 test("old user pages redirect to the new home page", async ({ page }) => {

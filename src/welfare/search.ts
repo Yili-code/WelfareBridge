@@ -1,8 +1,9 @@
 import type { BenefitCard, MatchResult, MatchStatus } from "./api";
+import { compareDeadline } from "./deadline";
 
 export type FacetKey = "region" | "domain" | "service_type" | "audiences";
 export type Filters = Record<FacetKey, Set<string>>;
-export type SortKey = "match" | "title" | "updated";
+export type SortKey = "match" | "deadline" | "title" | "updated";
 
 export const FACETS: { key: FacetKey; label: string; show: number }[] = [
   { key: "region", label: "地區", show: 8 },
@@ -44,6 +45,7 @@ export function searchCards(cards: BenefitCard[], { query, filters, onlyMatch, s
   });
   return list.sort((a, b) => {
     if (sort === "title") return a.title.localeCompare(b.title, "zh-Hant");
+    if (sort === "deadline") return compareDeadline(a, b) || a.title.localeCompare(b.title, "zh-Hant");
     if (sort === "updated") return (b.updated || "").localeCompare(a.updated || "") || a.title.localeCompare(b.title, "zh-Hant");
     if (results) {
       const diff = ORDER[results[a.id]?.status ?? "no"] - ORDER[results[b.id]?.status ?? "no"];

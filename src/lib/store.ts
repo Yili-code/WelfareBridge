@@ -18,6 +18,7 @@ const KEYS = {
   resources: "wf.resources",
   appeals: "wf.appeals",
   notifications: "wf.notifications",
+  saved: "wf.saved",
 } as const;
 
 type Key = (typeof KEYS)[keyof typeof KEYS];
@@ -181,6 +182,30 @@ async function appealRequest(method: string, input?: unknown, password = "", key
 
 export async function setAppealStatus(id: string, status: Appeal["status"], password: string) {
   return appealRequest("PATCH", { id, status }, password);
+}
+
+/* ---------- 收藏清單（存在這台裝置，所有資料卡共用） ---------- */
+
+export interface SavedBenefit { id: string; title: string; deadline: string; savedAt: string }
+const EMPTY_SAVED: SavedBenefit[] = [];
+
+export function getSaved(): SavedBenefit[] {
+  return read<SavedBenefit[]>(KEYS.saved, EMPTY_SAVED);
+}
+
+/** 加入或移出收藏；回傳加入後是否在清單裡 */
+export function toggleSaved(item: { id: string; title: string; deadline: string }): boolean {
+  const current = getSaved();
+  if (current.some(s => s.id === item.id)) {
+    write(KEYS.saved, current.filter(s => s.id !== item.id));
+    return false;
+  }
+  write(KEYS.saved, [...current, { id: item.id, title: item.title, deadline: item.deadline, savedAt: new Date().toISOString() }]);
+  return true;
+}
+
+export function useSaved() {
+  return useSyncExternalStore(subscribe, getSaved, () => EMPTY_SAVED);
 }
 
 /* ---------- notifications ---------- */

@@ -123,7 +123,6 @@
 .wui .cards { display: grid; gap: 1.3rem; counter-reset: card }
 .wui .card { background: var(--paper); border: var(--bw) solid var(--ink); box-shadow: var(--hard); display: grid; grid-template-columns: 1fr 230px; cursor: pointer; transition: transform .12s ease, box-shadow .12s ease; counter-increment: card; text-align: left; padding: 0; width: 100% }
 .wui .card:hover { transform: translate(-3px,-3px); box-shadow: var(--hard-lg) }
-.wui .card:active { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--ink) }
 .wui .card-main { padding: 1.1rem 1.2rem }
 .wui .card-head { display: flex; gap: .7rem; align-items: flex-start }
 .wui .card-head::before { content: counter(card, decimal-leading-zero); font-size: .9rem; font-weight: 900; letter-spacing: .04em; background: var(--ink); color: var(--mustard); padding: .05rem .45rem; flex: none; margin-top: .28rem }
@@ -292,6 +291,114 @@
 .wui .chat-foot form { display: flex; gap: .45rem }
 .wui .chat-foot input { flex: 1; min-width: 0; border: var(--bw) solid var(--ink); padding: .5rem .6rem; font-weight: 600; background: var(--paper) }
 .wui .chat .draft { border: 2px solid var(--ink); background: var(--mustard-soft); padding: .6rem .7rem; font-size: .88rem; font-weight: 600 }
+
+/* ---------- 建立資料卡邀請 ---------- */
+.wui .invite { display: flex; gap: 1.2rem; align-items: center; justify-content: space-between; flex-wrap: wrap; background: var(--mustard); border: var(--bw) solid var(--ink); box-shadow: var(--hard); padding: 1.2rem 1.4rem; margin-bottom: 1.4rem }
+.wui .invite h2 { margin: 0 0 .35rem; font-size: 1.35rem; font-weight: 900; line-height: 1.35 }
+.wui .invite p { margin: 0; font-weight: 600; color: var(--ink-2); max-width: 46rem }
+.wui .invite .btn { font-size: 1.05rem; padding: .85rem 1.5rem }
+
+/* ---------- 截止日、收藏 ---------- */
+.wui .tag.due { background: var(--paper) }
+.wui .tag.due.urgent { background: var(--red); color: #fff }
+.wui .tag.due.soon { background: var(--mustard-soft) }
+.wui .tag.due.open { background: var(--mint-soft) }
+.wui .card-actions { display: flex; flex-direction: column; gap: .5rem }
+.wui .save { border: 2px solid var(--ink); background: var(--paper); font-weight: 800; font-size: .86rem; padding: .4rem .7rem; cursor: pointer; box-shadow: 2px 2px 0 var(--ink) }
+.wui .save:hover { background: var(--mustard-soft) }
+.wui .save.on { background: var(--ink); color: var(--mustard) }
+.wui .save:active { transform: translate(2px,2px); box-shadow: none }
+.wui .save.big { padding: .72rem 1.1rem; font-size: .95rem; box-shadow: var(--hard-sm) }
+.wui .card-actions .btn, .wui .card-actions .save { white-space: nowrap }
+.wui[data-mode="elder"] .card-actions { flex-direction: row }
+@media (max-width: 640px) {
+  .wui .card-side { flex-wrap: wrap }
+  .wui .card-actions { flex-direction: row; flex: 1 1 100% }
+  .wui .card-actions > * { flex: 1 }
+}
+.wui .reminder { display: flex; gap: .8rem; align-items: center; justify-content: space-between; flex-wrap: wrap; background: var(--red-soft); border: var(--bw) solid var(--ink); box-shadow: var(--hard-sm); padding: .8rem 1rem; margin-bottom: 1.3rem; font-weight: 700 }
+.wui .reminder .actions { margin: 0 }
+.wui .gone { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem }
+.wui .gone li { display: flex; gap: .6rem; align-items: center; justify-content: space-between; border: 2px solid var(--ink); padding: .45rem .7rem; font-weight: 700; color: var(--ink-3) }
+.wui .gone .rm, .wui .learned .rm { border: 2px solid var(--ink); background: var(--paper); font-weight: 800; padding: .25rem .6rem; cursor: pointer }
+.wui .linklike { border: 0; background: none; padding: 0; font-weight: 800; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; cursor: pointer; margin-left: .3rem }
+
+/* ---------- 資料卡小視窗（一次一題） ---------- */
+.wui .modal-layer { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 1rem }
+.wui .modal-layer .scrim { z-index: 0 }
+.wui .modal { position: relative; z-index: 1; width: min(640px, 100%); max-height: calc(100dvh - 2rem); display: flex; flex-direction: column; background: var(--paper); border: var(--bw) solid var(--ink); box-shadow: var(--hard-lg) }
+.wui .modal-head { display: flex; gap: .8rem; align-items: center; padding: .85rem 1.1rem; background: var(--mint); border-bottom: var(--bw) solid var(--ink) }
+.wui .modal-title { flex: 1; min-width: 0 }
+.wui .modal-title b { display: block; font-size: 1.05rem; font-weight: 900 }
+.wui .modal-title small { display: block; font-size: .82rem; font-weight: 800 }
+.wui .progress { height: .6rem; background: var(--surface-2); border-bottom: 2px solid var(--ink) }
+.wui .progress i { display: block; height: 100%; background: var(--blue); transition: width .25s ease }
+.wui .stepnav { display: flex; gap: .35rem; flex-wrap: wrap; padding: .6rem 1.1rem 0 }
+.wui .stepnav button { width: 2.1rem; height: 2.1rem; border: 2px solid var(--ink); background: var(--paper); font-weight: 900; cursor: pointer }
+.wui .stepnav button.done { background: var(--mint-soft) }
+.wui .stepnav button[aria-current="step"] { background: var(--ink); color: var(--mustard) }
+.wui .modal-body { overflow: auto; padding: 1.1rem 1.2rem 1.3rem; flex: 1 }
+.wui .modal-body h2 { margin: 0 0 .35rem; font-size: 1.45rem; font-weight: 900; line-height: 1.35; outline: none }
+.wui .modal-body .why { margin: 0 0 1rem; color: var(--ink-3); font-size: .9rem; font-weight: 600 }
+.wui .choices { display: grid; gap: .55rem }
+.wui .choice { position: relative; text-align: left; border: var(--bw) solid var(--ink); background: var(--paper); padding: .8rem 2.6rem .8rem 1rem; font-weight: 800; font-size: 1rem; cursor: pointer; box-shadow: var(--hard-sm); line-height: 1.45 }
+.wui .choice small { display: block; font-weight: 600; font-size: .8rem; color: var(--ink-3) }
+.wui .choice:hover { background: var(--mustard-soft) }
+.wui .choice[aria-pressed="true"] { background: var(--blue); color: #fff }
+.wui .choice[aria-pressed="true"] small { color: #fff }
+.wui .choice[aria-pressed="true"]::after { content: "✓"; position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); font-size: 1.2rem; font-weight: 900 }
+.wui .choice:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink) }
+.wui .modal-foot { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; padding: .8rem 1.1rem; border-top: var(--bw) solid var(--ink); background: var(--surface-2) }
+.wui .modal-foot .spacer { flex: 1 }
+@media (max-width: 560px) { .wui .modal-layer { padding: 0; align-items: stretch } .wui .modal { width: 100%; max-height: none; height: 100dvh; box-shadow: none } }
+
+/* ---------- 資料卡結果頁 ---------- */
+.wui .summary { margin-bottom: 1.3rem }
+.wui .summary-head { display: flex; gap: .8rem; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: .6rem }
+.wui .summary-head h2 { margin: 0; font-size: 1.35rem; font-weight: 900 }
+.wui .summary-head .actions { margin: 0 }
+.wui .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: .45rem .9rem; margin: 0 }
+.wui .facts div { border-left: 4px solid var(--blue); padding: .1rem .6rem }
+.wui .facts dt { font-size: .76rem; font-weight: 900; letter-spacing: .08em; color: var(--ink-3) }
+.wui .facts dd { margin: 0; font-weight: 700; font-size: .93rem }
+.wui .learned-box { margin-top: 1rem; border: 2px solid var(--ink); background: var(--surface-3) }
+.wui .learned-box summary { cursor: pointer; padding: .55rem .8rem; font-weight: 800 }
+.wui .learned-box > .hint, .wui .learned-box > .learned { margin: 0 .8rem .8rem }
+.wui .result-bar { display: grid; gap: .8rem; margin-bottom: 1.3rem }
+.wui .result-bar .stats { margin: 0 }
+.wui .result-bar .actions { margin: 0 }
+.wui button.stat { cursor: pointer; font: inherit; color: inherit }
+.wui button.stat:hover { transform: translate(-2px,-2px); box-shadow: var(--hard) }
+.wui .quickq { margin-bottom: 1.6rem; background: var(--blue-soft) }
+.wui .quickq > h2 { font-size: 1.25rem }
+.wui .qq-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .8rem }
+.wui .qq { background: var(--paper); border: 2px solid var(--ink); padding: .75rem .9rem; box-shadow: 2px 2px 0 var(--ink) }
+.wui .qq-q { margin: 0 0 .55rem; font-weight: 900; font-size: 1.02rem }
+.wui .qq-q small { display: block; font-weight: 600; font-size: .8rem; color: var(--ink-3) }
+.wui .qq-a { display: flex; gap: .45rem; flex-wrap: wrap; align-items: center }
+.wui .qq-a select { border: 2px solid var(--ink); background: var(--paper); padding: .4rem .6rem; font-weight: 700 }
+.wui .qq-number { display: flex; gap: .45rem; align-items: center }
+.wui .qq-number input { width: 7rem; border: 2px solid var(--ink); padding: .4rem .6rem; font-weight: 700 }
+.wui .qq .skip { border: 0; background: none; font-weight: 800; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; color: var(--ink-2) }
+.wui .group { margin-bottom: 2rem }
+.wui .group-title { display: flex; align-items: center; gap: .6rem; margin: 0 0 .3rem; font-size: 1.4rem; font-weight: 900 }
+.wui .group-title .n { font-size: 1rem; background: var(--ink); color: var(--mustard); padding: .05rem .55rem }
+
+/* ---------- 列印／存成 PDF ---------- */
+.wui .print-sheet { display: none }
+@media print {
+  .wui { background: #fff; min-height: 0 }
+  .wui::before { display: none }
+  .wui > :not(.print-sheet) { display: none !important }
+  .wui .print-sheet { display: block; color: #000; font-size: 11pt; line-height: 1.5 }
+  .wui .print-sheet h1 { font-size: 18pt; margin: 0 0 .2rem }
+  .wui .print-sheet h2 { font-size: 13pt; margin: 1rem 0 .4rem; border-bottom: 2px solid #000 }
+  .wui .print-sheet ol { padding-left: 1.4rem; margin: 0 }
+  .wui .print-sheet li { margin-bottom: .6rem; page-break-inside: avoid }
+  .wui .print-sub, .wui .print-note { color: #333; font-size: 9.5pt }
+  .wui .print-url { font-size: 9pt; word-break: break-all }
+  .wui .print-check { font-size: 9.5pt; color: #333 }
+}
 
 /* ---------- 長者模式 ---------- */
 .wui[data-mode="elder"] { --maxw: 980px; --bw: 4px; --hard: 6px 6px 0 var(--ink); --hard-sm: 4px 4px 0 var(--ink); line-height: 1.85 }

@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { fetchBenefit, STATUS_LABEL, type BenefitDetail, type MatchResult } from "./api";
+import { fetchBenefit, STATUS_LABEL, type BenefitCard, type BenefitDetail, type MatchResult } from "./api";
+import { DeadlineTag } from "./BenefitCardView";
 
 const ICON: Record<string, string> = { satisfied: "✓", unknown: "?", unsure: "!", violated: "✕" };
 
-export default function DetailDrawer({ id, result, hasProfile, onClose, onGoProfile, onGap, onAskAssistant }: {
+export default function DetailDrawer({ id, result, hasProfile, saved, onToggleSave, onClose, onGoProfile, onGap, onAskAssistant }: {
   id: string | null;
   result: MatchResult | undefined;
   hasProfile: boolean;
@@ -13,6 +14,8 @@ export default function DetailDrawer({ id, result, hasProfile, onClose, onGoProf
   onGoProfile: () => void;
   onGap: (title: string) => void;
   onAskAssistant: () => void;
+  saved: boolean;
+  onToggleSave: (card: BenefitCard) => void;
 }) {
   const [detail, setDetail] = useState<{ id: string; data?: BenefitDetail; error?: string } | null>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -60,7 +63,7 @@ export default function DetailDrawer({ id, result, hasProfile, onClose, onGoProf
                 <ul className="reasons">{result.reasons.map(reason => <li key={reason.text} className={reason.state}><span className="ic" aria-hidden="true">{ICON[reason.state]}</span><span>{reason.text}</span></li>)}</ul>
                 {result.needs.length > 0 && <>
                   <p className="lead">補充這些資料就能確認：{result.needs.join("、")}</p>
-                  <div className="actions"><button type="button" className="btn sm" onClick={onAskAssistant}>請小幫手問我這幾題</button><button type="button" className="btn sm sec" onClick={onGoProfile}>到資料卡填寫</button></div>
+                  <div className="actions"><button type="button" className="btn sm" onClick={onAskAssistant}>請小幫手問我這幾題</button><button type="button" className="btn sm sec" onClick={onGoProfile}>到資料卡補充</button></div>
                 </>}
               </> : hasProfile ? <p role="status">正在比對您的資料卡…</p> : <>
                 <p>建立資料卡後，這裡會自動比對您是否可能符合資格。</p>
@@ -96,7 +99,7 @@ export default function DetailDrawer({ id, result, hasProfile, onClose, onGoProf
               <dt>補助領域</dt><dd>{data.domain}</dd>
               <dt>補助類型</dt><dd>{data.service_type}</dd>
               <dt>適用對象</dt><dd>{data.audiences.join("、")}</dd>
-              <dt>申請期間</dt><dd>{data.application.period || "請見官方公告"}</dd>
+              <dt>申請期間</dt><dd>{data.application.period || "請見官方公告"} <DeadlineTag card={data} /></dd>
               {data.updated && <><dt>官方公告</dt><dd>{data.updated}</dd></>}
             </dl>
           </div>
@@ -116,6 +119,7 @@ export default function DetailDrawer({ id, result, hasProfile, onClose, onGoProf
       </div>
       <div className="drawer-foot">
         {data?.source_url && <a className="btn" href={data.source_url} target="_blank" rel="noopener noreferrer">前往官方頁面 ↗</a>}
+        {data && <button className={`save big${saved ? " on" : ""}`} type="button" aria-pressed={saved} onClick={() => onToggleSave(data)}>{saved ? "★ 已收藏" : "☆ 收藏"}</button>}
         {data && <button className="btn sec" type="button" onClick={() => onGap(`「${data.title}」在我的地區找不到或不夠用`)}>這項服務我這裡沒有</button>}
       </div>
     </aside>

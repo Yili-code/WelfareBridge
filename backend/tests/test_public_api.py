@@ -57,3 +57,18 @@ def test_official_clauses_broken_by_pdf_line_wraps_are_joined():
     assert public._sentences(lines, 10) == [
         "依據作業辦法應符合下列規定：", "一、領有中低收入老人生活津貼。", "二、未接受機構收容安置、未領有政府提供之日間照顧服務補助。", "第三條 照顧者並應符合下列規定：",
     ]
+
+
+def test_quick_questions_pick_the_most_common_missing_answerable_data():
+    from app.matching import Profile
+    from app.registry import get_registry
+
+    registry = get_registry()
+    maybe = lambda *needs: SimpleNamespace(tier="tier2", needs=list(needs))
+    items = [maybe("employment.status", "identity.low_income"), maybe("employment.status"), maybe("identity.low_income", "employment.status"), SimpleNamespace(tier="tier1", needs=["disability.has_certificate"])]
+    questions = public.quick_questions(items, Profile(), registry)
+    assert [q["attribute_id"] for q in questions] == ["employment.status", "identity.low_income"]
+    assert questions[0]["affected"] == 3 and questions[0]["options"] and questions[1]["options"] == [{"value": "true", "label": "是"}, {"value": "false", "label": "否"}]
+    # 已經回答過（含回答不確定）的不再問
+    answered = Profile.from_dict({"attributes": {"employment.status": {"value": None, "source": "unsure"}}}, registry)
+    assert [q["attribute_id"] for q in public.quick_questions(items, answered, registry)] == ["identity.low_income"]

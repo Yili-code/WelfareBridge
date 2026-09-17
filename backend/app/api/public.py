@@ -12,6 +12,7 @@
 from __future__ import annotations
 
 import re
+from collections import Counter
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, HTTPException
@@ -175,6 +176,9 @@ def card(row: dict) -> dict:
         "points": points[:4],
         "price": price(benefit),
         "updated": (source.get("published_date") or "")[:10],  # 官方公告日期；系統重新處理的時間不是官方更新
+        "deadline": ((benefit.get("application_period") or {}).get("end_date") or "")[:10],
+        "rolling": bool((benefit.get("application_period") or {}).get("rolling")),
+        "source_url": source.get("source_url", ""),
     }
 
 
@@ -273,6 +277,35 @@ def reasons(item) -> list[dict]:
     return out
 
 
+QUICK_TYPES = {"boolean", "enum", "multi_enum", "number", "city"}
+UNIT_LABELS = {"TWD": "元", "TWD_month": "元／月", "TWD_year": "元／年", "years": "年", "months": "個月", "level": "級", "score": "分", "percent": "%", "gpa": "", "multiple": "倍"}
+
+
+def quick_questions(items, profile: Profile, registry, limit: int = 3) -> list[dict]:
+    """「補這幾題就能確認更多」：需要進一步確認的補助裡，最常缺的資料。使用者在結果頁直接點選回答，不必開聊天。"""
+    counts: Counter = Counter()
+    for item in items:
+        if item.tier == "tier2":
+            counts.update(set(item.needs))  # 同一筆補助缺同一項只算一次
+    askable = {attribute.id for attribute in registry.askable()}
+    out: list[dict] = []
+    for attribute_id, affected in counts.most_common():
+        attribute = registry.get(attribute_id)
+        if attribute is None or attribute_id not in askable or attribute.type not in QUICK_TYPES or profile.answered(attribute_id):
+            continue
+        if attribute.type == "boolean":
+            options = [{"value": "true", "label": "是"}, {"value": "false", "label": "否"}]
+        elif attribute.type in {"enum", "multi_enum"}:
+            options = [{"value": str(v.get("value")), "label": str(v.get("label", v.get("value")))} for v in attribute.values]
+        else:
+            options = []
+        out.append({"attribute_id": attribute_id, "label": attribute.label, "question": attribute.question or f"請問{attribute.label}？", "help": attribute.help,
+                    "type": attribute.type, "unit": "歲" if attribute_id.endswith("age") else UNIT_LABELS.get(attribute.unit or "", attribute.unit or ""), "options": options, "affected": affected})
+        if len(out) == limit:
+            break
+    return out
+
+
 @router.post("/match")
 def public_match(body: MatchBody) -> dict:
     registry = get_registry()
@@ -288,4 +321,4 @@ def public_match(body: MatchBody) -> dict:
         status = {"tier1": "yes", "tier2": "maybe"}.get(item.tier, "no")
         counts[status] += 1
         results[item.benefit_id] = {"status": status, "reasons": reasons(item), "needs": item.needs_labels[:4]}
-    return {"results": results, "counts": counts, "disclaimer": DISCLAIMER}
+    return {"results": results, "counts": counts, "questions": quick_questions(items, profile, registry), "disclaimer": DISCLAIMER}

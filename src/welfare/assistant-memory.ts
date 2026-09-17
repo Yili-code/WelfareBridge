@@ -70,3 +70,9 @@ export function rankForProfile(cards: BenefitCard[], results: Record<string, Mat
     || (results[a.id]?.needs.length ?? 0) - (results[b.id]?.needs.length ?? 0)
     || a.title.localeCompare(b.title, "zh-Hant"));
 }
+
+/** 在結果頁「補這幾題」直接回答：存成資料卡的補充資料（使用者自己確認過） */
+export function answerQuestion(question: { label: string; type: string; unit: string; options: { value: string; label: string }[] }, raw: string, now = new Date().toISOString()): AssistantAttribute {
+  const base: AssistantAttribute = { label: question.label, type: question.type, unit: question.unit || undefined, value: null, valueLabel: "不確定", options: question.options.length ? question.options : undefined, source: "unsure", updatedAt: now };
+  return raw === "" ? base : editLearned(base, raw, now);
+}
