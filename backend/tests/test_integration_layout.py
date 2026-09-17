@@ -18,6 +18,8 @@ def test_worker_only_does_not_schedule_a_crawl(monkeypatch):
     monkeypatch.setattr(db, "init_db", lambda: None)
     monkeypatch.setattr(crawl_service, "ensure_sources", lambda: None)
     monkeypatch.setattr(crawl_service, "run_sources", lambda **kwargs: pytest.fail("worker-only scheduled a crawl"))
+    monkeypatch.setattr(crawl_service, "fail_interrupted_jobs", lambda _now: 0)
+    monkeypatch.setattr(tasks, "recover_interrupted_tasks", lambda: 0)
     def consume(timeout):
         assert timeout == 30
         raise KeyboardInterrupt
