@@ -69,7 +69,21 @@ cd backend
 
 助理會直接呼叫與 `/api/benefits/search` 相同的搜尋功能：已有需求時自動查詢，也可輸入「幫我找租金補助」或「搜尋：獎學金」指定關鍵字。查詢的是資料中心已收錄的資料，並非即時爬取全網。每個搜尋條件最多檢索 50 筆，依已知資格排除明確不符者後顯示前 3 筆，附補助詳情、來源連結與待確認條件；無結果時可換關鍵字。後續回答會沿用搜尋條件重新篩選。搜尋結果由伺服器提供，不使用模型自行編造的補助名稱或網址。
 
-預設模型為 `qwen2.5:7b`。實際安裝狀態請用 `ollama list` 確認；系統精確比對 `LLM_MODEL` 標籤，不會以較小模型替代。缺少指定模型時，資格媒合使用規則模式，資源引導助理則提示模型尚未就緒。
+預設模型為 Google 的 Gemma 4 與 EmbeddingGemma，依顯示卡記憶體選擇：
+
+| 設定 | 8GB（預設，例如 RTX 3070） | 32GB（例如 RTX 5090） |
+| --- | --- | --- |
+| `LLM_MODEL` | `gemma4:e4b` | `gemma4:26b` |
+| `CORE_LLM_MODEL` | `gemma4:12b`（放不下的部分跑在 CPU） | `gemma4:31b` |
+| `EMBEDDING_MODEL` | `embeddinggemma` | `embeddinggemma` |
+
+```bash
+ollama pull gemma4:e4b
+ollama pull gemma4:12b
+ollama pull embeddinggemma
+```
+
+實際安裝狀態請用 `ollama list` 確認；系統精確比對 `LLM_MODEL` 標籤，不會以較小模型替代。缺少指定模型時，資格媒合使用規則模式，資源引導助理則提示模型尚未就緒。
 
 ## Docker
 
@@ -140,16 +154,24 @@ Compose 的 MongoDB 使用自己的 `welfarebridge_mongo_data` volume，與可�
 `OLLAMA_BASE_URL` 預設指向 `http://host.docker.internal:11434`，也就是**主機上**的 Ollama；
 容器不會自己安裝。沒有 Ollama 或缺少指定模型時，系統回到純規則模式（可在 `.env` 設 `LLM_PROVIDER=none` 明確關閉）。
 
-資格骨幹由 `CORE_LLM_MODEL`（預設 `qwen3:8b`）離線抽取，模型只是投票者之一。新爬到的補助在處理時自動建立；既有資料或換模型後手動重建：
+資格骨幹由 `CORE_LLM_MODEL`（預設 `gemma4:12b`）離線抽取，模型只是投票者之一。新爬到的補助在處理時自動建立；既有資料或換模型後手動重建：
 
 ```powershell
-# 全部補助（已跑過 AI 的沿用結果，RTX 3070 約 5 秒／筆）
+# 全部補助（已跑過 AI 的沿用結果）
 docker compose run --rm --no-deps benefit_crawler python scripts/build_eligibility_core.py
 # 換模型後重跑 AI；或 AI 不在線時只用規則式訊號
 docker compose run --rm --no-deps benefit_crawler python scripts/build_eligibility_core.py --refresh-llm
 docker compose run --rm --no-deps benefit_crawler python scripts/build_eligibility_core.py --no-llm
 # 分類資料修復：補縣市政府來源轄區、重跑去重（不同縣市不合併）、待確認分類交給 AI 重判
 docker compose run --rm --no-deps benefit_crawler python scripts/repair_classification.py --dry
+```
+
+換 embedding 模型（`EMBEDDING_MODEL`）後，舊索引會自動停用（分類只剩關鍵字與 LLM 兩方），要用新模型重建索引並重新分類；換 `LLM_MODEL` 後也要重跑 AI 補齊：
+
+```powershell
+docker compose run --rm --no-deps benefit_crawler python -m benefit_crawler --rebuild-embeddings
+docker compose run --rm --no-deps benefit_crawler python -m benefit_crawler --pipeline-only --force --reset-llm
+docker compose run --rm --no-deps benefit_crawler python scripts/build_eligibility_core.py --refresh-llm
 ```
 
 SQLite 與爬蟲檔案保存在本機 `data/`，Redis 佇列使用 `redis_data` volume 保存。`docker compose down` 保留這些資料；加上 `-v` 會刪除 MongoDB 與 Redis volumes，請勿用於一般停止操作。
