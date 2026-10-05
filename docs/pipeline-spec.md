@@ -34,7 +34,7 @@ Output:  補助訊號詞（附 pos_rate / neg_rate / lift）、負面詞、各�
 ```text
 Stage 4  分類
 Input:   title + raw_text
-Process: services/classifier_ensemble.py 三方投票：services/classifier.py 關鍵字（投是／否／棄權）× services/embeddings.py bge-m3（p_benefit：補助／非補助平均向量、最像的類別原型、kNN）× llm/fill.classify_document（完整類別清單＋page_kind）。
+Process: services/classifier_ensemble.py 三方投票：services/classifier.py 關鍵字（投是／否／棄權）× services/embeddings.py embeddinggemma（p_benefit：補助／非補助平均向量、最像的類別原型、kNN）× llm/fill.classify_document（完整類別清單＋page_kind）。
          先做結構性排除（services/admission.py page_kind：表單／附件／流程圖／進度查詢／標章／統計／問答／名單／行政公告／分頁片段／亂碼 → filtered_out 附原因；標題像方案但只有附件清單 → 保留為 uncertain）。
          兩方同意才放行；不一致交 LLM；LLM 說不是但有一方說是 → 保留為 uncertain（疑似補助，不進媒合）；LLM 不可用時同樣保留。
          例外（pipeline.keep_prior_classification）：本地 AI 這次不在線而先前 AI 已確認是補助 → 沿用先前判斷，不降級。
@@ -67,7 +67,7 @@ Process: llm/fill.py
          - map_conditions：每個 unmapped 條件句 → 候選屬性中選一個 + operator/value/role；驗證；仍不合 → complex；提議新屬性 → review_items
          - extract_eligibility_sentences：規則式一句條件都沒抓到時，先請 AI 逐字列出資格句（逐段驗證在原文），再進 map_conditions
          - classify_document（完整類別清單）：關鍵字分類尚未經 AI 確認的方案一律確認類別與 page_kind
-         - 思考型模型關閉 think；LLM_NUM_CTX 可調；換 32GB 主機用 qwen3:32b 並 --reset-llm 全部重做
+         - 思考型模型關閉 think；LLM_NUM_CTX 可調；換 32GB 主機用 gemma4:26b／gemma4:31b 並 --reset-llm 全部重做
 Output:  benefit.llm{processed, model, tasks, accepted[], rejected[], errors[]}
 ```
 

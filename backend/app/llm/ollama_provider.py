@@ -9,7 +9,7 @@ import httpx
 
 from .provider import LLMError, LLMProvider, LLMResponse
 
-DEFAULT_MODEL = "llama3.1"
+DEFAULT_MODEL = "gemma4:e4b"
 
 
 class OllamaProvider(LLMProvider):
@@ -23,7 +23,7 @@ class OllamaProvider(LLMProvider):
         options = {"temperature": 0, "num_predict": max_tokens}
         num_ctx = os.environ.get("LLM_NUM_CTX", "").strip()
         if num_ctx.isdigit():
-            options["num_ctx"] = int(num_ctx)  # 5090 主機跑 qwen3:32b 時可設 8192／16384，讓更長的原文進得去
+            options["num_ctx"] = int(num_ctx)  # 5090 主機跑 gemma4:31b 時可設 8192／16384，讓更長的原文進得去
         body = {
             "model": self.model,
             "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
@@ -31,7 +31,7 @@ class OllamaProvider(LLMProvider):
             "format": json_schema or "json",
             "options": options,
         }
-        if re.search(r"(qwen3|deepseek-r1|gpt-oss|magistral)", self.model, re.I):
+        if re.search(r"(gemma4|qwen3|deepseek-r1|gpt-oss|magistral)", self.model, re.I):
             body["think"] = False  # 思考型模型：結構化輸出不需要思考鏈，關掉才不會拖慢且更守 JSON 格式
         try:
             response = httpx.post(f"{self.base_url}/api/chat", json=body, timeout=self.timeout)

@@ -12,7 +12,7 @@
 | 來源 | 7 個 | 24 個（含 source.xlsx 的 51 個網址：HTML、PDF、CSV/JSON/XML、略過項記錄原因） |
 | 關鍵字 | 人工維護 keyword_rules.yaml | 由語料統計產生 keyword_rules_v2.yaml（log-odds ratio），附完整報告 |
 | 條件抽取 | 固定欄位 + 每個領域手寫 regex | 屬性登錄表（YAML）+ 通用型態規則（數值／布林／有序 enum／縣市／身分）+ 條件句對屬性 |
-| LLM | 雲端（Anthropic/OpenAI/Gemini）可選 | 只用本地 Ollama（qwen2.5:7b），填空缺、對條件句、判複雜條件、解析使用者描述 |
+| LLM | 雲端（Anthropic/OpenAI/Gemini）可選 | 只用本地 Ollama（Gemma 4，預設 gemma4:e4b），填空缺、對條件句、判複雜條件、解析使用者描述 |
 | 媒合 | 規則引擎 + 缺欄位追問 | 硬過濾候選 + 規則引擎（推定不拒絕）+ 資訊增益追問 + 排序漏斗（需求／時效／成本／互斥組合） |
 | 前端 | 資料中心／我的獎學金 | 資料中心（含原始文件與略過原因）／屬性登錄表／我的補助（需求類型、三張卡、建議組合） |
 

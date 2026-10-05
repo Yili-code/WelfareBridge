@@ -9,6 +9,7 @@
     python -m benefit_crawler --no-llm              # pipeline 不呼叫本地 AI
     python -m benefit_crawler --llm-fill            # 只對已抽取但 AI 尚未補齊的 benefits 執行本地 AI 補齊
     python -m benefit_crawler --mine-keywords       # 依目前語料統計關鍵字 → keyword_rules_v2.yaml + docs/generated/keyword-report.md
+    python -m benefit_crawler --rebuild-embeddings  # 用目前的 EMBEDDING_MODEL 重建分類用的 embedding 索引（換模型後必跑）
     python -m benefit_crawler --import-legacy       # 把 v1 demo_seed.json 的原始文件匯入 MongoDB（之後用 --pipeline-only --force 重新解析）
     python -m benefit_crawler --dry-run --max-items 3
     python -m benefit_crawler --export-seed         # 匯出 data/demo/seed_v2.json
@@ -38,6 +39,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--llm-fill", action="store_true", help="只執行本地 AI 補齊（對尚未補齊的 benefits）")
     parser.add_argument("--include-non-canonical", action="store_true", help="--llm-fill 時連非 canonical 的重複紀錄也補齊（預設只補 canonical）")
     parser.add_argument("--mine-keywords", action="store_true", help="依語料統計關鍵字並產生 keyword_rules_v2.yaml 與報告")
+    parser.add_argument("--rebuild-embeddings", action="store_true", help="用目前的 EMBEDDING_MODEL 重建分類用的 embedding 索引")
     parser.add_argument("--import-legacy", action="store_true", help="匯入 v1 demo_seed.json 的原始文件")
     parser.add_argument("--dry-run", action="store_true", help="不寫入資料庫")
     parser.add_argument("--export-seed", action="store_true", help="匯出 seed_v2.json")
@@ -77,6 +79,12 @@ def main(argv: list[str] | None = None) -> int:
 
         report = mine_and_write()
         print(f"[mine-keywords] {report}")
+        return 0
+
+    if args.rebuild_embeddings:
+        from app.services.embeddings import embedding_model, rebuild_index
+
+        print(f"[rebuild-embeddings] model={embedding_model()} {rebuild_index()}")
         return 0
 
     if args.export_seed:

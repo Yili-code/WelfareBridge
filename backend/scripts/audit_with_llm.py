@@ -1,6 +1,6 @@
-"""獨立審核：用「另一個」本地模型（預設 qwen3:8b；5090 主機建議 qwen3:32b）逐筆核對補助方案的欄位是否有原文依據。
+"""獨立審核：用「另一個」本地模型（預設 gemma4:12b；5090 主機建議 gemma4:31b）逐筆核對補助方案的欄位是否有原文依據。
 
-    python scripts/audit_with_llm.py --model qwen3:8b --limit 40 --out ../docs/generated/field-audit.md
+    python scripts/audit_with_llm.py --model gemma4:12b --limit 40 --out ../docs/generated/field-audit.md
 
 每筆送給審核模型：原文（節錄）＋系統抽出的欄位（類別、機關、金額、申請期間、申請方式、前 8 條資格規則與摘錄）。
 審核模型只回答每個欄位「correct / wrong / unverifiable」與一句理由；不會改資料。結果寫成 Markdown 報告與 JSON（可重現）。
@@ -87,7 +87,7 @@ def build_user(benefit: dict, registry) -> tuple[str, list[dict]]:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model", default=os.environ.get("AUDIT_MODEL", "qwen3:8b"))
+    parser.add_argument("--model", default=os.environ.get("AUDIT_MODEL", "gemma4:12b"))
     parser.add_argument("--base-url", default=os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434"))
     parser.add_argument("--limit", type=int, default=0, help="0 = 全部 canonical 補助方案")
     parser.add_argument("--domain", default="")

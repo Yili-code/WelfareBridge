@@ -1,5 +1,7 @@
 """三方投票分類：兩方同意才放行、任一方說是就不直接丟、LLM 不可用時保留待確認、類別以一致為準。"""
 
+from types import SimpleNamespace
+
 from app.services import classifier_ensemble as ce
 from app.services import embeddings
 
@@ -82,3 +84,17 @@ def test_transient_llm_outage_does_not_demote_a_confirmed_benefit():
     # AI 有跑而且說不確定：維持待確認，不能沿用
     judged = SimpleNamespace(uncertain=True, llm_used=True, is_benefit=True)
     assert not keep_prior_classification(judged, confirmed_before)
+
+
+def test_index_from_another_embedding_model_is_ignored(monkeypatch):
+    stored = {"_id": embeddings.INDEX_ID, "model": "bge-m3", "prototypes": {}, "gate": {}}
+    monkeypatch.setattr(embeddings, "get_db", lambda: SimpleNamespace(embedding_index=SimpleNamespace(find_one=lambda _q: stored)))
+    monkeypatch.setattr(embeddings, "embedding_model", lambda: "embeddinggemma")
+    embeddings.get_index.cache_clear()
+    try:
+        assert embeddings.get_index() is None
+        embeddings.get_index.cache_clear()
+        stored["model"] = "embeddinggemma"
+        assert embeddings.get_index() is stored
+    finally:
+        embeddings.get_index.cache_clear()

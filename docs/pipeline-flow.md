@@ -41,10 +41,10 @@ flowchart TD
         A -- program / portal --> E
         subgraph ENS[三方投票 classifier_ensemble.py]
             E[關鍵字加減分<br/>keyword_rules_v2.yaml] --> G{兩方同意？}
-            E2[bge-m3 embedding<br/>類別原型 + kNN] --> G
+            E2[embeddinggemma<br/>類別原型 + kNN] --> G
             G -- 是 --> K[放行]
             G -- 都否 --> F2[filtered_out]
-            G -- 不一致 --> L[本地 LLM 裁決<br/>qwen3 / Ollama]
+            G -- 不一致 --> L[本地 LLM 裁決<br/>Gemma 4 / Ollama]
             L -- 是 --> K
             L -- 否但有一方說是 --> U[保留 uncertain<br/>疑似補助待確認，不進媒合]
             L -- 不可用 --> U
