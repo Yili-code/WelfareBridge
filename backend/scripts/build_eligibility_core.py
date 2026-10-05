@@ -6,7 +6,7 @@
     python scripts/build_eligibility_core.py --refresh-llm      # 重新呼叫 AI（換模型後）
     python scripts/build_eligibility_core.py --gold --report    # 不寫入，只和黃金集比對各類條件的準確度
 
-模型：CORE_LLM_MODEL（預設 qwen3:8b；空字串＝沿用 LLM_MODEL）。
+模型：CORE_LLM_MODEL（預設 gemma4:12b；空字串＝沿用 LLM_MODEL）。
 """
 
 from __future__ import annotations

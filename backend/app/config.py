@@ -67,10 +67,12 @@ class Settings(BaseSettings):
 
     # ---- LLM（只支援本地 Ollama）----
     llm_provider: str = "ollama"  # ollama | none
-    llm_model: str = "qwen2.5:7b"
-    # 資格骨幹抽取用的模型（離線批次，準確度優先；空字串＝沿用 llm_model）。有 5090 可改 qwen3:32b 等較大模型
-    core_llm_model: str = "qwen3:8b"
-    embedding_model: str = "bge-m3"  # 本地 Ollama embedding 模型（分類的第二個獨立訊號）
+    # 預設值以 8GB 顯示卡為準；32GB（5090）主機可改 gemma4:26b（MoE，只有約 4B 參數在算，互動也夠快）
+    llm_model: str = "gemma4:e4b"
+    # 資格骨幹抽取用的模型（離線批次，準確度優先；空字串＝沿用 llm_model）。8GB 放不下會部分跑在 CPU；32GB 主機可改 gemma4:31b
+    core_llm_model: str = "gemma4:12b"
+    # 本地 Ollama embedding 模型（分類的第二個獨立訊號）。換模型後要重建索引：python -m benefit_crawler --rebuild-embeddings
+    embedding_model: str = "embeddinggemma"
     ollama_base_url: str = "http://localhost:11434"
     llm_timeout_seconds: float = 300.0
     llm_max_documents_per_run: int = 500

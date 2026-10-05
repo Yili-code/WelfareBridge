@@ -1,4 +1,4 @@
-"""Embedding（bge-m3，經本地 Ollama /api/embed）：文件向量快取、類別／閘門原型、相似度。
+"""Embedding（embeddinggemma，經本地 Ollama /api/embed）：文件向量快取、類別／閘門原型、相似度。
 
 用途：分類的第二個獨立訊號（第一個是關鍵字加減分，第三個是本地 LLM）。
 - 文件向量：標題 + 內文前 2500 字，以 content_hash 快取在 embeddings 集合，內容沒變不重算。
@@ -29,7 +29,7 @@ INDEX_ID = "latest"
 
 
 def embedding_model() -> str:
-    return getattr(get_settings(), "embedding_model", None) or "bge-m3"
+    return getattr(get_settings(), "embedding_model", None) or "embeddinggemma"
 
 
 def embedding_available() -> bool:
@@ -201,7 +201,12 @@ def rebuild_index() -> dict:
 
 @lru_cache
 def get_index() -> dict | None:
-    return get_db().embedding_index.find_one({"_id": INDEX_ID})
+    """索引必須由目前的 embedding 模型建立：不同模型的向量維度與語意空間都不同，混用時 cosine 會靜默算錯。"""
+    index = get_db().embedding_index.find_one({"_id": INDEX_ID})
+    if index and index.get("model") != embedding_model():
+        log.warning("embedding 索引由 %s 建立，與目前模型 %s 不符，先停用 embedding 訊號；請執行 python -m benefit_crawler --rebuild-embeddings", index.get("model"), embedding_model())
+        return None
+    return index
 
 
 # ----------------------------------------------------------------- classification signal

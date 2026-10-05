@@ -19,7 +19,7 @@ MT --> LLM
 SVC --> CRAWL[crawler/<br/>base · generic（設定檔驅動）· government · local · school]
 SVC --> DB[(MongoDB<br/>sources · raw_documents · benefits · providers · registry · user_profiles · match_results · feedback · review · crawl_jobs · keyword_stats)]
 MT --> DB
-LLM --> OL[Ollama · qwen2.5:7b<br/>主機 GPU · host.docker.internal:11434]
+LLM --> OL[Ollama · gemma4:e4b<br/>主機 GPU · host.docker.internal:11434]
 CRAWL --> WEB[官方網站]
 WK[crawler-worker<br/>python -m benefit_crawler --loop] --> SVC
 API -->|REDIS_URL| RQ[(Redis 工作佇列)]

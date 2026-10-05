@@ -1,4 +1,4 @@
-"""三方投票分類（閘門 + 類別）：關鍵字加減分 × embedding（bge-m3）× 本地 LLM。
+"""三方投票分類（閘門 + 類別）：關鍵字加減分 × embedding（embeddinggemma）× 本地 LLM。
 
 原則（依使用者要求「不要漏抓、也不要輕易放行」）：
 - 放行（是補助）：至少兩個獨立訊號同意；只有一個同意時交給 LLM 判斷。
@@ -26,7 +26,7 @@ KW_YES_CONF = 0.6      # 關鍵字：is_benefit 且 confidence >= 此值才投�
 KW_NO_RATIO = 0.5      # 關鍵字：signal < threshold × 此值才投「否」；其餘棄權
 EMB_YES = 0.65         # embedding：p_benefit >= 此值投「是」
 EMB_NO = 0.35          # embedding：p_benefit <= 此值投「否」
-EMB_CAT_MARGIN = 0.005  # embedding 第一名與第二名的餘弦差距達此值才算有明確類別意見（bge-m3 的餘弦差距通常很小）
+EMB_CAT_MARGIN = 0.005  # embedding 第一名與第二名的餘弦差距達此值才算有明確類別意見（依 bge-m3 校正；換模型後用 scripts/eval_classifier.py 重新確認）
 SECONDARY_EMB_GAP = 0.03
 SECONDARY_KW_RATIO = 0.5
 

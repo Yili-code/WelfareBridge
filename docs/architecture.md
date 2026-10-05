@@ -11,7 +11,7 @@ flowchart LR
     KR --> CL
     CL --> EX[extractor]
     REG[attribute_registry.yaml<br/>taxonomy.yaml<br/>identity_ontology.yaml] --> EX
-    EX --> LLM[llm/fill<br/>Ollama qwen2.5:7b]
+    EX --> LLM[llm/fill<br/>Ollama gemma4:e4b]
     LLM --> VA[schema_validator]
     VA --> BN[(benefits)]
     RD -->|CSV/JSON| PV[(providers)]

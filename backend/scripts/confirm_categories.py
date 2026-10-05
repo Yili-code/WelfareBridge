@@ -1,6 +1,6 @@
 """用指定的本地模型逐筆確認 canonical 補助方案的類別，只在「有獨立佐證」時才改：
 
-    python scripts/confirm_categories.py --model qwen3:8b [--min-confidence 0.8] [--dry-run]
+    python scripts/confirm_categories.py --model gemma4:12b [--min-confidence 0.8] [--dry-run]
     python scripts/confirm_categories.py --revert-unsupported      # 把之前沒有佐證的變更改回去（依 category_history）
 
 改類別的條件（三者缺一不可）：
@@ -120,7 +120,7 @@ def revert_unsupported(db) -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model", default=os.environ.get("AUDIT_MODEL", "qwen3:8b"))
+    parser.add_argument("--model", default=os.environ.get("AUDIT_MODEL", "gemma4:12b"))
     parser.add_argument("--min-confidence", type=float, default=0.8)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--limit", type=int, default=0)
