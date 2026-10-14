@@ -1,6 +1,19 @@
-# WelfareBridge
+# WelfareBridge — Taiwan Welfare Discovery / 台灣福利導引
 
-單一福利導引網站，整合建檔、需求登記、官方補助資料中心、爬蟲與資格媒合。
+**Find welfare benefits from collected official sources and understand which eligibility details still need confirmation. Built with Next.js, FastAPI, and a source-backed rules engine.**
+
+台灣福利導引網站，整合官方補助搜尋、個人資料卡、初步資格媒合、收藏與需求登記，協助使用者找到可能適用的補助並回到官方來源確認申請條件。
+
+[本機啟動](#windows-本機啟動) · [網站功能](#網站功能) · [Docker 部署](#docker) · [介面說明](docs/user-interface.md) · [資格媒合設計](docs/eligibility-core.md)
+
+## 適合誰與使用範圍
+
+- 想依地區、需求與身分查找補助，並了解缺少哪些資格資料的人。
+- 想研究 civic tech、官方資料爬取與可解釋規則媒合的開發者。
+- 目前提供本機與 Docker 啟動方式；搜尋範圍是已收錄的官方資料，並非即時全網搜尋。
+- 媒合結果是申請前的初步導引，不代表政府機關核准；申請須以官方公告與承辦機關確認為準。
+
+## 專案結構
 
 ```text
 src/app/                  Next.js 頁面與需求登記 API
