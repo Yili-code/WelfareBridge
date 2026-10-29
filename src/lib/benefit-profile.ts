@@ -79,6 +79,18 @@ export function toMatchingProfile(profile: Profile) {
  const support = chosen("support");
  if (support.includes(1)) attributes["care.needs_care"] = true;
  if (support.includes(2)) attributes["care.is_primary_caregiver"] = true;
+ // Ticking other items (not the "none / unsure" option) means the unticked care items do not apply.
+ if (support.length && !support.includes(4)) {
+  if (!support.includes(1)) attributes["care.needs_care"] = false;
+  if (!support.includes(2)) attributes["care.is_primary_caregiver"] = false;
+ }
+ // Facts the card already holds, so the assistant does not ask for them again.
+ if (profile.district) attributes["residence.household_district"] = profile.district;
+ if (housing === 2) attributes["housing.owns_property"] = true;
+ if (chosen("employment").includes(3)) attributes["employment.in_training"] = true;
+ if (identity.length && !identity.includes(4) && !identity.includes(3)) {
+  for (const id of ["identity.overseas_chinese", "identity.veteran_family", "identity.military_civil_bereaved", "identity.hakka"]) attributes[id] = false;
+ }
  for (const [id, learned] of Object.entries(profile.assistantAttributes ?? {})) {
   // Keep the source so the backend still treats unconfirmed readings of free text as unconfirmed.
   attributes[id] = learned.value === null

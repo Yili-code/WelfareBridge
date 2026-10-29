@@ -1,4 +1,5 @@
 """Choose follow-ups from unresolved eligibility rules, retaining explicit answers."""
+import re
 from . import MatchingEngine, Profile, load_records, parse_profile_text, plan_questions
 from ..db import get_db
 from ..registry import get_registry
@@ -32,14 +33,19 @@ def guidance(data, latest, target):
             elif attribute.type == "boolean" and text in {"是", "否", "有", "沒有"}:
                 profile.set(target, text in {"是", "有"}, evidence=text)
             elif attribute.type == "number":
-                try:
-                    profile.set(target, float(text), evidence=text)
-                except ValueError:
-                    pass
+                # Accept "30000元" / "約 8,000 元" so an answer with units is not dropped and re-asked.
+                found = re.search(r"\d[\d,]*(?:\.\d+)?", text)
+                if found:
+                    profile.set(target, float(found.group().replace(",", "")), evidence=text)
             elif attribute.type in {"enum", "multi_enum"}:
                 for option in attribute.values:
                     if text == option.get("label") or text == option.get("value"):
                         profile.set(target, [option['value']] if attribute.type == 'multi_enum' else option['value'], evidence=text)
+                if not profile.answered(target):
+                    # Free text that names exactly one option (longest label first) still counts as the answer.
+                    hits = [o for o in attribute.values if str(o.get("label", "")) and str(o.get("label")) in text]
+                    if len(hits) == 1:
+                        profile.set(target, [hits[0]['value']] if attribute.type == 'multi_enum' else hits[0]['value'], evidence=text)
             elif attribute.type == "city":
                 from ..services.normalization import normalize_city
                 city = normalize_city(text)

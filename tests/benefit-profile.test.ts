@@ -43,6 +43,13 @@ describe("welfare questionnaire to eligibility engine", () => {
   expect(result.attributes).toMatchObject({ "employment.status": "unemployed", "housing.tenure": "rent", "care.is_primary_caregiver": true });
   expect(toMatchingProfile({ ...base, screening: { employment: ["受僱工作中，包含兼職", "學生"] } }).attributes).not.toHaveProperty("employment.status");
  });
+ it("matching profile passes card facts to the assistant so it does not ask for them again", () => {
+  const result = toMatchingProfile({ ...base, district: "大安區", screening: { housing: ["自己或配偶持有的住宅"], employment: ["正在參加職業訓練"], support: ["懷孕、育兒，或扶養未成年子女"], identity: ["原住民"] } });
+  expect(result.attributes).toMatchObject({ "residence.household_district": "大安區", "housing.owns_property": true, "employment.in_training": true, "care.needs_care": false, "care.is_primary_caregiver": false, "identity.hakka": false });
+  const unsure = toMatchingProfile({ ...base, screening: { support: ["以上皆無／不確定"], identity: ["以上皆無／不確定"] } });
+  expect(unsure.attributes).not.toHaveProperty("care.needs_care");
+  expect(unsure.attributes).not.toHaveProperty("identity.hakka");
+ });
  it("assistant profile stays unchanged so the chat-to-schema flow is not affected", () => {
   const profile = { ...base, screening: { identity: ["以上皆無／不確定"], housing: ["租屋，包含整戶或分租"] } };
   expect(toBenefitProfile(profile).attributes).toEqual({});
