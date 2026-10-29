@@ -135,3 +135,25 @@ def test_grammar_incompatible_runner_retries_json_mode(monkeypatch):
     assert client().post('/api/assistant', json={"messages": SUMMARY_REQUEST}).status_code == 200
     assert len(calls) == 2
     assert 'json_schema' not in calls[1]
+
+def test_warmup_loads_model_in_background_and_is_throttled(monkeypatch):
+    warmed = []
+    class Provider:
+        def warm(self):
+            warmed.append(1)
+    monkeypatch.setattr(assistant, "_last_warm", 0.0)
+    monkeypatch.setattr(assistant, "get_provider", lambda: Provider())
+    assert client().post('/api/assistant/warmup').json() == {"warming": True}
+    assert warmed == [1]
+    assert client().post('/api/assistant/warmup').json() == {"warming": False}
+    assert warmed == [1]
+
+def test_warmup_is_noop_without_ai_and_failures_are_swallowed(monkeypatch):
+    monkeypatch.setattr(assistant, "_last_warm", 0.0)
+    monkeypatch.setattr(assistant, "get_provider", lambda: None)
+    assert client().post('/api/assistant/warmup').json() == {"warming": False}
+    class Broken:
+        def warm(self):
+            raise RuntimeError("boom")
+    monkeypatch.setattr(assistant, "get_provider", lambda: Broken())
+    assert client().post('/api/assistant/warmup').status_code == 200

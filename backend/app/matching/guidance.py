@@ -4,6 +4,20 @@ from . import MatchingEngine, Profile, load_records, parse_profile_text, plan_qu
 from ..db import get_db
 from ..registry import get_registry
 
+YES_WORDS = {"是", "有", "對", "是的", "有的", "對的", "沒錯", "有喔", "是喔", "對啊", "是啊", "有啊", "yes", "y"}
+NO_WORDS = {"否", "沒有", "沒", "不是", "無", "沒有喔", "不是喔", "沒有啊", "不是啊", "不對", "沒有的", "no", "n"}
+
+
+def yes_no(text):
+    """口語的是／否；其他（含「是的，但…」這類帶附註的句子）回傳 None，交給其他判讀。"""
+    cleaned = text.strip().strip("。.！!，, ").lower()
+    if cleaned in YES_WORDS:
+        return True
+    if cleaned in NO_WORDS:
+        return False
+    return None
+
+
 def guidance(data, latest, target):
     from ..api.assistant_search import requested_keyword, search_for_assistant, search_results
     registry = get_registry()
@@ -23,6 +37,7 @@ def guidance(data, latest, target):
     if target == 'guidance.scope' and latest.strip() in {'不確定', '不知道', '跳過', '不想回答'}:
         scope_skipped = True
     profile = Profile.from_dict(data, registry)
+    pending = bool(latest and target and target != 'guidance.scope' and registry.get(target) and not profile.answered(target))
     if latest:
         profile, _, _ = parse_profile_text(latest, profile, registry)
         attribute = registry.get(target) if target else None
@@ -30,8 +45,8 @@ def guidance(data, latest, target):
             text = latest.strip()
             if text in {"不確定", "不知道", "跳過", "不想回答"}:
                 profile.set(target, None, source="unsure")
-            elif attribute.type == "boolean" and text in {"是", "否", "有", "沒有"}:
-                profile.set(target, text in {"是", "有"}, evidence=text)
+            elif attribute.type == "boolean" and yes_no(text) is not None:
+                profile.set(target, yes_no(text), evidence=text)
             elif attribute.type == "number":
                 # Accept "30000元" / "約 8,000 元" so an answer with units is not dropped and re-asked.
                 found = re.search(r"\d[\d,]*(?:\.\d+)?", text)
@@ -65,6 +80,8 @@ def guidance(data, latest, target):
     question = (plan['questions'] or [None])[0]
     if not scopes and not scope_skipped and not search_keyword:
         question = {'attribute_id': 'guidance.scope', 'question': '你想先解決哪方面的需要？例如房租、學費、求職、醫療或生活費。', 'reason': '先確定要找的補助類型，才不會問到無關的資格', 'options': [{'label': v, 'value': v} for v in ['房租', '學費', '求職']]}
+    # 這一輪在回答某一題，但沒讀出答案：讓前端／對話提示使用者換個說法，而不是默默重問同一題
+    not_understood = pending and not profile.answered(target)
     output_profile = profile.to_dict()
     output_profile['_domains'] = scopes
     output_profile['_scope_skipped'] = scope_skipped
@@ -74,4 +91,4 @@ def guidance(data, latest, target):
         search['items'] = search_results(remaining)
         search['candidate_count'] = len(remaining)
     return {"profile": output_profile, "candidate_count": len(remaining), "question": question,
-            "matched_count": sum(i.status == 'high_match' for i in remaining), "total": len(records), "search": search}
+            "matched_count": sum(i.status == 'high_match' for i in remaining), "total": len(records), "search": search, "not_understood": not_understood}

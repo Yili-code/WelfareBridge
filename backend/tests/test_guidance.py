@@ -50,3 +50,14 @@ def test_grouped_education_rejects_incompatible_levels_without_guessing():
     assert evaluate_rule({**rule, 'value': ['university', 'junior_college']}, profile).status == 'match'
     profile.set('education.level', 'university')
     assert evaluate_rule({**rule, 'value': ['university']}, profile).status == 'match'
+
+
+def test_colloquial_yes_no_and_number_answers_are_understood(monkeypatch):
+    monkeypatch.setattr(module, 'get_db', lambda: None)
+    monkeypatch.setattr(module, 'load_records', lambda db: [])
+    base = {'_domains': ['housing']}
+    assert module.guidance(base, '沒有喔', 'identity.low_income')['profile']['attributes']['identity.low_income']['value'] is False
+    assert module.guidance(base, '對', 'identity.low_income')['profile']['attributes']['identity.low_income']['value'] is True
+    assert module.guidance(base, '每個月約 8,000 元', 'housing.rent_month')['profile']['attributes']['housing.rent_month']['value'] == 8000
+    assert module.guidance(base, '蛤', 'identity.low_income')['not_understood'] is True
+    assert module.guidance(base, '不確定', 'identity.low_income')['not_understood'] is False

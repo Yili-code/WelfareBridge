@@ -1,7 +1,9 @@
 """小幫手對話：追問由資格規劃器決定（不需要本地 AI）；只有「整理需求登記」用本地 AI 寫摘要。"""
 import json
+import logging
+import time
 from typing import Literal
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, BackgroundTasks, HTTPException
 from pydantic import BaseModel, Field, ValidationError
 from ..llm.factory import get_provider
 from ..llm.provider import LLMError
@@ -11,6 +13,30 @@ from pymongo.errors import PyMongoError
 
 router = APIRouter(prefix="/api", tags=["assistant"])
 LEARNED_SOURCES = {"asked", "parsed", "unsure"}
+log = logging.getLogger(__name__)
+WARM_INTERVAL = 60.0
+_last_warm = 0.0
+
+
+def _warm(provider) -> None:
+    try:
+        provider.warm()
+    except Exception as exc:  # 預熱只是加速，失敗不影響對話
+        log.info("模型預熱失敗：%s", exc)
+
+
+@router.post("/assistant/warmup")
+def warmup(background: BackgroundTasks):
+    """開啟小幫手時由前端呼叫：背景把模型載入顯卡，讓之後「整理需求登記」不必等冷啟動。沒有啟用 AI 時什麼都不做。"""
+    global _last_warm
+    provider = get_provider()
+    warm = getattr(provider, "warm", None)
+    now = time.monotonic()
+    if warm is None or now - _last_warm < WARM_INTERVAL:
+        return {"warming": False}
+    _last_warm = now
+    background.add_task(_warm, provider)
+    return {"warming": True}
 
 
 def _value_label(attribute, value) -> str:
@@ -110,6 +136,8 @@ def converse(body: Request):
         labels = [o['label'] for o in question['options'] if o['label'] != '不確定']
         if len(labels) > 3:
             reply += "\n可回答：" + "、".join(labels) + "；也可以回答不確定。"
+        if context.get('not_understood') and question['attribute_id'] == body.question_attribute:
+            reply = "抱歉，我沒有看懂這個回答，請從選項選一個，或直接回答「不確定」跳過這題。\n" + reply
         answer = Answer(reply=reply, quickReplies=labels[:3] + ['不確定'])
     else:
         answer = Answer(reply="目前沒有仍可能符合的補助。可以回到「我的資料卡」調整條件，或到「訴求專區」說出您需要的服務。" if not context['candidate_count'] else "目前能問的條件都確認了，比對結果已更新在畫面上；其餘細節請以官方公告為準。")

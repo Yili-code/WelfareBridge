@@ -31,6 +31,9 @@ class OllamaProvider(LLMProvider):
             "format": json_schema or "json",
             "options": options,
         }
+        keep_alive = os.environ.get("LLM_KEEP_ALIVE", "").strip()
+        if keep_alive:
+            body["keep_alive"] = int(keep_alive) if keep_alive.lstrip("-").isdigit() else keep_alive  # 例如 30m；0＝用完立刻釋放顯卡
         if re.search(r"(gemma4|qwen3|deepseek-r1|gpt-oss|magistral)", self.model, re.I):
             body["think"] = False  # 思考型模型：結構化輸出不需要思考鏈，關掉才不會拖慢且更守 JSON 格式
         try:
@@ -44,3 +47,14 @@ class OllamaProvider(LLMProvider):
         if not text:
             raise LLMError("Ollama 沒有回傳內容")
         return LLMResponse(text=text, model=data.get("model", self.model), raw=data, input_tokens=data.get("prompt_eval_count"), output_tokens=data.get("eval_count"))
+
+    def warm(self) -> None:
+        """空請求：只把模型載入顯卡（冷啟動要讀十幾 GB，可能超過一分鐘），之後的第一個真正請求就不必等。"""
+        body = {"model": self.model}
+        keep_alive = os.environ.get("LLM_KEEP_ALIVE", "").strip()
+        if keep_alive:
+            body["keep_alive"] = int(keep_alive) if keep_alive.lstrip("-").isdigit() else keep_alive
+        try:
+            httpx.post(f"{self.base_url}/api/generate", json=body, timeout=self.timeout)
+        except httpx.HTTPError as exc:
+            raise LLMError(f"Ollama 預熱失敗：{exc}") from exc

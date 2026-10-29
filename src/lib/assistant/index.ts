@@ -38,8 +38,13 @@ async function turn(state: AssistantState, profile: Profile | null, userText?: s
  };
 }
 
+/** 開啟小幫手時背景預熱本地 AI；只是加速，失敗不影響對話 */
+function warmup() {
+ fetch("/api/assistant/warmup", { method: "POST" }).catch(() => undefined);
+}
+
 export const engine: AssistantEngine = {
- start: profile => turn({ step: 0, answers: {} }, profile),
+ start: profile => { warmup(); return turn({ step: 0, answers: {} }, profile); },
  reply: (state, text, profile) => turn(state, profile, text),
 };
 export * from "./types";
