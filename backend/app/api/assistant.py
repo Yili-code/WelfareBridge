@@ -15,6 +15,8 @@ router = APIRouter(prefix="/api", tags=["assistant"])
 LEARNED_SOURCES = {"asked", "parsed", "unsure"}
 log = logging.getLogger(__name__)
 WARM_INTERVAL = 60.0
+MAX_TURNS = 15  # 追問題數多時 9 輪常常問不完；第 15 輪自動整理摘要
+NOT_UNDERSTOOD = "抱歉，我沒有看懂這個回答，請從選項選一個，或直接回答「不確定」跳過這題。\n"
 _last_warm = 0.0
 
 
@@ -98,11 +100,11 @@ def converse(body: Request):
     if body.messages and body.messages[-1].role != "user":
         raise HTTPException(422, "最後一則訊息需為使用者回答")
     turn_count = sum(m.role == 'user' for m in body.messages)
-    if turn_count > 9:
-        raise HTTPException(422, '對話最多 9 輪，請重新開始。')
+    if turn_count > MAX_TURNS:
+        raise HTTPException(422, f'對話最多 {MAX_TURNS} 輪，請重新開始。')
     latest = body.messages[-1].content if body.messages else ""
     explicit_summary = "整理需求登記" in latest
-    summary_requested = explicit_summary or turn_count >= 9
+    summary_requested = explicit_summary or turn_count >= MAX_TURNS
     # 追問與選項完全由規劃器決定（依哪一題最能確認資格）；以前模型只寫一句承接語，而且一定會被追問覆蓋，
     # 卻要等模型 5～30 秒、模型忙碌時整段對話失敗。現在只有「整理需求登記」這一步用模型。
     provider = get_provider() if summary_requested else None
@@ -141,4 +143,4 @@ def converse(body: Request):
         answer = Answer(reply=reply, quickReplies=labels[:3] + ['不確定'])
     else:
         answer = Answer(reply="目前沒有仍可能符合的補助。可以回到「我的資料卡」調整條件，或到「訴求專區」說出您需要的服務。" if not context['candidate_count'] else "目前能問的條件都確認了，比對結果已更新在畫面上；其餘細節請以官方公告為準。")
-    return {**answer.model_dump(), "search": context.get('search'), "model": provider.model if provider else "", "llm_used": provider is not None, "guidance_profile": context['profile'], "learned": learned_attributes(context['profile']), "question_attribute": question['attribute_id'] if question and not summary_requested else "", "candidate_count": context['candidate_count'], "turn_count": turn_count, "max_turns": 9, "completed": summary_requested}
+    return {**answer.model_dump(), "search": context.get('search'), "model": provider.model if provider else "", "llm_used": provider is not None, "guidance_profile": context['profile'], "learned": learned_attributes(context['profile']), "question_attribute": question['attribute_id'] if question and not summary_requested else "", "candidate_count": context['candidate_count'], "turn_count": turn_count, "max_turns": MAX_TURNS, "completed": summary_requested}

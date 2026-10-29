@@ -61,7 +61,13 @@ export function toMatchingProfile(profile: Profile) {
  const pick = (key: string) => QUESTIONS.find(q => q.key === key)!;
  const chosen = (key: string) => (screening[key] ?? []).map(option => pick(key).options.indexOf(option)).filter(index => index >= 0);
  const [age] = chosen("age");
- if (profile.age == null && age != null) preferences.number_ranges = { "applicant.age": AGE_BRACKETS[age] };
+ const ranges: Record<string, (number | null)[]> = {};
+ if (profile.age == null && age != null) ranges["applicant.age"] = AGE_BRACKETS[age];
+ // The card only says "registered under half a year / at least half a year", so keep it as a range.
+ const [residence] = chosen("residence");
+ if (residence === 0) ranges["residence.duration_months"] = [0, 5.99];
+ if (residence === 1) ranges["residence.duration_months"] = [6, null];
+ if (Object.keys(ranges).length) preferences.number_ranges = ranges;
  const [economy] = chosen("economy");
  if (economy === 2) attributes["identity.economic_hardship"] = true;
  if (economy === 3) attributes["identity.economic_hardship"] = false;

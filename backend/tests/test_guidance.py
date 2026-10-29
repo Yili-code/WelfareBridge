@@ -61,3 +61,20 @@ def test_colloquial_yes_no_and_number_answers_are_understood(monkeypatch):
     assert module.guidance(base, '每個月約 8,000 元', 'housing.rent_month')['profile']['attributes']['housing.rent_month']['value'] == 8000
     assert module.guidance(base, '蛤', 'identity.low_income')['not_understood'] is True
     assert module.guidance(base, '不確定', 'identity.low_income')['not_understood'] is False
+
+
+def test_hedged_and_third_party_answers():
+    assert module.yes_no('應該有吧') is module.UNSURE
+    assert module.yes_no('還在申請中') is module.UNSURE
+    assert module.yes_no('沒有喔') is False
+    assert module.yes_no('有，領有身障手冊') is True
+    assert module.yes_no('我朋友有') is None
+    assert module.yes_no('蛤') is None
+
+
+def test_unsure_hedge_is_recorded_as_unsure(monkeypatch):
+    monkeypatch.setattr(module, 'get_db', lambda: None)
+    monkeypatch.setattr(module, 'load_records', lambda db: [])
+    result = module.guidance({'_domains': ['housing']}, '應該有吧', 'identity.low_income')
+    assert result['profile']['attributes']['identity.low_income']['source'] == 'unsure'
+    assert result['not_understood'] is False

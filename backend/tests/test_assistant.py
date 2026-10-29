@@ -62,12 +62,12 @@ def test_ninth_answer_is_used_before_summary_and_tenth_is_rejected(monkeypatch):
             return {'summary': '平均85分，想找學費補助。', 'mainRequest': '學費補助'}
     monkeypatch.setattr(assistant, 'get_provider', lambda: Provider())
     messages = []
-    for i in range(9):
-        messages.extend([{'role': 'assistant', 'content': '請補充條件'}, {'role': 'user', 'content': '85' if i == 8 else '不確定'}])
+    for i in range(assistant.MAX_TURNS):
+        messages.extend([{'role': 'assistant', 'content': '請補充條件'}, {'role': 'user', 'content': '85' if i == assistant.MAX_TURNS - 1 else '不確定'}])
     response = client().post('/api/assistant', json={'messages': messages})
     assert response.status_code == 200
     data = response.json()
-    assert data['completed'] and data['turn_count'] == 9
+    assert data['completed'] and data['turn_count'] == assistant.MAX_TURNS
     assert data['question_attribute'] == '' and data['quickReplies'] == []
     assert seen == ['85']
     assert 'request_schema' not in data

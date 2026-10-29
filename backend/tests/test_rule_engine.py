@@ -70,3 +70,16 @@ def test_derived_elderly_tag_from_age():
 
 def test_complex_rule_is_unknown():
     assert evaluate_rule({**rule("applicant.age", "exists", None), "complexity": "complex"}, profile(**{"applicant.age": 20})).status == "unknown"
+
+
+def test_number_range_from_profile_card_decides_only_when_both_ends_agree():
+    from app.matching.profile import Profile
+    from app.matching.rule_engine import evaluate_rule
+    def rule(value):
+        return {'attribute_id': 'residence.duration_months', 'operator': '>=', 'value': value, 'complexity': 'simple'}
+    at_least_half_year = Profile.from_dict({'preferences': {'number_ranges': {'residence.duration_months': [6, None]}}})
+    assert evaluate_rule(rule(6), at_least_half_year).status == 'match'
+    assert evaluate_rule(rule(12), at_least_half_year).status == 'unknown'
+    under_half_year = Profile.from_dict({'preferences': {'number_ranges': {'residence.duration_months': [0, 5.99]}}})
+    assert evaluate_rule(rule(6), under_half_year).status == 'not_match'
+    assert evaluate_rule(rule(3), under_half_year).status == 'unknown'

@@ -188,6 +188,7 @@ export default function ChatWidget({ ref, profile, counts, matching, onSearch, o
         <button type="submit" className="btn sm" disabled={!text.trim() || busy}>送出</button>
       </form>}
       {allowFreeText && !draft && <button type="button" className="chip" disabled={busy} onClick={() => void send("請依照我們的對話整理需求登記，讓我確認後再送出。")}>整理需求登記給承辦人員</button>}
+      {profile && (state.turnCount ?? 0) >= 3 && !draft && <button type="button" className="chip" disabled={busy} onClick={() => { setOpen(false); onGoProfile(); }}>題目太多？到資料卡一次補完</button>}
     </div>}
   </div>;
 }

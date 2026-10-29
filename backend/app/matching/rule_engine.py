@@ -70,6 +70,20 @@ def evaluate_rule(rule: dict, profile: Profile, registry: Registry | None = None
             outcomes.append(evaluate_rule(rule, possible, registry).status)
         status = outcomes[0] if len(set(outcomes)) == 1 else 'unknown'
         return RuleEvaluation(status, {'match': '已填範圍全部符合此條件', 'not_match': '已填範圍均不符合此條件', 'unknown': '已知大致教育階段，仍需確認確切學制'}[status], candidates)
+    ranges = (profile.preferences or {}).get("number_ranges")
+    bounds = ranges.get(attribute_id) if isinstance(ranges, dict) else None
+    if user_value is None and attribute.type == "number" and isinstance(bounds, list) and len(bounds) == 2 and bounds[0] is not None and operator in {">", ">=", "<", "<=", "=", "!=", "between"}:
+        # 資料卡只知道大約範圍（例如「設籍已滿半年」）：範圍兩端的判斷一致才下結論，否則仍需確認
+        low, high = _num(bounds[0]), _num(bounds[1]) if bounds[1] is not None else None
+        if low is not None:
+            ends = [_compare(low, operator, expected)] + ([_compare(high, operator, expected)] if high is not None else [])
+            if high is None and operator in {">", ">="}:
+                ends.append(True)  # 沒有上限：夠大的值一定達標
+            elif high is None:
+                ends.append(_compare(1e9, operator, expected))
+            if None not in ends and len(set(ends)) == 1:
+                return RuleEvaluation("match" if ends[0] else "not_match", f"依資料卡的範圍判斷{'符合' if ends[0] else '不符合'}", bounds)
+        return RuleEvaluation("unknown", "資料卡只有大約範圍，仍需確認確切數值", bounds)
     if user_value is None or (isinstance(user_value, list) and not user_value and attribute_id != "identity.tags"):
         return RuleEvaluation("unknown", "你尚未提供此資料", None)
     if operator == "exists":

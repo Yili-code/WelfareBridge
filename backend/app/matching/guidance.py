@@ -8,13 +8,27 @@ YES_WORDS = {"是", "有", "對", "是的", "有的", "對的", "沒錯", "有�
 NO_WORDS = {"否", "沒有", "沒", "不是", "無", "沒有喔", "不是喔", "沒有啊", "不是啊", "不對", "沒有的", "no", "n"}
 
 
+UNSURE = "unsure"
+HEDGES = ("應該", "好像", "可能", "大概", "似乎", "也許", "不太確定", "不確定", "不知道", "不清楚", "還在申請", "申請中", "審核中", "還沒下來")
+OTHER_PEOPLE = ("朋友", "同學", "別人", "鄰居", "同事")
+
+
 def yes_no(text):
-    """口語的是／否；其他（含「是的，但…」這類帶附註的句子）回傳 None，交給其他判讀。"""
-    cleaned = text.strip().strip("。.！!，, ").lower()
+    """口語的是／否。回傳 True／False；說得不確定（「應該有吧」「申請中」）回傳 UNSURE；
+    讀不出來、或在講別人（「我朋友有」）回傳 None，由呼叫端提示使用者換個說法。"""
+    cleaned = text.strip().strip("。.！!，,？? 吧喔啊耶囉").lower()
     if cleaned in YES_WORDS:
         return True
     if cleaned in NO_WORDS:
         return False
+    if not cleaned or len(cleaned) > 16 or any(word in cleaned for word in OTHER_PEOPLE):
+        return None
+    if any(word in cleaned for word in HEDGES):
+        return UNSURE
+    if re.match(r"^(沒有|沒|無|不是|不曾|從來沒)", cleaned):
+        return False
+    if re.match(r"^(有|是|對|領有|持有|已經有|已有)", cleaned):
+        return True
     return None
 
 
@@ -45,6 +59,8 @@ def guidance(data, latest, target):
             text = latest.strip()
             if text in {"不確定", "不知道", "跳過", "不想回答"}:
                 profile.set(target, None, source="unsure")
+            elif attribute.type == "boolean" and yes_no(text) is UNSURE:
+                profile.set(target, None, source="unsure", evidence=text)
             elif attribute.type == "boolean" and yes_no(text) is not None:
                 profile.set(target, yes_no(text), evidence=text)
             elif attribute.type == "number":

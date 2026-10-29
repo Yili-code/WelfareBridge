@@ -50,6 +50,11 @@ describe("welfare questionnaire to eligibility engine", () => {
   expect(unsure.attributes).not.toHaveProperty("care.needs_care");
   expect(unsure.attributes).not.toHaveProperty("identity.hakka");
  });
+ it("matching profile keeps registration time as a range, not an invented month count", () => {
+  expect(toMatchingProfile({ ...base, screening: { residence: ["戶籍與居住地在同一縣市，設籍已滿半年"] } }).preferences.number_ranges).toEqual({ "residence.duration_months": [6, null] });
+  expect(toMatchingProfile({ ...base, screening: { residence: ["戶籍與居住地在同一縣市，設籍未滿半年"] } }).preferences.number_ranges).toEqual({ "residence.duration_months": [0, 5.99] });
+  expect(toMatchingProfile({ ...base, screening: { residence: ["不確定戶籍或設籍時間"] } }).preferences).not.toHaveProperty("number_ranges");
+ });
  it("assistant profile stays unchanged so the chat-to-schema flow is not affected", () => {
   const profile = { ...base, screening: { identity: ["以上皆無／不確定"], housing: ["租屋，包含整戶或分租"] } };
   expect(toBenefitProfile(profile).attributes).toEqual({});

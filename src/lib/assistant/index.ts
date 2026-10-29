@@ -10,7 +10,7 @@ function conversationState(guidance: Record<string, unknown> | undefined) {
 
 async function turn(state: AssistantState, profile: Profile | null, userText?: string): Promise<AssistantTurn> {
  const history = [...(state.history || []), ...(userText ? [{ role: "user" as const, content: userText }] : [])];
- if (history.filter(m => m.role === "user").length > 9) throw new Error("這段對話已達長度上限，請按「重新開始」。");
+ if (history.filter(m => m.role === "user").length > 15) throw new Error("這段對話已達長度上限，請按「重新開始」。");
  // 有資料卡時以資料卡（含先前對話寫回的資料）為準；沒有資料卡時沿用對話中累積的資料
  const guidance = profile ? { ...toMatchingProfile(profile), ...conversationState(state.guidanceProfile) } : state.guidanceProfile || {};
  let response: Response;
