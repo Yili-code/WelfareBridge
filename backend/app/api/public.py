@@ -322,3 +322,26 @@ def public_match(body: MatchBody) -> dict:
         counts[status] += 1
         results[item.benefit_id] = {"status": status, "reasons": reasons(item), "needs": item.needs_labels[:4]}
     return {"results": results, "counts": counts, "questions": quick_questions(items, profile, registry), "disclaimer": DISCLAIMER}
+
+
+# ============================================================ 附近教育資源（教育部開放資料）
+@router.get("/resources")
+def public_resources(city: str = "", kind: str = "", limit: int = 60) -> dict:
+    """依縣市（可再依類型）列出教育部開放資料中的服務據點，附資料集出處。"""
+    from ..services import moe_opendata
+    from ..services.normalization import normalize_city
+    db = get_db()
+    base: dict = {"source_id": {"$regex": "^moe_od_"}}
+    chosen = (normalize_city(city) or "") if city else ""
+    if chosen:
+        base["city"] = chosen
+    query = {**base, **({"service_kind": kind} if kind else {})}
+    rows = list(db.providers.find(query).sort([("district", 1), ("name", 1)]).limit(max(1, min(limit, 200))))
+    kinds = {row["_id"]: row["n"] for row in db.providers.aggregate([{"$match": base}, {"$group": {"_id": "$service_kind", "n": {"$sum": 1}}}])}
+    cities = sorted(c for c in db.providers.distinct("city", {"source_id": {"$regex": "^moe_od_"}}) if c)
+    return {
+        "city": chosen, "kind": kind, "total": db.providers.count_documents(query), "kinds": kinds, "cities": cities,
+        "items": [{"id": row["_id"], "name": row.get("name", ""), "kind": row.get("service_kind", ""), "city": row.get("city", ""), "district": row.get("district", ""),
+                   "address": row.get("address", ""), "phone": row.get("phone", ""), "operator": row.get("operator", ""), "source_url": row.get("source_url", "")} for row in rows],
+        "datasets": moe_opendata.datasets_summary(),
+    }

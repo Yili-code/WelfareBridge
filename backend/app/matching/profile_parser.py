@@ -161,11 +161,14 @@ def parse_profile_text(text: str, base: Profile | None = None, registry: Registr
     if match:
         record("care.cms_level", int(match.group(1)), match.group(0), 0.85)
         record("care.needs_care", True, match.group(0), 0.8)
-    if re.search(r"失業|被資遣|沒工作|待業", normalized):
-        match = re.search(r"失業|被資遣|沒工作|待業", normalized)
+    match = re.search(r"失業|被資遣|被裁員|被裁|裁員|被解僱|被開除|沒工作|待業|剛離職|已離職", normalized)
+    if match and not NEGATION_BEFORE.search(normalized[max(0, match.start() - 3) : match.start()]):
         record("employment.status", "unemployed", match.group(0), 0.8)
-        if "資遣" in match.group(0):
+        if re.search(r"資遣|裁員|解僱", match.group(0)):
             record("employment.involuntary_separation", True, match.group(0), 0.8)
+    match = re.search(r"(沒有|沒|未)(?:加保)?(?:勞保|勞工保險|就業保險|就保)|(?:勞保|就保)(?:都)?(?:沒有|沒加|沒保)", normalized)
+    if match:
+        record("financial.labor_insured", False, match.group(0), 0.8)
     if re.search(r"租屋|租房|房租|租金", normalized):
         match = re.search(r"租屋|租房|房租|租金", normalized)
         record("housing.tenure", "rent", match.group(0), 0.75)

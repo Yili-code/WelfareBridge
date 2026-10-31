@@ -29,16 +29,28 @@ function haystack(card: BenefitCard) {
 
 const ORDER: Record<MatchStatus, number> = { yes: 0, maybe: 1, no: 2 };
 
+// 與後端 guidance.TOPICS 相同的日常說法：整句話（「我媽媽失智需要人照顧」）拆成需求詞，任一個出現就算符合
+const NEED_WORDS = ["就學", "學費", "獎學金", "助學", "學貸", "租屋", "房租", "租金", "住宅", "買房", "購屋", "房貸", "修繕", "失業", "求職", "職訓", "裁員", "資遣", "找工作", "轉職", "創業", "離職", "醫療", "健保", "看病", "就醫", "住院", "重病", "手術", "身障", "身心障礙", "殘障", "輔具", "早療", "發展遲緩", "長照", "照顧", "照護", "失智", "看護", "居家服務", "日間照顧", "老人", "長輩", "臥床", "生活費", "育兒", "急難", "缺錢", "單親", "托育", "育嬰", "生育", "津貼", "低收", "撫養", "喪葬"];
+
+/** 短詞要全部出現；像句子的長詞改用句中的需求詞（任一個出現即可），句中沒有任何需求詞才照原樣比對 */
+function queryGroups(query: string): string[][] {
+  return normalize(query).split(/\s+/).filter(Boolean).map(word => {
+    if (word.length <= 6) return [word];
+    const found = NEED_WORDS.filter(term => word.includes(term));
+    return found.length ? found : [word];
+  });
+}
+
 export function searchCards(cards: BenefitCard[], { query, filters, onlyMatch, sort, results }: { query: string; filters: Filters; onlyMatch: boolean; sort: SortKey; results?: Record<string, MatchResult> }) {
-  const words = normalize(query).split(/\s+/).filter(Boolean);
+  const groups = queryGroups(query);
   const list = cards.filter(card => {
     for (const { key } of FACETS) {
       const selected = filters[key];
       if (selected.size && !values(card, key).some(value => selected.has(value))) return false;
     }
-    if (words.length) {
+    if (groups.length) {
       const hay = haystack(card);
-      if (!words.every(word => hay.includes(word))) return false;
+      if (!groups.every(group => group.some(word => hay.includes(word)))) return false;
     }
     if (onlyMatch && results && (results[card.id]?.status ?? "no") === "no") return false;
     return true;

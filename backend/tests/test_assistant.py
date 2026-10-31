@@ -157,3 +157,15 @@ def test_warmup_is_noop_without_ai_and_failures_are_swallowed(monkeypatch):
             raise RuntimeError("boom")
     monkeypatch.setattr(assistant, "get_provider", lambda: Broken())
     assert client().post('/api/assistant/warmup').status_code == 200
+
+
+
+def test_resource_hint_names_open_data_places_in_the_users_city(monkeypatch):
+    class Providers:
+        def aggregate(self, pipeline):
+            assert pipeline[0]["$match"]["city"] == "基隆市"
+            return [{"_id": "樂齡學習中心", "n": 8}, {"_id": "新住民學習中心", "n": 1}]
+    monkeypatch.setattr(assistant, "get_db", lambda: type("Db", (), {"providers": Providers()})())
+    hint = assistant.resource_hint({"attributes": {"residence.current_city": {"value": "基隆市"}}})
+    assert "樂齡學習中心 8 處" in hint and "附近教育資源" in hint
+    assert assistant.resource_hint({"attributes": {}}) == ""

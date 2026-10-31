@@ -25,6 +25,12 @@ describe("查詢補助：篩選、搜尋與排序", () => {
     expect(searchCards(cards, { query: "", filters, onlyMatch: false, sort: "title" }).map(c => c.id)).toEqual(["c"]);
   });
 
+  it("finds cards from a whole sentence by the need words in it", () => {
+    const care = [card("care", { title: "失智老人日間照顧補助" }), card("rent", { title: "租金補貼" })];
+    expect(searchCards(care, { query: "我媽媽失智需要人照顧", filters: emptyFilters(), onlyMatch: false, sort: "title" }).map(c => c.id)).toEqual(["care"]);
+    expect(searchCards(care, { query: "今天天氣很好呢", filters: emptyFilters(), onlyMatch: false, sort: "title" })).toEqual([]);
+  });
+
   it("matches every keyword and treats 台 and 臺 the same", () => {
     expect(searchCards(cards, { query: "台北 租金", filters: emptyFilters(), onlyMatch: false, sort: "title" }).map(c => c.id)).toEqual(["a"]);
   });

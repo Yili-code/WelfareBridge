@@ -20,7 +20,7 @@ from .api import ROUTERS
 from .config import Settings, get_settings
 from .db import get_db, init_db
 from .registry import get_registry
-from .services import crawl_service, seed, tasks
+from .services import crawl_service, moe_opendata, seed, tasks
 
 log = logging.getLogger(__name__)
 
@@ -38,6 +38,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             loaded = seed.load_seed_if_empty()
             if loaded:
                 log.info("seed loaded: %d benefits", loaded)
+        try:
+            moe_opendata.import_moe_opendata()
+        except Exception:  # 教育部開放資料只是附加資源，匯入失敗不該讓整個服務起不來
+            log.exception("moe open data import failed")
         if settings.crawl_on_startup:
             tasks.enqueue("crawl", {"source_ids": None, "run_pipeline": True, "triggered_by": "startup"})
         yield

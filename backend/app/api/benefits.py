@@ -17,6 +17,16 @@ router = APIRouter(prefix="/api", tags=["benefits"])
 SUMMARY_PROJECTION = {"original_text": 0, "evidence": 0, "conditions": 0, "structured_fields": 0, "classification.signals": 0, "classification.reasons": 0, "classification.matched_category": 0, "classification.matched_signal": 0, "classification.category_scores": 0, "classification.llm": 0}
 
 
+def _need_terms(needle: str) -> list[str]:
+    """關鍵字很短時照原樣找；像句子（含空白、或超過 6 個字）才拆出需求詞。"""
+    from ..matching.guidance import TOPICS
+    if len(needle) <= 6 and not re.search(r"\s", needle):
+        return []
+    parts = [p for p in re.split(r"[\s,，、。]+", needle) if 2 <= len(p) <= 6]
+    words = [w for ws in TOPICS.values() for w in ws if w in needle]
+    return list(dict.fromkeys([*parts, *words]))
+
+
 def _query(keyword: str | None, domain: str | None, category: str | None, provider: str | None, provider_type: str | None, benefit_form: str | None, application_status: str, needs_review: bool | None, canonical_only: bool, source_id: str | None, region: str | None, education_level: str | None, min_amount: float | None, overview: str, kind: str = "program", uncertain: bool | None = None) -> dict:
     query: dict = {}
     # 收錄政策：預設只列補助方案（record_kind=program）；彙整頁（portal）保留供查閱
@@ -63,6 +73,9 @@ def _query(keyword: str | None, domain: str | None, category: str | None, provid
         patterns = [{"title": {"$regex": re.escape(needle), "$options": "i"}}, {"provider": {"$regex": re.escape(needle), "$options": "i"}}, {"keywords": needle}, {"original_text": {"$regex": re.escape(needle)}}]
         if alt != needle:
             patterns += [{"title": {"$regex": re.escape(alt)}}, {"original_text": {"$regex": re.escape(alt)}}]
+        # 整句話（「我媽媽失智需要人照顧」）不會剛好出現在任何補助裡：另外用句中的需求詞（失智、照顧…）一起找
+        for term in _need_terms(needle):
+            patterns += [{"title": {"$regex": re.escape(term)}}, {"keywords": term}]
         query.setdefault("$and", []).append({"$or": patterns})
     return query
 

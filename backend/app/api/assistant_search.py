@@ -27,6 +27,12 @@ def search_for_assistant(data):
     truncated = False
     for term, domain in queries:
         found = search_benefits(keyword=term, domain=domain, category=None, application_status='active', page=1, page_size=50)
+        if not found['items'] and keyword:
+            # 搜尋是整串比對：「老人 日間照顧」這種多個詞要拆開各搜一次，不然什麼都找不到
+            for part in dict.fromkeys(re.split(r'[\s,，、]+', term)):
+                if part and part != term:
+                    sub = search_benefits(keyword=part, domain=domain, category=None, application_status='active', page=1, page_size=50)
+                    found = {'items': [*found['items'], *sub['items']], 'total': found['total'] + sub['total']}
         truncated = truncated or found['total'] > len(found['items'])
         ids.extend(item['id'] for item in found['items'])
     records = list(get_db().benefits.find({'_id': {'$in': list(dict.fromkeys(ids))},

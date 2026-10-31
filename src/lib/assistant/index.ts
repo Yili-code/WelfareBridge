@@ -4,7 +4,7 @@ import type { Profile } from "../types";
 
 /** 對話本身的狀態（找哪類補助、搜尋關鍵字、跳過的題目）；使用者資料一律以資料卡為準，每輪重新帶入 */
 function conversationState(guidance: Record<string, unknown> | undefined) {
- const keep = ["_domains", "_scope_skipped", "_search_keyword", "asked", "skipped"];
+ const keep = ["_domains", "_scope_skipped", "_search_keyword", "_misses", "asked", "skipped"];
  return Object.fromEntries(Object.entries(guidance ?? {}).filter(([key]) => keep.includes(key)));
 }
 

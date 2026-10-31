@@ -45,6 +45,7 @@ next-env.d.ts
 /data/*
 !/data/demo/
 !/data/gold/
+!/data/opendata/
 !/.env.example
 !/.env.local.example
 !**/.env.example

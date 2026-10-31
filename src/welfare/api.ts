@@ -63,3 +63,12 @@ export function fetchBenefit(id: string, signal?: AbortSignal) {
 export function matchProfile(profile: unknown, signal?: AbortSignal) {
   return request<MatchResponse>("/api/public/match", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ profile }), signal });
 }
+
+export interface ResourceItem { id: string; name: string; kind: string; city: string; district: string; address: string; phone: string; operator: string; source_url: string }
+export interface OpenDataset { nid: number; title: string; agency: string; kind: string; license: string; audience: string; url: string; count: number }
+export interface ResourcesResponse { city: string; kind: string; total: number; kinds: Record<string, number>; cities: string[]; items: ResourceItem[]; datasets: OpenDataset[] }
+
+export function fetchResources(city: string, kind: string, signal?: AbortSignal) {
+  const query = new URLSearchParams({ limit: "60", ...(city ? { city } : {}), ...(kind ? { kind } : {}) });
+  return request<ResourcesResponse>(`/api/public/resources?${query}`, { signal });
+}
