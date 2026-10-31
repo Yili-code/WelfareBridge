@@ -5,7 +5,6 @@ import time
 from typing import Literal
 from fastapi import APIRouter, BackgroundTasks, HTTPException
 from pydantic import BaseModel, Field, ValidationError
-from ..db import get_db
 from ..llm.factory import get_provider
 from ..llm.provider import LLMError
 from ..matching.guidance import guidance
@@ -40,28 +39,6 @@ def warmup(background: BackgroundTasks):
     _last_warm = now
     background.add_task(_warm, provider)
     return {"warming": True}
-
-
-def resource_hint(profile: dict) -> str:
-    """問完之後，提醒使用者所在縣市有教育部開放資料登錄的學習／照顧據點（前台「附近教育資源」分頁可查）。"""
-    attributes = (profile or {}).get("attributes") or {}
-    city = ""
-    for attribute_id in ("residence.current_city", "residence.household_city"):
-        item = attributes.get(attribute_id)
-        value = item.get("value") if isinstance(item, dict) else item
-        if isinstance(value, str) and value:
-            city = value
-            break
-    if not city:
-        return ""
-    try:
-        rows = list(get_db().providers.aggregate([{"$match": {"source_id": {"$regex": "^moe_od_"}, "city": city}}, {"$group": {"_id": "$service_kind", "n": {"$sum": 1}}}]))
-    except PyMongoError:
-        return ""
-    if not rows:
-        return ""
-    detail = "、".join(f"{row['_id']} {row['n']} 處" for row in sorted(rows, key=lambda r: -r["n"]))
-    return f"\n\n另外，{city}有教育部開放資料登錄的據點：{detail}，可以到上方「附近教育資源」查看地址與電話。"
 
 
 def _value_label(attribute, value) -> str:
@@ -167,7 +144,6 @@ def converse(body: Request):
             reply = "這題看起來不好回答，我先幫您跳過，之後可以到資料卡補上。\n" + reply
         answer = Answer(reply=reply, quickReplies=labels[:3] + ['不確定'])
     else:
-        hint = resource_hint(context['profile'])
         text = "目前沒有仍可能符合的補助。可以回到「我的資料卡」調整條件，或到「訴求專區」說出您需要的服務。" if not context['candidate_count'] else "目前能問的條件都確認了，比對結果已更新在畫面上；其餘細節請以官方公告為準。"
-        answer = Answer(reply=text + hint)
+        answer = Answer(reply=text)
     return {**answer.model_dump(), "search": context.get('search'), "model": provider.model if provider else "", "llm_used": provider is not None, "guidance_profile": context['profile'], "learned": learned_attributes(context['profile']), "question_attribute": question['attribute_id'] if question and not summary_requested else "", "candidate_count": context['candidate_count'], "turn_count": turn_count, "max_turns": MAX_TURNS, "completed": summary_requested}

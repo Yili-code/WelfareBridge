@@ -13,12 +13,11 @@ import GapPanel from "./GapPanel";
 import PrintSheet, { type PrintJob } from "./PrintSheet";
 import ProfileDialog from "./ProfileDialog";
 import ProfilePanel from "./ProfilePanel";
-import ResourcesPanel from "./ResourcesPanel";
 import SavedPanel from "./SavedPanel";
 import SearchPanel from "./SearchPanel";
 
-type Tab = "search" | "profile" | "saved" | "resources" | "gap";
-const TABS: { id: Tab; label: string }[] = [{ id: "search", label: "查詢補助與服務" }, { id: "profile", label: "我的資料卡" }, { id: "saved", label: "收藏清單" }, { id: "resources", label: "附近教育資源" }, { id: "gap", label: "訴求專區" }];
+type Tab = "search" | "profile" | "saved" | "gap";
+const TABS: { id: Tab; label: string }[] = [{ id: "search", label: "查詢補助與服務" }, { id: "profile", label: "我的資料卡" }, { id: "saved", label: "收藏清單" }, { id: "gap", label: "訴求專區" }];
 const DEFAULT_DISCLAIMER = "本結果僅供福利導覽與初步篩選，實際資格及補助額度以主管機關評估、核定為準。";
 
 // 伺服器端 render 時沒有 window；hydrate 完成前畫面只顯示「載入中」，所以兩邊初始值不同不會造成畫面不一致
@@ -204,9 +203,6 @@ export default function WelfareApp() {
       <div role="tabpanel" id="wui-panel-saved" aria-labelledby="wui-tab-saved" hidden={tab !== "saved"}>
         <SavedPanel saved={saved} cards={cards} results={results} onOpen={setDetailId} onToggleSave={toggleSave} onPrint={setPrintJob} onBrowse={() => goto("search")} />
       </div>
-      <div role="tabpanel" id="wui-panel-resources" aria-labelledby="wui-tab-resources" hidden={tab !== "resources"}>
-        {tab === "resources" && <ResourcesPanel defaultCity={active?.currentRegion || active?.region || ""} />}
-      </div>
       <div role="tabpanel" id="wui-panel-gap" aria-labelledby="wui-tab-gap" hidden={tab !== "gap"}>
         <GapPanel key={gapPrefill.key} prefill={gapPrefill.title} defaultRegion={active?.region ?? ""} onToast={showToast} />
       </div>
@@ -215,7 +211,6 @@ export default function WelfareApp() {
     <footer className="foot">
       <p>{disclaimer}</p>
       <p>補助資料來自各級政府與學校的官方公告，每項補助都附官方頁面連結；申請前請以官方公告為準。</p>
-      <p>「附近教育資源」使用政府資料開放平臺的教育部開放資料（政府資料開放授權條款－第1版）。</p>
     </footer>
 
     <DetailDrawer id={detailId} result={detailId ? results?.[detailId] : undefined} hasProfile={!!active} onClose={closeDetail} saved={!!detailId && savedIds.has(detailId)} onToggleSave={toggleSave}

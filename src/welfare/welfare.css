@@ -422,11 +422,3 @@
 .wui[data-mode="elder"] .chat { width: min(32rem, calc(100vw - 2rem)) }
 @media (max-width: 430px) { .wui .tabs button { padding: .6rem .6rem; font-size: .92rem } .wui .top-in { padding-left: .8rem; padding-right: .8rem } }
 @media (prefers-reduced-motion: reduce) { .wui *, .wui *::before, .wui *::after { transition: none !important; animation: none !important } }
-
-/* 附近教育資源 */
-.wui .res-list { list-style: none; margin: 0 0 1.2rem; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) }
-.wui .res-item { background: var(--paper); border: var(--bw) solid var(--ink); box-shadow: var(--hard-sm); padding: .9rem 1rem }
-.wui .res-item h3 { margin: .3rem 0 .4rem; font-size: 1.08rem; font-weight: 900; line-height: 1.35 }
-.wui .res-item p { margin: .15rem 0; font-size: .9rem }
-.wui .res-kind { display: inline-block; background: var(--mint-soft); border: 2px solid var(--ink); padding: .05rem .5rem; font-size: .78rem; font-weight: 800 }
-.wui .res-op { color: var(--ink-3) }
