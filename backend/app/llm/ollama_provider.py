@@ -19,8 +19,8 @@ class OllamaProvider(LLMProvider):
         super().__init__(model or DEFAULT_MODEL, timeout=timeout)
         self.base_url = base_url.rstrip("/")
 
-    def complete(self, system: str, user: str, *, json_schema: dict | None = None, max_tokens: int = 4096) -> LLMResponse:
-        options = {"temperature": 0, "num_predict": max_tokens}
+    def complete(self, system: str, user: str, *, json_schema: dict | None = None, max_tokens: int = 4096, temperature: float = 0.0) -> LLMResponse:
+        options = {"temperature": temperature, "num_predict": max_tokens}
         num_ctx = os.environ.get("LLM_NUM_CTX", "").strip()
         if num_ctx.isdigit():
             options["num_ctx"] = int(num_ctx)  # 5090 主機跑 gemma4:31b 時可設 8192／16384，讓更長的原文進得去

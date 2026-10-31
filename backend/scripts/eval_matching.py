@@ -437,11 +437,28 @@ def evaluate(mode: str, personas: list[dict], labels: dict[str, dict], records: 
     return {"summary": summary, "counts": dict(counts), "samples": samples, "per_persona": per_persona}
 
 
+def in_scope_labels(labels: dict[str, dict], db) -> tuple[dict[str, dict], Counter]:
+    """黃金集是某一次爬取時標的，之後資料庫可能已沒有那筆、已過截止日，或標註自己說它其實是彙整頁；這些不是比對引擎的錯，回測不計。"""
+    kept, skipped = {}, Counter()
+    for benefit_id, label in labels.items():
+        row = db.benefits.find_one({"_id": benefit_id}, {"status": 1, "is_canonical": 1})
+        if label.get("kind_issue"):
+            skipped["標註為彙整頁"] += 1
+        elif row is None:
+            skipped["資料庫已無此筆"] += 1
+        elif row.get("status") == "expired":
+            skipped["已截止"] += 1
+        else:
+            kept[benefit_id] = label
+    return kept, skipped
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--details", type=int, default=0)
     parser.add_argument("--labels", default="benefit_facets", help="benefit_facets（調整規則用的黃金集）｜holdout_facets（保留集，只驗證不調整）")
     parser.add_argument("--out", default="")
+    parser.add_argument("--all-labels", action="store_true", help="不排除資料庫已沒有、已截止或標註為彙整頁的補助（預設排除，因為它們不是比對引擎的錯）")
     parser.add_argument("--mode", choices=["dashboard", "complete", "both"], default="both")
     parser.add_argument("--core", choices=["db", "rebuild", "oracle", "none"], default="db", help="db＝資料庫裡建好的骨幹；rebuild＝用目前程式與已存的 AI 投票在記憶體重算（不寫入）；oracle＝以黃金標註當骨幹（分層設計的上限）；none＝舊引擎")
     args = parser.parse_args()
@@ -449,6 +466,9 @@ def main() -> int:
     labels = {row["id"]: row for row in yaml.safe_load((GOLD / f"{args.labels}.yaml").read_text(encoding="utf-8"))["labels"] if not row.get("skip")}
     personas = yaml.safe_load((GOLD / "personas.yaml").read_text(encoding="utf-8"))["personas"]
     records = load_records(get_db())
+    skipped = Counter()
+    if not args.all_labels:
+        labels, skipped = in_scope_labels(labels, get_db())
     for record in records:
         if args.core == "none":
             record.pop("eligibility_core", None)
@@ -459,7 +479,9 @@ def main() -> int:
 
             full = get_db().benefits.find_one({"_id": record["_id"]})
             record["eligibility_core"] = build_core(full, llm_output=(full.get("eligibility_core") or {}).get("llm"))
-    lines = ["# 媒合回測（黃金集）", "", f"- 標註檔 {args.labels}：補助 {len(labels)} 筆 × 使用者 {len(personas)} 人；骨幹來源：{args.core}", ""]
+    note = f"（另排除：{'、'.join(f'{k} {v} 筆' for k, v in skipped.items())}）" if skipped else ""
+    lines = ["# 媒合回測（黃金集）", "", f"- 標註檔 {args.labels}：補助 {len(labels)} 筆{note} × 使用者 {len(personas)} 人；骨幹來源：{args.core}", ""]
+    print(lines[-2])
     modes = ["dashboard", "complete"] if args.mode == "both" else [args.mode]
     for mode in modes:
         result = evaluate(mode, personas, labels, records, registry, settings, args.details)

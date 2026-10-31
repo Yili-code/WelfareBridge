@@ -374,12 +374,25 @@ def _aliases(registry: Registry, tags: list[str]) -> list[str]:
     return out
 
 
+# 這些條件常寫成「失業 30 日以上或非自願離職」這類擇一；句中另列了別的選項時，不能當成必要條件
+ALTERNATIVE_ATTR_KEYS = {"employment.involuntary_separation": ("非自願", "被資遣", "資遣"), "care.needs_care": ("長期照顧", "失能"), "care.is_primary_caregiver": ("主要照顧",)}
+
+
+ONE_OF_RE = re.compile(r"(下列|以下|左列)[^。\n]{0,10}之一")
+
+
+def _before(quote: str, text: str) -> str:
+    """引文前面緊鄰的一小段（條列前的「符合下列情形之一」就在這裡）。"""
+    index = text.find((quote or "").strip()[:24])
+    return text[max(0, index - 120):index] if index >= 0 else ""
+
+
 def caveat(facet: dict, quotes: list[str], text: str, registry: Registry) -> str:
     """回傳降級原因（空字串＝沒有疑慮）。只看支持這個 facet 的原文句子。"""
     kind = facet["kind"]
     if kind not in {"identity_any", "identity_exclude", "age", "education", "student", "attr"}:
         return ""
-    keys = _aliases(registry, facet.get("tags") or []) if kind in {"identity_any", "identity_exclude"} else ["歲"] if kind == "age" else []
+    keys = _aliases(registry, facet.get("tags") or []) if kind in {"identity_any", "identity_exclude"} else ["歲"] if kind == "age" else list(ALTERNATIVE_ATTR_KEYS.get(facet.get("attribute_id"), ()))
     for quote in quotes:
         sentence = _context(quote, text)
         if not sentence:
@@ -389,6 +402,8 @@ def caveat(facet: dict, quotes: list[str], text: str, registry: Registry) -> str
             if RECEIVER_RE.search(sentence):
                 return "原文排除的是已領其他補助者，不是身分本身"
             continue
+        if kind == "attr" and ONE_OF_RE.search(_before(quote, text)):
+            return "原文列為「下列條件之一」，不是每一項都要符合"
         sibling = _sibling_group(quote, text, keys) if kind == "identity_any" else ""
         if sibling:
             return f"原文另列「{sibling[:24]}」等其他申請對象，身分可能只是其中之一"
@@ -409,7 +424,7 @@ def caveat(facet: dict, quotes: list[str], text: str, registry: Registry) -> str
                 parts = [p for p in re.split(r"或|、", clause) if p.strip()]
                 others = [p for p in parts if not any(k in p for k in keys) and len(re.findall(r"[\u4e00-\u9fff]", p)) >= 4]
                 if others:
-                    return f"原文「{clause.strip()[:30]}」列了其他選項，{'身分' if kind == 'identity_any' else '年齡'}可能只是其中之一"
+                    return f"原文「{clause.strip()[:30]}」列了其他選項，{'身分' if kind == 'identity_any' else '年齡' if kind == 'age' else '這項條件'}可能只是其中之一"
         if kind == "age":
             ages = {int(n) for n in re.findall(r"(\d{1,3})\s*歲以上", sentence)}
             if len(ages) > 1:

@@ -67,7 +67,7 @@ def extract_raw(record: dict) -> dict | None:
     if provider is None:
         return None
     system, user = _prompt(record)
-    output = provider.complete_json(system, user, json_schema=CORE_SCHEMA, max_tokens=1500)  # 模型常把 JSON 排版成多行；700 會截斷
+    output = provider.complete_json(system, user, json_schema=CORE_SCHEMA, max_tokens=1500, salvage=True)  # 模型常把 JSON 排版成多行；700 會截斷
     output["_model"] = provider.model
     return output
 

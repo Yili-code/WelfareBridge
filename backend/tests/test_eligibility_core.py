@@ -144,3 +144,18 @@ def test_special_circumstances_assistance_does_not_require_prior_status():
         {"attribute_id": "identity.tags", "operator": "contains", "value": "special_circumstances", "complexity": "simple", "role": "required", "confidence": 0.9, "group_id": "identity"}]})
     facet = next(f for f in built["facets"] if f["kind"] == "identity_any")
     assert facet["status"] == "uncertain"
+
+
+def test_alternative_conditions_joined_by_or_are_not_all_required():
+    text = "失業勞工符合下列資格之一：失業30日以上或非自願離職，經推介受僱特定行業連續30日以上。"
+    facet = vote([{"kind": "attr", "attribute_id": "employment.involuntary_separation", "value": True, "source": source, "quote": "失業30日以上或非自願離職"} for source in ("rules", "llm")], text=text)[0]
+    assert facet["status"] == "uncertain" and facet["caveat"]
+    plain = vote([{"kind": "attr", "attribute_id": "employment.involuntary_separation", "value": True, "source": source, "quote": "須為非自願離職"} for source in ("rules", "llm")], text="申請人須為非自願離職之失業勞工。")[0]
+    assert plain["status"] == "confirmed"
+
+
+def test_attribute_in_a_one_of_list_is_not_required():
+    text = "勞工資格符合下列情形之一的失業勞工：\n\n失業期間達30日以上。\n\n非自願離職。\n\n經公立就業服務機構評估推介。"
+    proposals = [{"kind": "attr", "attribute_id": "employment.involuntary_separation", "value": True, "source": source, "quote": "非自願離職"} for source in ("rules", "llm")]
+    facet = vote(proposals, text=text)[0]
+    assert facet["status"] == "uncertain" and "之一" in facet["caveat"]
