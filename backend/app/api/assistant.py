@@ -52,7 +52,8 @@ def _value_label(attribute, value) -> str:
         return attribute.value_label(value)
     if attribute.type == "number":
         number = float(value)
-        return f"{number:g}{attribute.unit or ''}"
+        shown = f"{int(number):,}" if number == int(number) else f"{number:g}"
+        return f"{shown}{attribute.unit or ''}"
     return str(value)
 
 

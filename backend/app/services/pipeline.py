@@ -409,13 +409,14 @@ def expire_pass() -> int:
     db = get_db()
     today = taiwan_today().isoformat()
     changed = 0
-    for row in db.benefits.find({}, {"status": 1, "benefit.application_period.end_date": 1}):
+    for row in db.benefits.find({}, {"status": 1, "title": 1, "original_text": 1, "benefit.application_period.end_date": 1}):
         end = ((row.get("benefit") or {}).get("application_period") or {}).get("end_date", "")
         status = row.get("status", "active")
         new_status = status
-        if end and end < today and status == "active":
+        closed = closed_marker(row.get("title", ""), row.get("original_text", ""))
+        if (closed or (end and end < today)) and status == "active":
             new_status = "expired"
-        elif status == "expired" and (not end or end >= today):
+        elif status == "expired" and not closed and (not end or end >= today):  # 標題／原文明說停辦的，不因為沒有截止日就恢復
             new_status = "active"
         if new_status != status:
             db.benefits.update_one({"_id": row["_id"]}, {"$set": {"status": new_status}})

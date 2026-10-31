@@ -113,6 +113,23 @@ def test_unsure_hedge_is_recorded_as_unsure(monkeypatch):
     assert result['not_understood'] is False
 
 
+def test_hedged_answers_to_choice_and_number_questions_skip_the_question(monkeypatch):
+    monkeypatch.setattr(module, 'get_db', lambda: None)
+    monkeypatch.setattr(module, 'load_records', lambda db: [])
+    base = {'_domains': ['housing']}
+    for attribute, text in [('housing.tenure', '不太確定'), ('housing.rent_month', '不知道'), ('applicant.age', '我不清楚')]:
+        result = module.guidance(base, text, attribute)
+        assert result['profile']['attributes'][attribute]['source'] == 'unsure'
+        assert result['not_understood'] is False
+
+
+def test_school_year_is_not_read_as_an_age_or_amount(monkeypatch):
+    monkeypatch.setattr(module, 'get_db', lambda: None)
+    monkeypatch.setattr(module, 'load_records', lambda db: [])
+    result = module.guidance({'_domains': ['education']}, '大三', 'applicant.age')
+    assert 'applicant.age' not in result['profile']['attributes'] or result['profile']['attributes']['applicant.age']['value'] != 3
+
+
 def test_search_splits_a_sentence_into_need_words():
     from app.api.benefits import _need_terms
     assert _need_terms('租屋') == []

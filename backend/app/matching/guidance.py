@@ -19,6 +19,8 @@ TOPICS = {
 }
 UNSURE = "unsure"
 HEDGES = ("應該", "好像", "可能", "大概", "似乎", "也許", "不太確定", "不確定", "不知道", "不清楚", "還在申請", "申請中", "審核中", "還沒下來")
+UNSURE_PHRASES = ("不太確定", "不確定", "不知道", "不清楚", "不太清楚", "不曉得", "沒概念", "忘了")
+GRADE_RE = re.compile(r"(?:大|高|國|研)[一二三四五六七八九]|[一二三四五六七八九]年級")
 OTHER_PEOPLE = ("朋友", "同學", "別人", "鄰居", "同事")
 
 
@@ -123,9 +125,12 @@ def guidance(data, latest, target):
                 profile.set(target, None, source="unsure", evidence=text)
             elif attribute.type == "boolean" and yes_no(text) is not None:
                 profile.set(target, yes_no(text), evidence=text)
+            elif attribute.type != "boolean" and len(text) <= 16 and any(word in text for word in UNSURE_PHRASES):
+                profile.set(target, None, source="unsure", evidence=text)
             elif attribute.type == "number":
                 # Accept "30000元" / "約 8,000 元" so an answer with units is not dropped and re-asked.
-                number = parse_number(text, target)
+                # 「大三」「高二」是年級不是數量，不能當成年齡或金額
+                number = None if GRADE_RE.search(text) else parse_number(text, target)
                 if number is not None:
                     profile.set(target, number, evidence=text)
             elif attribute.type in {"enum", "multi_enum"}:

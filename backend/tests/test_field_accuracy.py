@@ -85,3 +85,17 @@ def test_excerpt_must_be_verbatim():
     assert excerpt_in_text("(一）具中華民國國籍。(三）家庭年所得低於一百萬元。", text)  # 拼接原句可以
     assert not excerpt_in_text("(一）具中華民國國籍。(三）家庭年所得低於兩百萬元。", text)  # 改寫不行
     assert not excerpt_in_text("申請人須同時符合下列各項資格條件，並且需要推薦函", text)
+
+
+def test_expire_pass_keeps_a_closed_program_closed_even_without_an_end_date(db):
+    from app.services import pipeline
+
+    db.benefits.delete_many({"_id": {"$in": ["closed-no-date", "open-no-date"]}})
+    db.benefits.insert_many([
+        {"_id": "closed-no-date", "title": "【已不再受理新申請案】測試貸款", "original_text": "", "status": "expired"},
+        {"_id": "open-no-date", "title": "測試補助", "original_text": "", "status": "expired"},
+    ])
+    pipeline.expire_pass()
+    assert db.benefits.find_one({"_id": "closed-no-date"})["status"] == "expired"
+    assert db.benefits.find_one({"_id": "open-no-date"})["status"] == "active"
+    db.benefits.delete_many({"_id": {"$in": ["closed-no-date", "open-no-date"]}})
