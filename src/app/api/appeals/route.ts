@@ -1,4 +1,6 @@
+import { guessDemandRegion, guessDemandType } from "@/lib/demand-types";
 import { openAppeals } from "@/lib/server/appeals.mjs";
+import { openDemands } from "@/lib/server/demands.mjs";
 import { authorized, isString as string, readJson as body, response, sameOrigin } from "@/lib/server/http";
 
 export const runtime = "nodejs";
@@ -24,7 +26,14 @@ export async function POST(request: Request) {
   if (!key || !/^[a-zA-Z0-9_-]{16,100}$/.test(key)) return response({ error: "缺少有效的送出識別碼。" }, 400);
   const { profileId, profileNickname, region, identities, age, mainRequest, summary, transcript } = input;
   const db = openAppeals();
-  try { return response(db.create({ profileId, profileNickname, region, identities, age, mainRequest, summary, transcript }, key), 201); } finally { db.close(); }
+  let created;
+  try { created = db.create({ profileId, profileNickname, region, identities, age, mainRequest, summary, transcript }, key); } finally { db.close(); }
+  // Demo：需求登記確認送出後，不經後台審核，同步公開到訴求專區（只公開標題與摘要，不含姓名與對話紀錄）。後台仍照常收到完整登記。
+  const demands = openDemands();
+  try {
+    demands.createFromAppeal({ id: key, title: mainRequest.trim().slice(0, 80), type: guessDemandType(`${mainRequest} ${summary}`), region: region.trim() || guessDemandRegion(`${mainRequest} ${summary}`) || "未填寫地區", detail: summary.trim().slice(0, 1000) }, key);
+  } catch { /* 公開失敗不影響需求登記本身 */ } finally { demands.close(); }
+  return response(created, 201);
 }
 export async function PATCH(request: Request) {
   if (!authorized(request)) return response({ error: "後台密碼不正確。" }, 401);

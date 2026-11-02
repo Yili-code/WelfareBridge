@@ -172,8 +172,8 @@ export default function ChatWidget({ ref, profile, counts, matching, onSearch, o
       {busy && <p className="msg assistant" role="status">小幫手正在想…</p>}
       {chatError && <div className="alert" role="alert">{chatError}<div className="go" style={{ marginTop: ".4rem" }}><button type="button" className="btn sm" disabled={busy} onClick={() => void retry()}>再試一次</button></div></div>}
       {draft && !busy && <div className="draft">
-        {submitted ? <p>需求登記已送給承辦人員，他們會依此評估是否需要新增服務（不會公開）。</p> : <>
-          <p><b>要把這份需求登記送給承辦人員嗎？</b>（不會公開；想讓大家附議，可以到「訴求專區」提出）</p>
+        {submitted ? <p>需求登記已送給承辦人員，他們會依此評估是否需要新增服務。Demo：標題與摘要已同步顯示在「訴求專區」，大家可以附議。</p> : <>
+          <p><b>要把這份需求登記送給承辦人員嗎？</b>（Demo：送出後標題與摘要會公開顯示在「訴求專區」，不含姓名與對話紀錄）</p>
           <div className="go" style={{ marginTop: ".4rem" }}><button type="button" className="btn sm" onClick={() => void submitAppeal()}>送出需求登記</button></div>
         </>}
         {submitError && <p className="err" role="alert">{submitError}</p>}

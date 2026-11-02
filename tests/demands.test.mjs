@@ -4,6 +4,30 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { openDemands, THRESHOLD } from '../src/lib/server/demands.mjs';
+import { DEMO_DEMANDS } from '../scripts/seed-demo-demands.mjs';
+
+test('a confirmed assistant request is published once as a Demo demand, and seeded demos show the right statuses', () => {
+  const folder = mkdtempSync(join(tmpdir(), 'welfare-demands-'));
+  let db;
+  try {
+    db = openDemands(join(folder, 'test.sqlite'));
+    const item = { id: 'idempotency-key-0001', title: '高雄失智症照護資源', type: '失智照顧', region: '高雄市', detail: '摘要' };
+    assert.equal(db.createFromAppeal(item, item.id).demo, true);
+    db.createFromAppeal(item, item.id);
+    assert.equal(db.list().filter(d => d.demo).length, 1, 'same key must not publish twice');
+    assert.equal(db.list().find(d => d.demo).supports, 1);
+
+    for (const demo of DEMO_DEMANDS) db.seed(demo);
+    for (const demo of DEMO_DEMANDS) db.seed(demo);
+    const all = db.list();
+    assert.equal(all.length, DEMO_DEMANDS.length + 1, 'seeding twice must not duplicate');
+    assert.equal(all.filter(d => d.status === 'pending').length, 4);
+    assert.equal(all.filter(d => d.status === 'collecting').length, 3, 'two seeded plus the new Demo request');
+    assert.equal(all.find(d => d.id === 'demo-seed-07').status, 'claimed');
+    assert.equal(all.find(d => d.id === 'demo-seed-08').status, 'done');
+    assert.equal(all.find(d => d.id === 'demo-seed-01').demo, false);
+  } finally { db?.close(); rmSync(folder, { recursive: true }); }
+});
 
 test('each browser supports a demand once; reaching the threshold makes it pending; staff can claim it', () => {
   const folder = mkdtempSync(join(tmpdir(), 'welfare-demands-'));

@@ -85,7 +85,7 @@ def main() -> int:
     parser.add_argument("--gold", action="store_true")
     parser.add_argument("--label-file", default="benefit_facets", help="--gold 使用的標註檔（benefit_facets｜holdout_facets）")
     parser.add_argument("--limit", type=int, default=0)
-    parser.add_argument("--no-llm", action="store_true")
+    parser.add_argument("--no-llm", action="store_true", help="只用規則式訊號。注意：會把資料庫裡已存的 AI 投票清掉（寫入時不可逆，除非有備份）；只想沿用已存的 AI 結果時什麼旗標都不要加")
     parser.add_argument("--refresh-llm", action="store_true")
     parser.add_argument("--report", action="store_true", help="不寫入資料庫，只和黃金集比對")
     parser.add_argument("--details", action="store_true")

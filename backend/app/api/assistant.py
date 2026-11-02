@@ -101,11 +101,12 @@ def converse(body: Request):
     if body.messages and body.messages[-1].role != "user":
         raise HTTPException(422, "最後一則訊息需為使用者回答")
     turn_count = sum(m.role == 'user' for m in body.messages)
-    if turn_count > MAX_TURNS:
-        raise HTTPException(422, f'對話最多 {MAX_TURNS} 輪，請重新開始。')
     latest = body.messages[-1].content if body.messages else ""
     explicit_summary = "整理需求登記" in latest
-    summary_requested = explicit_summary or turn_count >= MAX_TURNS
+    if turn_count > MAX_TURNS and not explicit_summary:
+        raise HTTPException(422, f'對話最多 {MAX_TURNS} 輪，請重新開始。')
+    # 摘要與「送出需求登記」只在使用者自己按下「整理需求登記」時出現；問滿 MAX_TURNS 題只是不再追問
+    summary_requested = explicit_summary
     # 追問與選項完全由規劃器決定（依哪一題最能確認資格）；以前模型只寫一句承接語，而且一定會被追問覆蓋，
     # 卻要等模型 5～30 秒、模型忙碌時整段對話失敗。現在只有「整理需求登記」這一步用模型。
     provider = get_provider() if summary_requested else None
@@ -132,7 +133,7 @@ def converse(body: Request):
             answer = Answer(reply="請確認以下需求摘要，尚未送出：\n" + summary.summary, quickReplies=[], summary=summary.summary, mainRequest=summary.mainRequest)
         except (LLMError, ValidationError, ValueError, KeyError):
             raise HTTPException(502, "AI 暫時無法產生有效回應，請重試。") from None
-    elif question:
+    elif question and turn_count < MAX_TURNS:
         # 規劃器只看使用者選的需求領域；說清楚範圍，免得和畫面上全部補助的數字對不起來
         reason = f"在您想找的補助中，有 {question['affected']} 筆需要這項資料才能判斷" if question.get('affected') else question['reason']
         reply = reason + "。\n" + question['question']
@@ -145,6 +146,11 @@ def converse(body: Request):
             reply = "這題看起來不好回答，我先幫您跳過，之後可以到資料卡補上。\n" + reply
         answer = Answer(reply=reply, quickReplies=labels[:3] + ['不確定'])
     else:
-        text = "目前沒有仍可能符合的補助。可以回到「我的資料卡」調整條件，或到「訴求專區」說出您需要的服務。" if not context['candidate_count'] else "目前能問的條件都確認了，比對結果已更新在畫面上；其餘細節請以官方公告為準。"
+        if not context['candidate_count']:
+            text = "目前沒有符合的補助。可以點下方「整理需求登記給承辦人員」，讓承辦人員評估是否需要新增服務；也可以回到「我的資料卡」調整條件，或到「訴求專區」說出您需要的服務。"
+        elif question:
+            text = f"已經問了 {MAX_TURNS} 題，比對結果已更新在畫面上；其餘細節請以官方公告為準。"
+        else:
+            text = "目前能問的條件都確認了，比對結果已更新在畫面上；其餘細節請以官方公告為準。"
         answer = Answer(reply=text)
-    return {**answer.model_dump(), "search": context.get('search'), "model": provider.model if provider else "", "llm_used": provider is not None, "guidance_profile": context['profile'], "learned": learned_attributes(context['profile']), "question_attribute": question['attribute_id'] if question and not summary_requested else "", "candidate_count": context['candidate_count'], "turn_count": turn_count, "max_turns": MAX_TURNS, "completed": summary_requested}
+    return {**answer.model_dump(), "search": context.get('search'), "model": provider.model if provider else "", "llm_used": provider is not None, "guidance_profile": context['profile'], "learned": learned_attributes(context['profile']), "question_attribute": question['attribute_id'] if question and not summary_requested and turn_count < MAX_TURNS else "", "candidate_count": context['candidate_count'], "turn_count": turn_count, "max_turns": MAX_TURNS, "completed": summary_requested}

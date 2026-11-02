@@ -186,3 +186,15 @@ def test_property_limits_written_after_a_colon_are_not_amounts():
     classification2.category, classification2.domain, classification2.is_benefit = "living_allowance", "social_welfare", True
     amount2 = Extractor().extract(make_doc(bracket, "中低收入戶"), SOURCE, classification2).benefit["benefit"]["amount"]
     assert (amount2["max"] or 0) <= 3000 and amount2["value"] in (3000, None), amount2
+
+
+def test_interest_income_limit_is_not_read_as_household_income_and_big_numbers_have_no_exponent():
+    from app.services.extractor import Extractor
+
+    extractor = Extractor()
+    rules: list[dict] = []
+    extractor._condition_rules("申請資格：家庭年所得70萬以下、年利息所得2萬元以下、不動產公告現值650萬元以內。", {}, "臺北市", rules, [], [])
+    incomes = [r for r in rules if r["attribute_id"] == "household.income_year"]
+    assert all(r["value"] != 20000 for r in incomes), incomes
+    assert all("e+" not in r["human_readable"] for r in rules), [r["human_readable"] for r in rules]
+    assert any("6,500,000" in r["human_readable"] for r in rules if r["attribute_id"] == "household.assets"), [r["human_readable"] for r in rules]

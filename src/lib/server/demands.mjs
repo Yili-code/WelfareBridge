@@ -18,11 +18,13 @@ export function openDemands(path = process.env.WELFARE_DB_PATH || resolve('data/
     CREATE TABLE IF NOT EXISTS demands (id TEXT PRIMARY KEY, title TEXT NOT NULL, type TEXT NOT NULL, region TEXT NOT NULL, detail TEXT NOT NULL,
       status TEXT NOT NULL DEFAULT 'open', owner TEXT NOT NULL DEFAULT '', result TEXT NOT NULL DEFAULT '', created_at TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS demand_supports (demand_id TEXT NOT NULL, voter TEXT NOT NULL, created_at TEXT NOT NULL, PRIMARY KEY (demand_id, voter));`);
+  // demo=1：小幫手摘要送出後自動公開到這裡的需求（畫面上標示 Demo）
+  if (!db.prepare("SELECT 1 FROM pragma_table_info('demands') WHERE name = 'demo'").get()) db.exec('ALTER TABLE demands ADD COLUMN demo INTEGER NOT NULL DEFAULT 0');
   const shape = (row, voter) => {
     if (!row) return null;
     const supports = Number(row.supports);
     const status = row.status === 'open' ? (supports >= THRESHOLD ? 'pending' : 'collecting') : row.status;
-    return { id: row.id, title: row.title, type: row.type, region: row.region, detail: row.detail, status, owner: row.owner, result: row.result, supports, created: row.created_at.slice(0, 10), voted: Boolean(voter) && Boolean(row.voted) };
+    return { id: row.id, title: row.title, type: row.type, region: row.region, detail: row.detail, status, owner: row.owner, result: row.result, supports, created: row.created_at.slice(0, 10), voted: Boolean(voter) && Boolean(row.voted), demo: Boolean(row.demo) };
   };
   const select = `SELECT d.*, (SELECT COUNT(*) FROM demand_supports s WHERE s.demand_id = d.id) AS supports,
     EXISTS(SELECT 1 FROM demand_supports s WHERE s.demand_id = d.id AND s.voter = ?) AS voted FROM demands d`;
@@ -43,6 +45,28 @@ export function openDemands(path = process.env.WELFARE_DB_PATH || resolve('data/
         db.exec('COMMIT');
       } catch (error) { db.exec('ROLLBACK'); throw error; }
       return this.get(id, voter);
+    },
+    /** 小幫手的需求登記送出後同步公開：以送出識別碼當 id，同一份登記重送不會重複出現。 */
+    createFromAppeal({ id, title, type, region, detail }, voter) {
+      const now = new Date().toISOString();
+      db.exec('BEGIN');
+      try {
+        db.prepare('INSERT OR IGNORE INTO demands (id, title, type, region, detail, demo, created_at) VALUES (?, ?, ?, ?, ?, 1, ?)').run(id, title, type, region, detail, now);
+        db.prepare('INSERT OR IGNORE INTO demand_supports VALUES (?, ?, ?)').run(id, voter, now);
+        db.exec('COMMIT');
+      } catch (error) { db.exec('ROLLBACK'); throw error; }
+      return this.get(id, voter);
+    },
+    /** 預先放的示範訴求：附議數用不重複的假瀏覽器識別碼補足，之後仍可照常附議。 */
+    seed({ id, title, type, region, detail, supports, status = 'open', owner = '', result = '', daysAgo = 0 }) {
+      const created = new Date(Date.now() - daysAgo * 86_400_000).toISOString();
+      db.exec('BEGIN');
+      try {
+        db.prepare('INSERT OR REPLACE INTO demands (id, title, type, region, detail, status, owner, result, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)').run(id, title, type, region, detail, status, owner, result, created);
+        db.prepare('DELETE FROM demand_supports WHERE demand_id = ?').run(id);
+        for (let i = 1; i <= supports; i += 1) db.prepare('INSERT INTO demand_supports VALUES (?, ?, ?)').run(id, `seed-${id}-${String(i).padStart(3, '0')}`, created);
+        db.exec('COMMIT');
+      } catch (error) { db.exec('ROLLBACK'); throw error; }
     },
     /** 同一個瀏覽器對同一則訴求只算一次 */
     support(id, voter) {

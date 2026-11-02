@@ -16,6 +16,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from ..config import Settings, get_settings
+from ..numfmt import fmt_num
 from ..registry import Attribute, Registry, get_registry
 from .classifier import ClassificationResult, get_classifier
 from .normalization import AMOUNT_RE, chinese_to_int, find_cities, normalize_city, normalize_text, parse_amounts, parse_date_range, parse_duration_months, taiwan_today, to_iso_date
@@ -1225,7 +1226,7 @@ class Extractor:
             low, high = _num(range_match.group(1)), _num(range_match.group(2))
             if low is not None and high is not None:
                 low, high = self._convert_unit(attribute, low, range_match.group(3)), self._convert_unit(attribute, high, range_match.group(3))
-                return self._rule(attribute.id, "between", [low, high], unit=attribute.unit, group_id=attribute.id.replace(".", "_"), human=f"{attribute.label}：{low:g}～{high:g}", excerpt=sentence[:200], confidence=0.85, extractor="rule_based", condition_text=clause, role="exclusion" if exclusion else "required")
+                return self._rule(attribute.id, "between", [low, high], unit=attribute.unit, group_id=attribute.id.replace(".", "_"), human=f"{attribute.label}：{fmt_num(low)}～{fmt_num(high)}", excerpt=sentence[:200], confidence=0.85, extractor="rule_based", condition_text=clause, role="exclusion" if exclusion else "required")
         candidates: list[tuple[re.Match, str]] = []
         for match in NUM_TOKEN_RE.finditer(clause):
             unit = match.group(3) or ""
@@ -1233,11 +1234,16 @@ class Extractor:
                 if unit or not re.search(r"gpa", clause, re.I):
                     continue
             elif unit not in allowed_units:
-                continue
+                # 「家庭年所得70萬以下」常省略「元」：金額欄位的「N萬」視為新臺幣
+                if not (attribute.unit.startswith("TWD") and match.group(2) and not unit):
+                    continue
+                unit = "元"
             candidates.append((match, unit))
         if not candidates:
             return None
         pos = clause.find(alias)
+        if attribute.unit.startswith("TWD") and clause[max(0, pos - 2):pos] in {"利息", "股利", "租金"}:
+            return None  # 「年利息所得2萬元以下」是另一種所得的限制，不是家庭所得上限
         # 中文條件句多半是「屬性 … 達／滿 N 單位 以上」：優先配對別名後方的數字；
         # 用前方的數字時，數字與別名之間不能夾著別的屬性（「所得達一百萬元以上或不動產價值達一千萬元」不能把一百萬配給不動產）
         other_aliases = [a for aid, als in self.registry.attributes_in_text(clause).items() if aid != attribute.id for a in als]
@@ -1278,7 +1284,7 @@ class Extractor:
             return None
         if attribute.unit == "score" and not (0 < value <= 100):
             return None
-        return self._rule(attribute.id, operator, value, unit=attribute.unit, group_id=attribute.id.replace(".", "_"), human=f"{attribute.label} {symbol} {value:g}{unit_label}", excerpt=sentence[:200], confidence=0.85, extractor="rule_based", condition_text=clause, role="exclusion" if exclusion else "required")
+        return self._rule(attribute.id, operator, value, unit=attribute.unit, group_id=attribute.id.replace(".", "_"), human=f"{attribute.label} {symbol} {fmt_num(value)}{unit_label}", excerpt=sentence[:200], confidence=0.85, extractor="rule_based", condition_text=clause, role="exclusion" if exclusion else "required")
 
     @staticmethod
     def _convert_unit(attribute: Attribute, value: float, unit: str) -> float:

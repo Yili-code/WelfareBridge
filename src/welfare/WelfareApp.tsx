@@ -204,7 +204,7 @@ export default function WelfareApp() {
         <SavedPanel saved={saved} cards={cards} results={results} onOpen={setDetailId} onToggleSave={toggleSave} onPrint={setPrintJob} onBrowse={() => goto("search")} />
       </div>
       <div role="tabpanel" id="wui-panel-gap" aria-labelledby="wui-tab-gap" hidden={tab !== "gap"}>
-        <GapPanel key={gapPrefill.key} prefill={gapPrefill.title} defaultRegion={active?.region ?? ""} onToast={showToast} />
+        <GapPanel key={gapPrefill.key} prefill={gapPrefill.title} defaultRegion={active?.region ?? ""} visible={tab === "gap"} onToast={showToast} />
       </div>
     </main>
 

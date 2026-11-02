@@ -67,12 +67,24 @@ def test_ninth_answer_is_used_before_summary_and_tenth_is_rejected(monkeypatch):
     response = client().post('/api/assistant', json={'messages': messages})
     assert response.status_code == 200
     data = response.json()
-    assert data['completed'] and data['turn_count'] == assistant.MAX_TURNS
+    # 問滿題數只是不再追問：不會自動產生摘要，也不會出現「送出需求登記」
+    assert not data['completed'] and data['turn_count'] == assistant.MAX_TURNS
     assert data['question_attribute'] == '' and data['quickReplies'] == []
+    assert data['summary'] == '' and data['mainRequest'] == '' and not data['llm_used']
     assert seen == ['85']
     assert 'request_schema' not in data
-    messages.extend([{'role': 'assistant', 'content': '摘要'}, {'role': 'user', 'content': '繼續'}])
+    messages.extend([{'role': 'assistant', 'content': '結束'}, {'role': 'user', 'content': '繼續'}])
     assert client().post('/api/assistant', json={'messages': messages}).status_code == 422
+    messages[-1] = {'role': 'user', 'content': '整理需求登記'}
+    explicit = client().post('/api/assistant', json={'messages': messages}).json()
+    assert explicit['completed'] and explicit['summary']
+
+
+def test_no_matching_benefit_points_to_the_request_registration(monkeypatch):
+    monkeypatch.setattr(assistant, 'guidance', lambda data, latest, target: {'profile': {'attributes': {}}, 'candidate_count': 0, 'question': None})
+    data = client().post('/api/assistant', json={'messages': [{'role': 'user', 'content': '我想找學費補助'}]}).json()
+    assert '沒有符合' in data['reply'] and '整理需求登記' in data['reply']
+    assert not data['completed'] and data['summary'] == ''
 
 def test_summary_uses_separate_contract_and_does_not_ask_again(monkeypatch):
     class Provider:

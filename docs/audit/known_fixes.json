@@ -1,0 +1,537 @@
+[
+ {
+  "id": "a1368320-ee58-4d5d-9670-37235ba62220",
+  "title": "弱勢助學（大專校院弱勢學生助學計畫）",
+  "kind": "income_interest",
+  "action": "modify",
+  "rule": {
+   "id": "986449a2-f007-45e5-817a-b7cab89f66db",
+   "attribute_id": "household.income_year",
+   "operator": "<=",
+   "value": 20000.0,
+   "unit": "TWD_year",
+   "group_id": "household_income_year",
+   "group_logic": "any",
+   "complexity": "simple",
+   "role": "required",
+   "human_readable": "家庭年所得 ≤ 20000元／年",
+   "evidence": {
+    "excerpt": "（一）申請資格：家庭年所得70萬以下（學士班90萬以下）、年利息所得2萬元以下、不動產公告現值650萬元以內（利息所得來自優惠存款且本金未逾100萬元可不列計算，優惠存款係專指臺灣銀行辦理之優惠儲蓄存款）。",
+    "extractor": "rule_based",
+    "condition_text": "家庭年所得70萬以下（學士班90萬以下）、年利息所得2萬元以下、不動產公告現值650萬元以內（利息所得來自優惠存款且本金未逾100萬元可不列計算"
+   },
+   "confidence": 0.85,
+   "inferred": false,
+   "inference_basis": "",
+   "registry_version": 2
+  }
+ },
+ {
+  "id": "34687bf9-09db-43a0-9de3-1ac3238f7d76",
+  "title": "衛生福利部辦理兒童及少年未來教育與發展帳戶",
+  "kind": "age_after_18",
+  "action": "remove",
+  "rule": {
+   "id": "a55ee86f-ffa7-49ac-be37-ad5b33797cfd",
+   "attribute_id": "applicant.age",
+   "operator": ">=",
+   "value": 18.0,
+   "unit": "years",
+   "group_id": "applicant_age",
+   "group_logic": "any",
+   "complexity": "simple",
+   "role": "required",
+   "human_readable": "年齡 ≥ 18歲",
+   "evidence": {
+    "excerpt": "為低收入戶及中低收入戶戶內105年1月1日出生之兒童設立個人的帳戶，由政府每年提撥經費，年滿18歲後成為他們的教育基金，讓弱勢兒童有接受高等教育的機會，不讓他們長大後陷入低學歷、低技術、低社會參與度的循環。",
+    "extractor": "rule_based",
+    "condition_text": "年滿18歲後成為他們的教育基金"
+   },
+   "confidence": 0.85,
+   "inferred": false,
+   "inference_basis": "",
+   "registry_version": 2
+  }
+ },
+ {
+  "id": "c994f38e-4959-4481-9143-e9914ede27a0",
+  "title": "兒童及少年未來教育與發展帳戶",
+  "kind": "age_after_18",
+  "action": "remove",
+  "rule": {
+   "id": "386069da-3242-4d26-8815-560eb2dc6c6a",
+   "attribute_id": "applicant.age",
+   "operator": ">=",
+   "value": 18.0,
+   "unit": "years",
+   "group_id": "applicant_age",
+   "group_logic": "any",
+   "complexity": "simple",
+   "role": "required",
+   "human_readable": "年齡 ≥ 18歲",
+   "evidence": {
+    "excerpt": "105年1月1日以後出生至年滿18歲之列冊之低收入戶、中低收入戶、長期安置之兒童及少年",
+    "extractor": "rule_based",
+    "condition_text": "105年1月1日以後出生至年滿18歲之列冊之低收入戶、中低收入戶、長期安置之兒童及少年"
+   },
+   "confidence": 0.85,
+   "inferred": false,
+   "inference_basis": "",
+   "registry_version": 2
+  }
+ },
+ {
+  "id": "8a3f5758-4832-4f42-9758-0b54020e1af7",
+  "title": "強化社會安全網—急難紓困",
+  "kind": "inferred_city",
+  "action": "remove",
+  "rule": {
+   "id": "f490cebd-57c1-4b5e-a34c-5512340d2be0",
+   "attribute_id": "residence.household_city",
+   "operator": "in",
+   "value": [
+    "桃園市"
+   ],
+   "unit": "",
+   "group_id": "residence_household_city",
+   "group_logic": "any",
+   "complexity": "simple",
+   "role": "required",
+   "human_readable": "戶籍縣市：桃園市（依機關推定）",
+   "evidence": {
+    "excerpt": "申請人「無需設籍」本市，以居住本市為原則，符合下列條件之一，備齊文件後就近至居住地區公所申請：",
+    "extractor": "rule_based",
+    "condition_text": "申請人「無需設籍」本市"
+   },
+   "confidence": 0.7,
+   "inferred": true,
+   "inference_basis": "原文寫「本市」，依機關名稱／標題中的「桃園市」推定",
+   "registry_version": 2
+  }
+ },
+ {
+  "id": "9d26c884-1c43-4870-aeef-93c27d6508de",
+  "title": "臺南市經濟弱勢家庭兒童及少年生活扶助",
+  "kind": "stateless_excl",
+  "action": "remove",
+  "rule": {
+   "id": "edcf835b-46df-4b53-a853-890bbf558667",
+   "attribute_id": "applicant.nationality",
+   "operator": "not_in",
+   "value": [
+    "stateless"
+   ],
+   "unit": "",
+   "group_id": "applicant_nationality",
+   "group_logic": "any",
+   "complexity": "simple",
+   "role": "exclusion",
+   "human_readable": "國籍：無國籍",
+   "evidence": {
+    "excerpt": "設籍本市並實際居住本市或屬兒童及少年福利與權益保障法第二十二條未辦理戶籍登記、無國籍或未取得居留、定居許可，並實際居住本市之未滿十八歲在學中兒童及少年，未獲政府同性質其他項目生活扶助或未接受公費收容安置，且有父母離異、一方死亡或失蹤、遭遇重大疾病、服刑等情形，法定代理人得申請發給生活扶助費",
+    "extractor": "rule_based",
+    "condition_text": "設籍本市並實際居住本市或屬兒童及少年福利與權益保障法第二十二條未辦理戶籍登記、無國籍或未取得居留、定居許可"
+   },
+   "confidence": 0.8,
+   "inferred": false,
+   "inference_basis": "",
+   "registry_version": 2
+  }
+ },
+ {
+  "id": "28cd682a-0a7f-4cd4-9fd5-cd02a814347c",
+  "title": "兒童及少年生活扶助",
+  "kind": "stateless_excl",
+  "action": "remove",
+  "rule": {
+   "id": "6e32deda-2b0d-45ae-99bc-78645c5161d0",
+   "attribute_id": "applicant.nationality",
+   "operator": "not_in",
+   "value": [
+    "stateless"
+   ],
+   "unit": "",
+   "group_id": "applicant_nationality",
+   "group_logic": "any",
+   "complexity": "simple",
+   "role": "exclusion",
+   "human_readable": "國籍：無國籍",
+   "evidence": {
+    "excerpt": "設籍並實際居住新竹市（以下簡稱本市），或於中華民國未辦理戶籍登記、無國籍、未取得居留或定居許可，而實際居住本市一個月以上之未滿十八歲兒童或少年，且符合下列情形之一：",
+    "extractor": "rule_based",
+    "condition_text": "或於中華民國未辦理戶籍登記、無國籍、未取得居留或定居許可"
+   },
+   "confidence": 0.8,
+   "inferred": false,
+   "inference_basis": "",
+   "registry_version": 2
+  }
+ },
+ {
+  "id": "ccfa62d6-55db-49d4-aab8-9fac5f802b8c",
+  "title": "新竹縣弱勢兒童及少年醫療補助",
+  "kind": "stateless_excl",
+  "action": "remove",
+  "rule": {
+   "id": "3cdda821-807b-4760-a468-c02bc006cc48",
+   "attribute_id": "applicant.nationality",
+   "operator": "not_in",
+   "value": [
+    "stateless"
+   ],
+   "unit": "",
+   "group_id": "applicant_nationality",
+   "group_logic": "any",
+   "complexity": "simple",
+   "role": "exclusion",
+   "human_readable": "國籍：無國籍",
+   "evidence": {
+    "excerpt": "設籍且實際居住新竹縣(以下簡稱本縣)未滿十八歲之兒童及少年，或實 際居住本縣之未辦理戶籍登記、無國籍或未取得居留、定居許可之兒童 少年，且有下列情形之一者：",
+    "extractor": "rule_based",
+    "condition_text": "或實 際居住本縣之未辦理戶籍登記、無國籍或未取得居留、定居許可之兒童 少年"
+   },
+   "confidence": 0.8,
+   "inferred": false,
+   "inference_basis": "",
+   "registry_version": 2
+  }
+ },
+ {
+  "id": "262cac45-d7b4-4e2c-a751-94d8bae97da8",
+  "title": "兒童及少年未來教育與發展帳戶",
+  "kind": "age_after_18",
+  "action": "remove",
+  "rule": {
+   "id": "5751dcf5-2fab-45e7-b7e8-95e79426844b",
+   "attribute_id": "applicant.age",
+   "operator": ">=",
+   "value": 18.0,
+   "unit": "years",
+   "group_id": "applicant_age",
+   "group_logic": "any",
+   "complexity": "simple",
+   "role": "required",
+   "human_readable": "年齡 ≥ 18歲",
+   "evidence": {
+    "excerpt": "帳戶採虛擬帳戶制，不發給實體存摺，由衛生福利部於臺灣銀行下開設專戶，參加者可選擇每月存500元、1,000元、1,250元自存款，繳存至開戶人年滿18歲。",
+    "extractor": "rule_based",
+    "condition_text": "繳存至開戶人年滿18歲"
+   },
+   "confidence": 0.85,
+   "inferred": false,
+   "inference_basis": "",
+   "registry_version": 2
+  }
+ },
+ {
+  "id": "02f916ed-e7e2-449e-b961-f8a523afd653",
+  "title": "罹患癌症之兒童及青少年醫療費用補助",
+  "kind": "stateless_excl",
+  "action": "remove",
+  "rule": {
+   "id": "170719aa-e8ec-4668-a0db-f93989395552",
+   "attribute_id": "applicant.nationality",
+   "operator": "not_in",
+   "value": [
+    "stateless"
+   ],
+   "unit": "",
+   "group_id": "applicant_nationality",
+   "group_logic": "any",
+   "complexity": "simple",
+   "role": "exclusion",
+   "human_readable": "國籍：無國籍",
+   "evidence": {
+    "excerpt": "二、實際居住本縣未辦理戶籍登記、無國籍或未取得居留、定居許可之罹患癌症未滿十八歲兒童及青少年",
+    "extractor": "rule_based",
+    "condition_text": "二、實際居住本縣未辦理戶籍登記、無國籍或未取得居留、定居許可之罹患癌症未滿十八歲兒童及青少年"
+   },
+   "confidence": 0.8,
+   "inferred": false,
+   "inference_basis": "",
+   "registry_version": 2
+  }
+ },
+ {
+  "id": "eb3e9fb7-92e2-48cb-b023-d5f2807b28ad",
+  "title": "弱勢家庭兒童及少年緊急生活扶助",
+  "kind": "stateless_excl",
+  "action": "remove",
+  "rule": {
+   "id": "fd47b6dd-633e-49f6-84ea-07496b4daff7",
+   "attribute_id": "applicant.nationality",
+   "operator": "not_in",
+   "value": [
+    "stateless"
+   ],
+   "unit": "",
+   "group_id": "applicant_nationality",
+   "group_logic": "any",
+   "complexity": "simple",
+   "role": "exclusion",
+   "human_readable": "國籍：無國籍",
+   "evidence": {
+    "excerpt": "一、設籍本縣或實際居住本縣未辦理戶籍登記、無國籍或未取得居留、定居許可之未滿十八歲兒童及少年。",
+    "extractor": "rule_based",
+    "condition_text": "一、設籍本縣或實際居住本縣未辦理戶籍登記、無國籍或未取得居留、定居許可之未滿十八歲兒童及少年"
+   },
+   "confidence": 0.8,
+   "inferred": false,
+   "inference_basis": "",
+   "registry_version": 2
+  }
+ },
+ {
+  "id": "c43f415d-6aae-4d78-a811-af47d870a887",
+  "title": "兒童及少年未來教育與發展帳戶",
+  "kind": "age_after_18",
+  "action": "remove",
+  "rule": {
+   "id": "51a9ff4e-23b6-447e-8ada-2fe19b07bc74",
+   "attribute_id": "applicant.age",
+   "operator": "<",
+   "value": 18.0,
+   "unit": "years",
+   "group_id": "applicant_age",
+   "group_logic": "any",
+   "complexity": "simple",
+   "role": "exclusion",
+   "human_readable": "年齡 < 18歲",
+   "evidence": {
+    "excerpt": "二、存金用途：作為兒少年滿18歲後接受高等教育、職業訓練或就業、創業之用，除非兒少因死亡、重病、身心障礙等特殊狀況，否則不可提早提領。",
+    "extractor": "rule_based",
+    "condition_text": "作為兒少年滿18歲後接受高等教育、職業訓練或就業、創業之用"
+   },
+   "confidence": 0.85,
+   "inferred": false,
+   "inference_basis": "",
+   "registry_version": 2
+  }
+ },
+ {
+  "id": "50f2f1e9-a93b-4beb-a230-413ecb584c21",
+  "title": "南投縣兒童及少年生活扶助審核作業規定",
+  "kind": "stateless_excl",
+  "action": "remove",
+  "rule": {
+   "id": "598a195a-ec8f-4cf2-9f26-39f5a026d75c",
+   "attribute_id": "applicant.nationality",
+   "operator": "not_in",
+   "value": [
+    "stateless"
+   ],
+   "unit": "",
+   "group_id": "applicant_nationality",
+   "group_logic": "any",
+   "complexity": "simple",
+   "role": "exclusion",
+   "human_readable": "國籍：無國籍",
+   "evidence": {
+    "excerpt": "少年或於本國未辦理戶籍登記、無國籍、未取得居留(定居)之未滿十",
+    "extractor": "rule_based",
+    "condition_text": "少年或於本國未辦理戶籍登記、無國籍、未取得居留(定居)之未滿十"
+   },
+   "confidence": 0.8,
+   "inferred": false,
+   "inference_basis": "",
+   "registry_version": 2
+  }
+ },
+ {
+  "id": "b8cb26fa-9733-4015-a513-f5dd4defc205",
+  "title": "兒童及少年未來教育與發展帳戶",
+  "kind": "age_after_18",
+  "action": "remove",
+  "rule": {
+   "id": "fac8efbe-799a-4afa-b467-8b9943229a38",
+   "attribute_id": "applicant.age",
+   "operator": ">=",
+   "value": 18.0,
+   "unit": "years",
+   "group_id": "applicant_age",
+   "group_logic": "any",
+   "complexity": "simple",
+   "role": "required",
+   "human_readable": "年齡 ≥ 18歲",
+   "evidence": {
+    "excerpt": "兒少於年滿18歲申請領回之款項最高54萬，可用於接受高等教育、職業訓練或就業、創業等。",
+    "extractor": "rule_based",
+    "condition_text": "兒少於年滿18歲申請領回之款項最高54萬"
+   },
+   "confidence": 0.85,
+   "inferred": false,
+   "inference_basis": "",
+   "registry_version": 2
+  }
+ },
+ {
+  "id": "44d558aa-c69d-4d6f-821a-e8c755062e5e",
+  "title": "花蓮縣兒童及少年生活扶助",
+  "kind": "stateless_excl",
+  "action": "remove",
+  "rule": {
+   "id": "cad915a4-db24-4732-abde-a7aaa0553998",
+   "attribute_id": "applicant.nationality",
+   "operator": "not_in",
+   "value": [
+    "stateless"
+   ],
+   "unit": "",
+   "group_id": "applicant_nationality",
+   "group_logic": "any",
+   "complexity": "simple",
+   "role": "exclusion",
+   "human_readable": "國籍：無國籍",
+   "evidence": {
+    "excerpt": "壹.補助對象: 設籍花蓮縣0至未滿18歲之兒童少年，或實際居住本縣但未辦理戶籍登記、無國籍或未取得居留、定居許可之兒童少年。",
+    "extractor": "rule_based",
+    "condition_text": "或實際居住本縣但未辦理戶籍登記、無國籍或未取得居留、定居許可之兒童少年"
+   },
+   "confidence": 0.8,
+   "inferred": false,
+   "inference_basis": "",
+   "registry_version": 2
+  }
+ },
+ {
+  "id": "fed0c690-a46a-4c00-8d28-f529b3b2d926",
+  "title": "花蓮縣弱勢兒童及少年醫療費用補助",
+  "kind": "stateless_excl",
+  "action": "remove",
+  "rule": {
+   "id": "be4e91ce-28d4-4788-b17b-b566036a11ba",
+   "attribute_id": "applicant.nationality",
+   "operator": "not_in",
+   "value": [
+    "stateless"
+   ],
+   "unit": "",
+   "group_id": "applicant_nationality",
+   "group_logic": "any",
+   "complexity": "simple",
+   "role": "exclusion",
+   "human_readable": "國籍：無國籍",
+   "evidence": {
+    "excerpt": "壹.補助對象:設籍花蓮縣0至未滿18歲之兒童少年，或實際居住本縣但未辦理戶籍登記、無國籍或未取得居留、定居許可之兒童少年。",
+    "extractor": "rule_based",
+    "condition_text": "或實際居住本縣但未辦理戶籍登記、無國籍或未取得居留、定居許可之兒童少年"
+   },
+   "confidence": 0.8,
+   "inferred": false,
+   "inference_basis": "",
+   "registry_version": 2
+  }
+ },
+ {
+  "id": "5d313e4d-98e9-49a7-9782-25dadfd1ed55",
+  "title": "兒童及少年未來教育與發展帳戶",
+  "kind": "age_after_18",
+  "action": "remove",
+  "rule": {
+   "id": "b8539f16-68d4-4670-985e-13c0d548f621",
+   "attribute_id": "applicant.age",
+   "operator": ">=",
+   "value": 18.0,
+   "unit": "years",
+   "group_id": "applicant_age",
+   "group_logic": "any",
+   "complexity": "simple",
+   "role": "required",
+   "human_readable": "年齡 ≥ 18歲",
+   "evidence": {
+    "excerpt": "105年1月1日以後出生的列冊低收入戶、中低收入戶兒童及少年、長期安置之失依兒童及少年，直到年滿18歲。",
+    "extractor": "rule_based",
+    "condition_text": "直到年滿18歲"
+   },
+   "confidence": 0.85,
+   "inferred": false,
+   "inference_basis": "",
+   "registry_version": 2
+  }
+ },
+ {
+  "id": "167af75c-c91e-4e49-b663-f2aec3b65b2d",
+  "title": "兒童及少年未來教育與發展帳戶",
+  "kind": "age_after_18",
+  "action": "remove",
+  "rule": {
+   "id": "c12dabfc-934b-43ae-96c4-0b192e4e8240",
+   "attribute_id": "applicant.age",
+   "operator": ">=",
+   "value": 18.0,
+   "unit": "years",
+   "group_id": "applicant_age",
+   "group_logic": "any",
+   "complexity": "simple",
+   "role": "required",
+   "human_readable": "年齡 ≥ 18歲",
+   "evidence": {
+    "excerpt": "該帳戶金額限定於高等教育、就業、創業使用，需待開立帳戶之兒少年滿18歲方得於申請查核後提領款項。",
+    "extractor": "rule_based",
+    "condition_text": "需待開立帳戶之兒少年滿18歲方得於申請查核後提領款項"
+   },
+   "confidence": 0.85,
+   "inferred": false,
+   "inference_basis": "",
+   "registry_version": 2
+  }
+ },
+ {
+  "id": "dd10ca5e-b821-4182-b0a0-f9aadae9c557",
+  "title": "澎湖縣政府115年度辦理兒童臨時托育服務實施計畫",
+  "kind": "stateless_excl",
+  "action": "remove",
+  "rule": {
+   "id": "02bd8104-4890-4cf6-934b-e10bed4a7c7e",
+   "attribute_id": "applicant.nationality",
+   "operator": "not_in",
+   "value": [
+    "stateless"
+   ],
+   "unit": "",
+   "group_id": "applicant_nationality",
+   "group_logic": "any",
+   "complexity": "simple",
+   "role": "exclusion",
+   "human_readable": "國籍：無國籍",
+   "evidence": {
+    "excerpt": "5.設籍並居住於本縣，家有6歲以下兒童之家庭，或實際居住本縣之未辦理戶籍登記、無國籍或未取得居留、定居許可兒童",
+    "extractor": "rule_based",
+    "condition_text": "或實際居住本縣之未辦理戶籍登記、無國籍或未取得居留、定居許可兒童"
+   },
+   "confidence": 0.8,
+   "inferred": false,
+   "inference_basis": "",
+   "registry_version": 2
+  }
+ },
+ {
+  "id": "dfe3598f-0feb-4b63-8f56-61cf2ee3f974",
+  "title": "澎湖縣政府困苦失依兒童及少年生活扶助要點",
+  "kind": "stateless_excl",
+  "action": "remove",
+  "rule": {
+   "id": "bba761a3-86f9-4f7c-9429-db71f79276b9",
+   "attribute_id": "applicant.nationality",
+   "operator": "not_in",
+   "value": [
+    "stateless"
+   ],
+   "unit": "",
+   "group_id": "applicant_nationality",
+   "group_logic": "any",
+   "complexity": "simple",
+   "role": "exclusion",
+   "human_readable": "國籍：無國籍",
+   "evidence": {
+    "excerpt": "三、補助對象：凡設籍且實際居住本縣三個月以上未滿十八歲之兒童及少年，或實際居住本縣之未辦理戶籍登記、無國籍或未取得居",
+    "extractor": "rule_based",
+    "condition_text": "或實際居住本縣之未辦理戶籍登記、無國籍或未取得居"
+   },
+   "confidence": 0.8,
+   "inferred": false,
+   "inference_basis": "",
+   "registry_version": 2
+  }
+ }
+]

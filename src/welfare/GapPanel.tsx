@@ -25,7 +25,7 @@ function voterId() {
 }
 
 /** 從補助詳情「這項服務我這裡沒有」帶入標題時，父層會換 key 重新掛載，讓表單直接帶入 prefill。 */
-export default function GapPanel({ prefill, defaultRegion, onToast }: { prefill: string; defaultRegion: string; onToast: (message: string) => void }) {
+export default function GapPanel({ prefill, defaultRegion, visible, onToast }: { prefill: string; defaultRegion: string; visible: boolean; onToast: (message: string) => void }) {
   const [items, setItems] = useState<Demand[] | null>(null);
   const [error, setError] = useState("");
   const [filter, setFilter] = useState<DemandStatus | "all">("all");
@@ -38,13 +38,14 @@ export default function GapPanel({ prefill, defaultRegion, onToast }: { prefill:
 
   const [version, setVersion] = useState(0);
   useEffect(() => {
+    if (!visible) return;  // 切到這一頁才抓；小幫手剛送出的需求才會馬上看到
     const controller = new AbortController();
     fetch(`/api/demands?voter=${encodeURIComponent(voterId())}`, { signal: controller.signal, cache: "no-store" })
       .then(res => (res.ok ? res.json() : Promise.reject(new Error())))
       .then((data: { items: Demand[] }) => { setItems(data.items); setError(""); })
       .catch(() => { if (!controller.signal.aborted) setError("暫時無法載入大家的訴求，請稍後再試。"); });
     return () => controller.abort();
-  }, [version]);
+  }, [version, visible]);
 
   const submit = async () => {
     if (title.trim().length < 4) { setFormError("請用至少 4 個字描述「哪裡、缺什麼服務」。"); return; }
@@ -127,7 +128,7 @@ export default function GapPanel({ prefill, defaultRegion, onToast }: { prefill:
           const flow = FLOW[demand.status];
           return <div key={demand.id} className="dcard">
             <div className="dtop"><h3>{demand.title}</h3><span className={`badge ${flow.badge}`}>{flow.label}</span></div>
-            <div className="meta"><span className="tag svc">{demand.type}</span><span className="tag">{demand.region}</span>{demand.owner && <span className="tag aud">認領：{demand.owner}</span>}</div>
+            <div className="meta">{demand.demo && <span className="tag aud" title="由小幫手需求登記自動公開的示範項目">Demo</span>}<span className="tag svc">{demand.type}</span><span className="tag">{demand.region}</span>{demand.owner && <span className="tag aud">認領：{demand.owner}</span>}</div>
             {demand.detail && <p>{demand.detail}</p>}
             {demand.result && <p><b>處理結果：</b>{demand.result}</p>}
             <div className="bar" aria-hidden="true"><i style={{ width: `${Math.min(100, Math.round(demand.supports / DEMAND_THRESHOLD * 100))}%` }} /></div>

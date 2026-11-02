@@ -10,6 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
+from ..numfmt import fmt_num
 from ..registry import Registry, get_registry
 from ..services.normalization import normalize_city
 from .profile import Profile
@@ -123,8 +124,8 @@ def evaluate_rule(rule: dict, profile: Profile, registry: Registry | None = None
         if outcome is None:
             return RuleEvaluation("unknown", "規則缺少可比較的數值", user_value)
         symbol = {">": ">", ">=": "≥", "<": "<", "<=": "≤", "=": "=", "!=": "≠", "between": "介於"}[operator]
-        target_text = f"{expected[0]:g}～{expected[1]:g}" if operator == "between" else f"{_num(expected):g}"
-        return RuleEvaluation("match" if outcome else "not_match", f"你的資料 {actual:g} {'符合' if outcome else '不符合'} {symbol} {target_text}", user_value)
+        target_text = f"{fmt_num(expected[0])}～{fmt_num(expected[1])}" if operator == "between" else fmt_num(_num(expected))
+        return RuleEvaluation("match" if outcome else "not_match", f"你的資料 {fmt_num(actual)} {'符合' if outcome else '不符合'} {symbol} {target_text}", user_value)
 
     # ---- 布林
     if attribute.type == "boolean":
