@@ -10,6 +10,7 @@ export default function DemandsAdmin({ password }: { password: string }) {
   const [items, setItems] = useState<Demand[] | null>(null);
   const [error, setError] = useState("");
   const [version, setVersion] = useState(0);
+  const [askDelete, setAskDelete] = useState<string | null>(null);
   const [drafts, setDrafts] = useState<Record<string, { owner: string; result: string }>>({});
 
   useEffect(() => {
@@ -30,6 +31,17 @@ export default function DemandsAdmin({ password }: { password: string }) {
       if (!res.ok) throw new Error(typeof data?.error === "string" ? data.error : "更新失敗");
       setVersion(v => v + 1);
     } catch (e) { setError(e instanceof Error ? e.message : "更新失敗"); }
+  };
+
+  const remove = async (demand: Demand) => {
+    try {
+      setError("");
+      const res = await fetch(`/api/demands/${encodeURIComponent(demand.id)}`, { method: "DELETE", headers: { Authorization: `Bearer ${password}` } });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) throw new Error(typeof data?.error === "string" ? data.error : "刪除失敗");
+      setAskDelete(null);
+      setVersion(v => v + 1);
+    } catch (e) { setError(e instanceof Error ? e.message : "刪除失敗"); }
   };
 
   if (!password) return <p className="mt-6 text-sm text-ink-400">請輸入後台密碼後管理訴求。</p>;
@@ -54,6 +66,13 @@ export default function DemandsAdmin({ password }: { password: string }) {
           <button type="button" className="rounded border px-3 py-1" onClick={() => void update(demand, "open")}>設為蒐集中／待認領</button>
           <button type="button" className="rounded border px-3 py-1" onClick={() => void update(demand, "claimed")}>設為已認領</button>
           <button type="button" className="rounded border px-3 py-1" onClick={() => void update(demand, "done")}>設為已實現</button>
+          {askDelete === demand.id
+            ? <span role="alertdialog" aria-label="確認刪除" className="ml-auto flex items-center gap-2">
+              <span className="text-red-700">確定刪除這則訴求{demand.demo ? "與它的需求登記" : ""}？無法復原。</span>
+              <button type="button" className="rounded border px-3 py-1" onClick={() => setAskDelete(null)}>取消</button>
+              <button type="button" className="rounded border border-red-700 bg-red-700 px-3 py-1 text-white" onClick={() => void remove(demand)}>確定刪除</button>
+            </span>
+            : <button type="button" className="ml-auto rounded border border-red-300 px-3 py-1 text-red-700" onClick={() => setAskDelete(demand.id)}>刪除</button>}
         </div>
       </article>;
     })}

@@ -291,6 +291,10 @@
 .wui .chat-foot form { display: flex; gap: .45rem }
 .wui .chat-foot input { flex: 1; min-width: 0; border: var(--bw) solid var(--ink); padding: .5rem .6rem; font-weight: 600; background: var(--paper) }
 .wui .chat .draft { border: 2px solid var(--ink); background: var(--mustard-soft); padding: .6rem .7rem; font-size: .88rem; font-weight: 600 }
+.wui .chat .draft-fields { display: grid; gap: .25rem; margin-top: .5rem }
+.wui .chat .draft-fields label { font-size: .8rem }
+.wui .chat .draft-fields input, .wui .chat .draft-fields textarea { width: 100%; font: inherit; font-weight: 400; padding: .4rem .5rem; border: 2px solid var(--ink); background: #fff; color: var(--ink); resize: vertical }
+.wui .chat .draft .hint { font-size: .78rem; font-weight: 400; margin-top: .3rem }
 
 /* ---------- 建立資料卡邀請 ---------- */
 .wui .invite { display: flex; gap: 1.2rem; align-items: center; justify-content: space-between; flex-wrap: wrap; background: var(--mustard); border: var(--bw) solid var(--ink); box-shadow: var(--hard); padding: 1.2rem 1.4rem; margin-bottom: 1.4rem }

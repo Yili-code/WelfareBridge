@@ -1,3 +1,4 @@
+import { openAppeals } from "@/lib/server/appeals.mjs";
 import { openDemands } from "@/lib/server/demands.mjs";
 import { authorized, isString, readJson, response, sameOrigin } from "@/lib/server/http";
 
@@ -35,4 +36,18 @@ export async function PATCH(request: Request, ctx: RouteContext<"/api/demands/[i
   try {
     return db.update(id, { status: input.status, owner: (input.owner ?? "").trim(), result: (input.result ?? "").trim() }) ? response({ ok: true }) : response({ error: "找不到這則訴求。" }, 404);
   } finally { db.close(); }
+}
+
+/** 承辦人員刪除訴求（連同同一份小幫手需求登記）：整理 Demo 資料用 */
+export async function DELETE(request: Request, ctx: RouteContext<"/api/demands/[id]">) {
+  if (!authorized(request)) return response({ error: "後台密碼不正確。" }, 401);
+  if (!sameOrigin(request)) return response({ error: "不接受跨站送出。" }, 403);
+  const { id } = await ctx.params;
+  const demands = openDemands();
+  try {
+    if (!demands.remove(id)) return response({ error: "找不到這則訴求。" }, 404);
+  } finally { demands.close(); }
+  const appeals = openAppeals();
+  try { appeals.remove(id); } finally { appeals.close(); }
+  return response({ ok: true });
 }

@@ -92,7 +92,7 @@ class Summary(BaseModel):
     summary: str = Field(min_length=1, max_length=2000)
     mainRequest: str = Field(min_length=1, max_length=500)
 
-SUMMARY_SYSTEM = "你是需求登記整理員。依提供的對話與身分資料，以繁體中文整理已明確說出的需求。未回答的成績、收入或資格請標示未提供，不得推測。不要繼續問問題，也不要聲稱已送出或審核通過。只輸出兩個字串欄位的 JSON：mainRequest（50字內需求標題）、summary（300字內摘要）。不要輸出 reply 或 quickReplies；不要把助理提問當成使用者事實。"
+SUMMARY_SYSTEM = "你是需求登記整理員。依提供的對話與身分資料，以繁體中文整理已明確說出的需求。未回答的成績、收入或資格請標示未提供，不得推測。不要繼續問問題，也不要聲稱已送出或審核通過。只輸出兩個字串欄位的 JSON：mainRequest（50字內需求標題）、summary（300字內摘要）。不要輸出 reply 或 quickReplies；不要把助理提問當成使用者事實，summary 不可以是問句，也不可以照抄助理說過的話；沒有明確需求時，請依使用者回答的資料整理。"
 
 @router.post("/assistant")
 def converse(body: Request):
@@ -118,7 +118,8 @@ def converse(body: Request):
         raise HTTPException(503, "補助資料庫暫時無法連線，無法根據候選條件縮小範圍，請重試。") from None
     question = context['question']
     if summary_requested:
-        payload = json.dumps({**body.model_dump(), "guidance": context}, ensure_ascii=False)
+        # 規劃器的下一題（question）不能給模型：它會把待問的題目當成使用者的需求照抄成摘要
+        payload = json.dumps({**body.model_dump(), "guidance": {"profile": context["profile"]}}, ensure_ascii=False)
         schema = Summary.model_json_schema()
         try:
             try:
@@ -130,6 +131,9 @@ def converse(body: Request):
                     raise
                 result = provider.complete_json(SUMMARY_SYSTEM, payload, max_tokens=1400)
             summary = Summary.model_validate(result)
+            asked = {m.content.strip() for m in body.messages if m.role == "assistant"}
+            if summary.summary.strip() in asked or summary.summary.strip().endswith(("？", "?")):
+                raise ValueError("summary repeats an assistant question")
             answer = Answer(reply="請確認以下需求摘要，尚未送出：\n" + summary.summary, quickReplies=[], summary=summary.summary, mainRequest=summary.mainRequest)
         except (LLMError, ValidationError, ValueError, KeyError):
             raise HTTPException(502, "AI 暫時無法產生有效回應，請重試。") from None

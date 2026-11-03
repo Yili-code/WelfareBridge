@@ -77,6 +77,16 @@ export function openDemands(path = process.env.WELFARE_DB_PATH || resolve('data/
     update(id, { status, owner = '', result = '' }) {
       return db.prepare('UPDATE demands SET status = ?, owner = ?, result = ? WHERE id = ?').run(status, owner, result, id).changes > 0;
     },
+    /** 刪除一則訴求與它的附議；小幫手送出的訴求和需求登記共用 id，由呼叫端一併刪登記 */
+    remove(id) {
+      db.exec('BEGIN');
+      try {
+        db.prepare('DELETE FROM demand_supports WHERE demand_id = ?').run(id);
+        const removed = db.prepare('DELETE FROM demands WHERE id = ?').run(id).changes > 0;
+        db.exec('COMMIT');
+        return removed;
+      } catch (error) { db.exec('ROLLBACK'); throw error; }
+    },
     close() { db.close(); },
   };
 }

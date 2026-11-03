@@ -27,6 +27,7 @@ function initialAnswers(profile: Profile | null): Answers {
 export default function ProfileDialog({ profile, onClose, onSaved }: { profile: Profile | null; onClose: () => void; onSaved: (message: string) => void }) {
   const editing = !!profile;
   const [step, setStep] = useState(editing ? 1 : 0);
+  const [askClose, setAskClose] = useState(false);
   const [answers, setAnswers] = useState<Answers>(() => initialAnswers(profile));
   const [relation, setRelation] = useState<Relation>(profile?.relation ?? "self");
   const [nickname, setNickname] = useState(profile?.nickname ?? "");
@@ -35,7 +36,6 @@ export default function ProfileDialog({ profile, onClose, onSaved }: { profile: 
   const [currentRegion, setCurrentRegion] = useState(profile?.currentRegion ?? "");
   const [tried, setTried] = useState(false);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const advanceTimer = useRef<number | null>(null);
 
   const question = step > 0 ? QUESTIONS[step - 1] : null;
   const selected = question ? answers[question.key] ?? [] : [];
@@ -58,14 +58,13 @@ export default function ProfileDialog({ profile, onClose, onSaved }: { profile: 
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = overflow; previous?.focus?.(); };
   }, []);
-  useEffect(() => () => { if (advanceTimer.current) window.clearTimeout(advanceTimer.current); }, []);
 
   const close = () => {
-    if (dirty && !window.confirm(editing ? "修改還沒儲存，確定要關閉嗎？" : "資料卡還沒儲存，確定要關閉嗎？")) return;
+    // 不用 window.confirm：內嵌瀏覽器與部分瀏覽器會擋掉原生確認視窗，造成關不掉
+    if (dirty && !askClose) { setAskClose(true); return; }
     onClose();
   };
   const go = (next: number) => {
-    if (advanceTimer.current) window.clearTimeout(advanceTimer.current);
     setTried(false);
     setStep(Math.max(0, Math.min(STEPS - 1, next)));
   };
@@ -80,10 +79,6 @@ export default function ProfileDialog({ profile, onClose, onSaved }: { profile: 
     const changed = updated[0] !== answers[question.key]?.[0];
     if (question.key === "age" && changed) setExactAge("");
     if (question.key === "residence" && changed) { setRegion(""); setCurrentRegion(""); }
-    // 單選題選完直接到下一題；年齡、戶籍還有要補的欄位，不自動跳
-    if (!question.multi && !["age", "residence"].includes(question.key) && step < STEPS - 1) {
-      advanceTimer.current = window.setTimeout(() => go(step + 1), 280);
-    }
   };
   const save = () => {
     if (!canSave) {
@@ -175,13 +170,18 @@ export default function ProfileDialog({ profile, onClose, onSaved }: { profile: 
         </>}
       </div>
 
-      <div className="modal-foot">
+      {askClose ? <div className="modal-foot" role="alertdialog" aria-label="確認關閉">
+        <b>{editing ? "修改還沒儲存，確定要關閉嗎？" : "資料卡還沒儲存，確定要關閉嗎？"}</b>
+        <span className="spacer" />
+        <button type="button" className="btn sec" onClick={() => setAskClose(false)}>繼續編輯</button>
+        <button type="button" className="btn" onClick={onClose}>放棄並關閉</button>
+      </div> : <div className="modal-foot">
         <button type="button" className="btn sec" onClick={() => go(step - 1)} disabled={step === 0}>上一步</button>
         <span className="spacer" />
         {question && !REQUIRED.has(question.key) && !selected.length && step < STEPS - 1 && <button type="button" className="btn sec" onClick={() => go(step + 1)}>跳過</button>}
         {editing && step < STEPS - 1 && <button type="button" className="btn sec" onClick={save}>儲存</button>}
         <button type="button" className="btn" onClick={next}>{step < STEPS - 1 ? "下一題 →" : editing ? "儲存並重新比對" : "完成並比對"}</button>
-      </div>
+      </div>}
     </div>
   </div>;
 }

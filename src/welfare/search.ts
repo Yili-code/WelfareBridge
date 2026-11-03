@@ -32,12 +32,21 @@ const ORDER: Record<MatchStatus, number> = { yes: 0, maybe: 1, no: 2 };
 // 與後端 guidance.TOPICS 相同的日常說法：整句話（「我媽媽失智需要人照顧」）拆成需求詞，任一個出現就算符合
 const NEED_WORDS = ["就學", "學費", "獎學金", "助學", "學貸", "租屋", "房租", "租金", "住宅", "買房", "購屋", "房貸", "修繕", "失業", "求職", "職訓", "裁員", "資遣", "找工作", "轉職", "創業", "離職", "醫療", "健保", "看病", "就醫", "住院", "重病", "手術", "身障", "身心障礙", "殘障", "輔具", "早療", "發展遲緩", "長照", "照顧", "照護", "失智", "看護", "居家服務", "日間照顧", "老人", "長輩", "臥床", "生活費", "育兒", "急難", "缺錢", "單親", "托育", "育嬰", "生育", "津貼", "低收", "撫養", "喪葬"];
 
-/** 短詞要全部出現；像句子的長詞改用句中的需求詞（任一個出現即可），句中沒有任何需求詞才照原樣比對 */
+// 公告用字和日常說法不同：搜「獎學金」也要找到標題寫「獎助學金」的補助
+const SYNONYMS: Record<string, string[]> = { "獎學金": ["獎助學金", "獎學", "助學"], "助學": ["獎助學金", "助學金"], "學費": ["學雜費", "就學"], "租屋": ["租金", "租賃"], "房租": ["租金", "租賃"] };
+const expand = (terms: string[]) => [...new Set(terms.flatMap(term => [term, ...(SYNONYMS[term] ?? [])]))];
+
+/** 整句說法（「我需要獎學金」）去掉開頭的「我需要／想找」等贅詞後再比對 */
+const stripFiller = (word: string) => word.replace(/^(請問|請|幫我)?(我)?(需要|想要|想找|想|要|找|有沒有|有)?/, "").replace(/(的)?(補助|服務|資訊)$/, "") || word;
+
+/** 句中有需求詞就用需求詞（任一個出現即可，含同義說法）；沒有需求詞才去掉贅詞後照原樣比對 */
 function queryGroups(query: string): string[][] {
   return normalize(query).split(/\s+/).filter(Boolean).map(word => {
-    if (word.length <= 6) return [word];
     const found = NEED_WORDS.filter(term => word.includes(term));
-    return found.length ? found : [word];
+    if (found.length && word.length > 6) return expand(found);
+    const core = stripFiller(word);
+    const inCore = NEED_WORDS.filter(term => core.includes(term));
+    return inCore.length && core.length > 6 ? expand(inCore) : expand([core]);
   });
 }
 

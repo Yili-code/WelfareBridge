@@ -92,6 +92,7 @@ export default function ProfilePanel({ profiles, active, cards, match, matching,
   onPrint: (job: PrintJob) => void;
   onToggleSave: (card: BenefitCard) => void;
 }) {
+  const [askDelete, setAskDelete] = useState(false);
   const domains = useMemo(() => needDomains(active), [active]);
   const grouped = useMemo(() => {
     if (!cards || !match) return null;
@@ -128,7 +129,11 @@ export default function ProfilePanel({ profiles, active, cards, match, matching,
           <h2>{active.nickname}的資料卡</h2>
           <div className="actions">
             <button type="button" className="btn" onClick={() => onEdit(active)}>編輯資料卡</button>
-            <button type="button" className="btn sec" onClick={() => { if (window.confirm(`確定要刪除「${active.nickname}」的資料卡嗎？`)) { removeProfile(active.id); onSaved("已刪除資料卡"); } }}>刪除</button>
+            {askDelete ? <>
+              <span>確定要刪除「{active.nickname}」的資料卡嗎？</span>
+              <button type="button" className="btn sec" onClick={() => setAskDelete(false)}>取消</button>
+              <button type="button" className="btn" onClick={() => { setAskDelete(false); removeProfile(active.id); onSaved("已刪除資料卡"); }}>確定刪除</button>
+            </> : <button type="button" className="btn sec" onClick={() => setAskDelete(true)}>刪除</button>}
           </div>
         </div>
         <Facts profile={active} />

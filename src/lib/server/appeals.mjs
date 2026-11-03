@@ -17,6 +17,7 @@ export function openAppeals(path = process.env.WELFARE_DB_PATH || resolve('data/
     update(id, status) {
       return db.prepare("UPDATE appeals SET body = json_set(body, '$.status', ?) WHERE id = ?").run(status, id).changes > 0;
     },
+    remove(id) { return db.prepare('DELETE FROM appeals WHERE id = ?').run(id).changes > 0; },
     close() { db.close(); },
   };
 }

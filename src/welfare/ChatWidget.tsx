@@ -121,13 +121,16 @@ export default function ChatWidget({ ref, profile, counts, matching, onSearch, o
 
   useEffect(() => { scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" }); }, [messages, busy, draft, open]);
 
+  const changeDraft = (patch: Partial<AppealDraft>) => setDraft(d => d && { ...d, ...patch });
+
   const submitAppeal = async () => {
     if (!draft || busy) return;
+    if (!draft.mainRequest.trim() || !draft.summary.trim()) { setSubmitError("標題與摘要不能留空。"); return; }
     setBusy(true); setSubmitError("");
     try {
       await addAppeal({
-        profileId: profile?.id ?? null, profileNickname: profile?.nickname ?? "未建檔使用者", region: draft.region, identities: draft.identities, age: draft.age,
-        mainRequest: draft.mainRequest, summary: draft.summary,
+        profileId: profile?.id ?? null, profileNickname: profile?.nickname ?? "未建檔使用者", region: draft.region.trim(), identities: draft.identities, age: draft.age,
+        mainRequest: draft.mainRequest.trim(), summary: draft.summary.trim(),
         transcript: messages.flatMap(m => (m.role === "assistant" || m.role === "user" ? [{ role: m.role, text: m.text }] : [])),
       }, submissionKey.current);
       setSubmitted(true);
@@ -176,7 +179,16 @@ export default function ChatWidget({ ref, profile, counts, matching, onSearch, o
       {draft && !busy && <div className="draft">
         {submitted ? <p>需求登記已送給承辦人員，他們會依此評估是否需要新增服務。Demo：標題與摘要已同步顯示在「訴求專區」，大家可以附議。</p> : <>
           <p><b>要把這份需求登記送給承辦人員嗎？</b>（Demo：送出後標題與摘要會公開顯示在「訴求專區」，不含姓名與對話紀錄）</p>
-          <div className="go" style={{ marginTop: ".4rem" }}><button type="button" className="btn sm" onClick={() => void submitAppeal()}>送出需求登記</button></div>
+          <div className="draft-fields">
+            <label htmlFor="wui-draft-title">需求標題</label>
+            <input id="wui-draft-title" maxLength={80} value={draft.mainRequest} onChange={e => changeDraft({ mainRequest: e.target.value })} />
+            <label htmlFor="wui-draft-region">地區（可不填）</label>
+            <input id="wui-draft-region" maxLength={40} value={draft.region} onChange={e => changeDraft({ region: e.target.value })} />
+            <label htmlFor="wui-draft-summary">需求摘要</label>
+            <textarea id="wui-draft-summary" rows={6} maxLength={1000} value={draft.summary} onChange={e => changeDraft({ summary: e.target.value })} />
+          </div>
+          <p className="hint">內容可以直接修改，確認無誤再送出。</p>
+          <div className="go" style={{ marginTop: ".4rem" }}><button type="button" className="btn sm" disabled={busy} onClick={() => void submitAppeal()}>送出需求登記</button></div>
         </>}
         {submitError && <p className="err" role="alert">{submitError}</p>}
       </div>}
