@@ -2,7 +2,7 @@
 
 import { useEffect, useImperativeHandle, useRef, useState, type Ref } from "react";
 import { engine, type AppealDraft, type AssistantState, type AssistantTurn } from "@/lib/assistant";
-import { addAppeal, uid, updateProfile } from "@/lib/store";
+import { addAppeal, addProfile, uid, updateProfile } from "@/lib/store";
 import type { Profile } from "@/lib/types";
 import type { MatchStatus } from "./api";
 import { mergeLearned } from "./assistant-memory";
@@ -41,7 +41,6 @@ export default function ChatWidget({ ref, profile, counts, matching, onSearch, o
   const submissionKey = useRef("");
   const pending = useRef<string | null>(null);
   const inFlight = useRef(false);
-  const warnedNoProfile = useRef(false);
   const lastKeyword = useRef("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const profileId = profile?.id ?? null;
@@ -62,9 +61,12 @@ export default function ChatWidget({ ref, profile, counts, matching, onSearch, o
           updateProfile(profile.id, { assistantAttributes: next });
           extra.push({ id: uid("m"), role: "update", written: changed.map(c => `${c.label}：${c.valueLabel}`), before: counts });
         }
-      } else if (!warnedNoProfile.current) {
-        warnedNoProfile.current = true;
-        extra.push({ id: uid("m"), role: "need-profile" });
+      } else {
+        // 還沒有資料卡：先用聊天確認的資料建一張，回答才不會白問，結果頁也會跟著更新
+        const { next, changed } = mergeLearned(undefined, turn.learned);
+        addProfile({ nickname: "我自己", relation: "self", region: "", age: null, identities: [], economy: "", needs: [], assistantAttributes: next });
+        extra.push({ id: uid("m"), role: "assistant", text: "已用您剛才的回答建立「我自己」的資料卡，之後可以到「我的資料卡」補充其他資料。" });
+        extra.push({ id: uid("m"), role: "update", written: changed.map(c => `${c.label}：${c.valueLabel}`), before: counts });
       }
     }
     const keyword = turn.search?.queries?.join(" ").trim();
