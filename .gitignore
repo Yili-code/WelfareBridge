@@ -56,3 +56,5 @@ next-env.d.ts
 **/.pytest_cache/
 *.pyc
 /test-results/
+
+.tunnel.env

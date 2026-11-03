@@ -1,0 +1,19 @@
+# 對外公開（Cloudflare Tunnel）：docker compose -f docker-compose.yml -f docker-compose.tunnel.yml up -d gate cloudflared
+# 不開任何對外埠；cloudflared 主動連出到 Cloudflare，只連得到 gate，gate 只放行前台路徑。
+services:
+  gate:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    volumes: ["./deploy/gate.conf:/etc/nginx/conf.d/default.conf:ro"]
+    depends_on:
+      web: { condition: service_healthy }
+    mem_limit: 128m
+  cloudflared:
+    image: cloudflare/cloudflared:2026.10.7
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    env_file:
+      - path: .tunnel.env
+        required: false
+    depends_on: [gate]
+    mem_limit: 128m
